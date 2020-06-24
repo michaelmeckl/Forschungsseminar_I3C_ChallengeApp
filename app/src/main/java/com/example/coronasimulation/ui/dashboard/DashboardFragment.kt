@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
-            print("Hello Button")
+            println("Hello Button")
         }
     }
 }
