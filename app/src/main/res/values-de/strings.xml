@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_dashboard">Übersicht</string>
-    <string name="title_notifications">Benachrichtigungen</string>
+    <string name="title_simulation">Simulation</string>
+    <string name="title_challenges">Challenges</string>
+    <string name="title_news">Neuigkeiten</string>
 </resources>
