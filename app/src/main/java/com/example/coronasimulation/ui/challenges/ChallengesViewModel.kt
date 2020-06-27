@@ -1,13 +1,13 @@
-package com.example.coronasimulation.ui.dashboard
+package com.example.coronasimulation.ui.challenges
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class ChallengesViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = "This is challenges Fragment"
     }
     val text: LiveData<String> = _text
 }

@@ -1,13 +1,13 @@
-package com.example.coronasimulation.ui.notifications
+package com.example.coronasimulation.ui.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class NewsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is news Fragment"
     }
     val text: LiveData<String> = _text
 }
