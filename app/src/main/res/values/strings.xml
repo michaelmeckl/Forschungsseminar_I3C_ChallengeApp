@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name" translatable="false">Corona Simulation</string>
+
     <string name="title_simulation">Simulation</string>
     <string name="title_challenges">Challenges</string>
     <string name="title_news">News</string>
+
+    <!-- toolbar actions -->
+    <string name="action_profile">My profile</string>
+    <string name="action_about">About</string>
 </resources>
