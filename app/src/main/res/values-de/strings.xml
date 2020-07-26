@@ -3,4 +3,8 @@
     <string name="title_simulation">Simulation</string>
     <string name="title_challenges">Challenges</string>
     <string name="title_news">Neuigkeiten</string>
+
+    <!-- toolbar actions -->
+    <string name="action_profile">Mein Profil</string>
+    <string name="action_about">Über</string>
 </resources>
