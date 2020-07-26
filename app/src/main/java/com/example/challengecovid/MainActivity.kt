@@ -1,4 +1,4 @@
-package com.example.coronasimulation
+package com.example.challengecovid
 
 import android.os.Bundle
 import android.view.Menu

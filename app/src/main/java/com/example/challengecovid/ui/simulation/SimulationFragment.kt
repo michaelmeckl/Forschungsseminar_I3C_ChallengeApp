@@ -1,4 +1,4 @@
-package com.example.coronasimulation.ui.simulation
+package com.example.challengecovid.ui.simulation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.example.coronasimulation.R
+import com.example.challengecovid.R
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_simulation.*
 

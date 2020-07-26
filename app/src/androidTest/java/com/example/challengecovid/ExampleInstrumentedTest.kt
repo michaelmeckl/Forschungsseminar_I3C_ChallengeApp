@@ -1,4 +1,4 @@
-package com.example.coronasimulation
+package com.example.challengecovid
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

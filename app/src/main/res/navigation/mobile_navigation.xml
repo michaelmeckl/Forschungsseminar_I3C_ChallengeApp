@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_simulation"
-        android:name="com.example.coronasimulation.ui.simulation.SimulationFragment"
+        android:name="com.example.challengecovid.ui.simulation.SimulationFragment"
         android:label="@string/title_simulation"
         tools:layout="@layout/fragment_simulation" />
 
     <fragment
         android:id="@+id/navigation_news"
-        android:name="com.example.coronasimulation.ui.news.NewsFragment"
+        android:name="com.example.challengecovid.ui.news.NewsFragment"
         android:label="@string/title_news"
         tools:layout="@layout/fragment_news" />
 
     <fragment
         android:id="@+id/navigation_challenges"
-        android:name="com.example.coronasimulation.ui.challenges.ChallengesFragment"
+        android:name="com.example.challengecovid.ui.challenges.ChallengesFragment"
         android:label="@string/title_challenges"
         tools:layout="@layout/fragment_challenges" />
 

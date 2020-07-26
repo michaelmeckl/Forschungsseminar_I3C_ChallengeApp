@@ -1,4 +1,4 @@
-package com.example.coronasimulation.model
+package com.example.challengecovid.model
 
 import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson

@@ -1,4 +1,4 @@
-package com.example.coronasimulation.ui.simulation
+package com.example.challengecovid.ui.simulation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

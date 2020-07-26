@@ -1,4 +1,4 @@
-package com.example.coronasimulation
+package com.example.challengecovid
 
 import android.content.Context
 import android.net.ConnectivityManager

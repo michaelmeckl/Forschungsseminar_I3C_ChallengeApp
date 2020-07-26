@@ -1,6 +1,6 @@
-package com.example.coronasimulation
+package com.example.challengecovid
 
-import com.example.coronasimulation.model.CoronaStatistics
+import com.example.challengecovid.model.CoronaStatistics
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 

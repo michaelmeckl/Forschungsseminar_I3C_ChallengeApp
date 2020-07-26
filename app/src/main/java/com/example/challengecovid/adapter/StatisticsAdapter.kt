@@ -1,12 +1,11 @@
-package com.example.coronasimulation.adapter
+package com.example.challengecovid.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.coronasimulation.R
-import com.example.coronasimulation.model.CoronaStatistics
+import com.example.challengecovid.R
+import com.example.challengecovid.model.CoronaStatistics
 import kotlinx.android.synthetic.main.statistics_list_item.view.*
 
 class StatisticsAdapter (private val statisticsList: List<CoronaStatistics>) : RecyclerView.Adapter<StatisticsAdapter.StatisticsListHolder>() {

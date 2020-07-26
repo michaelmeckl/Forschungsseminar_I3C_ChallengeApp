@@ -1,4 +1,4 @@
-package com.example.coronasimulation.ui.news
+package com.example.challengecovid.ui.news
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.coronasimulation.R
-import com.example.coronasimulation.Utils
-import com.example.coronasimulation.adapter.StatisticsAdapter
-import com.example.coronasimulation.model.CoronaStatistics
+import com.example.challengecovid.R
+import com.example.challengecovid.Utils
+import com.example.challengecovid.adapter.StatisticsAdapter
+import com.example.challengecovid.model.CoronaStatistics
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 import kotlinx.android.synthetic.main.fragment_news.*

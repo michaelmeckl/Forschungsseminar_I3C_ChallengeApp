@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Corona Simulation</string>
+    <string name="app_name" translatable="false">ChallengeCovid</string>
 
     <string name="title_simulation">Simulation</string>
     <string name="title_challenges">Challenges</string>

@@ -1,9 +1,9 @@
-package com.example.coronasimulation.ui.news
+package com.example.challengecovid.ui.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.coronasimulation.model.CoronaStatistics
+import com.example.challengecovid.model.CoronaStatistics
 
 class NewsViewModel : ViewModel() {
 
