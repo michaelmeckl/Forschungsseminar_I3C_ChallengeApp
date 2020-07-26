@@ -3,19 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_simulation">
+    app:startDestination="@+id/navigation_overview">
 
     <fragment
-        android:id="@+id/navigation_simulation"
-        android:name="com.example.challengecovid.ui.simulation.SimulationFragment"
-        android:label="@string/title_simulation"
-        tools:layout="@layout/fragment_simulation" />
-
-    <fragment
-        android:id="@+id/navigation_news"
-        android:name="com.example.challengecovid.ui.news.NewsFragment"
-        android:label="@string/title_news"
-        tools:layout="@layout/fragment_news" />
+        android:id="@+id/navigation_overview"
+        android:name="com.example.challengecovid.ui.overview.OverviewFragment"
+        android:label="@string/title_overview"
+        tools:layout="@layout/fragment_overview" />
 
     <fragment
         android:id="@+id/navigation_challenges"

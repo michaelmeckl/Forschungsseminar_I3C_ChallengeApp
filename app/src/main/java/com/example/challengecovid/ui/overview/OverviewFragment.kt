@@ -1,4 +1,4 @@
-package com.example.challengecovid.ui.news
+package com.example.challengecovid.ui.overview
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,23 +11,21 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
-import com.example.challengecovid.adapter.StatisticsAdapter
+import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.model.CoronaStatistics
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.result.Result
-import kotlinx.android.synthetic.main.fragment_news.*
-import kotlinx.android.synthetic.main.statistics_list_item.*
+import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.android.synthetic.main.list_item_template.*
 
-class NewsFragment : Fragment() {
+class OverviewFragment : Fragment() {
 
-    private val newsViewModel: NewsViewModel by viewModels()
+    private val overviewViewModel: OverviewViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_news, container, false)
+        val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         //TODO: check if connection is available maybe in on start / on create of main activity instead? or in a separate networking class
         /*
@@ -45,18 +43,7 @@ class NewsFragment : Fragment() {
 
         context?.let {
             if (Utils.isNetworkConnected(it)) {
-                //ApiService.fetchCurrentStatistics("germany")
-                fetchCurrentStatistics("germany")
-
-                /*
-                doAsync {
-                    Request(url).run()
-                    uiThread {
-                        repoList.adapter = RepoListAdapter(result)
-                    }
-                }
-
-                 */
+                // do api stuff?
             } else {
                 AlertDialog.Builder(it)
                     .setTitle("No Internet Connection")
@@ -74,13 +61,13 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerList = createDummyRecyclerList() //TODO: this should come from an api call later
-        val recyclerAdapter = StatisticsAdapter(recyclerList)
+        val recyclerAdapter = RecyclerAdapter(recyclerList)
 
         // calculate the number of columns used for the grid or the default number if this fragment has no context
         val numberOfColumns =
             this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
-        statistics_list.apply {
+        list.apply {
             setHasFixedSize(true)
             adapter = recyclerAdapter
             layoutManager = GridLayoutManager(activity, numberOfColumns)
@@ -88,12 +75,13 @@ class NewsFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        newsViewModel.statistics.observe(viewLifecycleOwner, Observer {
+        overviewViewModel.statistics.observe(viewLifecycleOwner, Observer {
             // TODO: update recyclerAdapter
-            statistics_item_count.text = it.casesToday.toString()
+            item_title.text = it.casesToday.toString()
         })
     }
 
+    /*
     fun fetchCurrentStatistics(country: String) {
         // deserialize objects with custom deserializer
         Fuel.get("https://disease.sh/v2/countries/${country}")
@@ -107,11 +95,11 @@ class NewsFragment : Fragment() {
                     is Result.Success -> {
                         // Successful request
                         val data = result.get()
-                        newsViewModel.statistics.value = data
+                        overviewViewModel.statistics.value = data
                     }
                 }
             }
-    }
+    }*/
 
     private fun createDummyRecyclerList(): List<CoronaStatistics> {
         val coronaStatisticsList = mutableListOf<CoronaStatistics>()
@@ -135,7 +123,6 @@ class NewsFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "News Fragment"
         private const val DEFAULT_NUMBER_COLUMNS = 2
     }
 }

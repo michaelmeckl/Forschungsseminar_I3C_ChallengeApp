@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.challengecovid.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_challenges.*
 
 class ChallengesFragment : Fragment() {
@@ -32,6 +33,11 @@ class ChallengesFragment : Fragment() {
 
         button_first.setOnClickListener {
             println("Hello Button")
+        }
+
+        fab_button.setOnClickListener { button ->
+            Snackbar.make(button, "This is a snackbar message!", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
         }
     }
 }

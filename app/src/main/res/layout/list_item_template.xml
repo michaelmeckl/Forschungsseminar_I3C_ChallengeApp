@@ -9,31 +9,30 @@
     card_view:cardCornerRadius="@dimen/corner_radius">
 
     <RelativeLayout
-        android:id="@+id/statistics_list_item"
+        android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:padding="4dp">
 
         <TextView
-            android:id="@+id/statistics_item_title"
+            android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="Anzahl neuer Fälle:"
+            tools:text="Mein Text:"
             />
 
-        <TextView
-            android:id="@+id/statistics_item_count"
+        <ImageView
+            android:id="@+id/item_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/statistics_item_title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginVertical="4dp"
-            android:textSize="24sp"
-            tools:text="367"
+            android:layout_below="@+id/item_title"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:contentDescription="Hier ist ein Bild"
             />
 
     </RelativeLayout>

@@ -1,29 +1,31 @@
 package com.example.challengecovid.adapter
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.CoronaStatistics
-import kotlinx.android.synthetic.main.statistics_list_item.view.*
+import kotlinx.android.synthetic.main.list_item_template.view.*
 
-class StatisticsAdapter (private val statisticsList: List<CoronaStatistics>) : RecyclerView.Adapter<StatisticsAdapter.StatisticsListHolder>() {
+class RecyclerAdapter (private val statisticsList: List<CoronaStatistics>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerListHolder>() {
 
     private lateinit var itemView: View
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticsListHolder {
-        itemView = LayoutInflater.from(parent.context).inflate(R.layout.statistics_list_item, parent, false)
-        return StatisticsListHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerListHolder {
+        itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_template, parent, false)
+        return RecyclerListHolder(itemView)
     }
 
     override fun getItemCount() = statisticsList.size
 
-    override fun onBindViewHolder(holder: StatisticsListHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerListHolder, position: Int) {
         holder.bindData(statisticsList[position])
     }
 
-    class StatisticsListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class RecyclerListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // TODO: maybe delete this if a click has no effect as this might confuse users?
         // apply a "pressed" effect by decreasing elevation and showing a ripple effect
         init {
@@ -35,13 +37,16 @@ class StatisticsAdapter (private val statisticsList: List<CoronaStatistics>) : R
                 itemView.elevation = originalElevation / 2
             }
             // set a ripple effect
-            itemView.statistics_list_item.setBackgroundResource(R.drawable.card_view_ripple)
+            itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)
         }
 
         //TODO:
         fun bindData(data: CoronaStatistics) {
-            itemView.statistics_item_title.text = "New cases today:"
-            itemView.statistics_item_count.text = data.casesToday.toString()
+            itemView.item_title.text = "Test Title"
+
+            val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.resources, R.drawable.test, null)
+            itemView.item_image.setImageDrawable(drawable)
+            //itemView.item_image.setImageResource(R.drawable.ic_star)  // too memory intensive
         }
     }
 }

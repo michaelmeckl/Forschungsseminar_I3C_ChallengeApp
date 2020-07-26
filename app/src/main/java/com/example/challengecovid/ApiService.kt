@@ -4,6 +4,9 @@ import com.example.challengecovid.model.CoronaStatistics
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.result.Result
 
+/**
+ * not used at the moment
+ */
 object ApiService {
 
 

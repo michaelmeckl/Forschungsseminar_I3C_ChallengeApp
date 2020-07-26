@@ -32,9 +32,11 @@ class MainActivity : AppCompatActivity() {
         // customize toolbar
     }
 
-    // https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller
-    // workaround for https://issuetracker.google.com/issues/142847973
+    /**
+     * Returns the associated navigation controller, see https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller.
+     */
     private fun getNavController(): NavController {
+        // This is a workaround for https://issuetracker.google.com/issues/142847973.
         val navFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         check(navFragment is NavHostFragment) {
             ("Activity $this does not have a NavHostFragment")

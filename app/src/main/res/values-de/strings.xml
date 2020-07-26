@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_simulation">Simulation</string>
+    <string name="title_overview">Übersicht</string>
     <string name="title_challenges">Challenges</string>
-    <string name="title_news">Neuigkeiten</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">Mein Profil</string>

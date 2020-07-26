@@ -1,11 +1,11 @@
-package com.example.challengecovid.ui.news
+package com.example.challengecovid.ui.overview
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.challengecovid.model.CoronaStatistics
 
-class NewsViewModel : ViewModel() {
+class OverviewViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is news Fragment"

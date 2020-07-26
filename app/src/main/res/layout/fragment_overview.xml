@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.news.NewsFragment">
+    tools:context=".ui.overview.OverviewFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/statistics_list"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:scrollbars="vertical"
-        tools:listitem="@layout/statistics_list_item"
+        tools:listitem="@layout/list_item_template"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

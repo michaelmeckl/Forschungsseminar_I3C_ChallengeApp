@@ -4,6 +4,10 @@ import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
+/**
+ * just for testing purposes with the recycler view, not useful for challenge app
+ */
+
 // TODO: don't make this dependent of the API!
 data class CoronaStatistics(
     val country: String,

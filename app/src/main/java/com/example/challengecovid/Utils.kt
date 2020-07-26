@@ -30,6 +30,9 @@ object Utils {
         return (screenWidthDp / columnWidthDp + 0.5).toInt()
     }
 
+    /**
+     * Checks if the device has a network connection.
+     */
     fun isNetworkConnected(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -39,7 +42,7 @@ object Utils {
     }
 
     /**
-     * Check if the device has an internet connection.
+     * Checks if the device has an internet connection.
      * See https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
      */
     fun hasInternetConnection(): Single<Boolean> {
