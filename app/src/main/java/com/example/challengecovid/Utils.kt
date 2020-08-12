@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
+import android.widget.Toast
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -42,10 +43,10 @@ object Utils {
     }
 
     /**
-     * Checks if the device has an internet connection.
-     * See https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
+     * Util-Method that pings a Google Server to test if the internet connection works.
      */
-    fun hasInternetConnection(): Single<Boolean> {
+    private fun hasInternetConnection(): Single<Boolean> {
+        //see https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
         return Single.fromCallable {
             try {
                 // Connect to Google DNS to check for connection
@@ -63,6 +64,16 @@ object Utils {
         }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    /**
+     *  Checks if the device has an internet connection.
+     */
+    fun checkInternet(context: Context) {
+        hasInternetConnection().subscribe { hasInternet ->
+            println("Internet Access: $hasInternet")
+            Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

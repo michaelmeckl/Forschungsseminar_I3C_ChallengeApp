@@ -1,16 +1,22 @@
 package com.example.challengecovid.ui.overview
 
+import android.graphics.drawable.Drawable
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.challengecovid.R
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.CoronaStatistics
 
 class OverviewViewModel : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is news Fragment"
-    }
-    val text: LiveData<String> = _text
+    val challenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData<List<Challenge>>() }
 
-    val statistics: MutableLiveData<CoronaStatistics> by lazy { MutableLiveData<CoronaStatistics>() }
+    init {
+        //challenges.value = TODO()
+    }
+
+    //TODO: get from db
+
 }

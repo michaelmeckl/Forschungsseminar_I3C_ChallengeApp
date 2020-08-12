@@ -1,10 +1,12 @@
 package com.example.challengecovid.ui.overview
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -12,35 +14,24 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.RecyclerAdapter
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.CoronaStatistics
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.list_item_template.*
+import kotlinx.android.synthetic.main.list_item_template.view.*
 
 class OverviewFragment : Fragment() {
 
     private val overviewViewModel: OverviewViewModel by viewModels()
+    private lateinit var recyclerAdapter: RecyclerAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
-
-        //TODO: check if connection is available maybe in on start / on create of main activity instead? or in a separate networking class
-        /*
-        Utils.hasInternetConnection().subscribe { hasInternet ->
-            println("Internet Access: $hasInternet")
-            Toast.makeText(
-                activity,
-                "Has internet connection: $hasInternet",
-                Toast.LENGTH_SHORT
-            ).show()
-
-         */
 
         setupObservers()
 
+        //TODO: should be somewhere where internet request have to be made, not here!
+        /*
         context?.let {
             if (Utils.isNetworkConnected(it)) {
                 // do api stuff?
@@ -52,7 +43,7 @@ class OverviewFragment : Fragment() {
                     .setPositiveButton(android.R.string.ok) { _, _ -> }
                     .show()
             }
-        }
+        }*/
 
         return root
     }
@@ -60,66 +51,48 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerList = createDummyRecyclerList() //TODO: this should come from an api call later
-        val recyclerAdapter = RecyclerAdapter(recyclerList)
+        val recyclerList = createDummyRecyclerList() //TODO: this should come from the database later
+        recyclerAdapter = RecyclerAdapter()
+        recyclerAdapter.challengeList = recyclerList
 
         // calculate the number of columns used for the grid or the default number if this fragment has no context
         val numberOfColumns =
             this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
+        // setup the Grid Layout with the recycler adapter
         list.apply {
-            setHasFixedSize(true)
+            setHasFixedSize(true) //can improve performance if changes in content do not change the layout size of the RecyclerView
             adapter = recyclerAdapter
             layoutManager = GridLayoutManager(activity, numberOfColumns)
         }
     }
 
     private fun setupObservers() {
-        overviewViewModel.statistics.observe(viewLifecycleOwner, Observer {
-            // TODO: update recyclerAdapter
-            item_title.text = it.casesToday.toString()
+        overviewViewModel.challenges.observe(viewLifecycleOwner, Observer {
+            it?.let {
+recyclerAdapter.challengeList = it
+            }
         })
     }
 
-    /*
-    fun fetchCurrentStatistics(country: String) {
-        // deserialize objects with custom deserializer
-        Fuel.get("https://disease.sh/v2/countries/${country}")
-            .responseObject(CoronaStatistics.Deserializer()) { _, _, result ->
-                when (result) {
-                    is Result.Failure -> {
-                        // Failed request
-                        val ex = result.getException()
-                        println(ex)
-                    }
-                    is Result.Success -> {
-                        // Successful request
-                        val data = result.get()
-                        overviewViewModel.statistics.value = data
-                    }
-                }
-            }
-    }*/
+    private fun createDummyRecyclerList(): List<Challenge> {
+        val challengeList = mutableListOf<Challenge>()
 
-    private fun createDummyRecyclerList(): List<CoronaStatistics> {
-        val coronaStatisticsList = mutableListOf<CoronaStatistics>()
+        val drawable: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.test, null)
 
         for (i in 1..10) {
-            coronaStatisticsList += CoronaStatistics(
-                "Deutschland",
-                34,
-                12,
-                10,
+            challengeList += Challenge(
+                "$i",
+                "Custom Challenge",
+                "Custom Description",
+                drawable,
                 3,
-                24,
-                10,
-                12,
-                80_000_000,
-                null
+                "medium",
+                10f
             )
         }
 
-        return coronaStatisticsList
+        return challengeList
     }
 
     companion object {
