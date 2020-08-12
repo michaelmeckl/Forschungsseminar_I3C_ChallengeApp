@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,10 +14,7 @@ import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.CoronaStatistics
 import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.android.synthetic.main.list_item_template.*
-import kotlinx.android.synthetic.main.list_item_template.view.*
 
 class OverviewFragment : Fragment() {
 
@@ -53,7 +49,7 @@ class OverviewFragment : Fragment() {
 
         val recyclerList = createDummyRecyclerList() //TODO: this should come from the database later
         recyclerAdapter = RecyclerAdapter()
-        recyclerAdapter.challengeList = recyclerList
+        //recyclerAdapter.challengeList = recyclerList
 
         // calculate the number of columns used for the grid or the default number if this fragment has no context
         val numberOfColumns =
@@ -70,7 +66,7 @@ class OverviewFragment : Fragment() {
     private fun setupObservers() {
         overviewViewModel.challenges.observe(viewLifecycleOwner, Observer {
             it?.let {
-recyclerAdapter.challengeList = it
+                recyclerAdapter.submitList(it)
             }
         })
     }
