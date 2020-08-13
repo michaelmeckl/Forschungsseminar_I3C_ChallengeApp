@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
-import com.example.challengecovid.database.Challenge
+import com.example.challengecovid.model.Challenge
 import kotlinx.android.synthetic.main.list_item_template.view.*
 
 class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {

@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.challengecovid.R
+import com.example.challengecovid.model.Challenge
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 /**
  * A database that stores Challenges and a global method to get access to the database.
  */
-@Database(entities = [Challenge::class], version = 1 /*, exportSchema = false*/)
+@Database(entities = [Challenge::class], version = 1, exportSchema = true)
 abstract class ChallengeDatabase : RoomDatabase() {
 
     // Connects the database to the DAO.

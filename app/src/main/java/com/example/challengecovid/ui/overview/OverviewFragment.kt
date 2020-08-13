@@ -1,15 +1,12 @@
 package com.example.challengecovid.ui.overview
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,14 +15,15 @@ import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.database.ChallengeDatabase
-import com.example.challengecovid.database.Challenge
+import com.example.challengecovid.model.Challenge
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_challenges.*
 import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.coroutines.*
 import java.util.*
+import kotlin.random.Random
 
 class OverviewFragment : Fragment() {
 
@@ -69,18 +67,22 @@ class OverviewFragment : Fragment() {
         }
 
         add_button.setOnClickListener {
-            /*
-            val dummyChallenge = Challenge(5656565, "New dummy challenge", "A new challenge was created! Good job!", R.drawable.ic_trophy, 4, "easy", 2f, Date().time)
-            dataSource.insert(dummyChallenge)
-            
-             */
+            val randomNum = Random.nextInt()
+            Log.d("randomNumber", randomNum.toString())
+
+            val dummyChallenge = Challenge(randomNum, "New dummy challenge", "A new challenge was created! Good job!", R.drawable.ic_trophy, 4, "easy", 2f, Date().time)
+
+            runBlocking {
+                withContext(Dispatchers.Default) {
+                    dataSource.insert(dummyChallenge)
+                }
+            }
         }
     }
 
     private fun setupObservers() {
         overviewViewModel.challenges.observe(viewLifecycleOwner, Observer {
             it?.let {
-                //TODO: does this work with ui mode change or crash?
                 recyclerAdapter.submitList(it)  // update recyclerItems that have changed
             }
         })
@@ -88,7 +90,7 @@ class OverviewFragment : Fragment() {
         overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),   //TODO: does this work?
+                    requireActivity().findViewById(android.R.id.content),
                     "DB content changed!",
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -103,7 +105,7 @@ class OverviewFragment : Fragment() {
         Observable.fromCallable {
             //create test challenges
             val challenge1 = Challenge(
-                5773,
+                577553,
                 "Custom Challenge1",
                 "Custom Description1",
                 R.drawable.test,
@@ -113,7 +115,7 @@ class OverviewFragment : Fragment() {
                 1234567 // in milliseconds
             )
             val challenge2 = Challenge(
-                24982,
+                2444982,
                 "Custom Challenge2",
                 "Custom Description2",
                 R.drawable.ic_star,
@@ -142,26 +144,6 @@ class OverviewFragment : Fragment() {
             .subscribe()
     }
 
-    private fun createDummyRecyclerList(): List<Challenge> {
-        val challengeList = mutableListOf<Challenge>()
-
-        //val drawable: Drawable? = ResourcesCompat.getDrawable(resources, R.drawable.test, null)
-
-        for (i in 1..10) {
-            challengeList += Challenge(
-                i,
-                "Custom Challenge",
-                "Custom Description",
-                R.drawable.test,
-                3,
-                "medium",
-                10f,
-                238956
-            )
-        }
-
-        return challengeList
-    }
 
     companion object {
         private const val DEFAULT_NUMBER_COLUMNS = 2

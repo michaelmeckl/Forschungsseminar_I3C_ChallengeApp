@@ -1,4 +1,4 @@
-package com.example.challengecovid.database
+package com.example.challengecovid.model
 
 import android.graphics.drawable.Drawable
 import androidx.room.Entity

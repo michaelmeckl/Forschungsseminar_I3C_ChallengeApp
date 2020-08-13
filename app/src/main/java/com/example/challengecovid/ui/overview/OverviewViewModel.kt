@@ -4,8 +4,9 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeDao
-import com.example.challengecovid.database.Challenge
+import com.example.challengecovid.model.Challenge
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -57,8 +58,20 @@ class OverviewViewModel (dataSource: ChallengeDao,
     init {
         //initializeChallenge(TODO())
 
-        //TODO: test if snackbar and updating db works!
-        //update()
+        val ch = Challenge(
+            2444982,
+            "Geänderte Challenge",
+            "Custom Description2",
+            R.drawable.ic_done,
+            5,
+            "high",
+            10f,
+            5678930
+        )
+        uiScope.launch {
+            update(ch)
+        }
+
     }
 
     /**
@@ -87,7 +100,7 @@ class OverviewViewModel (dataSource: ChallengeDao,
         }
     }
 
-    private suspend fun insert(challenge: Challenge) {
+    suspend fun insert(challenge: Challenge) {
         withContext(Dispatchers.IO) {
             databaseRef.insert(challenge)
         }
