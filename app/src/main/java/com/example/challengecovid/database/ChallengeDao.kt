@@ -1,11 +1,7 @@
 package com.example.challengecovid.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-import com.example.challengecovid.model.Challenge
+import androidx.room.*
 
 
 /**
@@ -14,7 +10,7 @@ import com.example.challengecovid.model.Challenge
 @Dao
 interface ChallengeDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE) // when a challenge already exists, ignore the new one
     fun insert(challenge: Challenge)
 
     /**
@@ -33,11 +29,11 @@ interface ChallengeDao {
      * Selects and returns the row that matches the supplied id / key.
      */
     @Query("SELECT * from challenge_table WHERE challengeId = :key")
-    fun get(key: String): Challenge
+    fun get(key: Int): Challenge
 
     /**
      * Selects and returns all rows in the table, sorted by id in descending order.
      */
     @Query("SELECT * FROM challenge_table ORDER BY challengeId DESC")
-    fun getAllChallengess(): LiveData<List<Challenge>>
+    fun getAllChallenges(): LiveData<List<Challenge>>
 }

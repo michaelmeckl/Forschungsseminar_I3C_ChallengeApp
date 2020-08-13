@@ -4,19 +4,34 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.challengecovid.model.Challenge
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.challengecovid.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * A database that stores Challenges and a global method to get access to the database.
  */
-@Database(entities = [Challenge::class], version = 1, exportSchema = false)
+@Database(entities = [Challenge::class], version = 1 /*, exportSchema = false*/)
 abstract class ChallengeDatabase : RoomDatabase() {
 
     // Connects the database to the DAO.
-    abstract val challengeDao: ChallengeDao
+    abstract fun challengeDao(): ChallengeDao
 
     // use a companion object to get static access
     companion object {
+
+        //TODO: use this instead?
+        /*
+        @Volatile private var INSTANCE: DataDatabase? = null
+
+        fun getInstance(context: Context): DataDatabase =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+        }
+        */
+
+
         /**
          * INSTANCE will keep a reference to any database returned via getInstance.
          * This will help us avoid repeatedly initializing the database, which is expensive.
@@ -25,8 +40,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
          *  reads will be done to and from the main memory. It means that changes made by one
          *  thread to shared data are visible to other threads.
          */
-        @Volatile
-        private var INSTANCE: ChallengeDatabase? = null
+        @Volatile private var INSTANCE: ChallengeDatabase? = null
 
         /**
          * Helper function to get the database.
@@ -39,7 +53,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
          * @param context The application context Singleton, used to get access to the filesystem.
          * @return ChallengeDatabase A singleton instance of the Database
          */
-        fun getInstance(context: Context): ChallengeDatabase {
+        fun getInstance(context: Context /*, scope: CoroutineScope*/): ChallengeDatabase {
             // Multiple threads can ask for the database at the same time, ensure we only initialize
             // it once by using synchronized. Only one thread may enter a synchronized block at a time.
             synchronized(this) {
@@ -48,17 +62,9 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 // Smart cast is only available to local variables.
                 var instance = INSTANCE
 
-                // If instance is `null` make a new database instance.
                 if (instance == null) {
-                    instance = Room.databaseBuilder(context.applicationContext, ChallengeDatabase::class.java,
-                        "challenge_database")
-                        // Wipes and rebuilds instead of migrating if no Migration object.
-                        // see https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
-                        .fallbackToDestructiveMigration()
-                        .build()
-
-                    // Assign INSTANCE to the newly created database.
-                    INSTANCE = instance
+                    // If instance is `null` make a new database instance and assign INSTANCE to the newly created database.
+                    instance = buildDatabase(context).also { INSTANCE = it }
                 }
 
                 // Return instance; smart cast to be non-null.
@@ -66,8 +72,65 @@ abstract class ChallengeDatabase : RoomDatabase() {
             }
         }
 
-        fun destroyDataBase(){
+        private fun buildDatabase(context: Context): ChallengeDatabase {
+            return Room.databaseBuilder(context.applicationContext, ChallengeDatabase::class.java, "challenge_database")
+                // Wipes and rebuilds instead of migrating.
+                // see https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
+                .fallbackToDestructiveMigration()
+                //.addCallback(ChallengeDatabaseCallback(scope))    //TODO
+                .build()
+        }
+
+        fun destroyDatabase(){
             INSTANCE = null
+        }
+    }
+
+
+    private class ChallengeDatabaseCallback(
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+
+        // Populate the database on creation with initial challenge data
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    populateDatabase(database.challengeDao())
+                }
+            }
+        }
+
+        private suspend fun populateDatabase(challengeDao: ChallengeDao) {
+            // Delete all content here.
+            challengeDao.clear()
+
+
+            // TODO: Add some challenges at the start!
+            val challenge1 = Challenge(
+                79374,
+                "Mehr Sport",
+                "Jeden Tag 10 Liegestütze und 15 Push Ups!",
+                null,
+                3,
+                "medium",
+                5f,
+                230976
+            )
+            val challenge2 = Challenge(
+                42648,
+                "Gesünder leben",
+                "An apple a day, keeps the doctor away!",
+                R.drawable.test,
+                10,
+                "high",
+                3f,
+                2853053
+            )
+
+            challengeDao.insert(challenge1)
+            challengeDao.insert(challenge2)
+
         }
     }
 }
