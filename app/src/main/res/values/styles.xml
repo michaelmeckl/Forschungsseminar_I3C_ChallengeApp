@@ -9,4 +9,11 @@
         <item name="colorSecondaryVariant">@color/colorAccentLight</item>
     </style>
 
+    <style name="recycler_title">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Large</item>
+    </style>
+
+
 </resources>

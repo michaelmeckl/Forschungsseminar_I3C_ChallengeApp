@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -75,6 +77,31 @@ object Utils {
             Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
         }
     }
+    /*
+    //TODO: use it like this for checking internet connection:
+    context?.let {
+        if (Utils.isNetworkConnected(it)) {
+            // do stuff with internet
+        } else {
+            AlertDialog.Builder(it)
+                .setTitle("No Internet Connection")
+                .setMessage("Please check your internet connection and try again")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.ok) { _, _ -> }
+                .show()
+        }
+    }
+    */
+
+    /**
+     * Utility-Method to create a viewmodel with custom params.
+     * used like: by viewmodels (viewModelFactory { MyViewModel("parameter") } )
+     */
+    inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+        object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+        }
 
 }
 

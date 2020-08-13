@@ -19,9 +19,7 @@
             android:id="@+id/item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            style="@style/recycler_title"
             tools:text="Challenge Title:"
             />
 
@@ -33,8 +31,20 @@
             android:layout_below="@+id/item_title"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
+            android:layout_centerInParent="true"
             android:src="@drawable/ic_home"
             tools:ignore="ContentDescription"
+            />
+
+        <TextView
+            android:id="@+id/item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_image"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            tools:text="Custom Description:"
             />
 
     </RelativeLayout>
