@@ -4,7 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -103,6 +107,17 @@ object Utils {
             override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
         }
 
+    /**
+     * This slides a given view to the right.
+     */
+    fun AppCompatActivity.slideOutView(v: View) {
+        val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
+        v.startAnimation(slideOutAnim)
+
+        // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
+        v.visibility = View.GONE
+        v.clearAnimation()
+    }
 }
 
 
