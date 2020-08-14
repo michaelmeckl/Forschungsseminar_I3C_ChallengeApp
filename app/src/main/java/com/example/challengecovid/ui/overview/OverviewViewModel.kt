@@ -116,6 +116,16 @@ class OverviewViewModel (dataSource: ChallengeDao,
         _showSnackbarEvent.value = null
     }
 
+    /**
+     * Add a new challenge to the database.
+     */
+    fun addNewChallenge(challenge: Challenge) {
+        //launch on the main thread because the result affects the UI
+        uiScope.launch {
+            insert(challenge)
+        }
+    }
+
     private fun initializeChallenge(challengeID: Int) {
         uiScope.launch {
             challenge.value = getChallengeFromDatabase(challengeID)
@@ -133,7 +143,9 @@ class OverviewViewModel (dataSource: ChallengeDao,
         }
     }
 
-    suspend fun insert(challenge: Challenge) {
+    private suspend fun insert(challenge: Challenge) {
+        // insert the new challenge on a separate I/O thread that is optimized for room interaction
+        // to avoid blocking the main / UI thread
         withContext(Dispatchers.IO) {
             databaseRef.insert(challenge)
         }

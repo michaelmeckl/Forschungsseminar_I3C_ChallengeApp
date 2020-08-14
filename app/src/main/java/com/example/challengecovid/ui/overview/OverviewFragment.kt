@@ -82,16 +82,14 @@ class OverviewFragment : Fragment() {
                 Date().time
             )
 
-            //TODO: cleanest way would be to call a function in the viewmodel instead and never perform db operations in the view
-            //TODO: test this
-            //launch a new coroutineScope on the main thread because the result affects the UI
+            overviewViewModel.addNewChallenge(dummyChallenge)
+            /*
             val job = CoroutineScope(Dispatchers.Main).launch {
-                // insert the new challenge on a separate I/O thread that is optimized for room interaction
-                // to avoid blocking the main / UI thread
                 withContext(Dispatchers.IO) {
                     dataSource.insert(dummyChallenge)
                 }
             }
+            */
         }
     }
 
