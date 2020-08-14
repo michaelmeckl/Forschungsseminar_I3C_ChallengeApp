@@ -32,11 +32,11 @@ class ChallengesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button_first.setOnClickListener {
-            println("Hello Button")
-        }
+//        button_first.setOnClickListener {
+//            println("Hello Button")
+//        }
 
-        fab_button.setOnClickListener { button ->
+        fab_create_challenge.setOnClickListener { button ->
             Snackbar.make(button, "This is a snackbar message!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
