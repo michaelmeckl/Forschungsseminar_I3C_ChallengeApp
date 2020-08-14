@@ -78,7 +78,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 // Wipes and rebuilds instead of migrating.
                 // see https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
                 .fallbackToDestructiveMigration()
-                //.addCallback(ChallengeDatabaseCallback(scope))    //TODO
+                //.addCallback(ChallengeDatabaseCallback(scope, context))    //TODO
                 .build()
         }
 
@@ -89,7 +89,8 @@ abstract class ChallengeDatabase : RoomDatabase() {
 
 
     private class ChallengeDatabaseCallback(
-        private val scope: CoroutineScope
+        private val scope: CoroutineScope,
+        private val context: Context
     ) : RoomDatabase.Callback() {
 
         // Populate the database on creation with initial challenge data
@@ -97,14 +98,14 @@ abstract class ChallengeDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    populateDatabase(database.challengeDao())
+                    prepopulateDatabase(database.challengeDao(), context)
                 }
             }
         }
 
-        private suspend fun populateDatabase(challengeDao: ChallengeDao) {
+        private suspend fun prepopulateDatabase(challengeDao: ChallengeDao, context: Context) {
             // Delete all content here.
-            challengeDao.clear()
+            challengeDao.clear()    //TODO: be careful to not delete anything important like user generated content!
 
 
             // TODO: Add some challenges at the start!
@@ -131,6 +132,19 @@ abstract class ChallengeDatabase : RoomDatabase() {
 
             challengeDao.insert(challenge1)
             challengeDao.insert(challenge2)
+
+            /*
+            //TODO: pre populate the database from an external file on the hard disk?
+            val resources = context.resources
+            val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
+                it.readText()
+            }
+            val typeToken = object : TypeToken<List<Player>>() {}.type
+            val tennisPlayers = Gson().fromJson<List<Player>>(jsonString, typeToken)
+
+            playerDao.insertAllPlayers(tennisPlayers)
+
+             */
 
         }
     }

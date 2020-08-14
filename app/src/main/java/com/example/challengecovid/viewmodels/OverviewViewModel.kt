@@ -1,13 +1,16 @@
 package com.example.challengecovid.viewmodels
 
 import android.app.Application
+import androidx.annotation.UiThread
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeDao
+import com.example.challengecovid.database.ChallengeDatabase
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.repository.ChallengeRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.IOException
@@ -27,19 +30,14 @@ class OverviewViewModel (dataSource: ChallengeDao,
                          application: Application
 ) : AndroidViewModel(application) {
 
-    /*//TODO: use this for repository
-    /**
-     * The data source this ViewModel will fetch results from.
-     */
-    private val challengeRepository = ChallengeRepository(getDatabase(application))
-
-    val challenges = challengeRepository.challenges
-     */
-
     /**
      * Hold a reference to the Database via the Dao.
      */
     private val databaseRef = dataSource
+
+    //TODO: instead of datasource pass the repository to this viewmodel
+    private val repository = ChallengeRepository(ChallengeDatabase.getInstance(application /*, uiScope*/))
+    // val challenges = challengeRepository.challenges
 
     /**
      * This is the job for all coroutines started by this ViewModel.
@@ -134,13 +132,19 @@ class OverviewViewModel (dataSource: ChallengeDao,
 
     private suspend fun getChallengeFromDatabase(challengeID: Int): Challenge? {
         return withContext(Dispatchers.IO) {
-            val challenge = databaseRef.get(challengeID)
-            if (challenge.duration <= (Date().time - challenge.startTime)) {
+            val challenge = databaseRef.get(challengeID).value
+            val difference = Date().time - challenge?.startTime!!
+            if (challenge.duration <= difference) {
                 // Duration Time is over -> challenge is outdated!
                 return@withContext null
             }
             challenge
         }
+    }
+
+    //TODO: instead fetch from the repository instead!
+    fun getChallenge(challenge: Challenge): LiveData<Challenge> {
+        return repository.getChallenge(challenge.challengeId)
     }
 
     private suspend fun insert(challenge: Challenge) {

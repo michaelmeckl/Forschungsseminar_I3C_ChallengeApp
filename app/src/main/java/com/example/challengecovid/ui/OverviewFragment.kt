@@ -22,6 +22,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_overview.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import kotlin.random.Random
@@ -38,7 +41,7 @@ class OverviewFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val application: Application = requireNotNull(this.activity).application
-        db = ChallengeDatabase.getInstance(application)
+        db = ChallengeDatabase.getInstance(application) //TODO: should the db be instantiated in the application class for prepopulating?
         dataSource = db.challengeDao()
 
         // init viewmodel with context and datasource
@@ -147,9 +150,11 @@ class OverviewFragment : Fragment() {
             )
 
             // add the challenges to the database
-            with(dataSource){
-                this.insert(challenge1)
-                this.insert(challenge2)
+            CoroutineScope(Dispatchers.Main).launch {
+                with(dataSource){
+                    this.insert(challenge1)
+                    this.insert(challenge2)
+                }
             }
 
             // fetch them from the db
