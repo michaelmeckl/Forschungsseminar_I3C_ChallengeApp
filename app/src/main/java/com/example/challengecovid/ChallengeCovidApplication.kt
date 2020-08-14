@@ -1,6 +1,9 @@
 package com.example.challengecovid
 
 import android.app.Application
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -11,17 +14,26 @@ import timber.log.Timber
 @Suppress("unused")
 class ChallengeCovidApplication: Application() {
 
-    // Important: more expensive tasks like fetching data from a db or network must be performed on a separate thread
-    // so the app start time is not delayed!
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
+
     override fun onCreate() {
         super.onCreate()
+        init()
+    }
 
-        // if in Debug Mode enable logging with Timber
-        if(BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        } /* else {
-            Timber.plant(CrashReportingTree())
-        }*/
+    /**
+     * Expensive tasks like fetching data from a db or network must be performed on a separate thread
+     * so the app start time is not delayed!
+     */
+    private fun init() {
+        applicationScope.launch {
 
+            // if in Debug Mode enable logging with Timber
+            if (BuildConfig.DEBUG) {
+                Timber.plant(Timber.DebugTree())
+            } /* else {
+                Timber.plant(CrashReportingTree())
+            }*/
+        }
     }
 }
