@@ -1,4 +1,4 @@
-package com.example.challengecovid.ui.overview
+package com.example.challengecovid.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

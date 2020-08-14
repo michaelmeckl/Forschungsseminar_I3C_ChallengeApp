@@ -1,8 +1,7 @@
-package com.example.challengecovid.ui.overview
+package com.example.challengecovid.ui
 
 import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +15,13 @@ import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.database.ChallengeDatabase
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.viewmodels.OverviewViewModel
+import com.example.challengecovid.viewmodels.OverviewViewmodelFactory
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 import kotlin.random.Random

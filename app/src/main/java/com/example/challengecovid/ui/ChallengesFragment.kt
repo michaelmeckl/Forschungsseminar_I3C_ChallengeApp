@@ -1,4 +1,4 @@
-package com.example.challengecovid.ui.challenges
+package com.example.challengecovid.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.challengecovid.R
+import com.example.challengecovid.viewmodels.ChallengesViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_challenges.*
 

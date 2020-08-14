@@ -1,4 +1,4 @@
-package com.example.challengecovid.ui.overview
+package com.example.challengecovid.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,10 @@ class OverviewViewmodelFactory(private val dataSource: ChallengeDao,
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return OverviewViewModel(dataSource, application) as T
+            return OverviewViewModel(
+                dataSource,
+                application
+            ) as T
         }
         throw IllegalArgumentException("Unable to construct viewmodel")
     }
