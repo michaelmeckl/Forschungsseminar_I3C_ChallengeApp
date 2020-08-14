@@ -1,6 +1,7 @@
 package com.example.challengecovid.ui.overview
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,11 +9,32 @@ import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.model.Challenge
 import kotlinx.coroutines.*
+import timber.log.Timber
+import java.io.IOException
 import java.util.*
 
+/**
+ * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
+ * allows data to survive configuration changes such as screen rotations. In addition, background
+ * work such as fetching network results or performing database operations can continue through
+ * configuration changes and deliver results after the new Fragment or Activity is available.
+ *
+ * @param application The application that this viewmodel is attached to, it's safe to hold a
+ * reference to applications across rotation since Application is never recreated during actiivty
+ * or fragment lifecycle events.
+ */
 class OverviewViewModel (dataSource: ChallengeDao,
                          application: Application
-) : ViewModel() {
+) : AndroidViewModel(application) {
+
+    /*//TODO: use this for repository
+    /**
+     * The data source this ViewModel will fetch results from.
+     */
+    private val challengeRepository = ChallengeRepository(getDatabase(application))
+
+    val challenges = challengeRepository.challenges
+     */
 
     /**
      * Hold a reference to the Database via the Dao.
@@ -20,9 +42,10 @@ class OverviewViewModel (dataSource: ChallengeDao,
     private val databaseRef = dataSource
 
     /**
-     * viewModelJob allows us to cancel all coroutines started by this ViewModel.
+     * This is the job for all coroutines started by this ViewModel.
+     * Cancelling this job will cancel all coroutines started by this ViewModel.
      */
-    private var viewModelJob = Job()
+    private var viewModelJob = SupervisorJob()
 
     /**
      * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
@@ -34,7 +57,7 @@ class OverviewViewModel (dataSource: ChallengeDao,
      * the main thread on Android. This is a sensible default because most coroutines started by
      * a [ViewModel] update the UI after performing some processing.
      */
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     //val challenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData<List<Challenge>>() }
     val challenges = databaseRef.getAllChallenges()
@@ -57,6 +80,16 @@ class OverviewViewModel (dataSource: ChallengeDao,
 
     init {
         //initializeChallenge(TODO())
+
+        // TODO: refresh the room db with new challenges from other players?
+        /*
+        uiScope.launch {
+            try {
+                challengeRepository.refreshChallenges()
+            } catch (e: IOException) {
+                Timber.e(e)
+            }
+        }*/
 
         val ch = Challenge(
             2444982,

@@ -22,6 +22,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 import java.util.*
 import kotlin.random.Random
 
@@ -47,7 +48,6 @@ class OverviewFragment : Fragment() {
         ).get(OverviewViewModel::class.java)
 
         testDatabase()
-        setupObservers()
 
         return root
     }
@@ -66,18 +66,41 @@ class OverviewFragment : Fragment() {
             layoutManager = GridLayoutManager(activity, numberOfColumns)
         }
 
+        // see https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#7
         add_button.setOnClickListener {
             val randomNum = Random.nextInt()
-            Log.d("randomNumber", randomNum.toString())
+            Timber.tag("randomNumber").d(randomNum.toString())
 
-            val dummyChallenge = Challenge(randomNum, "New dummy challenge", "A new challenge was created! Good job!", R.drawable.ic_trophy, 4, "easy", 2f, Date().time)
+            val dummyChallenge = Challenge(
+                randomNum,
+                "New dummy challenge",
+                "A new challenge was created! Good job!",
+                R.drawable.ic_trophy,
+                4,
+                "easy",
+                2f,
+                Date().time
+            )
 
-            runBlocking {
-                withContext(Dispatchers.Default) {
+            //TODO: cleanest way would be to call a function in the viewmodel instead and never perform db operations in the view
+            //TODO: test this
+            //launch a new coroutineScope on the main thread because the result affects the UI
+            val job = CoroutineScope(Dispatchers.Main).launch {
+                // insert the new challenge on a separate I/O thread that is optimized for room interaction
+                // to avoid blocking the main / UI thread
+                withContext(Dispatchers.IO) {
                     dataSource.insert(dummyChallenge)
                 }
             }
         }
+    }
+
+    /**
+     * Called when the fragment's activity has been created and this fragment's view hierarchy instantiated.
+     */
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupObservers()
     }
 
     private fun setupObservers() {
@@ -136,8 +159,8 @@ class OverviewFragment : Fragment() {
 
         }.doOnNext { list ->
             var finalString = ""
-            list.value?.map { finalString += it.title +  " - " }
-            Log.d("DB_Test", finalString)
+            list.value?.map { finalString += it.title + " - " }
+            Timber.d(finalString)
 
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
