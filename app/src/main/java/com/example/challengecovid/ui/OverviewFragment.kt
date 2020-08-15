@@ -15,8 +15,9 @@ import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.database.ChallengeDatabase
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.viewmodels.OverviewViewModel
-import com.example.challengecovid.viewmodels.OverviewViewmodelFactory
+import com.example.challengecovid.viewmodels.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -31,7 +32,6 @@ import kotlin.random.Random
 
 class OverviewFragment : Fragment() {
 
-    private lateinit var db: ChallengeDatabase
     private lateinit var dataSource: ChallengeDao
     private lateinit var overviewViewModel: OverviewViewModel
 
@@ -41,16 +41,17 @@ class OverviewFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val application: Application = requireNotNull(this.activity).application
-        db = ChallengeDatabase.getInstance(application) //TODO: should the db be instantiated in the application class for prepopulating?
-        dataSource = db.challengeDao()
+        val db = ChallengeDatabase.getInstance(application /*, coroutineScope*/) //TODO: should the db be instantiated in the application class for prepopulating?
+        val repository = ChallengeRepository(db)
 
-        // init viewmodel with context and datasource
+        // init viewmodel with datasource
         overviewViewModel = ViewModelProvider(
             this,
-            OverviewViewmodelFactory(dataSource, application)
+            ViewModelFactory(repository)
         ).get(OverviewViewModel::class.java)
 
-        testDatabase()
+        //dataSource = db.challengeDao()
+        //testDatabase()
 
         return root
     }
@@ -71,11 +72,10 @@ class OverviewFragment : Fragment() {
 
         // see https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#7
         add_button.setOnClickListener {
-            val randomNum = Random.nextInt()
-            Timber.tag("randomNumber").d(randomNum.toString())
+            //val randomNum = Random.nextInt()
+            //Timber.tag("randomNumber").d(randomNum.toString())
 
             val dummyChallenge = Challenge(
-                randomNum,
                 "New dummy challenge",
                 "A new challenge was created! Good job!",
                 R.drawable.ic_trophy,
@@ -129,7 +129,6 @@ class OverviewFragment : Fragment() {
         Observable.fromCallable {
             //create test challenges
             val challenge1 = Challenge(
-                577553,
                 "Custom Challenge1",
                 "Custom Description1",
                 R.drawable.test,
@@ -139,7 +138,6 @@ class OverviewFragment : Fragment() {
                 1234567 // in milliseconds
             )
             val challenge2 = Challenge(
-                2444982,
                 "Custom Challenge2",
                 "Custom Description2",
                 R.drawable.ic_star,

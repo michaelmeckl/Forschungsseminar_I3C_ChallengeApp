@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 /**
  * A database that stores Challenges and a global method to get access to the database.
  */
-@Database(entities = [Challenge::class], version = 1, exportSchema = true)
+@Database(entities = [Challenge::class], version = 2, exportSchema = true)
 abstract class ChallengeDatabase : RoomDatabase() {
 
     // Connects the database to the DAO.
@@ -110,7 +110,6 @@ abstract class ChallengeDatabase : RoomDatabase() {
 
             // TODO: Add some challenges at the start!
             val challenge1 = Challenge(
-                79374,
                 "Mehr Sport",
                 "Jeden Tag 10 Liegestütze und 15 Push Ups!",
                 null,
@@ -120,7 +119,6 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 230976
             )
             val challenge2 = Challenge(
-                42648,
                 "Gesünder leben",
                 "An apple a day, keeps the doctor away!",
                 R.drawable.test,

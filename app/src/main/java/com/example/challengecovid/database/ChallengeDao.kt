@@ -16,6 +16,9 @@ interface ChallengeDao {
     @Update
     suspend fun update(challenge: Challenge)
 
+    @Query("DELETE FROM challenge_table WHERE challengeId = :id")
+    suspend fun delete(id: String)
+
     /**
      * Deletes all values from the table. This does not delete the table, only its contents.
      */
@@ -26,7 +29,7 @@ interface ChallengeDao {
      * Selects and returns the row that matches the supplied id / key.
      */
     @Query("SELECT * from challenge_table WHERE challengeId = :key")
-    fun get(key: Int): LiveData<Challenge>   // no suspend for LiveData!!
+    fun get(key: String): LiveData<Challenge>   // no suspend for LiveData!!
 
     /**
      * Selects and returns all rows in the table, sorted by id in descending order.

@@ -34,6 +34,8 @@ class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffC
             // apply a "pressed" visual effect by decreasing elevation and showing a ripple effect
             itemView.setOnClickListener {
                 itemView.elevation = originalElevation / 2
+
+                //TODO: show clicked item enlarged in front or detail view!
             }
             // set a ripple effect
             itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)

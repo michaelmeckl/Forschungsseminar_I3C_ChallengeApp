@@ -9,8 +9,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import com.example.challengecovid.viewmodels.ViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -96,28 +96,25 @@ object Utils {
         }
     }
     */
-
-    /**
-     * Utility-Method to create a viewmodel with custom params.
-     * used like: by viewmodels (viewModelFactory { MyViewModel("parameter") } )
-     */
-    inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
-        object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
-        }
-
-    /**
-     * This slides a given view to the right.
-     */
-    fun AppCompatActivity.slideOutView(v: View) {
-        val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
-        v.startAnimation(slideOutAnim)
-
-        // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
-        v.visibility = View.GONE
-        v.clearAnimation()
-    }
 }
+
+/**
+ * This slides a given view to the right.
+ */
+fun AppCompatActivity.slideOutView(v: View) {
+    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
+    v.startAnimation(slideOutAnim)
+
+    // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
+    v.visibility = View.GONE
+    v.clearAnimation()
+}
+
+/*
+fun Fragment.getViewModelFactory(): ViewModelFactory {
+    val repository = (requireContext().applicationContext as ChallengeCovidApplication).challengeRepository
+    return ViewModelFactory(repository, this)
+}
+*/
 
 

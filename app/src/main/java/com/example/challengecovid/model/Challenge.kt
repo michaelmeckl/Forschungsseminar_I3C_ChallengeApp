@@ -6,7 +6,6 @@ import java.util.UUID
 
 @Entity(tableName = "challenge_table")
 data class Challenge (
-    @PrimaryKey val challengeId: String = UUID.randomUUID().toString(),     //generate a random id
     val title: String,
     val description: String?,
     //val icon: Drawable?,   //Drawable cant be saved in room! Only save the path to the resource
@@ -14,7 +13,9 @@ data class Challenge (
     val points: Int,
     val difficulty: String,
     val duration: Float,
-    val startTime: Long
+    val startTime: Long,
+    //val completed: Boolean,   //TODO: necessary?
+    @PrimaryKey val challengeId: String = UUID.randomUUID().toString()     //generate a random id
 )
 
 /**
