@@ -13,7 +13,8 @@
 
     <style name="recycler_title">
         <item name="android:layout_margin">8dp</item>
-        <item name="android:textAppearance">@android:style/TextAppearance.Material.Large</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Title</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 
