@@ -2,6 +2,7 @@ package com.example.challengecovid.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 enum class Gender {
     MALE,
@@ -11,8 +12,7 @@ enum class Gender {
 
 @Entity(tableName = "user_table")
 data class User (
-    @PrimaryKey(autoGenerate = true)
-    private val userId: Int,
+    @PrimaryKey private val userId: String = UUID.randomUUID().toString(),
     private val username: String,
     private val gender: Gender,
     private val level: Int

@@ -2,10 +2,11 @@ package com.example.challengecovid.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(tableName = "challenge_table")
 data class Challenge (
-    @PrimaryKey(autoGenerate = true) val challengeId: Int = 0,
+    @PrimaryKey val challengeId: String = UUID.randomUUID().toString(),     //generate a random id
     val title: String,
     val description: String?,
     //val icon: Drawable?,   //Drawable cant be saved in room! Only save the path to the resource
