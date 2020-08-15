@@ -43,7 +43,8 @@ class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffC
             itemView.item_title.text = data.title
             itemView.item_description.text = data.description
 
-            //TODO unschön!
+            //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
+
             val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
             itemView.item_image.setImageDrawable(drawable)
         }

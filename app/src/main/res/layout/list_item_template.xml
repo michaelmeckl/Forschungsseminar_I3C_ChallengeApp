@@ -8,6 +8,8 @@
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="@dimen/corner_radius">
+    <!-- elevation needs to be zero for background color:
+     app:cardBackgroundColor="@color/content_background" -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/list_item"
