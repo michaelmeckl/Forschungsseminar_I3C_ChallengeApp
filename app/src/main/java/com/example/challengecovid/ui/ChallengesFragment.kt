@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.challengecovid.R
 import com.example.challengecovid.viewmodels.ChallengesViewModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_challenges.*
+
 
 class ChallengesFragment : Fragment() {
 
@@ -23,9 +23,9 @@ class ChallengesFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_challenges, container, false)
 
-        challengesViewModel.text.observe(viewLifecycleOwner, Observer {
-            text_challenges.text = it
-        })
+//        challengesViewModel.text.observe(viewLifecycleOwner, Observer {
+//            text_challenges.text = it
+//        })
         return root
     }
 
@@ -36,9 +36,19 @@ class ChallengesFragment : Fragment() {
 //            println("Hello Button")
 //        }
 
-        fab_create_challenge.setOnClickListener { button ->
-            Snackbar.make(button, "This is a snackbar message!", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        fab_create_challenge.setOnClickListener {
+            val newFragment: Fragment = CreateChallengeFragment()
+            val transaction = requireFragmentManager().beginTransaction()
+
+            transaction.replace(
+                R.id.nav_host_fragment,
+                newFragment
+            )
+
+            transaction.addToBackStack(null) // if written, this transaction will be added to backstack
+
+            transaction.commit()
+
         }
     }
 }

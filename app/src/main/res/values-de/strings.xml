@@ -6,4 +6,15 @@
     <!-- toolbar actions -->
     <string name="action_profile">Mein Profil</string>
     <string name="action_about">Über</string>
+    <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
+    <string name="hint_name_create_new_challenge">Name der Challenge</string>
+    <string name="hint_description_create_new_challenge">Beschreibung</string>
+    <string name="hint_points_create_new_challenge">Anzahl XP</string>
+    <string name="button_text_create_challenge">Challenge erstellen</string>
+
+    <string-array name="difficulties_challenges">
+            <item>Einfach</item>
+            <item>Mittel</item>
+            <item>Schwer</item>
+        </string-array>
 </resources>
