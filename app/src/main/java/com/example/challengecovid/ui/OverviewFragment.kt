@@ -15,6 +15,7 @@ import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.database.ChallengeDatabase
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.Difficulty
 import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ViewModelFactory
@@ -78,11 +79,10 @@ class OverviewFragment : Fragment() {
             val dummyChallenge = Challenge(
                 "New dummy challenge",
                 "A new challenge was created! Good job!",
-                R.drawable.ic_trophy,
-                4,
-                "easy",
-                2f,
-                Date().time
+                Difficulty.LEICHT,
+                false,
+                null,
+                R.drawable.ic_trophy
             )
 
             overviewViewModel.addNewChallenge(dummyChallenge)
@@ -125,6 +125,7 @@ class OverviewFragment : Fragment() {
         })
     }
 
+    /*
     private fun testDatabase() {
         Observable.fromCallable {
             //create test challenges
@@ -167,6 +168,8 @@ class OverviewFragment : Fragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()
     }
+
+     */
 
 
     companion object {

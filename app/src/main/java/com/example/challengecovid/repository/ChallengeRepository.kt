@@ -1,11 +1,8 @@
 package com.example.challengecovid.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.challengecovid.database.ChallengeDatabase
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.ChallengeUI
-import com.example.challengecovid.model.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -52,11 +49,6 @@ class ChallengeRepository(private val database: ChallengeDatabase) {
         return challengeDao.getAllChallenges()
     }
 
-
-    // not used at the moment
-    val challenges: LiveData<List<ChallengeUI>> = Transformations.map(database.challengeDao().getAllChallenges()) {
-        it.asDomainModel()
-    }
 
     /**
      * Refresh the challenges stored in the offline cache (Room).

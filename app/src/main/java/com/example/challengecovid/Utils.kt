@@ -9,8 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.example.challengecovid.viewmodels.ViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -94,6 +92,54 @@ object Utils {
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .show()
         }
+    }
+    */
+
+    /*
+    fun fetchCurrentStatistics(country: String) {
+        // deserialize objects with custom deserializer
+        Fuel.get("https://disease.sh/v2/countries/${country}")
+            .responseObject(CoronaStatistics.Deserializer()) { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        // Failed request
+                        val ex = result.getException()
+                        println(ex)
+                    }
+                    is Result.Success -> {
+                        // Successful request
+                        val data = result.get()
+                    }
+                }
+            }
+    }
+
+     */
+
+    /*
+    fun makeRequest(): Triple<Response, String, Body> {
+
+        val httpAsync = Fuel.get("https://disease.sh/v2/all")
+            .responseJson { request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        // Failed request
+                        val ex = result.getException()
+                        println(ex)
+                    }
+                    is Result.Success -> {
+                        // Successful request
+                        val data = result.get().content
+                        val test = result.value.obj()
+                        println(data)
+                        println(test)
+                    }
+                }
+            }
+
+        //val response = httpAsync.awaitResponse(Response)
+        val response = httpAsync.join()
+        return Triple(response, response.responseMessage, response.body())
     }
     */
 }
