@@ -1,5 +1,7 @@
 package com.example.challengecovid
 
+import ProfileView
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -56,7 +58,12 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             //TODO
-            R.id.action_profile -> true
+            R.id.action_profile -> {
+                val intent = Intent(this, ProfileView::class.java)
+
+                startActivity(intent)
+                true
+            }
             R.id.action_about -> true
             else -> super.onOptionsItemSelected(item)
         }
