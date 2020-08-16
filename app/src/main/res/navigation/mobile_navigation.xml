@@ -7,13 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_overview"
-        android:name="com.example.challengecovid.ui.overview.OverviewFragment"
+        android:name="com.example.challengecovid.ui.OverviewFragment"
         android:label="@string/title_overview"
-        tools:layout="@layout/fragment_overview" />
+        tools:layout="@layout/fragment_overview">
+        <action
+            android:id="@+id/action_overview_to_challenges"
+            app:destination="@id/navigation_challenges"
+            app:enterAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_in_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_challenges"
-        android:name="com.example.challengecovid.ui.challenges.ChallengesFragment"
+        android:name="com.example.challengecovid.ui.ChallengesFragment"
         android:label="@string/title_challenges"
         tools:layout="@layout/fragment_challenges" />
 

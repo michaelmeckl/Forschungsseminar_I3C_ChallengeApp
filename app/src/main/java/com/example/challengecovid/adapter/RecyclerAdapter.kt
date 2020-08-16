@@ -5,48 +5,71 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
-import com.example.challengecovid.model.CoronaStatistics
+import com.example.challengecovid.model.Challenge
 import kotlinx.android.synthetic.main.list_item_template.view.*
 
-class RecyclerAdapter (private val statisticsList: List<CoronaStatistics>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerListHolder>() {
+class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {
 
-    private lateinit var itemView: View
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerListHolder {
-        itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_template, parent, false)
-        return RecyclerListHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
     }
 
-    override fun getItemCount() = statisticsList.size
-
-    override fun onBindViewHolder(holder: RecyclerListHolder, position: Int) {
-        holder.bindData(statisticsList[position])
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        val item = getItem(position)
+        viewHolder.bind(item)
     }
 
-    class RecyclerListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: maybe delete this if a click has no effect as this might confuse users?
-        // apply a "pressed" effect by decreasing elevation and showing a ripple effect
+    // define the view holder with a private constructor so it can only be instantiated with the from()-Method
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         init {
-            //save original elevation of the layout in a local variable as otherwise the elevation would decrease by half on every click
+            //save original elevation in a local variable to prevent the elevation from decreasing by half on every click
             val originalElevation = itemView.elevation
 
-            // Define click listener for the ViewHolder's View.
+            // apply a "pressed" visual effect by decreasing elevation and showing a ripple effect
             itemView.setOnClickListener {
                 itemView.elevation = originalElevation / 2
+
+                //TODO: show clicked item enlarged in front or detail view!
             }
             // set a ripple effect
             itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)
         }
 
-        //TODO:
-        fun bindData(data: CoronaStatistics) {
-            itemView.item_title.text = "Test Title"
+        fun bind(data: Challenge) {
+            itemView.item_title.text = data.title
+            itemView.item_description.text = data.description
 
-            val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.resources, R.drawable.test, null)
+            //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
+
+            val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
             itemView.item_image.setImageDrawable(drawable)
-            //itemView.item_image.setImageResource(R.drawable.ic_star)  // too memory intensive
         }
+
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.list_item_template, parent, false)
+
+                return ViewHolder(view)
+            }
+        }
+    }
+}
+
+// This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
+class DiffCallback : DiffUtil.ItemCallback<Challenge>() {
+    override fun areItemsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
+        return oldItem.challengeId == newItem.challengeId
+    }
+
+    override fun areContentsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
+        return oldItem == newItem
     }
 }

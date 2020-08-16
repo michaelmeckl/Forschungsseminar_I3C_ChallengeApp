@@ -4,6 +4,13 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.challengecovid.viewmodels.ViewModelFactory
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -42,10 +49,10 @@ object Utils {
     }
 
     /**
-     * Checks if the device has an internet connection.
-     * See https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
+     * Util-Method that pings a Google Server to test if the internet connection works.
      */
-    fun hasInternetConnection(): Single<Boolean> {
+    private fun hasInternetConnection(): Single<Boolean> {
+        //see https://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-times-out/27312494#27312494
         return Single.fromCallable {
             try {
                 // Connect to Google DNS to check for connection
@@ -65,6 +72,49 @@ object Utils {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    /**
+     *  Checks if the device has an internet connection.
+     */
+    fun checkInternet(context: Context) {
+        hasInternetConnection().subscribe { hasInternet ->
+            println("Internet Access: $hasInternet")
+            Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
+        }
+    }
+    /*
+    //TODO: use it like this for checking internet connection:
+    context?.let {
+        if (Utils.isNetworkConnected(it)) {
+            // do stuff with internet
+        } else {
+            AlertDialog.Builder(it)
+                .setTitle("No Internet Connection")
+                .setMessage("Please check your internet connection and try again")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.ok) { _, _ -> }
+                .show()
+        }
+    }
+    */
 }
+
+/**
+ * This slides a given view to the right.
+ */
+fun AppCompatActivity.slideOutView(v: View) {
+    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
+    v.startAnimation(slideOutAnim)
+
+    // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
+    v.visibility = View.GONE
+    v.clearAnimation()
+}
+
+/*
+fun Fragment.getViewModelFactory(): ViewModelFactory {
+    val repository = (requireContext().applicationContext as ChallengeCovidApplication).challengeRepository
+    return ViewModelFactory(repository, this)
+}
+*/
 
 

@@ -1,4 +1,4 @@
-package com.example.challengecovid.ui.challenges
+package com.example.challengecovid.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
