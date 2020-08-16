@@ -32,8 +32,8 @@ interface ChallengeDao {
     fun get(key: String): LiveData<Challenge>   // no suspend for LiveData!!
 
     /**
-     * Selects and returns all rows in the table, sorted by id in descending order.
+     * Selects and returns all rows in the table, sorted by timestamp in descending order.
      */
-    @Query("SELECT * FROM challenge_table ORDER BY challengeId DESC")
+    @Query("SELECT * FROM challenge_table ORDER BY createdAt DESC") //TODO: check if order is corret now!
     fun getAllChallenges(): LiveData<List<Challenge>>
 }
