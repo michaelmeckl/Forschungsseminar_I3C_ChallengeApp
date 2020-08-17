@@ -13,7 +13,7 @@ enum class Gender {
 
 @Entity(
     tableName = "user_table",
-    indices = [Index(value = ["userId"])]
+    indices = [Index(value = ["userId"], unique = true)]
 )
 data class User (
     @PrimaryKey val userId: String = UUID.randomUUID().toString(),
