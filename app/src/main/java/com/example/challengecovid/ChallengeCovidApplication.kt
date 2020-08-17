@@ -29,11 +29,7 @@ class ChallengeCovidApplication: Application() {
         applicationScope.launch {
 
             // if in Debug Mode enable logging with Timber
-            if (BuildConfig.DEBUG) {
-                Timber.plant(Timber.DebugTree())
-            } /* else {
-                Timber.plant(CrashReportingTree())
-            }*/
+            if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
         }
     }
 }

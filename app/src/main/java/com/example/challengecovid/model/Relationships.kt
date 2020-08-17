@@ -1,13 +1,9 @@
-package com.example.challengecovid.database
+package com.example.challengecovid.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.ChallengeCategory
-import com.example.challengecovid.model.User
-import com.example.challengecovid.model.UserChallenge
 
 //See https://developer.android.com/training/data-storage/room/relationships#kotlin
 
@@ -15,10 +11,13 @@ import com.example.challengecovid.model.UserChallenge
  * ################################################
  *  Cross Reference Tables / Associative Entities
  * ################################################
-*/
+ */
 
 // Associative Entity for the M - N - relationship between users and system challenges
-@Entity(primaryKeys = ["challengeId", "userId"])
+@Entity(
+    tableName = "challenge_user_crossref",
+    primaryKeys = ["challengeId", "userId"]
+)
 data class ChallengeUserCrossRef(
     val challengeId: String,
     val userId: String
@@ -28,7 +27,7 @@ data class ChallengeUserCrossRef(
  * ################################################
  *              Relationship Tables
  * ################################################
-*/
+ */
 
 // 1 - (optional) many - relationship between a user and his own created challenges
 data class UserWithChallenges(

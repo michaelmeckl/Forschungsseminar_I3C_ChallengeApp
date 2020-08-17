@@ -3,12 +3,9 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.Difficulty
-import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.database.repository.ChallengeRepository
 import kotlinx.coroutines.*
-import java.util.*
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -74,19 +71,6 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
             }
         }*/
 
-        val ch = Challenge(
-            title = "Geänderte Challenge",
-            description = "Custom Description2",
-            difficulty = Difficulty.MITTEL,
-            completed = false,
-            category = "TODO",
-            duration = 5f,
-            iconPath = R.drawable.ic_done
-        )
-        uiScope.launch {
-            update(ch)
-        }
-
     }
 
     /**
@@ -129,11 +113,6 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
         }
     }
 
-    //TODO: instead fetch from the repository instead!
-    fun getChallenge(challenge: Challenge): LiveData<Challenge> {
-        return dataSource.getChallenge(challenge.challengeId)
-    }
-
     private suspend fun insert(challenge: Challenge) {
         // insert the new challenge on a separate I/O thread that is optimized for room interaction
         // to avoid blocking the main / UI thread
@@ -152,7 +131,7 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
 
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
-            dataSource.deleteAllChallenges()
+            dataSource.deleteAllUserChallenges()
         }
         _showSnackbarEvent.value = true
     }

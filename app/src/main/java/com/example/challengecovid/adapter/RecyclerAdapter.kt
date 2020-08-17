@@ -36,6 +36,7 @@ class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffC
                 itemView.elevation = originalElevation / 2
 
                 //TODO: show clicked item enlarged in front or detail view!
+
             }
             // set a ripple effect
             itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)
@@ -47,8 +48,17 @@ class RecyclerAdapter : ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffC
 
             //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
 
-            val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
-            itemView.item_image.setImageDrawable(drawable)
+            //val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
+            //itemView.item_image.setImageDrawable(drawable)
+            itemView.item_image.setImageResource(data.iconPath ?: return)
+
+            /**
+            //set the ImageView bounds to match the Drawable's dimensions
+            adjustViewBounds = true
+            layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT)
+             */
         }
 
 

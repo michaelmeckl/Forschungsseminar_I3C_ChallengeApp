@@ -12,24 +12,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.RecyclerAdapter
-import com.example.challengecovid.database.ChallengeDao
-import com.example.challengecovid.database.ChallengeDatabase
+import com.example.challengecovid.database.dao.ChallengeDao
+import com.example.challengecovid.database.ChallengeAppDatabase
+import com.example.challengecovid.database.repository.CategoryRepository
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.Difficulty
-import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.database.repository.ChallengeRepository
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.*
-import kotlin.random.Random
 
 class OverviewFragment : Fragment() {
 
@@ -42,13 +36,14 @@ class OverviewFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeDatabase.getInstance(application /*, coroutineScope*/) //TODO: should the db be instantiated in the application class for prepopulating?
-        val repository = ChallengeRepository(db)
+        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO)) //TODO: should the db be instantiated in the application class for prepopulating?
+        val challengeRepository = ChallengeRepository(db)
+        val categoryRepository = CategoryRepository(db)
 
         // init viewmodel with datasource
         overviewViewModel = ViewModelProvider(
             this,
-            ViewModelFactory(repository)
+            ViewModelFactory(challengeRepository)
         ).get(OverviewViewModel::class.java)
 
         //dataSource = db.challengeDao()

@@ -7,22 +7,30 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.challengecovid.R
-import com.example.challengecovid.database.ChallengeDatabase.Companion.DB_VERSION
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.Difficulty
+import com.example.challengecovid.database.ChallengeAppDatabase.Companion.DB_VERSION
+import com.example.challengecovid.database.dao.*
+import com.example.challengecovid.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Challenge::class], version = DB_VERSION, exportSchema = true)
+@Database(
+    entities = [Challenge::class, ChallengeCategory::class, UserChallenge::class, User::class, ChallengeUserCrossRef::class],
+    version = DB_VERSION,
+    exportSchema = true
+)
 @TypeConverters(Converters::class)
-abstract class ChallengeDatabase : RoomDatabase() {
+abstract class ChallengeAppDatabase : RoomDatabase() {
 
-    // Connect the database to the DAO.
+    // Connect the database to the DAOs
     abstract fun challengeDao(): ChallengeDao
+    abstract fun userChallengeDao(): UserChallengeDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun userDao(): UserDao
+    abstract fun relationshipsDao(): RelationshipsDao
 
     // use a companion object to get static access to the db instance (Singleton)
     companion object {
-        const val DB_VERSION = 5
+        const val DB_VERSION = 6
         private const val DB_NAME = "challenge_database.sqlite"
 
         /**
@@ -31,7 +39,8 @@ abstract class ChallengeDatabase : RoomDatabase() {
          * The value of a volatile variable will never be cached, and all writes and reads will be done to and from
          * the main memory. It means that changes made by one thread to shared data are visible to other threads.
          */
-        @Volatile private var INSTANCE: ChallengeDatabase? = null
+        @Volatile
+        private var INSTANCE: ChallengeAppDatabase? = null
 
         /**
          * If a database has already been retrieved, the previous database will be returned. Otherwise, create a new
@@ -40,7 +49,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
          * @param context The application context Singleton, used to get access to the filesystem.
          * @return ChallengeDatabase A singleton instance of the Database
          */
-        fun getInstance(context: Context /*TODO:, scope: CoroutineScope*/): ChallengeDatabase {
+        fun getInstance(context: Context, scope: CoroutineScope): ChallengeAppDatabase {
             // Multiple threads can ask for the database at the same time, ensure we only initialize
             // it once by using synchronized. Only one thread may enter a synchronized block at a time.
             synchronized(this) {
@@ -50,7 +59,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 var instance = INSTANCE
                 if (instance == null) {
                     // If instance is `null` make a new database instance and assign INSTANCE to the newly created database.
-                    instance = buildDatabase(context).also { INSTANCE = it }
+                    instance = buildDatabase(scope, context).also { INSTANCE = it }
                 }
 
                 // Return instance; smart cast to be non-null.
@@ -65,17 +74,15 @@ abstract class ChallengeDatabase : RoomDatabase() {
             }
         */
 
-        private fun buildDatabase(context: Context): ChallengeDatabase {
-            return Room.databaseBuilder(context.applicationContext, ChallengeDatabase::class.java, DB_NAME)
-                // Wipes and rebuilds instead of migrating.
-                // see https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
-                .createFromAsset(DB_NAME)   //TODO: test this out!
-                //.addCallback(ChallengeDatabaseCallback(scope, context))    //TODO
-                .fallbackToDestructiveMigration()
+        private fun buildDatabase(scope: CoroutineScope, context: Context): ChallengeAppDatabase {
+            return Room.databaseBuilder(context.applicationContext, ChallengeAppDatabase::class.java, DB_NAME)
+                //.createFromAsset(DB_NAME)   //TODO: does work but always needs to be in sync with current schema!!
+                .addCallback(ChallengeDatabaseCallback(scope, context))
+                .fallbackToDestructiveMigration()   // Wipes and rebuilds db instead of migrating
                 .build()
         }
 
-        fun destroyDatabase(){
+        fun destroyDatabase() {
             INSTANCE = null
         }
     }
@@ -91,38 +98,38 @@ abstract class ChallengeDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    prepopulateDatabase(database.challengeDao(), context)
+                    prepopulateDatabase(database.categoryDao(), database.challengeDao(), context)
                 }
             }
         }
 
-        private suspend fun prepopulateDatabase(challengeDao: ChallengeDao, context: Context) {
-            // Delete all content here.
-            challengeDao.clear()    //TODO: be careful to not delete anything important like user generated content!
+        private suspend fun prepopulateDatabase(
+            categoryDao: CategoryDao,
+            challengeDao: ChallengeDao,
+            context: Context
+        ) {
+            //challengeDao.clear()    //TODO: be careful to not delete anything important like user generated content!
 
+            //TODO: wir brauchen dringend bessere Icons als die Standards aus Android Studio!
 
-            // TODO: Add some challenges at the start!
-            val challenge1 = Challenge(
-                "Mehr Sport",
-                "Jeden Tag 10 Liegestütze und 15 Push Ups!",
-                Difficulty.SCHWER,
-                false,
-                "TODO1",
-                10f,
-                null
+            //TODO: vllt als externe Json-Datei? Sollte auf jeden Fall nicht hardcoded hier sein!!!!!
+            val healthyCategory = ChallengeCategory(
+                title = "Gesunder Lebensstil",   //TODO: als string ressourcen auslagern!
+                description = "Diese Kategorie enthält Challenges, die einen gesunden Lebensstil zum Ziel haben.",
+                iconPath = R.drawable.ic_star
             )
-            val challenge2 = Challenge(
-                "Gesünder leben",
-                "An apple a day, keeps the doctor away!",
-                Difficulty.LEICHT,
-                false,
-                "TODO2",
-                21f,
-                R.drawable.ic_graph
+            val sportCategory = ChallengeCategory(
+                title = "Sport",
+                description = "Diese Kategorie enthält Challenges, die Bewegung und körperliche Aktivitäten fördern.",
+                iconPath = R.drawable.ic_done
+            )
+            val relaxCategory = ChallengeCategory(
+                title = "Entspannen",
+                description = "Diese Kategorie enthält Challenges, die für etwas Ruhe und Entspannung im Alltag hilfreich sind.",
+                iconPath = R.drawable.ic_statistics
             )
 
-            challengeDao.insert(challenge1)
-            challengeDao.insert(challenge2)
+            categoryDao.insertAll(listOf(healthyCategory, sportCategory, relaxCategory))
 
             /*
             //TODO: pre populate the database from an external file on the hard disk?
