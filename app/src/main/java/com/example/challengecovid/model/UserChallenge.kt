@@ -7,7 +7,7 @@ data class UserChallenge (
     override val title: String,
     override val description: String,
     override val difficulty: Difficulty,
-    override val completed: Boolean
-    //val creator: User   //TODO: necessary? if so how to implement in room? with a foreign key?
+    override val completed: Boolean,
+    val creatorId: String
     //val iconPath: Int?,
 ) : BaseChallenge()

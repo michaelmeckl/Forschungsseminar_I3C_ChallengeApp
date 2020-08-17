@@ -79,6 +79,7 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
             description = "Custom Description2",
             difficulty = Difficulty.MITTEL,
             completed = false,
+            category = "TODO",
             duration = 5f,
             iconPath = R.drawable.ic_done
         )

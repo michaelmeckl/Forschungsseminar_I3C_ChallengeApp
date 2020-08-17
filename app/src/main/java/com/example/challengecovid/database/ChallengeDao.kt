@@ -10,11 +10,17 @@ interface ChallengeDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE) // when a challenge already exists, ignore the new one
     suspend fun insert(challenge: Challenge)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertChallenges(vararg challenge: Challenge)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)    //TODO replace or ignore?
     suspend fun insertAll(challenges: List<Challenge>)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(challenge: Challenge)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateChallenges(vararg challenge: Challenge)
 
     @Query("DELETE FROM challenge_table WHERE challengeId = :id")
     suspend fun delete(id: String)
@@ -34,6 +40,6 @@ interface ChallengeDao {
     /**
      * Selects and returns all rows in the table, sorted by timestamp in descending order.
      */
-    @Query("SELECT * FROM challenge_table ORDER BY createdAt DESC") //TODO: check if order is corret now!
+    @Query("SELECT * FROM challenge_table ORDER BY createdAt DESC")
     fun getAllChallenges(): LiveData<List<Challenge>>
 }

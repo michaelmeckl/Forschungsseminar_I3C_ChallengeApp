@@ -81,6 +81,7 @@ class OverviewFragment : Fragment() {
                 "A new challenge was created! Good job!",
                 Difficulty.LEICHT,
                 false,
+                "Category ID this challenge belongs to",
                 null,
                 R.drawable.ic_trophy
             )
