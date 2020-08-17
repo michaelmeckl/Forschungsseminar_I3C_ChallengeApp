@@ -1,8 +1,10 @@
 package com.example.challengecovid.repository
 
+import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.challengecovid.database.ChallengeDatabase
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeUI
 import com.example.challengecovid.model.asDomainModel
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +17,16 @@ import timber.log.Timber
 class ChallengeRepository(private val database: ChallengeDatabase) {
     val challenges: LiveData<List<ChallengeUI>> = Transformations.map(database.challengeDao().getAllChallenges()) {
         it.asDomainModel()
+    }
+
+    val allChallenges: LiveData<List<Challenge>> = database.challengeDao().getAllChallenges()
+
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insert(challenge: Challenge) {
+        database.challengeDao().insert(challenge)
     }
 
     /**
