@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="@dimen/corner_radius">
+    card_view:cardCornerRadius="@dimen/card_view_corner_radius">
     <!-- elevation needs to be zero for background color:
      app:cardBackgroundColor="@color/content_background" -->
 

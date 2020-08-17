@@ -4,5 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- Custom dimensions -->
-    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="card_view_corner_radius">8dp</dimen>
+    <dimen name="bottom_sheet_corner_radius">16dp</dimen>
+    <dimen name="bottom_sheet_top_padding">8dp</dimen>
+    <dimen name="badge_corner_radius">4dp</dimen>
 </resources>
