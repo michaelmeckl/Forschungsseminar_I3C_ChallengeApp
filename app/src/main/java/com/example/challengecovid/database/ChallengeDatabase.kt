@@ -7,12 +7,13 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.challengecovid.R
+import com.example.challengecovid.database.ChallengeDatabase.Companion.DB_VERSION
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.Difficulty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Challenge::class], version = 3, exportSchema = true)  //TODO: arrayOf(Challenge:class) ??
+@Database(entities = [Challenge::class], version = DB_VERSION, exportSchema = true)
 @TypeConverters(Converters::class)
 abstract class ChallengeDatabase : RoomDatabase() {
 
@@ -21,6 +22,9 @@ abstract class ChallengeDatabase : RoomDatabase() {
 
     // use a companion object to get static access to the db instance (Singleton)
     companion object {
+        const val DB_VERSION = 5
+        private const val DB_NAME = "challenge_database.sqlite"
+
         /**
          * INSTANCE will keep a reference to any database returned via getInstance to prevent repeatedly initializing
          * the database (which is expensive)
@@ -44,7 +48,6 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 // Copy the current value of INSTANCE to a local variable so Kotlin can smart cast.
                 // Smart cast is only available to local variables.
                 var instance = INSTANCE
-
                 if (instance == null) {
                     // If instance is `null` make a new database instance and assign INSTANCE to the newly created database.
                     instance = buildDatabase(context).also { INSTANCE = it }
@@ -63,12 +66,12 @@ abstract class ChallengeDatabase : RoomDatabase() {
         */
 
         private fun buildDatabase(context: Context): ChallengeDatabase {
-            return Room.databaseBuilder(context.applicationContext, ChallengeDatabase::class.java, "challenge_database")
+            return Room.databaseBuilder(context.applicationContext, ChallengeDatabase::class.java, DB_NAME)
                 // Wipes and rebuilds instead of migrating.
                 // see https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
-                //TODO .createFromAsset("path to asset")
-                .fallbackToDestructiveMigration()
+                .createFromAsset(DB_NAME)   //TODO: test this out!
                 //.addCallback(ChallengeDatabaseCallback(scope, context))    //TODO
+                .fallbackToDestructiveMigration()
                 .build()
         }
 
@@ -104,6 +107,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 "Jeden Tag 10 Liegestütze und 15 Push Ups!",
                 Difficulty.SCHWER,
                 false,
+                "TODO1",
                 10f,
                 null
             )
@@ -112,6 +116,7 @@ abstract class ChallengeDatabase : RoomDatabase() {
                 "An apple a day, keeps the doctor away!",
                 Difficulty.LEICHT,
                 false,
+                "TODO2",
                 21f,
                 R.drawable.ic_graph
             )
