@@ -39,10 +39,12 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
 
             //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
 
+            //TODO: use Glide instead to load image?
             //val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
             //itemView.item_image.setImageDrawable(drawable)
             itemView.item_image.setImageResource(data.iconPath ?: return)
-            /**
+            /*
+            //TODO test this out!
             //set the ImageView bounds to match the Drawable's dimensions
             adjustViewBounds = true
             layoutParams = ViewGroup.LayoutParams(

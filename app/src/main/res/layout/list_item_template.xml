@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="4dp"
+    card_view:cardElevation="2dp"
     card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="@dimen/card_view_corner_radius">
     <!-- elevation needs to be zero for background color:
-     app:cardBackgroundColor="@color/content_background" -->
+     app:cardBackgroundColor="@color/content_background"
+     -->
+    <!-- shape overlay:
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.ChallengeCovid.Card"
+    -->
+    <!-- TODO use MaskedCardView from google sunflower instead? -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/list_item"
@@ -30,6 +35,8 @@
             />
 
         <!-- TODO add a real placeholder drawable -->
+
+        <!-- TODO set width to 0, height to 95dp and centerCrop -->
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="wrap_content"
@@ -41,7 +48,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:src="@drawable/ic_home"
-            app:tint="@android:color/black"
             tools:ignore="ContentDescription"
             />
 
