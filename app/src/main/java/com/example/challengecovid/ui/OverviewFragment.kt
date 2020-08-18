@@ -5,12 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
+import com.example.challengecovid.adapter.CategoryClickListener
+import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.dao.ChallengeDao
 import com.example.challengecovid.database.ChallengeAppDatabase
@@ -46,16 +51,25 @@ class OverviewFragment : Fragment() {
             ViewModelFactory(challengeRepository)
         ).get(OverviewViewModel::class.java)
 
-        //dataSource = db.challengeDao()
-        //testDatabase()
-
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerAdapter = RecyclerAdapter()
+        recyclerAdapter = RecyclerAdapter(object : ChallengeClickListener {
+            override fun onChallengeClick(challenge: Challenge) {
+                Toast.makeText(context, "Clicked on ${challenge.title} (${challenge.challengeId})", Toast.LENGTH_LONG).show()
+
+                // navigate to another fragment on click
+                requireActivity().findNavController(R.id.nav_host_fragment).navigate(
+                    R.id.action_global_navigation_map,
+                    null,
+                    NavOptions.Builder().setLaunchSingleTop(true).build()
+                )
+            }
+        })
+
         // calculate the number of columns to use for the grid layout
         val numberOfColumns = this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
@@ -120,52 +134,6 @@ class OverviewFragment : Fragment() {
             }
         })
     }
-
-    /*
-    private fun testDatabase() {
-        Observable.fromCallable {
-            //create test challenges
-            val challenge1 = Challenge(
-                "Custom Challenge1",
-                "Custom Description1",
-                R.drawable.test,
-                3,
-                "medium",
-                5f,
-                1234567 // in milliseconds
-            )
-            val challenge2 = Challenge(
-                "Custom Challenge2",
-                "Custom Description2",
-                R.drawable.ic_star,
-                5,
-                "high",
-                10f,
-                5678930
-            )
-
-            // add the challenges to the database
-            CoroutineScope(Dispatchers.Main).launch {
-                with(dataSource){
-                    this.insert(challenge1)
-                    this.insert(challenge2)
-                }
-            }
-
-            // fetch them from the db
-            dataSource.getAllChallenges()
-
-        }.doOnNext { list ->
-            var finalString = ""
-            list.value?.map { finalString += it.title + " - " }
-            Timber.d(finalString)
-
-        }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe()
-    }
-
-     */
 
 
     companion object {

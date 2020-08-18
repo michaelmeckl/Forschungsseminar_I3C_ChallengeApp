@@ -12,6 +12,7 @@ import com.example.challengecovid.database.dao.*
 import com.example.challengecovid.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Database(
     entities = [Challenge::class, ChallengeCategory::class, UserChallenge::class, User::class, ChallengeUserCrossRef::class],
@@ -30,7 +31,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
 
     // use a companion object to get static access to the db instance (Singleton)
     companion object {
-        const val DB_VERSION = 6
+        const val DB_VERSION = 2
         private const val DB_NAME = "challenge_database.sqlite"
 
         /**
@@ -93,9 +94,12 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
         private val context: Context
     ) : RoomDatabase.Callback() {
 
-        // Populate the database on creation with initial challenge data
+        // INFO: wird nur beim ersten Mal aufgerufen (zum Testen App daten löschen oder neu installieren!)
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
+            Timber.tag("DB_DEBUG").d("in onCreate DB")
+
+            // Populate the database on creation with initial challenge data
             INSTANCE?.let { database ->
                 scope.launch {
                     prepopulateDatabase(database.categoryDao(), database.challengeDao(), context)
@@ -103,12 +107,18 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
             }
         }
 
+        override fun onOpen(db: SupportSQLiteDatabase) {
+            super.onOpen(db)
+            Timber.tag("DB_DEBUG").d("in onOpen DB")
+        }
+
         private suspend fun prepopulateDatabase(
             categoryDao: CategoryDao,
             challengeDao: ChallengeDao,
             context: Context
         ) {
-            //challengeDao.clear()    //TODO: be careful to not delete anything important like user generated content!
+            //challengeDao.clear()
+            //categoryDao.clear()   // implement me
 
             //TODO: wir brauchen dringend bessere Icons als die Standards aus Android Studio!
 
