@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeAppDatabase.Companion.DB_VERSION
 import com.example.challengecovid.database.dao.*
 import com.example.challengecovid.model.*
@@ -77,14 +76,10 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
 
         private fun buildDatabase(scope: CoroutineScope, context: Context): ChallengeAppDatabase {
             return Room.databaseBuilder(context.applicationContext, ChallengeAppDatabase::class.java, DB_NAME)
-                //.createFromAsset(DB_NAME)   //TODO: does work but always needs to be in sync with current schema!!
-                .addCallback(ChallengeDatabaseCallback(scope))  //TODO: use the method above instead to prepopulate the db??
+                .addCallback(ChallengeDatabaseCallback(scope))
+                //.createFromAsset(DB_NAME)     // alternative way to prepopulate db from a db asset in the assets folder
                 .fallbackToDestructiveMigration()   // Wipes and rebuilds db instead of migrating
                 .build()
-        }
-
-        fun destroyDatabase() {
-            INSTANCE = null
         }
     }
 
