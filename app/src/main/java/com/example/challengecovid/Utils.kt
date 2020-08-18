@@ -148,7 +148,7 @@ object Utils {
  * This slides a given view to the right.
  */
 fun AppCompatActivity.slideOutView(v: View) {
-    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
+    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
     v.startAnimation(slideOutAnim)
 
     // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
