@@ -69,7 +69,7 @@ class OverviewFragment : Fragment() {
                     null,
                     NavOptions.Builder()
                         .setLaunchSingleTop(true)
-                        .setEnterAnim(R.anim.slide_to_left)
+                        .setEnterAnim(R.anim.slide_in_right)
                         .setExitAnim(R.anim.fragment_close_exit)
                         .build()
                 )
