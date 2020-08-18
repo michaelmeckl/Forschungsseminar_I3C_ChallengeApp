@@ -78,7 +78,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
         private fun buildDatabase(scope: CoroutineScope, context: Context): ChallengeAppDatabase {
             return Room.databaseBuilder(context.applicationContext, ChallengeAppDatabase::class.java, DB_NAME)
                 //.createFromAsset(DB_NAME)   //TODO: does work but always needs to be in sync with current schema!!
-                .addCallback(ChallengeDatabaseCallback(scope, context))
+                .addCallback(ChallengeDatabaseCallback(scope))  //TODO: use the method above instead to prepopulate the db??
                 .fallbackToDestructiveMigration()   // Wipes and rebuilds db instead of migrating
                 .build()
         }
@@ -89,10 +89,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
     }
 
 
-    private class ChallengeDatabaseCallback(
-        private val scope: CoroutineScope,
-        private val context: Context
-    ) : RoomDatabase.Callback() {
+    private class ChallengeDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
 
         // INFO: wird nur beim ersten Mal aufgerufen (zum Testen App daten löschen oder neu installieren!)
         override fun onCreate(db: SupportSQLiteDatabase) {
@@ -102,7 +99,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
             // Populate the database on creation with initial challenge data
             INSTANCE?.let { database ->
                 scope.launch {
-                    prepopulateDatabase(database.categoryDao(), database.challengeDao(), context)
+                    prepopulateDatabase(database.categoryDao(), database.challengeDao())
                 }
             }
         }
@@ -112,48 +109,18 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
             Timber.tag("DB_DEBUG").d("in onOpen DB")
         }
 
-        private suspend fun prepopulateDatabase(
-            categoryDao: CategoryDao,
-            challengeDao: ChallengeDao,
-            context: Context
-        ) {
+        /**
+         * Pre-populate the database with categories and (app) challenges.
+         */
+        private suspend fun prepopulateDatabase(categoryDao: CategoryDao, challengeDao: ChallengeDao) {
             //challengeDao.clear()
             //categoryDao.clear()   // implement me
 
-            //TODO: wir brauchen dringend bessere Icons als die Standards aus Android Studio!
+            val categories = Data.getChallengeCategories()
+            categoryDao.insertAll(categories)
 
-            //TODO: vllt als externe Json-Datei? Sollte auf jeden Fall nicht hardcoded hier sein!!!!!
-            val healthyCategory = ChallengeCategory(
-                title = "Gesunder Lebensstil",   //TODO: als string ressourcen auslagern!
-                description = "Diese Kategorie enthält Challenges, die einen gesunden Lebensstil zum Ziel haben.",
-                iconPath = R.drawable.ic_star
-            )
-            val sportCategory = ChallengeCategory(
-                title = "Sport",
-                description = "Diese Kategorie enthält Challenges, die Bewegung und körperliche Aktivitäten fördern.",
-                iconPath = R.drawable.ic_done
-            )
-            val relaxCategory = ChallengeCategory(
-                title = "Entspannen",
-                description = "Diese Kategorie enthält Challenges, die für etwas Ruhe und Entspannung im Alltag hilfreich sind.",
-                iconPath = R.drawable.ic_statistics
-            )
-
-            categoryDao.insertAll(listOf(healthyCategory, sportCategory, relaxCategory))
-
-            /*
-            //TODO: pre populate the database from an external file on the hard disk?
-            val resources = context.resources
-            val jsonString = resources.openRawResource(R.raw.players).bufferedReader().use {
-                it.readText()
-            }
-            val typeToken = object : TypeToken<List<Player>>() {}.type
-            val tennisPlayers = Gson().fromJson<List<Player>>(jsonString, typeToken)
-
-            playerDao.insertAllPlayers(tennisPlayers)
-
-             */
-
+            val challenges = Data.getChallenges()
+            challengeDao.insertAll(challenges)
         }
     }
 }
