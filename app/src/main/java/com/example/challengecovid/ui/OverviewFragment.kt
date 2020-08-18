@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.CategoryClickListener
@@ -65,7 +67,11 @@ class OverviewFragment : Fragment() {
                 requireActivity().findNavController(R.id.nav_host_fragment).navigate(
                     R.id.action_global_navigation_map,
                     null,
-                    NavOptions.Builder().setLaunchSingleTop(true).build()
+                    NavOptions.Builder()
+                        .setLaunchSingleTop(true)
+                        .setEnterAnim(R.anim.slide_to_left)
+                        .setExitAnim(R.anim.fragment_close_exit)
+                        .build()
                 )
             }
         })
@@ -84,6 +90,12 @@ class OverviewFragment : Fragment() {
         add_button.setOnClickListener {
             //val randomNum = Random.nextInt()
             //Timber.tag("randomNumber").d(randomNum.toString())
+
+            // test out a simple animation
+            YoYo.with(Techniques.Wave)
+                .duration(400)  // 400 ms
+                .repeat(2)
+                .playOn(it)
 
             val dummyChallenge = Challenge(
                 "New dummy challenge",
