@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setupToolbar()
 
         // setup the nav controller
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        val navView: BottomNavigationView = findViewById(R.id.bottom_nav_view)
         val navController = getNavController()
         navView.setupWithNavController(navController)
     }

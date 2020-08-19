@@ -5,6 +5,9 @@
     <string name="title_challenges">Challenges</string>
     <string name="title_category_detail">Category</string>
 
+    <!-- Others -->
+    <string name="shared_element_transition_name" translatable="false">item_image</string>
+
     <!-- toolbar actions -->
     <string name="action_profile">My profile</string>
     <string name="action_about">About</string>

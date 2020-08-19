@@ -3,13 +3,15 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
-import kotlinx.android.synthetic.main.list_item_template.view.*
+import kotlinx.android.synthetic.main.category_list_item.view.*
 
 class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
     ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {
@@ -32,7 +34,7 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
             clickListener: ChallengeClickListener
         ) {
             // set a ripple effect on Click
-            itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)
+            itemView.category_item.setBackgroundResource(R.drawable.card_view_ripple)
 
             itemView.item_title.text = data.title
             itemView.item_description.text = data.description
@@ -43,7 +45,6 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
             //val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
             //itemView.item_image.setImageDrawable(drawable)
             itemView.item_image.setImageResource(data.iconPath ?: return)
-            itemView.item_image.transitionName = "itemView"
 
             /*
             //TODO test this out!
@@ -54,9 +55,11 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
             ViewGroup.LayoutParams.WRAP_CONTENT)
              */
 
+            itemView.item_image.transitionName = itemView.resources.getString(R.string.shared_element_transition_name)
+
             itemView.setOnClickListener {
                 //call the interface method
-                clickListener.onChallengeClick(data)
+                clickListener.onChallengeClick(it.item_image, data)
             }
         }
 
@@ -64,7 +67,7 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.list_item_template, parent, false)
+                val view = layoutInflater.inflate(R.layout.category_list_item, parent, false)
 
                 return ViewHolder(view)
             }
@@ -90,5 +93,5 @@ interface CategoryClickListener {
 }
 
 interface ChallengeClickListener {
-    fun onChallengeClick(challenge: Challenge)
+    fun onChallengeClick(itemView: ImageView, challenge: Challenge)
 }

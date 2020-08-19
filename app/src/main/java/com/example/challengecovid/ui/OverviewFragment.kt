@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,7 +17,6 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
-import com.example.challengecovid.adapter.CategoryClickListener
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.dao.ChallengeDao
@@ -44,7 +43,10 @@ class OverviewFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO)) //TODO: should the db be instantiated in the application class for prepopulating?
+        val db = ChallengeAppDatabase.getInstance(
+            application,
+            CoroutineScope(Dispatchers.IO)
+        ) //TODO: should the db be instantiated in the application class for prepopulating?
         val challengeRepository = ChallengeRepository(db)
         val categoryRepository = CategoryRepository(db)
 
@@ -61,28 +63,19 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerAdapter = RecyclerAdapter(object : ChallengeClickListener {
-            override fun onChallengeClick(challenge: Challenge) {
-                Toast.makeText(context, "Clicked on ${challenge.title}", Toast.LENGTH_LONG).show()
+            override fun onChallengeClick(itemView: ImageView, challenge: Challenge) {
+                //Toast.makeText(context, "Clicked on ${challenge.title}", Toast.LENGTH_LONG).show()
 
-                // name has to be the same as the transitionname!
-                //val extras = FragmentNavigatorExtras(imageView to "imageView")
-                //oder: val extras = FragmentNavigatorExtras(imageView to imageView.transitionName)
-
-                //TODO: for safeArgs
-                //val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
-                
-                // TODO: apply this to 
-                /*
-                postponeEnterTransition()
-                viewTreeObserver.addOnPreDrawListener {
-                    startPostponedEnterTransition()
-                    true
-                }
-                
-                 */
-            
+                val extras = FragmentNavigatorExtras(itemView to itemView.transitionName)
+                val action = OverviewFragmentDirections.actionOverviewToDetail(
+                    title = challenge.title,
+                    description = challenge.description,
+                    imageRes = challenge.iconPath ?: return
+                )
 
                 // navigate to another fragment on click
+                requireActivity().findNavController(R.id.nav_host_fragment).navigate(action, extras)
+                /*
                 requireActivity().findNavController(R.id.nav_host_fragment).navigate(
                     R.id.action_overview_to_detail,
                     null,
@@ -92,17 +85,27 @@ class OverviewFragment : Fragment() {
                         .setExitAnim(R.anim.fragment_close_exit)
                         .build()
                 )
+                */
             }
         })
 
         // calculate the number of columns to use for the grid layout
         val numberOfColumns = this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
+        //postponeEnterTransition()
         // setup the Grid Layout with the recycler adapter
-        list.apply {
+        recycler_category_list.apply {
             setHasFixedSize(true) //can improve performance if changes in content do not change the layout size of the RecyclerView
             adapter = recyclerAdapter
             layoutManager = GridLayoutManager(activity, numberOfColumns)
+
+            // necessary to await loading of all items so shared element transitions can be performed on them on click
+            //FIXME: this redraws the whole list and leaks memory!!!!!! but its necessary for the transition to work :(
+            postponeEnterTransition()
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
         }
 
         // see https://codelabs.developers.google.com/codelabs/kotlin-android-training-coroutines-and-room/#7

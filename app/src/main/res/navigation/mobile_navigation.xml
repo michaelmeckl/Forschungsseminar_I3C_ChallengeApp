@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_overview">
 
     <fragment
@@ -22,15 +22,21 @@
         android:label="@string/title_challenges"
         tools:layout="@layout/fragment_challenges" />
 
-    <dialog
+    <fragment
         android:id="@+id/navigation_category_detail"
         android:name="com.example.challengecovid.ui.CategoryDetailFragment"
         android:label="@string/title_category_detail"
         tools:layout="@layout/fragment_category_detail">
         <argument
-            android:name="categoryId"
-            app:argType="integer" />
-    </dialog>
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageRes"
+            app:argType="integer"/>
+    </fragment>
 
     <!-- TODO not as global action! -->
     <action
