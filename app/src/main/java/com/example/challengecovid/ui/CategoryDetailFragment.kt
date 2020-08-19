@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.core.view.ViewCompat
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
@@ -16,13 +13,13 @@ import kotlinx.android.synthetic.main.fragment_category_detail.*
 
 class CategoryDetailFragment: Fragment() {
 
+    // get the given navigation arguments lazily
     private val arguments : CategoryDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // set the shared element transition that should be performed when the view is created
-        //sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_element_transition)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.slide_top)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_element_enter_transition)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -32,8 +29,16 @@ class CategoryDetailFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /*
+        postponeEnterTransition()
+        (view.parent as? ViewGroup)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+        */
+
         // set the same transition name on the new image view to enable the shared element transition!
-        detail_image.transitionName = resources.getString(R.string.shared_element_transition_name)
+        detail_image.transitionName = arguments.imageRes.toString()
+
         detail_image.setImageResource(arguments.imageRes)
         detail_title.text = arguments.title
         detail_description.text = arguments.description
@@ -52,5 +57,40 @@ class CategoryDetailFragment: Fragment() {
         // Call super onResume after sizing
         super.onResume()
     }
+     */
+
+    /*
+    private fun startEnterTransitionAfterLoadingImage(
+        imageAddress: String,
+        imageView: ImageView
+    ) {
+        Glide.with(this)
+            .load(imageAddress)
+            .dontAnimate() // 1
+            .listener(object : RequestListener<Drawable> { // 2
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: com.bumptech.glide.request.target.Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: com.bumptech.glide.request.target.Target<Drawable>,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    startPostponedEnterTransition()
+                    return false
+                }
+            })
+            .into(imageView)
+    }
+
      */
 }

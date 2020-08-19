@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -35,34 +36,20 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
         ) {
             // set a ripple effect on Click
             itemView.category_item.setBackgroundResource(R.drawable.card_view_ripple)
+            //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
 
             itemView.item_title.text = data.title
             itemView.item_description.text = data.description
-
-            //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
-
-            //TODO: use Glide instead to load image?
-            //val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
-            //itemView.item_image.setImageDrawable(drawable)
             itemView.item_image.setImageResource(data.iconPath ?: return)
 
-            /*
-            //TODO test this out!
-            //set the ImageView bounds to match the Drawable's dimensions
-            adjustViewBounds = true
-            layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT)
-             */
-
-            itemView.item_image.transitionName = itemView.resources.getString(R.string.shared_element_transition_name)
+            // set an unique transition name for each imageView
+            itemView.item_image.transitionName = data.iconPath.toString()
 
             itemView.setOnClickListener {
                 //call the interface method
                 clickListener.onChallengeClick(it.item_image, data)
             }
         }
-
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
@@ -93,5 +80,5 @@ interface CategoryClickListener {
 }
 
 interface ChallengeClickListener {
-    fun onChallengeClick(itemView: ImageView, challenge: Challenge)
+    fun onChallengeClick(itemView: View, challenge: Challenge)
 }
