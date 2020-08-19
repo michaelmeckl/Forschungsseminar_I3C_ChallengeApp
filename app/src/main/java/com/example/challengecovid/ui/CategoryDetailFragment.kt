@@ -1,25 +1,32 @@
 package com.example.challengecovid.ui
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 
 
-class CategoryDetailFragment: Fragment() {
+class CategoryDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
-    private val arguments : CategoryDetailFragmentArgs by navArgs()
+    private val arguments: CategoryDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // set the shared element transition that should be performed when the view is created
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.shared_element_enter_transition)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(R.transition.shared_element_enter_transition)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,15 +66,13 @@ class CategoryDetailFragment: Fragment() {
     }
      */
 
-    /*
-    private fun startEnterTransitionAfterLoadingImage(
-        imageAddress: String,
-        imageView: ImageView
-    ) {
+    private fun startEnterTransitionAfterLoadingImage(imageAddress: Int, imageView: ImageView) {
         Glide.with(this)
             .load(imageAddress)
-            .dontAnimate() // 1
-            .listener(object : RequestListener<Drawable> { // 2
+            .circleCrop()
+            //.dontTransform()
+            .dontAnimate()
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -91,6 +96,4 @@ class CategoryDetailFragment: Fragment() {
             })
             .into(imageView)
     }
-
-     */
 }
