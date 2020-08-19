@@ -43,6 +43,8 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
             //val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.context.resources, data.iconPath ?: return, null)
             //itemView.item_image.setImageDrawable(drawable)
             itemView.item_image.setImageResource(data.iconPath ?: return)
+            itemView.item_image.transitionName = "itemView"
+
             /*
             //TODO test this out!
             //set the ImageView bounds to match the Drawable's dimensions

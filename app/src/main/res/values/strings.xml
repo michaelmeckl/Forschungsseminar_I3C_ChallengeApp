@@ -3,6 +3,7 @@
 
     <string name="title_overview">Overview</string>
     <string name="title_challenges">Challenges</string>
+    <string name="title_category_detail">Category</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">My profile</string>

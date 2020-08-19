@@ -2,6 +2,7 @@
 <resources>
     <string name="title_overview">Übersicht</string>
     <string name="title_challenges">Challenges</string>
+    <string name="title_category_detail">Kategorie</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">Mein Profil</string>

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -61,11 +62,29 @@ class OverviewFragment : Fragment() {
 
         recyclerAdapter = RecyclerAdapter(object : ChallengeClickListener {
             override fun onChallengeClick(challenge: Challenge) {
-                Toast.makeText(context, "Clicked on ${challenge.title} (${challenge.challengeId})", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Clicked on ${challenge.title}", Toast.LENGTH_LONG).show()
+
+                // name has to be the same as the transitionname!
+                //val extras = FragmentNavigatorExtras(imageView to "imageView")
+                //oder: val extras = FragmentNavigatorExtras(imageView to imageView.transitionName)
+
+                //TODO: for safeArgs
+                //val action = ArtistsFragmentDirections.navToArtistDetail(uri = artist.imageUri)
+                
+                // TODO: apply this to 
+                /*
+                postponeEnterTransition()
+                viewTreeObserver.addOnPreDrawListener {
+                    startPostponedEnterTransition()
+                    true
+                }
+                
+                 */
+            
 
                 // navigate to another fragment on click
                 requireActivity().findNavController(R.id.nav_host_fragment).navigate(
-                    R.id.action_global_navigation_map,
+                    R.id.action_overview_to_detail,
                     null,
                     NavOptions.Builder()
                         .setLaunchSingleTop(true)

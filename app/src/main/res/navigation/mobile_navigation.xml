@@ -11,10 +11,9 @@
         android:label="@string/title_overview"
         tools:layout="@layout/fragment_overview">
         <action
-            android:id="@+id/action_overview_to_challenges"
-            app:destination="@id/navigation_challenges"
-            app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_in_right" />
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_category_detail">
+        </action>
     </fragment>
 
     <fragment
@@ -23,7 +22,17 @@
         android:label="@string/title_challenges"
         tools:layout="@layout/fragment_challenges" />
 
-    <!-- TODO -->
+    <dialog
+        android:id="@+id/navigation_category_detail"
+        android:name="com.example.challengecovid.ui.CategoryDetailFragment"
+        android:label="@string/title_category_detail"
+        tools:layout="@layout/fragment_category_detail">
+        <argument
+            android:name="categoryId"
+            app:argType="integer" />
+    </dialog>
+
+    <!-- TODO not as global action! -->
     <action
         android:id="@+id/action_global_navigation_map"
         app:destination="@id/navigation_challenges"
