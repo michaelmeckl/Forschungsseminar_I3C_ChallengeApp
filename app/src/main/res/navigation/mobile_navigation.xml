@@ -12,8 +12,7 @@
         tools:layout="@layout/fragment_overview">
         <action
             android:id="@+id/action_overview_to_detail"
-            app:destination="@id/navigation_category_detail">
-        </action>
+            app:destination="@id/navigation_category_detail"/>
     </fragment>
 
     <fragment
