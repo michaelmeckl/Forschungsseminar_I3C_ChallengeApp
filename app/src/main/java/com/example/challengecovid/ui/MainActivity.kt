@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
+import com.example.challengecovid.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -60,11 +61,15 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             //TODO
             R.id.action_profile -> {
-                val intent = Intent(this, ProfileView::class.java)
+                val fragmentManager = supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                val fragment = ProfileFragment()
+                fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
+                fragmentTransaction.commit()
 
-                startActivity(intent)
                 true
             }
+
             R.id.action_about -> true
             else -> super.onOptionsItemSelected(item)
         }
