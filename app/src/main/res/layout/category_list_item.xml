@@ -36,7 +36,6 @@
 
         <!-- TODO add a real placeholder drawable -->
 
-        <!-- TODO set width to 0, height to 95dp and centerCrop -->
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="wrap_content"
@@ -59,7 +58,7 @@
             app:layout_constraintBottom_toBottomOf="@id/category_item"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:textAppearance="@android:style/TextAppearance.Material.Body1"
+            android:textAppearance="?attr/textAppearanceListItem"
             tools:text="Custom Description:"
             />
 

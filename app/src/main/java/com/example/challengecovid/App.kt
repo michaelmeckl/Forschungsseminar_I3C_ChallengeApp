@@ -17,12 +17,15 @@ class App: Application() {
     private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     companion object {
-        lateinit var instance: App private set      // static reference to the application context
+        // Static reference to the application context
+        // This should be used carefully (to prevent memory leaks) and only when no activity context is available!
+        lateinit var instance: App private set
     }
 
     override fun onCreate() {
         super.onCreate()
-        instance = this   // save the application context so it can be used in non-activity or fragment classes
+        // save the application context so it can be used in non-activity or fragment classes
+        instance = this
 
         init()
     }

@@ -17,7 +17,7 @@ import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import timber.log.Timber
 
-
+// TODO: change the toolbar in this fragment so it only shows a back button but not the icon and the settings menu!!
 class CategoryDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
