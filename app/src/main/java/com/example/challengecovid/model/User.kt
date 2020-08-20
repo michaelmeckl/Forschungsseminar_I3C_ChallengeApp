@@ -20,8 +20,9 @@ data class User (
     val username: String = "Anonym",
     val gender: Gender,
     val level: Int,
-    val points: Int
-    //val iconPath: Int?,
+    val points: Int,
+    val userIcon: String,
+    val dailyStreakCount: Int
     //val friends: List<User> //necessary ??
     //val currentChallenges: List<Challenge>
 )

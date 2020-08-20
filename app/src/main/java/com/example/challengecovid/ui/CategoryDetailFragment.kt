@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.fragment_category_detail.*
+import timber.log.Timber
 
 
 class CategoryDetailFragment : Fragment() {
@@ -42,13 +43,16 @@ class CategoryDetailFragment : Fragment() {
             startPostponedEnterTransition()
         }
         */
+        val (title, description, imageName) = arguments
 
         // set the same transition name on the new image view to enable the shared element transition!
-        detail_image.transitionName = arguments.imageRes.toString()
+        detail_image.transitionName = imageName
 
-        detail_image.setImageResource(arguments.imageRes)
-        detail_title.text = arguments.title
-        detail_description.text = arguments.description
+        val imageIdentifier = requireActivity().resources.getIdentifier(imageName, "drawable", activity?.packageName)
+
+        detail_image.setImageResource(imageIdentifier)
+        detail_title.text = title
+        detail_description.text = description
     }
 
     /*

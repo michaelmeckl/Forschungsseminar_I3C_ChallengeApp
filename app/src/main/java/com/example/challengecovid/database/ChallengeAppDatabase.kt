@@ -30,7 +30,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
 
     // use a companion object to get static access to the db instance (Singleton)
     companion object {
-        const val DB_VERSION = 2
+        const val DB_VERSION = 3
         private const val DB_NAME = "challenge_database.sqlite"
 
         /**

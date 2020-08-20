@@ -9,6 +9,6 @@ data class ChallengeCategory (
     @PrimaryKey val categoryId: String = UUID.randomUUID().toString(),
     val title: String,
     val description: String,
-    val iconPath: Int?
+    val categoryIcon: String
     //val containedChallenges: List<Challenge>  // instead implemented as room relationship table
 )

@@ -14,8 +14,8 @@ data class Challenge(
     override val completed: Boolean,
     val category: String,
     val duration: Float?,   //TODO: or interval? or dayOfWeak? How do our challenges look like in the end?
-    //val icon: Drawable?,   //Drawable cant be saved in room! Only save the path to the resource
-    val iconPath: Int?
+    // IMPORTANT: Don't save the resource identifier as this is generated at compile time and can therefore change!
+    val challengeIcon: String
 ) : BaseChallenge()
 
 

@@ -6,22 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView.ItemAnimator
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionInflater
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.RecyclerAdapter
 import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.dao.ChallengeDao
+import com.example.challengecovid.database.dao.CategoryDao
 import com.example.challengecovid.database.repository.CategoryRepository
 import com.example.challengecovid.database.repository.ChallengeRepository
 import com.example.challengecovid.model.Challenge
@@ -33,9 +35,10 @@ import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
+//TODO: the contents in here should actually be in the challengeFragment
 class OverviewFragment : Fragment() {
 
-    private lateinit var dataSource: ChallengeDao
+    private lateinit var categoryDataSource: CategoryDao
     private lateinit var overviewViewModel: OverviewViewModel
 
     private lateinit var recyclerAdapter: RecyclerAdapter
@@ -48,7 +51,7 @@ class OverviewFragment : Fragment() {
         val db = ChallengeAppDatabase.getInstance(
             application,
             CoroutineScope(Dispatchers.IO)
-        ) //TODO: should the db be instantiated in the application class for prepopulating?
+        )
         val challengeRepository = ChallengeRepository(db)
         val categoryRepository = CategoryRepository(db)
 
@@ -94,6 +97,7 @@ class OverviewFragment : Fragment() {
             })
         }
 
+        //TODO: move this to the challengeListView later
         add_button.setOnClickListener {
             addNewChallenge(it)
         }
@@ -125,7 +129,7 @@ class OverviewFragment : Fragment() {
             false,
             "Category ID this challenge belongs to",
             null,
-            R.drawable.ic_trophy
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.cherry_please_stay_isolated_1)
         )
 
         overviewViewModel.addNewChallenge(dummyChallenge)
@@ -136,7 +140,7 @@ class OverviewFragment : Fragment() {
         val action = OverviewFragmentDirections.actionOverviewToDetail(
             title = challenge.title,
             description = challenge.description,
-            imageRes = challenge.iconPath ?: return
+            imageName = challenge.challengeIcon
         )
 
         // set an exit transition

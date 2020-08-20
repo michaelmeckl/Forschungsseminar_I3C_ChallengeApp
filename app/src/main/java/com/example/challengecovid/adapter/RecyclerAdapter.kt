@@ -3,8 +3,6 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,6 +11,7 @@ import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
 import kotlinx.android.synthetic.main.category_list_item.view.*
+import timber.log.Timber
 
 class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
     ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {
@@ -40,10 +39,12 @@ class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
 
             itemView.item_title.text = data.title
             itemView.item_description.text = data.description
-            itemView.item_image.setImageResource(data.iconPath ?: return)
+            val iconIdentifier =
+                itemView.context.resources.getIdentifier(data.challengeIcon, "drawable", itemView.context.packageName)
+            itemView.item_image.setImageResource(iconIdentifier)
 
             // set an unique transition name for each imageView
-            itemView.item_image.transitionName = data.iconPath.toString()
+            itemView.item_image.transitionName = data.challengeIcon
 
             itemView.setOnClickListener {
                 //call the interface method

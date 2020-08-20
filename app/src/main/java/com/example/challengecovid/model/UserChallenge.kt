@@ -9,5 +9,5 @@ data class UserChallenge (
     override val difficulty: Difficulty,
     override val completed: Boolean,
     val creatorId: String
-    //val iconPath: Int?,
+    //val userChallengeIcon: String,
 ) : BaseChallenge()

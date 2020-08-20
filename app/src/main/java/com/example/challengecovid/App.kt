@@ -12,12 +12,18 @@ import timber.log.Timber
  * Important stuff that has to be initialized before everything else should go here!
  */
 @Suppress("unused")
-class ChallengeCovidApplication: Application() {
+class App: Application() {
 
     private val applicationScope = CoroutineScope(Dispatchers.Default)
 
+    companion object {
+        lateinit var instance: App private set      // static reference to the application context
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this   // save the application context so it can be used in non-activity or fragment classes
+
         init()
     }
 
