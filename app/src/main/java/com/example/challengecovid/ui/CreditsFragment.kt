@@ -3,16 +3,10 @@ package com.example.challengecovid.ui
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.challengecovid.R
-import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.CreditsAdapter
-import com.example.challengecovid.adapter.RecyclerAdapter
-import com.example.challengecovid.model.Challenge
 import kotlinx.android.synthetic.main.fragment_credits.*
-import kotlinx.android.synthetic.main.fragment_overview.*
 
-//TODO: add links in the text!
 class CreditsFragment : Fragment() {
 
     private lateinit var creditsAdapter: CreditsAdapter
