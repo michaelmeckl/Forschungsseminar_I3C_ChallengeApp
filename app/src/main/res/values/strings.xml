@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name" translatable="false">ChallengeCovid</string>
 
-    <string name="title_overview">Overview</string>
-    <string name="title_challenges">Challenges</string>
-    <string name="title_category_detail">Category</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_challenges">Challenges</string>
+    <string name="label_social">Social</string>
+    <string name="label_category_detail">Category</string>
 
     <!-- Others -->
 

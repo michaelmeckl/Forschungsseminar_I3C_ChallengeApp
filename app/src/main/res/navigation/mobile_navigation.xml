@@ -5,38 +5,6 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_overview">
 
-    <fragment
-        android:id="@+id/navigation_overview"
-        android:name="com.example.challengecovid.ui.OverviewFragment"
-        android:label="@string/title_overview"
-        tools:layout="@layout/fragment_overview">
-        <action
-            android:id="@+id/action_overview_to_detail"
-            app:destination="@id/navigation_category_detail"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_challenges"
-        android:name="com.example.challengecovid.ui.ChallengesFragment"
-        android:label="@string/title_challenges"
-        tools:layout="@layout/fragment_challenges" />
-
-    <fragment
-        android:id="@+id/navigation_category_detail"
-        android:name="com.example.challengecovid.ui.CategoryDetailFragment"
-        android:label="@string/title_category_detail"
-        tools:layout="@layout/fragment_category_detail">
-        <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="description"
-            app:argType="string" />
-        <argument
-            android:name="imageRes"
-            app:argType="integer"/>
-    </fragment>
-
     <!-- TODO not as global action! -->
     <action
         android:id="@+id/action_global_navigation_map"
@@ -50,5 +18,43 @@
             app:argType="string"
             android:defaultValue="id_unknown" />
     </action>
+
+    <fragment
+        android:id="@+id/navigation_overview"
+        android:name="com.example.challengecovid.ui.OverviewFragment"
+        android:label="@string/label_overview"
+        tools:layout="@layout/fragment_overview">
+        <action
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_category_detail"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_challenges"
+        android:name="com.example.challengecovid.ui.ChallengesFragment"
+        android:label="@string/label_challenges"
+        tools:layout="@layout/fragment_challenges" />
+
+    <fragment
+        android:id="@+id/navigation_category_detail"
+        android:name="com.example.challengecovid.ui.CategoryDetailFragment"
+        android:label="@string/label_category_detail"
+        tools:layout="@layout/fragment_category_detail">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageName"
+            app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_social"
+        android:name="com.example.challengecovid.ui.SocialFragment"
+        android:label="@string/label_social"
+        tools:layout="@layout/fragment_social" />
 
 </navigation>
