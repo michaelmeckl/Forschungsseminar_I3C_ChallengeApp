@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.adapter.ChallengeListAdapter
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.viewmodels.ChallengeViewModel2
 import com.example.challengecovid.viewmodels.ChallengesViewModel
 import kotlinx.android.synthetic.main.fragment_challenges.*
+import timber.log.Timber
+import java.util.*
+import kotlin.random.Random
 
 
 class ChallengesFragment : Fragment() {
@@ -50,9 +54,9 @@ class ChallengesFragment : Fragment() {
         // Add an observer on the LiveData returned by getAlphabetizedWords.
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        challengeViewModel2.allChallenges.observe(viewLifecycleOwner, Observer { words ->
+        challengeViewModel2.allChallenges.observe(viewLifecycleOwner, Observer { challenges ->
             // Update the cached copy of the words in the adapter.
-            words?.let { adapter.setWords(it) }
+            challenges?.let { adapter.setChallenges(it) }
         })
 
 

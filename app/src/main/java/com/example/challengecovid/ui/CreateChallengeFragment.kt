@@ -36,6 +36,9 @@ class CreateChallengeFragment : Fragment() {
             spinner_create_new_challenge.adapter = adapter
         }
         button_submit_create_new_challenge.setOnClickListener {
+
+
+            // Navigate back to ChallengesFragment
             val newFragment: Fragment = ChallengesFragment()
             val transaction = requireFragmentManager().beginTransaction()
 

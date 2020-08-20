@@ -11,26 +11,26 @@ import com.example.challengecovid.model.Challenge
 
 class ChallengeListAdapter internal constructor(
     context: Context
-) : RecyclerView.Adapter<ChallengeListAdapter.WordViewHolder>() {
+) : RecyclerView.Adapter<ChallengeListAdapter.ChallengeViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var challenges = emptyList<Challenge>() // Cached copy of words
 
-    inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val wordItemView: TextView = itemView.findViewById(R.id.name_challenge)
+    inner class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val challengeItemView: TextView = itemView.findViewById(R.id.name_challenge)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
         val itemView = inflater.inflate(R.layout.challenge_item, parent, false)
-        return WordViewHolder(itemView)
+        return ChallengeViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val current = challenges[position]
-        holder.wordItemView.text = current.title
+        holder.challengeItemView.text = current.title
     }
 
-    internal fun setWords(challenges: List<Challenge>) {
+    internal fun setChallenges(challenges: List<Challenge>) {
         this.challenges = challenges
         notifyDataSetChanged()
     }
