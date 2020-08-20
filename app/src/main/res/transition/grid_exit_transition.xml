@@ -5,7 +5,7 @@
     android:startDelay="25">
     <fade>
         <targets>
-            <target android:targetId="@+id/card_view_item" />
+            <target android:targetId="@+id/category_card_view" />
         </targets>
     </fade>
 </transitionSet>

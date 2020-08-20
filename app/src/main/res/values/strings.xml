@@ -8,6 +8,7 @@
     <string name="label_credits">Credits</string>
 
     <!-- Others -->
+    <string name="credits_used_icons">Used Icons:</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">My profile</string>
