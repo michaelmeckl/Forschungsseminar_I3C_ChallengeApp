@@ -12,6 +12,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.challengecovid.R
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import timber.log.Timber
 
@@ -35,12 +36,6 @@ class CategoryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        /*
-        postponeEnterTransition()
-        (view.parent as? ViewGroup)?.doOnPreDraw {
-            startPostponedEnterTransition()
-        }
-        */
         val (title, description, imageName) = arguments
 
         // set the same transition name on the new image view to enable the shared element transition!
@@ -49,7 +44,6 @@ class CategoryDetailFragment : Fragment() {
         val imageIdentifier = requireActivity().resources.getIdentifier(imageName, "drawable", activity?.packageName)
 
         detail_image.setImageResource(imageIdentifier)
-        detail_title.text = title
         detail_description.text = description
     }
 
