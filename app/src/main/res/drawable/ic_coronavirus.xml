@@ -2,8 +2,8 @@
 "Icon made by Freepik from www.flaticon.com"
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="200dp"
-    android:height="200dp"
+    android:width="48dp"
+    android:height="48dp"
     android:viewportWidth="497.65"
     android:viewportHeight="497.65">
   <path

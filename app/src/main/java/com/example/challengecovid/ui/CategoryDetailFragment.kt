@@ -2,9 +2,7 @@ package com.example.challengecovid.ui
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -17,7 +15,6 @@ import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import timber.log.Timber
 
-// TODO: change the toolbar in this fragment so it only shows a back button but not the icon and the settings menu!!
 class CategoryDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
@@ -36,6 +33,7 @@ class CategoryDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         /*
         postponeEnterTransition()
@@ -53,6 +51,11 @@ class CategoryDetailFragment : Fragment() {
         detail_image.setImageResource(imageIdentifier)
         detail_title.text = title
         detail_description.text = description
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()    // don't show the menu in this fragment!
     }
 
     /*

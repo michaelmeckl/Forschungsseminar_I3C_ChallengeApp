@@ -3,11 +3,14 @@ package com.example.challengecovid.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,6 +18,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val navController: NavController by lazy { setupNavController() }
+    private val appBarConfiguration by lazy {
+        AppBarConfiguration(
+            // add top level views here
+            setOf(
+                R.id.navigation_overview,
+                R.id.navigation_challenges,
+                R.id.navigation_social
+            )
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,10 +38,20 @@ class MainActivity : AppCompatActivity() {
 
         // setup bottom navigation with the nav controller
         bottom_nav_view.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in setOf(R.id.navigation_credits, R.id.navigation_category_detail)) {
+                // remove the toolbar logo in the detail view and in the credits
+                custom_toolbar.logo = null
+            } else {
+                custom_toolbar.setLogo(R.drawable.ic_coronavirus)
+            }
+        }
     }
 
     private fun setupToolbar() {
         setSupportActionBar(custom_toolbar)
+        custom_toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     /**
@@ -44,12 +67,13 @@ class MainActivity : AppCompatActivity() {
         return (navFragment as NavHostFragment?)!!.navController
     }
 
+    // Inflate the menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    // Handle clicks on the menu items
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }

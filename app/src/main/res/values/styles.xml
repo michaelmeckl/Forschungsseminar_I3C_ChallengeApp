@@ -13,6 +13,14 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
+    <!-- Splash Screen Theme
+    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+    -->
+
     <style name="recycler_title">
         <item name="android:layout_margin">8dp</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Material.Title</item>
