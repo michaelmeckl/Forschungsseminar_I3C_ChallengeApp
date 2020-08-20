@@ -8,13 +8,21 @@
     <string name="action_about">Über</string>
     <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
     <string name="hint_name_create_new_challenge">Name der Challenge</string>
-    <string name="hint_description_create_new_challenge">Beschreibung</string>
+    <string name="hint_description_create_new_challenge">Beschreibung (optional)</string>
     <string name="hint_points_create_new_challenge">Anzahl XP</string>
     <string name="button_text_create_challenge">Challenge erstellen</string>
+    <string name="textview_text_create_challenge">Schwierigkeit:</string>
+    <string name="spinner_text_icon_create_new_challenge">Kategorie (optional):</string>
+    <string name="hint_duration_create_challenge">Dauer in Tagen (optional)</string>
 
     <string-array name="difficulties_challenges">
-            <item>Einfach</item>
-            <item>Mittel</item>
-            <item>Schwer</item>
-        </string-array>
+        <item>Einfach</item>
+        <item>Mittel</item>
+        <item>Schwer</item>
+    </string-array>
+
+    <string-array name="icons_challenges">
+        <item>Kein icon</item>
+    </string-array>
+
 </resources>

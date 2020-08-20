@@ -9,14 +9,21 @@
     <string name="action_about">About</string>
     <string name="heading_create_new_challenge">Create new challenge</string>
     <string name="hint_name_create_new_challenge">Name of challenge</string>
-    <string name="hint_description_create_new_challenge">Description</string>
+    <string name="hint_description_create_new_challenge">Description (optional)</string>
     <string name="hint_points_create_new_challenge">Amount XP</string>
     <string name="button_text_create_challenge">Create Challenge</string>
+    <string name="textview_text_create_challenge">Difficulty:</string>
+    <string name="spinner_text_icon_create_new_challenge">Category (optional):</string>
+    <string name="hint_duration_create_challenge">Duration in days (optional)</string>
 
     <string-array name="difficulties_challenges">
-            <item>Easy</item>
-            <item>Medium</item>
-            <item>Hard</item>
-        </string-array>
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="icons_challenges">
+        <item>No icon</item>
+    </string-array>
 
 </resources>

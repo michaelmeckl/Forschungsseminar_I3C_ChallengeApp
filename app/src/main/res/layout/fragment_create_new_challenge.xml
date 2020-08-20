@@ -1,77 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="4dp"
-    tools:context="com.example.challengecovid.ui.CreateChallengeFragment">
+    android:layout_height="match_parent">
 
-
-    <TextView
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="@string/heading_create_new_challenge"
-        android:textSize="26sp">
-    </TextView>
+        android:orientation="vertical"
+        android:padding="4dp"
+        tools:context="com.example.challengecovid.ui.CreateChallengeFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/name_create_new_challenge"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="132"
-            android:hint="@string/hint_name_create_new_challenge">
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:padding="16dp"
+            android:text="@string/heading_create_new_challenge"
+            android:textSize="26sp"
+            android:textStyle="bold">
+        </TextView>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/description_create_new_challenge"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_name_create_new_challenge"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_description_create_new_challenge">
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:padding="4dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_create_new_challenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_name_create_new_challenge"
+                android:inputType="text"
+                android:text="">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/points_create_new_challenge"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_points_create_new_challenge">
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:padding="4dp">
 
-    <Spinner
-        android:id="@+id/spinner_create_new_challenge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-    </Spinner>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_create_new_challenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_description_create_new_challenge"
+                android:inputType="text">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_submit_create_new_challenge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:text="@string/button_text_create_challenge"
-        android:textColor="@color/design_default_color_surface" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
 
-</LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_duration_create_new_challenge"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duration_create_new_challenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/hint_duration_create_challenge"
+                    android:inputType="number"
+                    android:text="">
+                </com.google.android.material.textfield.TextInputEditText>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/info_duration_create_challenge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:src="@drawable/ic_info">
+            </ImageView>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/spinner_create_new_challenge"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/textview_text_create_challenge">
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinner_create_new_challenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+        </Spinner>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/spinner_icon_create_new_challenge"
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/spinner_text_icon_create_new_challenge">
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinner_icon_create_new_challenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+        </Spinner>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_submit_create_new_challenge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:text="@string/button_text_create_challenge"
+            android:textColor="@color/design_default_color_surface" />
+
+    </LinearLayout>
+</ScrollView>
