@@ -16,8 +16,6 @@
     <style name="SplashTheme" parent="AppTheme">
         <!--<item name="android:windowBackground">@drawable/splash_background</item>-->
         <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="recycler_title">
