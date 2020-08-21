@@ -82,21 +82,6 @@ object Utils {
             Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
         }
     }
-    /*
-    //TODO: use it like this for checking internet connection:
-    context?.let {
-        if (Utils.isNetworkConnected(it)) {
-            // do stuff with internet
-        } else {
-            AlertDialog.Builder(it)
-                .setTitle("No Internet Connection")
-                .setMessage("Please check your internet connection and try again")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.ok) { _, _ -> }
-                .show()
-        }
-    }
-    */
 
     /*
     fun fetchCurrentStatistics(country: String) {
