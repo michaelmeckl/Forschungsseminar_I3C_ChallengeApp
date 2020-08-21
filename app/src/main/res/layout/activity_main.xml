@@ -16,7 +16,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleMarginStart="30dp"
         app:contentInsetStart="20dp"
-        app:logo="@drawable/ic_coronavirus"
         app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

@@ -13,13 +13,10 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <!-- Splash Screen Theme
-    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
+    <style name="SplashTheme" parent="AppTheme">
+        <!--<item name="android:windowBackground">@drawable/splash_background</item>-->
+        <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
-    -->
 
     <style name="recycler_title">
         <item name="android:layout_margin">8dp</item>
@@ -34,6 +31,10 @@
     <style name="BottomSheetDialogTheme" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/BottomSheet</item>
+
+        <!--
+        <item name="android:backgroundDimEnabled">false</item>
+        -->
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/white</item>
