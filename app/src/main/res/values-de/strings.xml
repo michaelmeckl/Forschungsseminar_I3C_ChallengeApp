@@ -8,6 +8,7 @@
 
     <!-- Others -->
     <string name="credits_used_icons">Verwendete Icons:</string>
+    <string name="splash_screen_load">Laden …</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">Mein Profil</string>

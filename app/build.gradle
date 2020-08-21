@@ -56,6 +56,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
+    // for SplashScreen
+    implementation 'com.rbddevs.splashy:splashy:1.3.0'
+
     // coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4"

@@ -1,6 +1,8 @@
 package com.example.challengecovid
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
@@ -9,6 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -185,5 +188,13 @@ fun Fragment.getViewModelFactory(): ViewModelFactory {
     return ViewModelFactory(repository, this)
 }
 */
+
+// Util-Functions to start an activity with an intent
+inline fun <reified T : Activity> Context.createIntent(vararg extras: Pair<String, Any?>) =
+    Intent(this, T::class.java).apply { putExtras(bundleOf(*extras)) }
+
+inline fun <reified T: Activity> Activity.startActivity() {
+    startActivity(createIntent<T>())
+}
 
 
