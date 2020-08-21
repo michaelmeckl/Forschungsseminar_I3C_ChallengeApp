@@ -24,7 +24,7 @@
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:src="@drawable/cherry_please_stay_isolated_1"
+        android:src="@drawable/icon_protective_suit_corona"
         tools:ignore="ContentDescription" />
 
     <TextView

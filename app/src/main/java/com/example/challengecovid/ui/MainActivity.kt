@@ -1,9 +1,16 @@
 package com.example.challengecovid.ui
 
+import android.R.attr
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -12,6 +19,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,14 +45,16 @@ class MainActivity : AppCompatActivity() {
         // setup bottom navigation with the nav controller
         bottom_nav_view.setupWithNavController(navController)
 
+        /*
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id in setOf(R.id.navigation_credits, R.id.navigation_category_detail)) {
                 // remove the toolbar logo in the detail view and in the credits
                 custom_toolbar.logo = null
             } else {
+                //TODO: maybe find some other suitable icon?
                 custom_toolbar.setLogo(R.drawable.ic_coronavirus)
             }
-        }
+        }*/
     }
 
     private fun setupToolbar() {

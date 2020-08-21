@@ -12,8 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView.ItemAnimator
-import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionInflater
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -129,7 +127,7 @@ class OverviewFragment : Fragment() {
             false,
             "Category ID this challenge belongs to",
             null,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.cherry_please_stay_isolated_1)
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icon_protective_suit_corona)
         )
 
         overviewViewModel.addNewChallenge(dummyChallenge)

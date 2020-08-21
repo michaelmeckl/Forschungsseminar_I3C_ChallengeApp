@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- TODO change icon here too! -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/custom_toolbar"
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:titleMarginStart="30dp"
         app:contentInsetStart="20dp"
-        app:logo="@drawable/cherry_please_stay_isolated_1"
         app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
