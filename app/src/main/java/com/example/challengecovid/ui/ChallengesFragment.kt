@@ -1,5 +1,6 @@
 package com.example.challengecovid.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -89,8 +90,20 @@ class ChallengesFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                challengeViewModel2.delete(adapter.getChallengeAt(viewHolder.adapterPosition))
-                Toast.makeText(requireContext(), "Challenge deleted", Toast.LENGTH_SHORT).show()
+                val alertDialogBuilder = AlertDialog.Builder(viewHolder.itemView.context)
+                alertDialogBuilder.setTitle("Challenge löschen?")
+                alertDialogBuilder.setPositiveButton("Ja") { _, _ ->
+                    // remove this item
+                    challengeViewModel2.delete(adapter.getChallengeAt(viewHolder.adapterPosition))
+                    Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
+                }
+                alertDialogBuilder.setNegativeButton("Nein") { _, _ ->
+                    // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
+                    adapter.notifyItemChanged(viewHolder.adapterPosition)
+                    Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
+                }
+                alertDialogBuilder.show()
+//                challengeViewModel2.delete(adapter.getChallengeAt(viewHolder.adapterPosition))
             }
         }).attachToRecyclerView(recyclerView)
     }
