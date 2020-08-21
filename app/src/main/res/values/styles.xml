@@ -6,7 +6,39 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorSecondaryVariant">@color/colorAccentLight</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryDark</item>
+        <item name="colorError">@color/error</item>
+
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <!-- Splash Screen Theme
+    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+    -->
+
+    <style name="recycler_title">
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Material.Title</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_dialog_fragment</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
 </resources>

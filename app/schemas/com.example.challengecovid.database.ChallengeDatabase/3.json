@@ -1,0 +1,86 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "213d09b0e55e30bc6ea05427aab1d4a8",
+    "entities": [
+      {
+        "tableName": "challenge_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `completed` INTEGER NOT NULL, `duration` REAL, `iconPath` INTEGER, `createdAt` INTEGER NOT NULL, `challengeId` TEXT NOT NULL, PRIMARY KEY(`challengeId`))",
+        "fields": [
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "completed",
+            "columnName": "completed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconPath",
+            "columnName": "iconPath",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "challengeId",
+            "columnName": "challengeId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "challengeId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_challenge_table_title_description",
+            "unique": false,
+            "columnNames": [
+              "title",
+              "description"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_challenge_table_title_description` ON `${TABLE_NAME}` (`title`, `description`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '213d09b0e55e30bc6ea05427aab1d4a8')"
+    ]
+  }
+}

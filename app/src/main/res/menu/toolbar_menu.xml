@@ -12,14 +12,25 @@
         />
     -->
 
+    <!-- TODO find a better icon for this ! -->
     <item
         android:id="@+id/action_profile"
+        android:menuCategory="secondary"
+        android:icon="@drawable/icons8_user_male"
         android:title="@string/action_profile"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_about"
+        android:menuCategory="secondary"
         android:title="@string/action_about"
+        app:showAsAction="never" />
+
+    <!-- This id has to be the same as the one in the navigation graph!-->
+    <item
+        android:id="@+id/navigation_credits"
+        android:menuCategory="secondary"
+        android:title="@string/action_credits"
         app:showAsAction="never" />
 
 </menu>

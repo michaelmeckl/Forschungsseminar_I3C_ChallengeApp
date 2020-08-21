@@ -1,52 +1,85 @@
 package com.example.challengecovid.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
-import com.example.challengecovid.model.CoronaStatistics
-import kotlinx.android.synthetic.main.list_item_template.view.*
+import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.ChallengeCategory
+import kotlinx.android.synthetic.main.category_list_item.view.*
+import timber.log.Timber
 
-class RecyclerAdapter (private val statisticsList: List<CoronaStatistics>) : RecyclerView.Adapter<RecyclerAdapter.RecyclerListHolder>() {
+class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
+    ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {
 
-    private lateinit var itemView: View
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerListHolder {
-        itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_template, parent, false)
-        return RecyclerListHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
     }
 
-    override fun getItemCount() = statisticsList.size
-
-    override fun onBindViewHolder(holder: RecyclerListHolder, position: Int) {
-        holder.bindData(statisticsList[position])
+    // Replace the contents of a view (invoked by the layout manager)
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        val item = getItem(position)
+        viewHolder.bind(item, clickListener)
     }
 
-    class RecyclerListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // TODO: maybe delete this if a click has no effect as this might confuse users?
-        // apply a "pressed" effect by decreasing elevation and showing a ripple effect
-        init {
-            //save original elevation of the layout in a local variable as otherwise the elevation would decrease by half on every click
-            val originalElevation = itemView.elevation
+    // define the view holder with a private constructor so it can only be instantiated with the from()-Method
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            // Define click listener for the ViewHolder's View.
+        fun bind(
+            data: Challenge,
+            clickListener: ChallengeClickListener
+        ) {
+            // set a ripple effect on Click
+            itemView.category_item.setBackgroundResource(R.drawable.card_view_ripple)
+            //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
+
+            itemView.item_title.text = data.title
+            itemView.item_description.text = data.description
+            val iconIdentifier =
+                itemView.context.resources.getIdentifier(data.challengeIcon, "drawable", itemView.context.packageName)
+            itemView.item_image.setImageResource(iconIdentifier)
+
+            // set an unique transition name for each imageView
+            itemView.item_image.transitionName = data.challengeIcon
+
             itemView.setOnClickListener {
-                itemView.elevation = originalElevation / 2
+                //call the interface method
+                clickListener.onChallengeClick(it.item_image, data)
             }
-            // set a ripple effect
-            itemView.list_item.setBackgroundResource(R.drawable.card_view_ripple)
         }
 
-        //TODO:
-        fun bindData(data: CoronaStatistics) {
-            itemView.item_title.text = "Test Title"
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.category_list_item, parent, false)
 
-            val drawable: Drawable? = ResourcesCompat.getDrawable(itemView.resources, R.drawable.test, null)
-            itemView.item_image.setImageDrawable(drawable)
-            //itemView.item_image.setImageResource(R.drawable.ic_star)  // too memory intensive
+                return ViewHolder(view)
+            }
         }
     }
+}
+
+// This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
+class DiffCallback : DiffUtil.ItemCallback<Challenge>() {
+    override fun areItemsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
+        return oldItem.challengeId == newItem.challengeId
+    }
+
+    override fun areContentsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
+        return oldItem == newItem
+    }
+}
+
+// ClickListener - Interfaces for the recycler view items
+
+interface CategoryClickListener {
+    fun onCategoryClick(category: ChallengeCategory)
+}
+
+interface ChallengeClickListener {
+    fun onChallengeClick(itemView: View, challenge: Challenge)
 }

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_overview">Übersicht</string>
-    <string name="title_challenges">Challenges</string>
+    <string name="label_overview">Übersicht</string>
+    <string name="label_challenges">Challenges</string>
+    <string name="label_social">Soziales</string>
+    <string name="label_category_detail">Kategorie</string>
+    <string name="label_credits">Quellen</string>
+
+    <!-- Others -->
+    <string name="credits_used_icons">Verwendete Icons:</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">Mein Profil</string>
     <string name="action_about">Über</string>
+    <string name="action_credits">Quellen</string>
 </resources>
