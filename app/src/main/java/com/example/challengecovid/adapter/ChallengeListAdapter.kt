@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
@@ -18,6 +19,8 @@ class ChallengeListAdapter internal constructor(
 
     inner class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val challengeItemView: TextView = itemView.findViewById(R.id.name_challenge)
+        val challengeItemXP: TextView = itemView.findViewById(R.id.xp_challenge)
+        val challengeItemIcon: ImageView = itemView.findViewById(R.id.icon_challenge)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
@@ -28,6 +31,9 @@ class ChallengeListAdapter internal constructor(
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val current = challenges[position]
         holder.challengeItemView.text = current.title
+        holder.challengeItemXP.text = String.format("%s XP", current.points.toString())
+//        TODO: Sollte so gehen später
+//        holder.challengeItemIcon.background = current.iconPath
     }
 
     internal fun setChallenges(challenges: List<Challenge>) {
