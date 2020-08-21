@@ -30,5 +30,8 @@ class ChallengeViewModel2(application: Application) : AndroidViewModel(applicati
     fun insert(challenge: Challenge) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(challenge)
     }
+    fun delete(challenge: Challenge) = viewModelScope.launch(Dispatchers.IO) {
+        repository.delete(challenge)
+    }
 
 }

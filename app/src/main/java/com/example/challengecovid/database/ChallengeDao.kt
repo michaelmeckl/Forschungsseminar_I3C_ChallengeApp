@@ -23,6 +23,9 @@ interface ChallengeDao {
     @Update
     fun update(challenge: Challenge)
 
+    @Delete
+    fun delete(challenge: Challenge)
+
     /**
      * Deletes all values from the table. This does not delete the table, only its contents.
      */

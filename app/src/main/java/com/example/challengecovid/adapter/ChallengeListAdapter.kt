@@ -42,6 +42,10 @@ class ChallengeListAdapter internal constructor(
     }
 
     override fun getItemCount() = challenges.size
+
+    fun getChallengeAt(position: Int): Challenge {
+        return challenges[position]
+    }
 }
 
 

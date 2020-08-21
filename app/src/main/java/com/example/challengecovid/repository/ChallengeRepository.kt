@@ -21,7 +21,11 @@ class ChallengeRepository(private val database: ChallengeDatabase) {
 
     val allChallenges: LiveData<List<Challenge>> = database.challengeDao().getAllChallenges()
 
-
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun delete(challenge: Challenge) {
+        database.challengeDao().delete(challenge)
+    }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
