@@ -13,14 +13,11 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
-    </style>
-
-    <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+    <style name="SplashTheme" parent="AppTheme">
+        <!--<item name="android:windowBackground">@drawable/splash_background</item>-->
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="recycler_title">
@@ -36,6 +33,10 @@
     <style name="BottomSheetDialogTheme" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/BottomSheet</item>
+
+        <!--
+        <item name="android:backgroundDimEnabled">false</item>
+        -->
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/white</item>
