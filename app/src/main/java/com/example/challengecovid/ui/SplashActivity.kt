@@ -113,6 +113,7 @@ class SplashActivity : AppCompatActivity() {
             if (Utils.isNetworkConnected(it)) {
                 fetchNewData()
             } else {
+                //TODO: oder vllt lieber nur einen Toast damit nicht zu aufdringlich?
                 showConnectionAlert()
             }
         }
