@@ -2,10 +2,6 @@ package com.example.dialogfragment_example
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,13 +12,16 @@ import kotlinx.android.synthetic.main.popup_edit_profile.view.*
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 
 import android.os.Build.*
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.navigation.findNavController
 import com.example.challengecovid.ui.MainActivity
 import com.example.challengecovid.ui.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,15 +30,7 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 
 class EditProfileDialog : Fragment() {
 
-    private val permissionslist = arrayOf(READ_EXTERNAL_STORAGE)
-
-    companion object {
-
-        private val IMAGE_PICK_CODE = 1000
-
-        private val PERMISSION_CODE = 10001
-
-    }
+    lateinit var myDialog : Dialog
 
 
 
@@ -55,17 +46,30 @@ class EditProfileDialog : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         edit_profile_picture.setOnClickListener{
-            requestPermissions(permissionslist, IMAGE_PICK_CODE)
+
+
         }
 
         save_changes.setOnClickListener{
-            //namensänderung in die datenbank schicken
-            val fragmentManager = childFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            val fragment = ProfileFragment()
-            fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
-            fragmentTransaction.commit()
+            view.findNavController().navigate(R.id.action_editProfileDialog_to_profileFragment)
         }
+    }
+
+
+
+
+
+
+
+}
+
+/*
+    companion object {
+
+        private val IMAGE_PICK_CODE = 1000
+
+        private val PERMISSION_CODE = 10001
+
     }
 
     private fun pickImageFromGallery() {
@@ -73,6 +77,7 @@ class EditProfileDialog : Fragment() {
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out kotlin.String>, grantResults: IntArray): Unit {
        when (requestCode){
@@ -91,7 +96,6 @@ class EditProfileDialog : Fragment() {
        }
 
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
             profile_picture_edit.setImageURI(data?.data)
@@ -100,14 +104,9 @@ class EditProfileDialog : Fragment() {
 
         }
     }
+*/
 
-
-}
-
-
-
-
-
+ */
 
 
 

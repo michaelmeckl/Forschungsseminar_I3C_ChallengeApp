@@ -1,5 +1,8 @@
 package com.example.dialogfragment_example
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +11,11 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.challengecovid.R
+import kotlinx.android.synthetic.main.popup_add_friend.*
 import kotlinx.android.synthetic.main.popup_edit_profile.view.*
+import androidx.navigation.findNavController
 
-//imoplementation via https://blog.mindorks.com/implementing-dialog-fragment-in-android
+
 
 class AddFriendDialog : DialogFragment() {
 
@@ -20,6 +25,8 @@ class AddFriendDialog : DialogFragment() {
 
     }
 
+
+
     private lateinit var viewModel: PopupViewModel
 
     override fun onCreateView(
@@ -27,28 +34,25 @@ class AddFriendDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.popup_add_friend, container, false)
+        val root = inflater.inflate(R.layout.popup_add_friend, container, false)
+        return root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(PopupViewModel::class.java)
-        setupClickListeners(view)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-    }
-
-    private fun setupClickListeners(view: View) {
-        view.save_changes.setOnClickListener {
-            viewModel.sendName(view.change_name.text.toString())
+        friend_invitation.setOnClickListener{
+            var txt = new_friend_name.toString()
             dismiss()
         }
+
+
     }
+
+
+
+
 
 }

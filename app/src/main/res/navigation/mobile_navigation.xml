@@ -15,6 +15,9 @@
             app:destination="@id/navigation_challenges"
             app:enterAnim="@anim/slide_in_right"
             app:popEnterAnim="@anim/slide_in_right" />
+        <action
+            android:id="@+id/action_navigation_overview_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -22,5 +25,25 @@
         android:name="com.example.challengecovid.ui.ChallengesFragment"
         android:label="@string/title_challenges"
         tools:layout="@layout/fragment_challenges" />
+    <fragment
+        android:id="@+id/addFriendDialog"
+        android:name="com.example.dialogfragment_example.AddFriendDialog"
+        android:label="AddFriendDialog" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.challengecovid.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileDialog"
+            app:destination="@id/editProfileDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileDialog"
+        android:name="com.example.dialogfragment_example.EditProfileDialog"
+        android:label="EditProfileDialog" >
+        <action
+            android:id="@+id/action_editProfileDialog_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
 
 </navigation>

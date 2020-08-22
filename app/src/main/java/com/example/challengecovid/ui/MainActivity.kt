@@ -1,6 +1,5 @@
 package com.example.challengecovid.ui
 
-import ProfileView
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 val fragment = ProfileFragment()
                 fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
                 fragmentTransaction.commit()
-
+               // view.findNavController().navigate(R.id.action_navigation_overview_to_profileFragment)
                 true
             }
 
