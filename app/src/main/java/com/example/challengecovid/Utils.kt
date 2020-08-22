@@ -174,6 +174,7 @@ fun Fragment.getViewModelFactory(): ViewModelFactory {
 }
 */
 
+/*
 // Util-Functions to start an activity with an intent
 inline fun <reified T : Activity> Context.createIntent(vararg extras: Pair<String, Any?>) =
     Intent(this, T::class.java).apply { putExtras(bundleOf(*extras)) }
@@ -181,5 +182,6 @@ inline fun <reified T : Activity> Context.createIntent(vararg extras: Pair<Strin
 inline fun <reified T: Activity> Activity.startActivity() {
     startActivity(createIntent<T>())
 }
+*/
 
 

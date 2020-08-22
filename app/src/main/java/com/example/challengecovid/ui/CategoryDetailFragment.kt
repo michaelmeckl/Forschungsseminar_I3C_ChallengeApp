@@ -6,12 +6,15 @@ import android.view.*
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.challengecovid.R
+import com.example.challengecovid.createShareIntent
+import com.example.challengecovid.shareImageWithText
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import timber.log.Timber
@@ -48,8 +51,20 @@ class CategoryDetailFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()    // don't show the menu in this fragment!
+        menu.clear()    // don't show the main menu in this fragment!
+        inflater.inflate(R.menu.share_menu, menu)   // instead show a custom menu here
+    }
+
+    //TODO
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_share -> {
+                //createShareIntent(requireActivity())
+                shareImageWithText(requireActivity())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     /*
