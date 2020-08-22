@@ -20,6 +20,7 @@
         android:title="@string/action_profile"
         app:showAsAction="never" />
 
+    <!-- TODO merge both below to one -->
     <item
         android:id="@+id/action_about"
         android:menuCategory="secondary"
