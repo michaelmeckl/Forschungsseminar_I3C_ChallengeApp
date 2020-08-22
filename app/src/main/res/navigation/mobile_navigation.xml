@@ -2,13 +2,27 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
+    android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_overview">
+
+    <!-- TODO not as global action! useless atm-->
+    <action
+        android:id="@+id/action_global_navigation_map"
+        app:destination="@id/navigation_challenges"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" >
+        <argument
+            android:name="showDetails"
+            app:argType="string"
+            android:defaultValue="id_unknown" />
+    </action>
 
     <fragment
         android:id="@+id/navigation_overview"
         android:name="com.example.challengecovid.ui.OverviewFragment"
-        android:label="@string/title_overview"
+        android:label="@string/label_overview"
         tools:layout="@layout/fragment_overview">
         <action
             android:id="@+id/action_overview_to_challenges"
@@ -18,12 +32,14 @@
         <action
             android:id="@+id/action_navigation_overview_to_profileFragment"
             app:destination="@id/profileFragment" />
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_category_detail"/>
     </fragment>
 
     <fragment
         android:id="@+id/navigation_challenges"
         android:name="com.example.challengecovid.ui.ChallengesFragment"
-        android:label="@string/title_challenges"
+        android:label="@string/label_challenges"
         tools:layout="@layout/fragment_challenges" />
     <fragment
         android:id="@+id/addFriendDialog"
@@ -45,5 +61,33 @@
             android:id="@+id/action_editProfileDialog_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_category_detail"
+        android:name="com.example.challengecovid.ui.CategoryDetailFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_category_detail">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageName"
+            app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_social"
+        android:name="com.example.challengecovid.ui.SocialFragment"
+        android:label="@string/label_social"
+        tools:layout="@layout/fragment_social" />
+
+    <fragment
+        android:id="@+id/navigation_credits"
+        android:name="com.example.challengecovid.ui.CreditsFragment"
+        android:label="@string/label_credits"
+        tools:layout="@layout/fragment_credits" />
 
 </navigation>

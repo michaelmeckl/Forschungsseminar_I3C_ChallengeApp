@@ -1,11 +1,8 @@
 package com.example.challengecovid.viewmodels
 
-import android.app.Application
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.challengecovid.database.ChallengeDao
-import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.database.repository.ChallengeRepository
 
 /**
  * Factory for constructing the OverviewViewmodel with parameters.

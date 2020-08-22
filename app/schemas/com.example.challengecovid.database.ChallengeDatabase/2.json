@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d0dcaeaf39a37f0ab924460ae47b78b9",
+    "identityHash": "5d6a743f68932d18c9ca8595f47f6f3e",
     "entities": [
       {
         "tableName": "challenge_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT, `iconPath` INTEGER, `points` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `duration` REAL NOT NULL, `startTime` INTEGER NOT NULL, `challengeId` TEXT NOT NULL, PRIMARY KEY(`challengeId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `completed` INTEGER NOT NULL, `duration` REAL, `iconPath` INTEGER, `createdAt` INTEGER NOT NULL, `challengeId` TEXT NOT NULL, PRIMARY KEY(`challengeId`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -18,18 +18,6 @@
             "fieldPath": "description",
             "columnName": "description",
             "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "iconPath",
-            "columnName": "iconPath",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "points",
-            "columnName": "points",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -39,14 +27,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "duration",
-            "columnName": "duration",
-            "affinity": "REAL",
+            "fieldPath": "completed",
+            "columnName": "completed",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "startTime",
-            "columnName": "startTime",
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "iconPath",
+            "columnName": "iconPath",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd0dcaeaf39a37f0ab924460ae47b78b9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5d6a743f68932d18c9ca8595f47f6f3e')"
     ]
   }
 }

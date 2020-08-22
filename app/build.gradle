@@ -1,7 +1,12 @@
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "9.3.0"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion 29
@@ -51,8 +56,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
+    // for SplashScreen
+    // implementation 'com.rbddevs.splashy:splashy:1.3.0'
+
     // coroutines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4"
 
     //navigation
@@ -61,12 +69,22 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
 
+    //animations
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
+
+    //image loading
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+
     //database
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+    // for debugging and visualizing the db:
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
+    // Serialization
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // networking

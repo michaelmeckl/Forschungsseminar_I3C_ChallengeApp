@@ -3,11 +3,9 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.database.repository.ChallengeRepository
 import kotlinx.coroutines.*
-import java.util.*
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -73,20 +71,6 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
             }
         }*/
 
-        val ch = Challenge(
-            "Geänderte Challenge",
-            "Custom Description2",
-            R.drawable.ic_done,
-            5,
-            "high",
-            10f,
-            5678930,
-            "2444982"
-        )
-        uiScope.launch {
-            update(ch)
-        }
-
     }
 
     /**
@@ -117,18 +101,16 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
     private suspend fun getChallengeFromDatabase(challengeID: String): Challenge? {
         return withContext(Dispatchers.IO) {
             val challenge = dataSource.getChallenge(challengeID).value
-            val difference = Date().time - challenge?.startTime!!
+            val difference = System.currentTimeMillis() - challenge?.createdAt!!
+            /*
             if (challenge.duration <= difference) {
                 // Duration Time is over -> challenge is outdated!
                 return@withContext null
             }
+
+             */
             challenge
         }
-    }
-
-    //TODO: instead fetch from the repository instead!
-    fun getChallenge(challenge: Challenge): LiveData<Challenge> {
-        return dataSource.getChallenge(challenge.challengeId)
     }
 
     private suspend fun insert(challenge: Challenge) {
@@ -149,7 +131,7 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
 
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
-            dataSource.deleteAllChallenges()
+            dataSource.deleteAllUserChallenges()
         }
         _showSnackbarEvent.value = true
     }

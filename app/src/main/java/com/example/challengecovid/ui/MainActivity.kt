@@ -1,44 +1,75 @@
 package com.example.challengecovid.ui
 
 import android.content.Intent
+import android.R.attr
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
 import com.example.challengecovid.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+    private val navController: NavController by lazy { setupNavController() }
+    private val appBarConfiguration by lazy {
+        AppBarConfiguration(
+            // add top level views here
+            setOf(
+                R.id.navigation_overview,
+                R.id.navigation_challenges,
+                R.id.navigation_social
+            )
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // setup a custom toolbar
+        // setup custom toolbar
         setupToolbar()
 
-        // setup the nav controller
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = getNavController()
-        navView.setupWithNavController(navController)
+        // setup bottom navigation with the nav controller
+        bottom_nav_view.setupWithNavController(navController)
+
+        /*
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in setOf(R.id.navigation_credits, R.id.navigation_category_detail)) {
+                // remove the toolbar logo in the detail view and in the credits
+                custom_toolbar.logo = null
+            } else {
+                //TODO: maybe find some other suitable icon?
+                custom_toolbar.setLogo(R.drawable.ic_coronavirus)
+            }
+        }*/
     }
 
     private fun setupToolbar() {
         setSupportActionBar(custom_toolbar)
-
-        // customize toolbar
+        custom_toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 
     /**
-     * Returns the associated navigation controller, see https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller.
+     * Returns the navigation controller associated with this activity.
+     * See https://stackoverflow.com/questions/59275009/fragmentcontainerview-using-findnavcontroller.
      */
-    private fun getNavController(): NavController {
+    private fun setupNavController(): NavController {
         // This is a workaround for https://issuetracker.google.com/issues/142847973.
         val navFragment: Fragment? = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         check(navFragment is NavHostFragment) {
@@ -47,30 +78,14 @@ class MainActivity : AppCompatActivity() {
         return (navFragment as NavHostFragment?)!!.navController
     }
 
+    // Inflate the menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
+    // Handle clicks on the menu items
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            //TODO
-            R.id.action_profile -> {
-                val fragmentManager = supportFragmentManager
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                val fragment = ProfileFragment()
-                fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
-                fragmentTransaction.commit()
-               // view.findNavController().navigate(R.id.action_navigation_overview_to_profileFragment)
-                true
-            }
-
-            R.id.action_about -> true
-            else -> super.onOptionsItemSelected(item)
-        }
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 }
