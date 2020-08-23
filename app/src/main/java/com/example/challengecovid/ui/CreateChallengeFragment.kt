@@ -10,33 +10,28 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.challengecovid.R
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.viewmodels.ChallengeViewModel2
-import com.example.challengecovid.viewmodels.ChallengesViewModel
+import com.example.challengecovid.database.ChallengeAppDatabase
+import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.model.Difficulty
+import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.viewmodels.ChallengeListViewModel
+import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_create_new_challenge.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
-import java.util.*
 import kotlin.random.Random
-import kotlin.reflect.typeOf
 
 
 class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private var root: View? = null
-    private val challengesViewModel: ChallengesViewModel by viewModels()
-    private lateinit var challengeViewModel2: ChallengeViewModel2
+    private lateinit var challengeListViewModel: ChallengeListViewModel
     private lateinit var spinnerDifficulties: Spinner
     private lateinit var spinnerIcons: Spinner
     private var selectedSpinnerDifficulty = "Einfach"
     private var selectedSpinnerIcon = "Kein Icon"
-
-
-    fun CreateChallengeFragment() {
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_create_new_challenge, container, false)
@@ -50,12 +45,18 @@ class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
-        // Another interface callback
+        TODO("not implemented")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        challengeViewModel2 = ViewModelProvider(this).get(ChallengeViewModel2::class.java)
+        val application: Application = requireNotNull(this.activity).application
+        val db = ChallengeAppDatabase.getInstance(
+            application,
+            CoroutineScope(Dispatchers.IO)
+        )
+        val challengeRepository = ChallengeRepository(db)
+        challengeListViewModel = getViewModel { ChallengeListViewModel(challengeRepository) }
 
         // init adapter for difficulty spinner
 //        var adapter1 = ArrayAdapter.createFromResource(
@@ -133,41 +134,30 @@ class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
 
             var challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
-            val all_icons = resources.getStringArray(R.array.icons_challenges)
+            val allIcons = resources.getStringArray(R.array.icons_challenges)
             when (selectedSpinnerIcon) {
-                all_icons[0] -> challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
+                allIcons[0] -> challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
             }
-            var newchallengeDuration: Float
+            val newchallengeDuration: Float
             val selectedChallengeDuration = duration_create_new_challenge.text.toString()
-            if (selectedChallengeDuration.isEmpty()) {
-                newchallengeDuration = Float.POSITIVE_INFINITY
+            newchallengeDuration = if (selectedChallengeDuration.isEmpty()) {
+                Float.POSITIVE_INFINITY
             } else {
-                newchallengeDuration = selectedChallengeDuration.toFloat()
+                selectedChallengeDuration.toFloat()
             }
 
-            val newChallenge = Challenge(
-                randomNum,
+            val newChallenge = UserChallenge(
                 name_create_new_challenge.text.toString(),
                 description_create_new_challenge.text.toString(),
-//                TODO: das ersetzen später
-//                challengeIcon,
-                R.drawable.ic_trophy,
-                challengeXP,
-                selectedSpinnerDifficulty,
-                newchallengeDuration,
-                Date().time
+                Difficulty.MITTEL,
+                false,
+                "123456789"     //TODO: hier später die userId des nutzers rein, der diese challenge angelegt hat
             )
 
 
             Timber.d(newChallenge.toString())
-            /*
-            val job = CoroutineScope(Dispatchers.Main).launch {
-                withContext(Dispatchers.IO) {
-                    dataSource.insert(dummyChallenge)
-                }
-            }
-            */
-            challengeViewModel2.insert(newChallenge)
+
+            challengeListViewModel.insert(newChallenge)
 
             // Navigate back to ChallengesFragment
             val newFragment: Fragment = ChallengesFragment()

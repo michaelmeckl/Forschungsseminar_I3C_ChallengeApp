@@ -1,13 +1,13 @@
 package com.example.challengecovid.ui
 
 import android.app.AlertDialog
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,53 +15,54 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.adapter.ChallengeListAdapter
-import com.example.challengecovid.viewmodels.ChallengeViewModel2
-import com.example.challengecovid.viewmodels.ChallengesViewModel
+import com.example.challengecovid.database.ChallengeAppDatabase
+import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.viewmodels.ChallengeListViewModel
+import com.example.challengecovid.viewmodels.OverviewViewModel
+import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenges.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 
 class ChallengesFragment : Fragment() {
 
-    private var root: View? = null
-    private val challengesViewModel: ChallengesViewModel by viewModels()
-    private lateinit var challengeViewModel2: ChallengeViewModel2
+    private lateinit var challengeListViewModel: ChallengeListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        root = inflater.inflate(R.layout.fragment_challenges, container, false)
-
-//        challengesViewModel.text.observe(viewLifecycleOwner, Observer {
-//            text_challenges.text = it
-//        })
-        return root
+        return inflater.inflate(R.layout.fragment_challenges, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = recyclerview_challenges
-        val adapter = ChallengeListAdapter(requireContext())
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val application: Application = requireNotNull(this.activity).application
+        val db = ChallengeAppDatabase.getInstance(
+            application,
+            CoroutineScope(Dispatchers.IO)
+        )
+        val challengeRepository = ChallengeRepository(db)
 
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        challengeViewModel2 = ViewModelProvider(this).get(ChallengeViewModel2::class.java)
+        val listAdapter = ChallengeListAdapter(requireContext())
+        recyclerview_challenges.apply {
+            adapter = listAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
+        challengeListViewModel = getViewModel { ChallengeListViewModel(challengeRepository) }
+
         // The onChanged() method fires when the observed data changes and the activity is
         // in the foreground.
-        challengeViewModel2.allChallenges.observe(viewLifecycleOwner, Observer { challenges ->
+        challengeListViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
             // Update the cached copy of the words in the adapter.
-            challenges?.let { adapter.setChallenges(it) }
+            it?.let {
+                listAdapter.challenges = it
+            }
         })
-
-
-//        button_first.setOnClickListener {
-//            println("Hello Button")
-//        }
 
         fab_create_challenge.setOnClickListener {
             val newFragment: Fragment = CreateChallengeFragment()
@@ -77,6 +78,7 @@ class ChallengesFragment : Fragment() {
             transaction.commit()
 
         }
+
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -94,18 +96,18 @@ class ChallengesFragment : Fragment() {
                 alertDialogBuilder.setTitle("Challenge löschen?")
                 alertDialogBuilder.setPositiveButton("Ja") { _, _ ->
                     // remove this item
-                    challengeViewModel2.delete(adapter.getChallengeAt(viewHolder.adapterPosition))
+                    challengeListViewModel.delete(listAdapter.getChallengeAt(viewHolder.adapterPosition))
                     Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                 }
                 alertDialogBuilder.setNegativeButton("Nein") { _, _ ->
                     // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
-                    adapter.notifyItemChanged(viewHolder.adapterPosition)
+                    listAdapter.notifyItemChanged(viewHolder.adapterPosition)
                     Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                 }
                 alertDialogBuilder.show()
 //                challengeViewModel2.delete(adapter.getChallengeAt(viewHolder.adapterPosition))
             }
-        }).attachToRecyclerView(recyclerView)
+        }).attachToRecyclerView(recyclerview_challenges)
     }
 
 }

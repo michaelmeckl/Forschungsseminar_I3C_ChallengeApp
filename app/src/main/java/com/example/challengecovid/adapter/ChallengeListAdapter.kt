@@ -9,15 +9,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.ui.CreditsItem
 
 class ChallengeListAdapter internal constructor(
-    context: Context
+    private val context: Context
 ) : RecyclerView.Adapter<ChallengeListAdapter.ChallengeViewHolder>() {
 
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var challenges = emptyList<Challenge>() // Cached copy of words
+    var challenges = listOf<UserChallenge>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
-    inner class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ChallengeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val challengeItemView: TextView = itemView.findViewById(R.id.name_challenge)
         val challengeItemXP: TextView = itemView.findViewById(R.id.xp_challenge)
         val challengeItemIcon: ImageView = itemView.findViewById(R.id.icon_challenge)
@@ -25,27 +31,22 @@ class ChallengeListAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
-        val itemView = inflater.inflate(R.layout.challenge_item, parent, false)
+        val itemView = LayoutInflater.from(context).inflate(R.layout.challenge_item, parent, false)
         return ChallengeViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
         val current = challenges[position]
         holder.challengeItemView.text = current.title
-        holder.challengeItemXP.text = String.format("%s XP", current.points.toString())
+        holder.challengeItemXP.text = String.format("%s XP", current.difficulty.points)
         holder.challengeItemDescription.text = current.description
 //        TODO: Sollte so gehen später
 //        holder.challengeItemIcon.background = current.iconPath
     }
 
-    internal fun setChallenges(challenges: List<Challenge>) {
-        this.challenges = challenges
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount() = challenges.size
 
-    fun getChallengeAt(position: Int): Challenge {
+    fun getChallengeAt(position: Int): UserChallenge {
         return challenges[position]
     }
 }

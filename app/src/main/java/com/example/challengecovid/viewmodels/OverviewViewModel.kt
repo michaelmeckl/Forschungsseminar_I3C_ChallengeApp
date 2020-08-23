@@ -17,9 +17,7 @@ import kotlinx.coroutines.*
  * reference to applications across rotation since Application is never recreated during actiivty
  * or fragment lifecycle events.
  */
-class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel() {
-
-    private val dataSource = challengeRepository
+class OverviewViewModel (private val challengeRepository: ChallengeRepository) : ViewModel() {
 
     /**
      * This is the job for all coroutines started by this ViewModel.
@@ -40,7 +38,7 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
     private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     //val challenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData<List<Challenge>>() }
-    val challenges = dataSource.getAllChallenges()
+    val challenges = this.challengeRepository.getAllChallenges()
 
     private var challenge = MutableLiveData<Challenge?>()
 
@@ -100,7 +98,7 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
 
     private suspend fun getChallengeFromDatabase(challengeID: String): Challenge? {
         return withContext(Dispatchers.IO) {
-            val challenge = dataSource.getChallenge(challengeID).value
+            val challenge = challengeRepository.getChallenge(challengeID).value
             val difference = System.currentTimeMillis() - challenge?.createdAt!!
             /*
             if (challenge.duration <= difference) {
@@ -117,21 +115,21 @@ class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel()
         // insert the new challenge on a separate I/O thread that is optimized for room interaction
         // to avoid blocking the main / UI thread
         withContext(Dispatchers.IO) {
-            dataSource.insertNewChallenge(challenge)
+            challengeRepository.insertNewChallenge(challenge)
         }
         _showSnackbarEvent.value = true
     }
 
     private suspend fun update(challenge: Challenge) {
         withContext(Dispatchers.IO) {
-            dataSource.updateChallenge(challenge)
+            challengeRepository.updateChallenge(challenge)
         }
         _showSnackbarEvent.value = true
     }
 
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
-            dataSource.deleteAllUserChallenges()
+            challengeRepository.deleteAllUserChallenges()
         }
         _showSnackbarEvent.value = true
     }

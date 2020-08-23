@@ -16,5 +16,4 @@ abstract class BaseChallenge {
     abstract val completed: Boolean
     var createdAt: Long = System.currentTimeMillis()  //needs to be var so Kotlin automatically generates setter (which is needed for room)
     @PrimaryKey var challengeId: String = UUID.randomUUID().toString()  //generate a random id
-    //TODO: use autoincrement instead of UUID?
 }

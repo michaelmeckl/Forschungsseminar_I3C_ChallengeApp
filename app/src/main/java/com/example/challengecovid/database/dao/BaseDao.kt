@@ -4,7 +4,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
-import com.example.challengecovid.model.Challenge
 
 /**
  * Generic DAO interface to reduce some boilerplate code.

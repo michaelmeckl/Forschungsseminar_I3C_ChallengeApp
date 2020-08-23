@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +26,7 @@ import com.example.challengecovid.database.repository.ChallengeRepository
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.Difficulty
 import com.example.challengecovid.viewmodels.OverviewViewModel
-import com.example.challengecovid.viewmodels.ViewModelFactory
+import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.coroutines.CoroutineScope
@@ -54,10 +53,15 @@ class OverviewFragment : Fragment() {
         val categoryRepository = CategoryRepository(db)
 
         // init viewmodel with datasource
+        /*
         overviewViewModel = ViewModelProvider(
             this,
-            ViewModelFactory(challengeRepository)
+            ChallengeViewModelFactory(challengeRepository)
         ).get(OverviewViewModel::class.java)
+
+         */
+        //overviewViewModel = ViewModelProvider(this, BaseViewModelFactory { OverviewViewModel(challengeRepository) }).get(OverviewViewModel::class.java)
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
 
         return root
     }
@@ -159,13 +163,13 @@ class OverviewFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        overviewViewModel.challenges.observe(viewLifecycleOwner, Observer {
+        overviewViewModel.challenges.observe(viewLifecycleOwner, {
             it?.let {
                 recyclerAdapter.submitList(it)  // update recyclerItems that have changed
             }
         })
 
-        overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+        overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, {
             if (it == true) {
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),

@@ -3,7 +3,6 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,6 @@ import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
 import kotlinx.android.synthetic.main.category_list_item.view.*
-import timber.log.Timber
 
 class RecyclerAdapter(private val clickListener: ChallengeClickListener) :
     ListAdapter<Challenge, RecyclerAdapter.ViewHolder>(DiffCallback()) {
