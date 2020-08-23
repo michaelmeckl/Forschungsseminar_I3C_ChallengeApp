@@ -29,15 +29,17 @@
 
         <TextView
             android:id="@+id/name_challenge"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/icon_challenge"
+            app:layout_constraintEnd_toStartOf="@+id/xp_challenge"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Mache dein Bett" />
+            app:layout_constraintHorizontal_bias="0.0"
+            tools:text="Titel dieser Challenge ist wirklich lang, um zu testen" />
 
         <TextView
             android:id="@+id/xp_challenge"
