@@ -16,7 +16,7 @@ import timber.log.Timber
 @Database(
     entities = [Challenge::class, ChallengeCategory::class, UserChallenge::class, User::class, ChallengeUserCrossRef::class],
     version = DB_VERSION,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class ChallengeAppDatabase : RoomDatabase() {
@@ -30,7 +30,7 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
 
     // use a companion object to get static access to the db instance (Singleton)
     companion object {
-        const val DB_VERSION = 3
+        const val DB_VERSION = 4
         private const val DB_NAME = "challenge_database.sqlite"
 
         /**
@@ -108,9 +108,6 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
          * Pre-populate the database with categories and (app) challenges.
          */
         private suspend fun prepopulateDatabase(categoryDao: CategoryDao, challengeDao: ChallengeDao) {
-            //challengeDao.clear()
-            //categoryDao.clear()   // implement me
-
             val categories = Data.getChallengeCategories()
             categoryDao.insertAll(categories)
 

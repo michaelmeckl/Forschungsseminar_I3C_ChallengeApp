@@ -3,8 +3,10 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.model.UserChallenge
 import kotlinx.coroutines.*
 
 /**
@@ -37,11 +39,9 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
      */
     private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    //val challenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData<List<Challenge>>() }
-    val challenges = this.challengeRepository.getAllChallenges()
+    private var currentChallenge = MutableLiveData<UserChallenge>()
 
-    private var challenge = MutableLiveData<Challenge?>()
-
+    val allChallenges: LiveData<List<UserChallenge>> = challengeRepository.getAllUserChallenges()
 
     /**
      * Request a toast by setting this value to true.
@@ -55,22 +55,6 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
     val showSnackBarEvent: LiveData<Boolean?>
         get() = _showSnackbarEvent
 
-
-    init {
-        //initializeChallenge(TODO())
-
-        // TODO: refresh the room db with new challenges from other players?
-        /*
-        uiScope.launch {
-            try {
-                challengeRepository.refreshChallenges()
-            } catch (e: IOException) {
-                Timber.e(e)
-            }
-        }*/
-
-    }
-
     /**
      * Call this immediately after calling `show()` on a toast.
      * It will clear the toast request, so if the user rotates their phone it won't show a duplicate
@@ -83,71 +67,42 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
     /**
      * Add a new challenge to the database.
      */
-    fun addNewChallenge(challenge: Challenge) {
+    fun insertNewChallenge(userChallenge: UserChallenge) {
         //launch on the main thread because the result affects the UI
         uiScope.launch {
-            insert(challenge)
+            // insert the new challenge on a separate I/O thread that is optimized for room interaction
+            // to avoid blocking the main / UI thread
+            withContext(Dispatchers.IO) {
+                challengeRepository.insertUserChallenge(userChallenge)
+            }
+            _showSnackbarEvent.value = true
         }
     }
 
     private fun initializeChallenge(challengeID: String) {
         uiScope.launch {
-            challenge.value = getChallengeFromDatabase(challengeID)
+            currentChallenge.value = getUserChallengeFromDatabase(challengeID)
         }
     }
 
-    private suspend fun getChallengeFromDatabase(challengeID: String): Challenge? {
+    private suspend fun getUserChallengeFromDatabase(challengeID: String): UserChallenge? {
         return withContext(Dispatchers.IO) {
-            val challenge = challengeRepository.getChallenge(challengeID).value
-            val difference = System.currentTimeMillis() - challenge?.createdAt!!
-            /*
-            if (challenge.duration <= difference) {
-                // Duration Time is over -> challenge is outdated!
-                return@withContext null
-            }
-
-             */
-            challenge
+            challengeRepository.getUserChallenge(challengeID).value
         }
     }
 
-    private suspend fun insert(challenge: Challenge) {
-        // insert the new challenge on a separate I/O thread that is optimized for room interaction
-        // to avoid blocking the main / UI thread
+    fun updateChallenge(userChallenge: UserChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            challengeRepository.insertNewChallenge(challenge)
+            challengeRepository.updateUserChallenge(userChallenge)
         }
         _showSnackbarEvent.value = true
     }
 
-    private suspend fun update(challenge: Challenge) {
+    fun removeChallenge(userChallenge: UserChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            challengeRepository.updateChallenge(challenge)
+            challengeRepository.deleteUserChallenge(userChallenge)
         }
         _showSnackbarEvent.value = true
-    }
-
-    private suspend fun clear() {
-        withContext(Dispatchers.IO) {
-            challengeRepository.deleteAllUserChallenges()
-        }
-        _showSnackbarEvent.value = true
-    }
-
-    /**
-     * Clear the challenge infos.
-     */
-    fun onClear() {
-        uiScope.launch {
-            // Clear the database table.
-            clear()
-
-            // And clear tonight since it's no longer in the database
-            challenge.value = null
-
-            // Show a snackbar message, because it's friendly.
-            _showSnackbarEvent.value = true
-        }
     }
 
     /**

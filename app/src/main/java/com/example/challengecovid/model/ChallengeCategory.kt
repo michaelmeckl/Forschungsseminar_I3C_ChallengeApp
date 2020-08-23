@@ -10,5 +10,4 @@ data class ChallengeCategory (
     val title: String,
     val description: String,
     val categoryIcon: String
-    //val containedChallenges: List<Challenge>  // instead implemented as room relationship table
 )

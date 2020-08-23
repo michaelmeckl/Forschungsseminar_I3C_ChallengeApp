@@ -13,19 +13,19 @@ object Data {
 
     //TODO: erweitern und passende Icons verwenden!
 
-    //TODO: nur SVG benutzen (keine PNG/JPG oder nur sehr hochauflösende!) sonst sieht die detail view nicht gut aus!
+    //TODO: nur SVG benutzen für categories (keine PNG/JPG oder nur sehr hochauflösende!) sonst sieht die detail view nicht gut aus!
 
     // challenge categories
     fun getChallengeCategories(): List<ChallengeCategory> = listOf(
         ChallengeCategory(
             title = "Gesunder Lebensstil",
             description = "Diese Kategorie enthält Challenges, die einen gesunden Lebensstil zum Ziel haben.",
-            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_star)
+            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_vergeben)
         ),
         ChallengeCategory(
             title = "Sport",
             description = "Diese Kategorie enthält Challenges, die Bewegung und körperliche Aktivitäten fördern.",
-            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_done)
+            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_96)
         ),
         ChallengeCategory(
             title = "Entspannen",
@@ -41,8 +41,8 @@ object Data {
             "Versuche dich den heutigen Tag an alle dir bekannten Corona-Umgangsregeln und Richtlinien zu halten, wie beispielsweise 1,50m Abstand zu anderen zu halten, Niesen und Husten nur in Armbeuge und natürlich deine Maske zu tragen, wenn du raus gehst. Damit schützt du deine Mitmenschen und hilfst mit den Virus zu besiegen!",
             Difficulty.SCHWER,
             false,
+            5,
             "242-fhk24-242",    //TODO: set the category id manually to be able to set this??? or change to title of the category instead of id?
-            1f,     // 1 day
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
@@ -50,8 +50,8 @@ object Data {
             "Für 3 Tage hintereinander jeden Tag 10 Liegestütze und 15 Push Ups machen!",
             Difficulty.MITTEL,
             false,
+            3,
             "category id or title whatever",
-            3f,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_klopapier)
         ),
         Challenge(
@@ -59,8 +59,8 @@ object Data {
             "An apple a day, keeps the doctor away!",
             Difficulty.SCHWER,
             false,
+            1,
             "category this challenge belongs to",
-            7f,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         )
     )

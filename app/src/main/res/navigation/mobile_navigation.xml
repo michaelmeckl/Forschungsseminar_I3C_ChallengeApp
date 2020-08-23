@@ -5,35 +5,22 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_overview">
 
-    <!-- TODO not as global action! useless atm-->
-    <action
-        android:id="@+id/action_global_navigation_map"
-        app:destination="@id/navigation_challenges"
-        app:enterAnim="@anim/nav_default_enter_anim"
-        app:exitAnim="@anim/nav_default_exit_anim"
-        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim" >
-        <argument
-            android:name="showDetails"
-            app:argType="string"
-            android:defaultValue="id_unknown" />
-    </action>
-
     <fragment
         android:id="@+id/navigation_overview"
         android:name="com.example.challengecovid.ui.OverviewFragment"
         android:label="@string/label_overview"
         tools:layout="@layout/fragment_overview">
-        <action
-            android:id="@+id/action_overview_to_detail"
-            app:destination="@id/navigation_category_detail"/>
     </fragment>
 
     <fragment
         android:id="@+id/navigation_challenges"
         android:name="com.example.challengecovid.ui.ChallengesFragment"
         android:label="@string/label_challenges"
-        tools:layout="@layout/fragment_challenges" />
+        tools:layout="@layout/fragment_challenges">
+        <action
+            android:id="@+id/action_category_to_detail"
+            app:destination="@id/navigation_category_detail"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_category_detail"
