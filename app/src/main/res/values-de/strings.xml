@@ -6,15 +6,17 @@
     <string name="label_category_detail">Kategorie</string>
     <string name="label_credits">Quellen</string>
 
+    <!-- toolbar actions -->
+    <string name="action_profile">Mein Profil</string>
+    <string name="action_about">Über</string>
+    <string name="action_credits">Quellen</string>
+
     <!-- Others -->
     <string name="credits_used_icons">Verwendete Icons:</string>
     <string name="splash_screen_load">Laden …</string>
     <string name="no_internet">Keine Internetverbindung</string>
     <string name="no_internet_warning">Neue Daten können nicht geladen werden ohne Internet! Überprüfe deine Verbindung und versuch es nochmal.</string>
 
-    <!-- toolbar actions -->
-    <string name="action_profile">Mein Profil</string>
-    <string name="action_about">Über</string>
     <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
     <string name="hint_name_create_new_challenge">Name der Challenge</string>
     <string name="hint_description_create_new_challenge">Beschreibung (optional)</string>
@@ -34,5 +36,4 @@
         <item>Kein icon</item>
     </string-array>
 
-    <string name="action_credits">Quellen</string>
 </resources>
