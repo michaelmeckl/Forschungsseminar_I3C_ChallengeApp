@@ -1,6 +1,8 @@
 package com.example.challengecovid
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
@@ -9,8 +11,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.os.bundleOf
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -81,43 +82,104 @@ object Utils {
             Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
         }
     }
+
     /*
-    //TODO: use it like this for checking internet connection:
-    context?.let {
-        if (Utils.isNetworkConnected(it)) {
-            // do stuff with internet
-        } else {
-            AlertDialog.Builder(it)
-                .setTitle("No Internet Connection")
-                .setMessage("Please check your internet connection and try again")
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.ok) { _, _ -> }
-                .show()
-        }
+    fun fetchCurrentStatistics(country: String) {
+        // deserialize objects with custom deserializer
+        Fuel.get("https://disease.sh/v2/countries/${country}")
+            .responseObject(CoronaStatistics.Deserializer()) { _, _, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        // Failed request
+                        val ex = result.getException()
+                        println(ex)
+                    }
+                    is Result.Success -> {
+                        // Successful request
+                        val data = result.get()
+                    }
+                }
+            }
+    }
+
+     */
+
+    /*
+    fun makeRequest(): Triple<Response, String, Body> {
+
+        val httpAsync = Fuel.get("https://disease.sh/v2/all")
+            .responseJson { request, response, result ->
+                when (result) {
+                    is Result.Failure -> {
+                        // Failed request
+                        val ex = result.getException()
+                        println(ex)
+                    }
+                    is Result.Success -> {
+                        // Successful request
+                        val data = result.get().content
+                        val test = result.value.obj()
+                        println(data)
+                        println(test)
+                    }
+                }
+            }
+
+        //val response = httpAsync.awaitResponse(Response)
+        val response = httpAsync.join()
+        return Triple(response, response.responseMessage, response.body())
     }
     */
+}
 
-    /**
-     * Utility-Method to create a viewmodel with custom params.
-     * used like: by viewmodels (viewModelFactory { MyViewModel("parameter") } )
-     */
-    inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
-        object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+/**
+ * This slides a given view to the right.
+ */
+fun AppCompatActivity.slideOutView(v: View) {
+    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+    v.startAnimation(slideOutAnim)
+
+    // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
+    v.visibility = View.GONE
+    v.clearAnimation()
+}
+
+/*
+// see Google Sunflower
+// TODO: Helper function for calling a share functionality.
+// Should be used when user presses a share button/menu item.
+@Suppress("DEPRECATION")
+private fun createShareIntent() {
+    val shareText = plantDetailViewModel.plant.value.let { plant ->
+        if (plant == null) {
+            ""
+        } else {
+            getString(R.string.share_text_plant, plant.name)
         }
-
-    /**
-     * This slides a given view to the right.
-     */
-    fun AppCompatActivity.slideOutView(v: View) {
-        val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_to_right)
-        v.startAnimation(slideOutAnim)
-
-        // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
-        v.visibility = View.GONE
-        v.clearAnimation()
     }
+    val shareIntent = ShareCompat.IntentBuilder.from(requireActivity())
+        .setText(shareText)
+        .setType("text/plain")
+        .createChooserIntent()
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+    startActivity(shareIntent)
+}
+
+ */
+
+/*
+fun Fragment.getViewModelFactory(): ViewModelFactory {
+    val repository = (requireContext().applicationContext as ChallengeCovidApplication).challengeRepository
+    return ViewModelFactory(repository, this)
+}
+*/
+
+// Util-Functions to start an activity with an intent
+inline fun <reified T : Activity> Context.createIntent(vararg extras: Pair<String, Any?>) =
+    Intent(this, T::class.java).apply { putExtras(bundleOf(*extras)) }
+
+inline fun <reified T: Activity> Activity.startActivity() {
+    startActivity(createIntent<T>())
 }
 
 

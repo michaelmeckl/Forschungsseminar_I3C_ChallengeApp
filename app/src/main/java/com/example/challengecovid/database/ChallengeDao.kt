@@ -31,16 +31,3 @@ interface ChallengeDao {
      */
     @Query("DELETE FROM challenge_table")
     fun clear()
-
-    /**
-     * Selects and returns the row that matches the supplied id / key.
-     */
-    @Query("SELECT * from challenge_table WHERE challengeId = :key")
-    fun get(key: Int): Challenge
-
-    /**
-     * Selects and returns all rows in the table, sorted by id in descending order.
-     */
-    @Query("SELECT * FROM challenge_table ORDER BY challengeId DESC")
-    fun getAllChallenges(): LiveData<List<Challenge>>
-}

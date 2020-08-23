@@ -2,18 +2,12 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e7e6c0b49541c1b10d9bb9cc73aefb0c",
+    "identityHash": "d0dcaeaf39a37f0ab924460ae47b78b9",
     "entities": [
       {
         "tableName": "challenge_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`challengeId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `iconPath` INTEGER, `points` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `duration` REAL NOT NULL, `startTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT, `iconPath` INTEGER, `points` INTEGER NOT NULL, `difficulty` TEXT NOT NULL, `duration` REAL NOT NULL, `startTime` INTEGER NOT NULL, `challengeId` TEXT NOT NULL, PRIMARY KEY(`challengeId`))",
         "fields": [
-          {
-            "fieldPath": "challengeId",
-            "columnName": "challengeId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "title",
             "columnName": "title",
@@ -55,13 +49,19 @@
             "columnName": "startTime",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "challengeId",
+            "columnName": "challengeId",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
             "challengeId"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
@@ -70,7 +70,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e7e6c0b49541c1b10d9bb9cc73aefb0c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd0dcaeaf39a37f0ab924460ae47b78b9')"
     ]
   }
 }

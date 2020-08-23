@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name" translatable="false">ChallengeCovid</string>
 
-    <string name="title_overview">Overview</string>
-    <string name="title_challenges">Challenges</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_challenges">Challenges</string>
+    <string name="label_social">Social</string>
+    <string name="label_category_detail">Category</string>
+    <string name="label_credits">Credits</string>
+
+    <!-- Others -->
+    <string name="credits_used_icons">Used Icons:</string>
+    <string name="splash_screen_load">Loading …</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="no_internet_warning">No new data can be loaded without a connection! Please check your internet connection and try again.</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">My profile</string>
@@ -26,4 +35,5 @@
         <item>No icon</item>
     </string-array>
 
+    <string name="action_credits">Credits</string>
 </resources>

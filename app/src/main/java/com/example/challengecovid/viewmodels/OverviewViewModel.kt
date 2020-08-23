@@ -1,17 +1,11 @@
 package com.example.challengecovid.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.R
-import com.example.challengecovid.database.ChallengeDao
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.database.repository.ChallengeRepository
 import kotlinx.coroutines.*
-import timber.log.Timber
-import java.io.IOException
-import java.util.*
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -23,23 +17,9 @@ import java.util.*
  * reference to applications across rotation since Application is never recreated during actiivty
  * or fragment lifecycle events.
  */
-class OverviewViewModel (dataSource: ChallengeDao,
-                         application: Application
-) : AndroidViewModel(application) {
+class OverviewViewModel (challengeRepository: ChallengeRepository) : ViewModel() {
 
-    /*//TODO: use this for repository
-    /**
-     * The data source this ViewModel will fetch results from.
-     */
-    private val challengeRepository = ChallengeRepository(getDatabase(application))
-
-    val challenges = challengeRepository.challenges
-     */
-
-    /**
-     * Hold a reference to the Database via the Dao.
-     */
-    private val databaseRef = dataSource
+    private val dataSource = challengeRepository
 
     /**
      * This is the job for all coroutines started by this ViewModel.
@@ -60,7 +40,7 @@ class OverviewViewModel (dataSource: ChallengeDao,
     private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     //val challenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData<List<Challenge>>() }
-    val challenges = databaseRef.getAllChallenges()
+    val challenges = dataSource.getAllChallenges()
 
     private var challenge = MutableLiveData<Challenge?>()
 
@@ -91,20 +71,6 @@ class OverviewViewModel (dataSource: ChallengeDao,
             }
         }*/
 
-        val ch = Challenge(
-            2444982,
-            "Geänderte Challenge",
-            "Custom Description2",
-            R.drawable.ic_done,
-            5,
-            "high",
-            10f,
-            5678930
-        )
-        uiScope.launch {
-            update(ch)
-        }
-
     }
 
     /**
@@ -126,19 +92,23 @@ class OverviewViewModel (dataSource: ChallengeDao,
         }
     }
 
-    private fun initializeChallenge(challengeID: Int) {
+    private fun initializeChallenge(challengeID: String) {
         uiScope.launch {
             challenge.value = getChallengeFromDatabase(challengeID)
         }
     }
 
-    private suspend fun getChallengeFromDatabase(challengeID: Int): Challenge? {
+    private suspend fun getChallengeFromDatabase(challengeID: String): Challenge? {
         return withContext(Dispatchers.IO) {
-            val challenge = databaseRef.get(challengeID)
-            if (challenge.duration <= (Date().time - challenge.startTime)) {
+            val challenge = dataSource.getChallenge(challengeID).value
+            val difference = System.currentTimeMillis() - challenge?.createdAt!!
+            /*
+            if (challenge.duration <= difference) {
                 // Duration Time is over -> challenge is outdated!
                 return@withContext null
             }
+
+             */
             challenge
         }
     }
@@ -147,21 +117,21 @@ class OverviewViewModel (dataSource: ChallengeDao,
         // insert the new challenge on a separate I/O thread that is optimized for room interaction
         // to avoid blocking the main / UI thread
         withContext(Dispatchers.IO) {
-            databaseRef.insert(challenge)
+            dataSource.insertNewChallenge(challenge)
         }
         _showSnackbarEvent.value = true
     }
 
     private suspend fun update(challenge: Challenge) {
         withContext(Dispatchers.IO) {
-            databaseRef.update(challenge)
+            dataSource.updateChallenge(challenge)
         }
         _showSnackbarEvent.value = true
     }
 
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
-            databaseRef.clear()
+            dataSource.deleteAllUserChallenges()
         }
         _showSnackbarEvent.value = true
     }
