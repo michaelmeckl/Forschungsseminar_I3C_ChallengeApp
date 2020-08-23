@@ -1,23 +1,14 @@
 package com.example.challengecovid.ui
 
-import android.graphics.drawable.Drawable
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.transition.TransitionInflater
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.example.challengecovid.R
 import com.example.challengecovid.createShareIntent
-import com.example.challengecovid.shareImageWithText
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_category_detail.*
-import timber.log.Timber
 
 class CategoryDetailFragment : Fragment() {
 
@@ -39,7 +30,7 @@ class CategoryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (title, description, imageName) = arguments
+        val (_, description, imageName) = arguments
 
         // set the same transition name on the new image view to enable the shared element transition!
         detail_image.transitionName = imageName
@@ -50,17 +41,33 @@ class CategoryDetailFragment : Fragment() {
         detail_description.text = description
     }
 
+    // Create the Share Intent
+    private fun getShareIntent() : Intent {
+        val message = "Challenge:\n${arguments.title}\n\n${arguments.description}"
+
+        // Create intent to show the chooser dialog
+        return Intent.createChooser(Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, message)
+            type = "text/plain"
+        },  requireActivity().getString(R.string.share_title))
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()    // don't show the main menu in this fragment!
         inflater.inflate(R.menu.share_menu, menu)   // instead show a custom menu here
+
+        // decide dynamically if the share icon should be shown by checking if the activity resolves
+        if (null == getShareIntent().resolveActivity(requireActivity().packageManager)) {
+            // hide the menu item if it doesn't resolve
+            menu.findItem(R.id.action_share)?.isVisible = false
+        }
     }
 
-    //TODO
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_share -> {
-                //createShareIntent(requireActivity())
-                shareImageWithText(requireActivity())
+                startActivity(getShareIntent())
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -82,6 +89,7 @@ class CategoryDetailFragment : Fragment() {
     }
      */
 
+    /*
     private fun startEnterTransitionAfterLoadingImage(imageAddress: Int, imageView: ImageView) {
         Glide.with(this)
             .load(imageAddress)
@@ -112,4 +120,6 @@ class CategoryDetailFragment : Fragment() {
             })
             .into(imageView)
     }
+
+     */
 }

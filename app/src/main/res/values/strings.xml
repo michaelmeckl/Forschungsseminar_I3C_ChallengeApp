@@ -18,5 +18,6 @@
     <string name="splash_screen_load">Loading …</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="no_internet_warning">No new data can be loaded without a connection! Please check your internet connection and try again.</string>
+    <string name="share_title">Teile diese Challenge über</string>
 
 </resources>
