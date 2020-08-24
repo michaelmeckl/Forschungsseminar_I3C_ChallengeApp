@@ -3,7 +3,7 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class PopupViewModel : ViewModel() {
+class ProfileViewModel : ViewModel() {
     val name = MutableLiveData<String>()
 
     fun sendName(text: String) {
