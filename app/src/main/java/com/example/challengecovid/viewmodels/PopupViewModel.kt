@@ -1,4 +1,4 @@
-package com.example.dialogfragment_example
+package com.example.challengecovid.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

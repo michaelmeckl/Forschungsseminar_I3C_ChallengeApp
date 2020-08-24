@@ -28,9 +28,9 @@ import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.popup_edit_profile.*
 import java.util.*
-import com.example.dialogfragment_example.PopupViewModel as PopupViewModel
 import kotlinx.android.synthetic.main.fragment_profile.*
 import androidx.navigation.findNavController
+import com.example.challengecovid.viewmodels.PopupViewModel
 
 
 class ProfileFragment : Fragment() {

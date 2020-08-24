@@ -1,20 +1,13 @@
 package com.example.dialogfragment_example
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.popup_add_friend.*
-import kotlinx.android.synthetic.main.popup_edit_profile.view.*
-import androidx.navigation.findNavController
-
+import com.example.challengecovid.viewmodels.PopupViewModel
 
 
 class AddFriendDialog : DialogFragment() {
