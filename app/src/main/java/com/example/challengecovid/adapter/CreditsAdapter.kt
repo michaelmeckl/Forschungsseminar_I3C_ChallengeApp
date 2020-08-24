@@ -3,18 +3,10 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.ChallengeCategory
-import com.example.challengecovid.ui.CreditsFragment
 import com.example.challengecovid.ui.CreditsItem
-import kotlinx.android.synthetic.main.category_list_item.view.*
 import kotlinx.android.synthetic.main.credits_list_item.view.*
-import timber.log.Timber
 
 class CreditsAdapter : RecyclerView.Adapter<CreditsAdapter.ViewHolder>() {
 

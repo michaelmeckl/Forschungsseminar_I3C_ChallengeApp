@@ -44,7 +44,7 @@ data class ChallengesInCategory(
     @Embedded val category: ChallengeCategory,
     @Relation(
         parentColumn = "categoryId",
-        entityColumn = "category"
+        entityColumn = "containingCategory"
     )
     val associatedChallenges: List<Challenge>  // a challenge category must have at least one challenge belonging to it so it can't be null
 )

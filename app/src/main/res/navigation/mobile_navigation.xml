@@ -11,15 +11,21 @@
         android:label="@string/label_overview"
         tools:layout="@layout/fragment_overview">
         <action
-            android:id="@+id/action_overview_to_detail"
-            app:destination="@id/navigation_category_detail"/>
+            android:id="@+id/action_overview_to_create"
+            app:destination="@id/navigation_create_challenge"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
     <fragment
         android:id="@+id/navigation_challenges"
         android:name="com.example.challengecovid.ui.ChallengesFragment"
         android:label="@string/label_challenges"
-        tools:layout="@layout/fragment_challenges" />
+        tools:layout="@layout/fragment_challenges">
+        <action
+            android:id="@+id/action_category_to_detail"
+            app:destination="@id/navigation_category_detail"/>
+    </fragment>
 
     <dialog
         android:id="@+id/navigation_add_friend"
@@ -74,5 +80,12 @@
         android:name="com.example.challengecovid.ui.CreditsFragment"
         android:label="@string/label_credits"
         tools:layout="@layout/fragment_credits" />
+
+    <dialog
+        android:id="@+id/navigation_create_challenge"
+        android:name="com.example.challengecovid.ui.CreateChallengeFragment"
+        android:label="CreateChallengeFragment"
+        tools:layout="@layout/fragment_create_new_challenge">
+    </dialog>
 
 </navigation>

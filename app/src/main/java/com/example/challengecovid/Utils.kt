@@ -1,8 +1,6 @@
 package com.example.challengecovid
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.DisplayMetrics
@@ -11,7 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -143,36 +140,6 @@ fun AppCompatActivity.slideOutView(v: View) {
     v.visibility = View.GONE
     v.clearAnimation()
 }
-
-/*
-// see Google Sunflower
-// TODO: Helper function for calling a share functionality.
-// Should be used when user presses a share button/menu item.
-@Suppress("DEPRECATION")
-private fun createShareIntent() {
-    val shareText = plantDetailViewModel.plant.value.let { plant ->
-        if (plant == null) {
-            ""
-        } else {
-            getString(R.string.share_text_plant, plant.name)
-        }
-    }
-    val shareIntent = ShareCompat.IntentBuilder.from(requireActivity())
-        .setText(shareText)
-        .setType("text/plain")
-        .createChooserIntent()
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
-    startActivity(shareIntent)
-}
-
- */
-
-/*
-fun Fragment.getViewModelFactory(): ViewModelFactory {
-    val repository = (requireContext().applicationContext as ChallengeCovidApplication).challengeRepository
-    return ViewModelFactory(repository, this)
-}
-*/
 
 /*
 // Util-Functions to start an activity with an intent

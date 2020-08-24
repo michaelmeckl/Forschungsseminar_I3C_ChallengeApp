@@ -99,9 +99,9 @@ dependencies {
     // logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    // detecting memory leaks; debugImplementation because LeakCanary should only run in debug builds
-    //TODO: IMPORTANT comment this out for production as it will install a separate app too!!!!!
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
+    //detecting memory leaks; debugImplementation because LeakCanary should only run in debug builds
+    //IMPORTANT comment this out for production as it will install a separate app too!!!!!
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     // for testing
     testImplementation 'junit:junit:4.13'

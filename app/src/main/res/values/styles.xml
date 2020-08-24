@@ -42,4 +42,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="dialogFullScreen" parent="@style/Theme.MaterialComponents.Light.Dialog.MinWidth">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
 </resources>

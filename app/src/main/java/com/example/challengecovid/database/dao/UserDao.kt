@@ -3,8 +3,6 @@ package com.example.challengecovid.database.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
-import com.example.challengecovid.database.dao.BaseDao
-import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.User
 
 @Dao

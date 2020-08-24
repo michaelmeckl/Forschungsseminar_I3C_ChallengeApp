@@ -1,5 +1,6 @@
 package com.example.challengecovid.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.challengecovid.model.ChallengeCategory
@@ -8,9 +9,9 @@ import com.example.challengecovid.model.ChallengeCategory
 interface CategoryDao : BaseDao<ChallengeCategory> {
 
     @Query("SELECT * from challenge_category_table WHERE categoryId = :key")
-    suspend fun getCategory(key: String): ChallengeCategory
+    fun getCategory(key: String): LiveData<ChallengeCategory>
 
     @Query("SELECT * FROM challenge_category_table")
-    suspend fun getAllCategories(): List<ChallengeCategory>    // no live data necessary because they are never changed
+    fun getAllCategories(): LiveData<List<ChallengeCategory>>
 
 }
