@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
@@ -26,12 +30,17 @@ import timber.log.Timber
 import kotlin.random.Random
 
 
-class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var overviewViewModel: OverviewViewModel
 
     private var selectedSpinnerDifficulty = "Einfach"
     private var selectedSpinnerIcon = "Kein Icon"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.dialogFullScreen)    // set a custom style to make the dialog fragment bigger
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_create_new_challenge, container, false)
@@ -56,11 +65,6 @@ class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 layout_name_create_new_challenge.error = "Braucht nen namen alter"      //TODO ... ¯\_(ツ)_/¯
                 return@setOnClickListener
             }
-
-            // add a simple animation
-            YoYo.with(Techniques.Wobble)
-                .duration(300)  // 300 ms
-                .playOn(view)
 
             // create and add the challenge to the database
             addNewChallenge()
@@ -129,6 +133,7 @@ class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
          */
     }
 
+    //TODO: das funktioniert iwie nicht immer ?? (z.B. nach rotation wird nichts angezeigt manchmal?)
     private fun addNewChallenge() {
         layout_name_create_new_challenge.error = ""
 
@@ -171,15 +176,8 @@ class CreateChallengeFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
     private fun navigateBack() {
-        val newFragment: Fragment = OverviewFragment()
-        val transaction = requireFragmentManager().beginTransaction()
-
-        transaction.replace(
-            R.id.nav_host_fragment,
-            newFragment
-        )
-        transaction.addToBackStack(null) // if written, this transaction will be added to backstack
-        transaction.commit()
+        //activity?.onBackPressed()
+        requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
     }
 
 

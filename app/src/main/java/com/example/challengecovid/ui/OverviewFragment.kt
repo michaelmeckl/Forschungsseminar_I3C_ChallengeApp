@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
 import com.example.challengecovid.adapter.UserChallengeAdapter
 import com.example.challengecovid.database.ChallengeAppDatabase
@@ -51,19 +54,21 @@ class OverviewFragment : Fragment() {
         setupObservers()
         setupSwipeListener()
 
-        //TODO: replace this with navigation component! (and make it a dialog fragment!)
         fab_create_challenge.setOnClickListener {
-            val newFragment: Fragment = CreateChallengeFragment()
-            val transaction = requireFragmentManager().beginTransaction()
+            /*
+            // add a simple animation
+            YoYo.with(Techniques.Wobble)
+                .duration(200)  // 300 ms
+                .playOn(fab_create_challenge)
+            */
+            val navOptions = NavOptions.Builder()
+                .setLaunchSingleTop(true)
+                .setEnterAnim(R.anim.fade_in)
+                .setExitAnim(R.anim.fade_out)
+                .build()
 
-            transaction.replace(
-                R.id.nav_host_fragment,
-                newFragment
-            )
-
-            transaction.addToBackStack(null) // if written, this transaction will be added to backstack
-
-            transaction.commit()
+            requireActivity().findNavController(R.id.nav_host_fragment)
+                .navigate(OverviewFragmentDirections.actionOverviewToCreate())
         }
     }
 

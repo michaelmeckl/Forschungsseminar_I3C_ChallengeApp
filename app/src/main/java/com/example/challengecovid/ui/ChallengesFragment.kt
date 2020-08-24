@@ -101,16 +101,6 @@ class ChallengesFragment : Fragment() {
 
         // navigate to another fragment on click
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(action, extras)
-        /*
-        requireActivity().findNavController(R.id.nav_host_fragment).navigate(
-            R.id.action_overview_to_detail,
-            null,
-            NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setEnterAnim(R.anim.slide_in_right)
-                .setExitAnim(R.anim.fragment_close_exit)
-                .build()
-        )*/
     }
 
     private fun setupObservers() {

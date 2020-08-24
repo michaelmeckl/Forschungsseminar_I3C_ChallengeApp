@@ -10,6 +10,11 @@
         android:name="com.example.challengecovid.ui.OverviewFragment"
         android:label="@string/label_overview"
         tools:layout="@layout/fragment_overview">
+        <action
+            android:id="@+id/action_overview_to_create"
+            app:destination="@id/navigation_create_challenge"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
     <fragment
@@ -49,5 +54,12 @@
         android:name="com.example.challengecovid.ui.CreditsFragment"
         android:label="@string/label_credits"
         tools:layout="@layout/fragment_credits" />
+
+    <dialog
+        android:id="@+id/navigation_create_challenge"
+        android:name="com.example.challengecovid.ui.CreateChallengeFragment"
+        android:label="CreateChallengeFragment"
+        tools:layout="@layout/fragment_create_new_challenge">
+    </dialog>
 
 </navigation>
