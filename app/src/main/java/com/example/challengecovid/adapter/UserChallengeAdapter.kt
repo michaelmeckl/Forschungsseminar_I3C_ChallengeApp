@@ -3,12 +3,14 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
 
-class UserChallengeAdapter : RecyclerView.Adapter<UserChallengeAdapter.ChallengeViewHolder>() {
+class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListener) : RecyclerView.Adapter<UserChallengeAdapter.ChallengeViewHolder>() {
+
 
     var userChallenges = listOf<UserChallenge>()
         set(value) {
@@ -25,18 +27,22 @@ class UserChallengeAdapter : RecyclerView.Adapter<UserChallengeAdapter.Challenge
     }
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
-        holder.bind(userChallenges[position])
+        holder.bind(userChallenges[position], clicklistener)
     }
 
     override fun getItemCount() = userChallenges.size
 
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: UserChallenge) {
+        fun bind(data: UserChallenge, clicklistener: UserChallengeOnClickListener) {
             itemView.name_challenge.text = data.title
             itemView.xp_challenge.text= String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
             //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+
+            itemView.setOnClickListener{
+                clicklistener.onItemClick(it as CardView, data)
+            }
         }
 
         companion object {
@@ -48,6 +54,10 @@ class UserChallengeAdapter : RecyclerView.Adapter<UserChallengeAdapter.Challenge
             }
         }
     }
+    interface UserChallengeOnClickListener {
+        fun onItemClick(view: CardView, userChallenge: UserChallenge)
+    }
+
 }
 
 

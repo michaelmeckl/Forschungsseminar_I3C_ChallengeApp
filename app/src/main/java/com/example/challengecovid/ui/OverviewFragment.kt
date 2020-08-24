@@ -2,11 +2,13 @@ package com.example.challengecovid.ui
 
 import android.app.AlertDialog
 import android.app.Application
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -15,15 +17,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
+import com.example.challengecovid.adapter.CategoriesAdapter
+import com.example.challengecovid.adapter.CategoryClickListener
 import com.example.challengecovid.adapter.UserChallengeAdapter
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.model.ChallengeCategory
+import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.challenge_item.view.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import timber.log.Timber
 
 class OverviewFragment : Fragment() {
 
@@ -45,7 +53,14 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        challengeListAdapter = UserChallengeAdapter()
+//        challengeListAdapter = UserChallengeAdapter(object : UserChallengeAdapter.UserChallengeOnClickListener)
+        challengeListAdapter = UserChallengeAdapter(object : UserChallengeAdapter.UserChallengeOnClickListener {
+
+            override fun onItemClick(view: CardView, userChallenge: UserChallenge) {
+                setChallengeCompleted(view, userChallenge)
+            }
+
+        })
         recyclerview_challenges.apply {
             setHasFixedSize(true)
             adapter = challengeListAdapter
@@ -71,6 +86,18 @@ class OverviewFragment : Fragment() {
                 .navigate(OverviewFragmentDirections.actionOverviewToCreate())
         }
     }
+
+    private fun setChallengeCompleted(itemView: CardView, userChallenge: UserChallenge) {
+        Timber.d(userChallenge.toString())
+        val newUserChallenge = UserChallenge(userChallenge.title, userChallenge.description, userChallenge.difficulty, completed = true, userChallenge.duration, userChallenge.creatorId)
+        overviewViewModel.updateChallenge(newUserChallenge)
+        itemView.setCardBackgroundColor(Color.parseColor("#A1E887"))
+        itemView.description_challenge.text = "Heute Abgeschlossen"
+        itemView.xp_challenge.visibility = View.INVISIBLE
+        itemView.checkmark_completed_challenge.visibility = View.VISIBLE
+
+    }
+
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
