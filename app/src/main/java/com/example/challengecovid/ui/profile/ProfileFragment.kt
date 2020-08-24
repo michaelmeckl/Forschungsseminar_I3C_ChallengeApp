@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.challengecovid.R
-import com.example.challengecovid.adapter.RecyclerAdapter
 import kotlinx.android.synthetic.main.fragment_profile.*
 import androidx.navigation.findNavController
 import com.example.challengecovid.viewmodels.ProfileViewModel
@@ -17,7 +16,6 @@ import com.example.challengecovid.viewmodels.ProfileViewModel
 class ProfileFragment : Fragment() {
 
     private lateinit var myDialog: Dialog
-    private lateinit var recyclerAdapter: RecyclerAdapter
     private val profileViewModel: ProfileViewModel by viewModels()
 
 
