@@ -1,5 +1,6 @@
 package com.example.challengecovid.viewmodels
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +10,7 @@ import kotlinx.coroutines.*
 
 class CategoryViewModel (private val categoryRepository: CategoryRepository) : ViewModel() {
 
-    val allCategories = this.categoryRepository.getAllChallengeCategories()
+    val allCategories: LiveData<List<ChallengeCategory>> = categoryRepository.getAllChallengeCategories()
 
     private var currentCategory = MutableLiveData<ChallengeCategory>()
 

@@ -4,20 +4,14 @@ import androidx.lifecycle.LiveData
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.User
+import com.example.challengecovid.model.UserChallenge
 import timber.log.Timber
 
 class UserRepository (database: ChallengeAppDatabase) {
 
-    //TODO
     private val userDao = database.userDao()
 
-    /**
-     * ################################################
-     *                  App Users
-     * ################################################
-     */
-
-    suspend fun insertNewChallenge(user: User) {
+    suspend fun insertNewUser(user: User) {
         userDao.insert(user)
         Timber.i("new user inserted in repository")
     }
@@ -27,9 +21,14 @@ class UserRepository (database: ChallengeAppDatabase) {
         Timber.i("list of users inserted in repository")
     }
 
-    suspend fun updateChallenge(user: User) {
+    suspend fun updateUser(user: User) {
         userDao.update(user)
         Timber.i("user updated in repository: $user")
+    }
+
+    suspend fun deleteUser(user: User) {
+        Timber.i("deleted user in repository")
+        return userDao.delete(user)
     }
 
     fun getUser(id: String): LiveData<User> {
