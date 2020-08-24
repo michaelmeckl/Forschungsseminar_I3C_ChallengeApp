@@ -6,7 +6,7 @@ import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.User
 import timber.log.Timber
 
-class UserRepository (private val database: ChallengeAppDatabase) {
+class UserRepository (database: ChallengeAppDatabase) {
 
     //TODO
     private val userDao = database.userDao()

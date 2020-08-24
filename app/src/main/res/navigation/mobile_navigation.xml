@@ -5,30 +5,14 @@
     android:id="@+id/nav_graph"
     app:startDestination="@+id/navigation_overview">
 
-    <!-- TODO not as global action! useless atm-->
-    <action
-        android:id="@+id/action_global_navigation_map"
-        app:destination="@id/navigation_challenges"
-        app:enterAnim="@anim/nav_default_enter_anim"
-        app:exitAnim="@anim/nav_default_exit_anim"
-        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-        app:popExitAnim="@anim/nav_default_pop_exit_anim" >
-        <argument
-            android:name="showDetails"
-            app:argType="string"
-            android:defaultValue="id_unknown" />
-    </action>
-
     <fragment
         android:id="@+id/navigation_overview"
         android:name="com.example.challengecovid.ui.OverviewFragment"
         android:label="@string/label_overview"
         tools:layout="@layout/fragment_overview">
         <action
-            android:id="@+id/action_overview_to_challenges"
-            app:destination="@id/navigation_challenges"
-            app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/slide_in_right" />
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_category_detail"/>
         <action
             android:id="@+id/action_navigation_overview_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -40,10 +24,12 @@
         android:name="com.example.challengecovid.ui.ChallengesFragment"
         android:label="@string/label_challenges"
         tools:layout="@layout/fragment_challenges" />
+
     <fragment
         android:id="@+id/addFriendDialog"
         android:name="com.example.dialogfragment_example.AddFriendDialog"
         android:label="AddFriendDialog" />
+
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.challengecovid.ui.profile.ProfileFragment"
@@ -52,6 +38,7 @@
             android:id="@+id/action_profileFragment_to_editProfileDialog"
             app:destination="@id/editProfileDialog" />
     </fragment>
+
     <fragment
         android:id="@+id/editProfileDialog"
         android:name="com.example.dialogfragment_example.EditProfileDialog"
