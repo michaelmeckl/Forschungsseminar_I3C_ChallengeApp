@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="@dimen/corner_radius">
+    >
 
     <RelativeLayout
         android:id="@+id/list_item"

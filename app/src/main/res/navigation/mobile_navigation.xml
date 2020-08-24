@@ -32,8 +32,7 @@
         <action
             android:id="@+id/action_navigation_overview_to_profileFragment"
             app:destination="@id/profileFragment" />
-            android:id="@+id/action_overview_to_detail"
-            app:destination="@id/navigation_category_detail"/>
+
     </fragment>
 
     <fragment

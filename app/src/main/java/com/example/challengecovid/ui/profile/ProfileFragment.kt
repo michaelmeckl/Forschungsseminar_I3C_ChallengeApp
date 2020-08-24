@@ -67,7 +67,7 @@ datenbank
         }
 
         edit_profile.setOnClickListener {
-           // view.findNavController().navigate(R.id.action_profileFragment_to_editProfileDialog)
+           view.findNavController().navigate(R.id.action_profileFragment_to_editProfileDialog)
             val fragmentManager = requireActivity().supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
             val fragment = EditProfileDialog()
