@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -61,8 +59,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(custom_toolbar)
-        custom_toolbar.setupWithNavController(navController, appBarConfiguration)
+        setSupportActionBar(custom_toolbar as? Toolbar)
+        (custom_toolbar as? Toolbar)?.setupWithNavController(navController, appBarConfiguration)
     }
 
     /**
@@ -80,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
     // Inflate the menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

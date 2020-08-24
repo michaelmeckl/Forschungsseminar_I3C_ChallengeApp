@@ -12,11 +12,18 @@
     <string name="action_about">About</string>
     <string name="action_credits">Credits</string>
 
+    <!-- toolbar actions -->
+    <string name="action_profile">My profile</string>
+    <string name="action_about">About</string>
+    <string name="action_share">Share</string>
+    <string name="action_credits">Credits</string>
+
     <!-- Others -->
     <string name="credits_used_icons">Used Icons:</string>
     <string name="splash_screen_load">Loading …</string>
     <string name="no_internet">No Internet Connection</string>
     <string name="no_internet_warning">No new data can be loaded without a connection! Please check your internet connection and try again.</string>
+    <string name="share_title">Teile diese Challenge über</string>
 
     <!-- toolbar actions -->
     <string name="action_profile">My profile</string>
