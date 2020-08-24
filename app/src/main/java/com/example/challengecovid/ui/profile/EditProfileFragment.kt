@@ -1,4 +1,4 @@
-package com.example.dialogfragment_example
+package com.example.challengecovid.ui.profile
 
 import android.os.Build
 import android.os.Bundle
@@ -28,11 +28,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
-class EditProfileDialog : Fragment() {
+class EditProfileFragment : Fragment() {
 
-    lateinit var myDialog : Dialog
-
-
+    lateinit var myDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,20 +43,16 @@ class EditProfileDialog : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        edit_profile_picture.setOnClickListener{
+        edit_profile_picture.setOnClickListener {
 
 
         }
 
-        save_changes.setOnClickListener{
-            view.findNavController().navigate(R.id.action_editProfileDialog_to_profileFragment)
+        save_changes.setOnClickListener {
+            //remove this fragment from the backstack to navigate back
+            requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
     }
-
-
-
-
-
 
 
 }

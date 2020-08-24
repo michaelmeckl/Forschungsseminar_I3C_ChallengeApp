@@ -1,4 +1,4 @@
-package com.example.dialogfragment_example
+package com.example.challengecovid.ui.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,20 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.challengecovid.R
 import kotlinx.android.synthetic.main.popup_add_friend.*
-import com.example.challengecovid.viewmodels.PopupViewModel
+import com.example.challengecovid.viewmodels.ProfileViewModel
 
 
-class AddFriendDialog : DialogFragment() {
+class AddFriendFragment : DialogFragment() {
 
-    companion object {
-
-        const val TAG = "AddFriendDialog"
-
-    }
-
-
-
-    private lateinit var viewModel: PopupViewModel
+    private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,20 +24,15 @@ class AddFriendDialog : DialogFragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        friend_invitation.setOnClickListener{
+        friend_invitation.setOnClickListener {
             var txt = new_friend_name.toString()
             dismiss()
         }
 
 
     }
-
-
-
-
 
 }

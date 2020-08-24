@@ -13,10 +13,6 @@
         <action
             android:id="@+id/action_overview_to_detail"
             app:destination="@id/navigation_category_detail"/>
-        <action
-            android:id="@+id/action_navigation_overview_to_profileFragment"
-            app:destination="@id/profileFragment" />
-
     </fragment>
 
     <fragment
@@ -25,27 +21,30 @@
         android:label="@string/label_challenges"
         tools:layout="@layout/fragment_challenges" />
 
-    <fragment
-        android:id="@+id/addFriendDialog"
-        android:name="com.example.dialogfragment_example.AddFriendDialog"
-        android:label="AddFriendDialog" />
+    <dialog
+        android:id="@+id/navigation_add_friend"
+        android:name="com.example.challengecovid.ui.profile.AddFriendFragment"
+        android:label="AddFriendDialog"
+        tools:layout="@layout/popup_add_friend"/>
 
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/navigation_profile"
         android:name="com.example.challengecovid.ui.profile.ProfileFragment"
-        android:label="ProfileFragment" >
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileDialog"
-            app:destination="@id/editProfileDialog" />
+            app:destination="@id/navigation_edit_profile" />
+        <action
+            android:id="@+id/action_profileFragment_to_addFriend"
+            app:destination="@id/navigation_add_friend" />
     </fragment>
 
     <fragment
-        android:id="@+id/editProfileDialog"
-        android:name="com.example.dialogfragment_example.EditProfileDialog"
-        android:label="EditProfileDialog" >
-        <action
-            android:id="@+id/action_editProfileDialog_to_profileFragment"
-            app:destination="@id/profileFragment" />
+        android:id="@+id/navigation_edit_profile"
+        android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
+        android:label="EditProfileDialog"
+        tools:layout="@layout/popup_edit_profile">
     </fragment>
 
     <fragment
