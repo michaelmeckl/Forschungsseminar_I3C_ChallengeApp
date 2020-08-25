@@ -51,6 +51,9 @@
         android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
         android:label="EditProfileDialog"
         tools:layout="@layout/popup_edit_profile">
+        <action
+            android:id="@+id/action_navigation_edit_profile_to_navigation_edit_profile_picture"
+            app:destination="@id/navigation_edit_profile_picture" />
     </fragment>
 
     <fragment
@@ -87,5 +90,9 @@
         android:label="CreateChallengeFragment"
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
+    <fragment
+        android:id="@+id/navigation_edit_profile_picture"
+        android:name="com.example.challengecovid.ui.profile.EditProfilePictureDialogFragment"
+        android:label="EditProfilePictureDialogFragment" />
 
 </navigation>

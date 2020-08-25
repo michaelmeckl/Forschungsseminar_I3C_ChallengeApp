@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:padding="5dp">
+    <!-- TODO dont set both widht AND heigt manually! use wrap content or else  -->
+    <!--de.hdodenhof.circleimageview.CircleImageView -->
+
+    <!--  1  app:layout_constraintBottom_toTopOf="@+id/profile_picture_4"
+       app:layout_constraintRight_toLeftOf="@+id/profile_picture_2" /> -->
+
+    <!-- 2  app:layout_constraintBottom_toTopOf="@id/profile_picture_5"
+        app:layout_constraintLeft_toRightOf="@id/profile_picture_1"
+        app:layout_constraintRight_toLeftOf="@id/profile_picture_3" /> -->
+
+    <!-- 3   app:layout_constraintBottom_toTopOf="@id/profile_picture_6"
+        app:layout_constraintLeft_toRightOf="@id/profile_picture_2" /> -->
+
+    <!-- 4  app:layout_constraintRight_toLeftOf="@id/profile_picture_5"
+        app:layout_constraintTop_toBottomOf="@id/profile_picture_1" /> -->
+
+    <!--  5  app:layout_constraintLeft_toRightOf="@id/profile_picture_4"
+       app:layout_constraintRight_toLeftOf="@id/profile_picture_6"
+       app:layout_constraintTop_toBottomOf="@id/profile_picture_2" /> -->
+
+
+    <!-- 6   app:layout_constraintLeft_toRightOf="@id/profile_picture_4"
+        app:layout_constraintRight_toLeftOf="@id/profile_picture_6"
+        app:layout_constraintTop_toBottomOf="@id/profile_picture_2" /> -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:text="Profilbild bearbeiten"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <ImageView
+        android:id="@+id/profile_picture_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/desc"
+        android:elevation="2dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/iconfinder_avatar_367_456319_6415373"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.134" />
+
+    <Button
+        android:id="@+id/save_changes_profile_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="112dp"
+        android:text="Änderung sichern"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.92"
+        android:contentDescription="@string/desc"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_row2"
+        app:layout_constraintTop_toBottomOf="@id/profile_picture_new" >
+
+        <ImageButton
+            android:id="@+id/profile_picture_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/iconfinder_avatar_367_456319_6415373"
+            android:contentDescription="@string/desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="start"
+ />
+
+        <ImageButton
+            android:id="@+id/profile_picture_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/iconfinder_avatar_368_456320_6415359"
+            android:contentDescription="@string/desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center" />
+
+        <ImageButton
+            android:id="@+id/profile_picture_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/iconfinder_avatar_369_456321_6415374"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/desc"
+            android:layout_gravity="end"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/save_changes_profile_picture"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_row1" >
+
+    <ImageButton
+        android:id="@+id/profile_picture_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/iconfinder_avatar_370_456322_6415362"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.693"
+        android:contentDescription="@string/desc"
+        android:layout_gravity="start"/>
+
+    <ImageButton
+        android:id="@+id/profile_picture_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/iconfinder_avatar_373_456325_6415360"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/desc"
+        android:layout_gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/profile_picture_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/iconfinder_avatar_378_456330_6415368"
+            android:contentDescription="@string/desc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

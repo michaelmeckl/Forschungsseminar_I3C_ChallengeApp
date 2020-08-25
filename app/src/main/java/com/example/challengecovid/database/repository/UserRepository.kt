@@ -31,7 +31,7 @@ class UserRepository (database: ChallengeAppDatabase) {
         return userDao.delete(user)
     }
 
-    fun getUser(id: String): LiveData<User> {
+    fun getUser(id: String): LiveData<User>{
         Timber.i("get user in repository: $id")
         return userDao.getUser(id)
     }
@@ -39,6 +39,18 @@ class UserRepository (database: ChallengeAppDatabase) {
     fun getAllUsers(): LiveData<List<User>> {
         Timber.i("get all Users in repository")
         return userDao.getAllUsers()
+    }
+
+    fun updateUserName(id: String,username: String ){
+        userDao.updateUserName(id,username)
+        Timber.i("update username $id: $username")
+
+    }
+
+    fun updateUserIcon(id: String,usericon: String ){
+        userDao.updateUserName(id,usericon)
+        Timber.i("update usericon $id: $usericon")
+
     }
 
 }

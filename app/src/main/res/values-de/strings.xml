@@ -23,6 +23,7 @@
     <string name="save_changes">Änderungen speichern</string>
     <string name="add_friend">Anfrage abschicken</string>
     <string name="change_profile_pic">Profilbild ändern</string>
+    <string name="desc">Beschreibung</string>
 
     <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
     <string name="hint_name_create_new_challenge">Name der Challenge</string>
