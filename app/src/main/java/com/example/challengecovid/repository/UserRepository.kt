@@ -2,14 +2,18 @@ package com.example.challengecovid.repository
 
 import androidx.lifecycle.LiveData
 import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.User
-import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.model.firebase_model.User_Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class UserRepository (database: ChallengeAppDatabase) {
+class UserRepository(database: ChallengeAppDatabase) {
+
+    // reference to the firestore db
+    private val firestore = FirebaseFirestore.getInstance()
 
     private val userDao = database.userDao()
+
 
     suspend fun insertNewUser(user: User) {
         userDao.insert(user)
@@ -39,6 +43,42 @@ class UserRepository (database: ChallengeAppDatabase) {
     fun getAllUsers(): LiveData<List<User>> {
         Timber.i("get all Users in repository")
         return userDao.getAllUsers()
+    }
+
+
+    /**
+     * ################################################
+     *                  for Firebase
+     * ################################################
+     */
+
+    fun saveNewUser(newUser: User_Firebase) {
+        firestore.collection("users")
+            .add(newUser)
+            .addOnSuccessListener { documentReference ->
+                Timber.tag("FIREBASE_INSERT_USER").d(
+                    "DocumentSnapshot added with ID: ${documentReference.id}"
+                )
+            }
+            .addOnFailureListener { e ->
+                Timber.tag("FIREBASE_INSERT_USER").d(
+                    "Error adding document $e"
+                )
+            }
+    }
+
+    fun fetchAllUsers() {
+        firestore.collection("users")
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result) {
+                        Timber.tag("FIREBASE_ALL_USERS").d("${document.id} => ${document.data}")
+                    }
+                } else {
+                    Timber.tag("FIREBASE_ALL_USERS").d(" Error getting documents: ${task.exception}")
+                }
+            }
     }
 
 }

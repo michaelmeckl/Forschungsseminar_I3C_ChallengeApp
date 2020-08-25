@@ -32,6 +32,10 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
 
+        <activity
+            android:name=".ui.CharacterCreationActivity">
+        </activity>
+
         <service
             android:name=".firebase.MessagingService"
             android:exported="false">

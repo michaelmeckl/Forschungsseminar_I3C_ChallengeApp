@@ -1,10 +1,8 @@
 package com.example.challengecovid.firebase
 
-import android.util.Log
 import android.widget.Toast
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.challengecovid.R
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
@@ -18,7 +16,7 @@ class MessagingService: FirebaseMessagingService() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Timber.tag("FIREBASE_TOKEN").d("getInstanceId failed ${task.exception}")
+                    Timber.tag(TOKEN_TAG).d("getInstanceId failed ${task.exception}")
                     return@OnCompleteListener
                 }
 
@@ -27,7 +25,7 @@ class MessagingService: FirebaseMessagingService() {
 
                 // Log and toast
                 val msg = "Token retrieved successfully: $token"
-                Timber.tag("FIREBASE_TOKEN").d(msg)
+                Timber.tag(TOKEN_TAG).d(msg)
                 Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
     }
@@ -40,11 +38,11 @@ class MessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Timber.tag("MESSAGE").d("From: ${remoteMessage.from}")
+        Timber.tag(MSG_TAG).d("From: ${remoteMessage.from}")
 
         // Check if message contains a data payload.
         if (remoteMessage.data.isNotEmpty()) {
-            Timber.tag("MESSAGE").d("Message data payload: ${remoteMessage.data}")
+            Timber.tag(MSG_TAG).d("Message data payload: ${remoteMessage.data}")
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use WorkManager.
@@ -57,7 +55,7 @@ class MessagingService: FirebaseMessagingService() {
 
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
-            Timber.tag("MESSAGE").d("Message Notification Body: ${it.body}")
+            Timber.tag(MSG_TAG).d("Message Notification Body: ${it.body}")
         }
     }
 
@@ -73,7 +71,7 @@ class MessagingService: FirebaseMessagingService() {
      * Handle time allotted to BroadcastReceivers.
      */
     private fun handleNow() {
-        Timber.tag("MESSAGE").d("Short lived task is done.")
+        Timber.tag(MSG_TAG).d("Short lived task is done.")
     }
 
     /**
@@ -83,7 +81,7 @@ class MessagingService: FirebaseMessagingService() {
      */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Timber.tag("FIREBASE_TOKEN").d("Refreshed token: $token")
+        Timber.tag(TOKEN_TAG).d("Refreshed token: $token")
 
         // If you want to send messages to this application instance or manage this apps subscriptions on the server side,
         // send the Instance ID token to your app server.
@@ -99,8 +97,13 @@ class MessagingService: FirebaseMessagingService() {
                 if (!task.isSuccessful) {
                     msg = "Subscribing to topic failed!"
                 }
-                Timber.tag("FIREBASE_MESSAGING").d(msg)
+                Timber.tag(MSG_TAG).d(msg)
                 Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             }
+    }
+
+    companion object {
+        const val MSG_TAG = "FIREBASE_MESSAGE"
+        const val TOKEN_TAG = "FIREBASE_TOKEN"
     }
 }

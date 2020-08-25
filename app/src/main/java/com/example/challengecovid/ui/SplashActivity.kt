@@ -14,17 +14,20 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.challengecovid.BuildConfig
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 
 
-//TODO: find a better splash screen logo?
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
     private var firstRun: Boolean = false
-    private var firstTimeThisDay: Boolean = false     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
+
+    //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
+    // alternativ vllt über firebase in app messaging gut umsetzbar!
+    private var firstTimeThisDay: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +92,10 @@ class SplashActivity : AppCompatActivity() {
             val channelName = getString(R.string.default_notification_channel_name)
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager?.createNotificationChannel(
-                NotificationChannel(channelId,
-                channelName, NotificationManager.IMPORTANCE_LOW)
+                NotificationChannel(
+                    channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW
+                )
             )
         }
 
@@ -108,26 +113,27 @@ class SplashActivity : AppCompatActivity() {
             // wait for 2 seconds
             delay(2000)
 
+            //TODO: revert this later!!!
+            startCharacterCreation()
+            /*
             if (firstRun) {
-                startCharacterSelection()
+                startCharacterCreation()
             } else {
                 startMain()
             }
+            */
         }
     }
 
-    // TODO navigate to Character Selection
-    private fun startCharacterSelection() {
-        /*
-        val intent = Intent(this@SplashActivity, CharacterSelectActivity::class.java)
+    private fun startCharacterCreation() {
+        val intent = Intent(this@SplashActivity, CharacterCreationActivity::class.java)
         startActivity(intent)
 
         // close this activity so the user can't navigate back to it!
         finish()
-        */
     }
 
-    // navigate to Main Activity
+    // navigate direct to Main Activity
     private fun startMain() {
         val intent = Intent(this@SplashActivity, MainActivity::class.java)
         startActivity(intent)
@@ -141,8 +147,13 @@ class SplashActivity : AppCompatActivity() {
             if (Utils.isNetworkConnected(it)) {
                 fetchNewData()
             } else {
-                //TODO: oder vllt lieber nur einen Toast damit nicht zu aufdringlich?
-                showConnectionAlert()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.no_internet + R.string.no_internet_warning,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                //showConnectionAlert()
             }
         }
     }
@@ -157,7 +168,7 @@ class SplashActivity : AppCompatActivity() {
             .setTitle(R.string.no_internet)
             .setMessage(R.string.no_internet_warning)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }     // TODO: dialog.dismiss() and retry ?
+            .setPositiveButton(android.R.string.ok) { _, _ -> }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
     }
