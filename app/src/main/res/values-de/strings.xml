@@ -12,6 +12,9 @@
     <string name="action_share">Teilen</string>
     <string name="action_credits">Quellen</string>
 
+    <!-- Firebase -->
+    <string name="default_notification_channel_name">Challenges</string>
+
     <!-- Others -->
     <string name="credits_used_icons">Verwendete Icons:</string>
     <string name="splash_screen_load">Laden …</string>

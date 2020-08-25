@@ -40,11 +40,10 @@
             </intent-filter>
         </service>
 
-        <!-- TODO eigener Notification Channel nötig?
+        <!-- default notification channel for firebase cloud messages -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-            -->
 
         <!-- color and icon for notifications without custom icon or color specified -->
         <meta-data

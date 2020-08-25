@@ -13,6 +13,10 @@
     <string name="action_share">Share</string>
     <string name="action_credits">Credits</string>
 
+    <!-- Firebase -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="true">Challenges</string>
+
     <!-- Others -->
     <string name="credits_used_icons">Used Icons:</string>
     <string name="splash_screen_load">Loading …</string>

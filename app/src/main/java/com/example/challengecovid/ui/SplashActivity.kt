@@ -2,7 +2,10 @@ package com.example.challengecovid.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View.ALPHA
 import android.view.View.TRANSLATION_Y
@@ -13,6 +16,7 @@ import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 
 //TODO: find a better splash screen logo?
@@ -28,6 +32,8 @@ class SplashActivity : AppCompatActivity() {
 
         checkFirstRun()
         animateSplashScreen()
+
+        handleIncomingCloudMessages()
 
         //TODO: loadNewChallengeData()
         showSplashScreen()
@@ -73,6 +79,28 @@ class SplashActivity : AppCompatActivity() {
 
         // Update the shared preferences with the current version code
         prefs.edit().putInt(PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
+    }
+
+    //TODO:
+    private fun handleIncomingCloudMessages() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(
+                NotificationChannel(channelId,
+                channelName, NotificationManager.IMPORTANCE_LOW)
+            )
+        }
+
+        // Handle possible data accompanying notification message.
+        intent.extras?.let {
+            for (key in it.keySet()) {
+                val value = intent.extras?.get(key)
+                Timber.tag("FIREBASE_CLOUD_MESSAGE").d("Key: $key Value: $value")
+            }
+        }
     }
 
     private fun showSplashScreen() {

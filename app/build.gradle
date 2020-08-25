@@ -62,7 +62,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0' // In-App Messaging
     implementation 'com.google.firebase:firebase-functions-ktx:19.0.2'  // Cloud Functions
     implementation 'com.google.firebase:firebase-messaging:20.2.4'  // Cloud Messaging
-
+    implementation 'com.google.firebase:firebase-firestore:21.5.0'  // Cloud Firestore
+    //implementation 'com.google.firebase:firebase-database:19.3.1'   // Real-time database
+    implementation 'com.firebaseui:firebase-ui-auth:6.3.0'  // FirebaseUI for Firebase Auth
 
     // for SplashScreen
     // implementation 'com.rbddevs.splashy:splashy:1.3.0'

@@ -90,8 +90,10 @@ class MessagingService: FirebaseMessagingService() {
 
         //sendRegistrationToServer(token)
 
+        //TODO should this be in the splash activity instead?
         //subscribe to a topic after receiving your token
-        FirebaseMessaging.getInstance().subscribeToTopic("new_challenges")     //TODO create that topic
+        //if the topic doesn't exist yet it will be created automatically!
+        FirebaseMessaging.getInstance().subscribeToTopic("new_challenges")
             .addOnCompleteListener { task ->
                 var msg = "Successfully subscribed to topic!"
                 if (!task.isSuccessful) {
