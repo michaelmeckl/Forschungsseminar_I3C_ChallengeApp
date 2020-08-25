@@ -3,8 +3,8 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.database.repository.ChallengeRepository
-import com.example.challengecovid.database.repository.UserRepository
+import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.repository.UserRepository
 import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 

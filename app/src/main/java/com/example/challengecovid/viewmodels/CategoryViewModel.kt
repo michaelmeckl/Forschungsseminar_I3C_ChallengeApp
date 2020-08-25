@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.challengecovid.database.repository.CategoryRepository
+import com.example.challengecovid.repository.CategoryRepository
 import com.example.challengecovid.model.ChallengeCategory
 import kotlinx.coroutines.*
 

@@ -1,24 +1,17 @@
 package com.example.challengecovid.ui.profile
 
-import android.app.Application
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import com.example.challengecovid.R
-import kotlinx.android.synthetic.main.fragment_profile.*
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.ChallengeRepository
-import com.example.challengecovid.database.repository.UserRepository
-import com.example.challengecovid.viewmodels.OverviewViewModel
+import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
@@ -33,10 +26,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-        val userRepository = UserRepository(db)
-
+        val userRepository = RepositoryController.getUserRepository()
         profileViewModel = getViewModel { ProfileViewModel(userRepository) }
 
         return root

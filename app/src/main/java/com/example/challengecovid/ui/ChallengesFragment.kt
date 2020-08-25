@@ -1,6 +1,5 @@
 package com.example.challengecovid.ui
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,17 +11,14 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.CategoriesAdapter
 import com.example.challengecovid.adapter.CategoryClickListener
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.CategoryRepository
 import com.example.challengecovid.model.ChallengeCategory
 import com.example.challengecovid.viewmodels.CategoryViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenges.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class ChallengesFragment : Fragment() {
 
@@ -32,12 +28,8 @@ class ChallengesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_challenges, container, false)
 
-        // get a database instance
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-
-        // init the datasource (repository)
-        val categoryRepository = CategoryRepository(db)
+        // get the datasource (repository)
+        val categoryRepository = RepositoryController.getCategoryRepository()
 
         // init viewmodel with datasource
         categoryViewmodel = getViewModel { CategoryViewModel(categoryRepository) }

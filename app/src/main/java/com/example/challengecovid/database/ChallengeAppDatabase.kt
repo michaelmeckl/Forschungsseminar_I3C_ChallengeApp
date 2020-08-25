@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.challengecovid.Data
 import com.example.challengecovid.database.ChallengeAppDatabase.Companion.DB_VERSION
 import com.example.challengecovid.database.dao.*
 import com.example.challengecovid.model.*

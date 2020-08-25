@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.UserChallengeAdapter
 import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -33,10 +34,7 @@ class OverviewFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-        val challengeRepository = ChallengeRepository(db)
-
+        val challengeRepository = RepositoryController.getChallengeRepository()
         overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
 
         return root

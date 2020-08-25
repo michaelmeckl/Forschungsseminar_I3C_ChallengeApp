@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.coroutines.*
 

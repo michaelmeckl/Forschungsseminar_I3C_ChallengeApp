@@ -1,4 +1,4 @@
-package com.example.challengecovid.database.repository
+package com.example.challengecovid.repository
 
 import com.example.challengecovid.database.ChallengeAppDatabase
 

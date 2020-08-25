@@ -1,4 +1,4 @@
-package com.example.challengecovid.database
+package com.example.challengecovid
 
 import com.example.challengecovid.App
 import com.example.challengecovid.R
