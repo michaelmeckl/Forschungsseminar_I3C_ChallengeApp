@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/content_background">
 
     <TextView
         android:id="@+id/choose_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Wähle ein Profilbild:"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/profile_image"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:text="Wähle ein Profilbild:"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="2dp"
         android:layout_marginHorizontal="32dp"
+        android:elevation="2dp"
+        android:src="@drawable/ic_home"
+        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
-        app:layout_constraintTop_toBottomOf="@+id/choose_image"
-        android:src="@drawable/ic_home" />
+        app:layout_constraintTop_toBottomOf="@+id/choose_image" />
 
     <TextView
         android:id="@+id/choose_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="54dp"
+        android:layout_marginTop="74dp"
+        android:text="Gib einen Usernamen ein:"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
-        app:layout_constraintTop_toBottomOf="@id/profile_image"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:text="Gib einen Usernamen ein:"/>
+        app:layout_constraintTop_toBottomOf="@id/profile_image" />
 
     <EditText
         android:id="@+id/username_edit_field"
@@ -46,11 +47,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="54dp"
         android:layout_marginVertical="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/choose_username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:autofillHints="Username"
         android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/choose_username"
         tools:ignore="LabelFor" />
 
     <Button
@@ -58,9 +59,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Weiter"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="Weiter"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
