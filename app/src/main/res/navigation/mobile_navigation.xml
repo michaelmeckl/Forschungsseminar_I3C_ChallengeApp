@@ -77,7 +77,7 @@
 
     <fragment
         android:id="@+id/navigation_about"
-        android:name="com.example.challengecovid.ui.CreditsFragment"
+        android:name="com.example.challengecovid.ui.AboutFragment"
         android:label="@string/label_about"
         tools:layout="@layout/fragment_about" />
 

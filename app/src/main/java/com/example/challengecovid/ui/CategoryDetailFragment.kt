@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
-import com.example.challengecovid.createShareIntent
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 
 class CategoryDetailFragment : Fragment() {
@@ -75,19 +74,23 @@ class CategoryDetailFragment : Fragment() {
     }
 
     /*
-    // TODO: sort of a "hack" for fullscreen dialog fragment
-    // see https://stackoverflow.com/questions/12478520/how-to-set-dialogfragments-width-and-height
-    override fun onResume() {
-        // Get existing layout params for the window
-        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        // Assign window properties to fill the parent
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
-        // Call super onResume after sizing
-        super.onResume()
+    // Helper function for calling a share functionality.
+    // Should be used when user presses a share button/menu item.
+    fun createShareIntent(context: Activity) {
+
+        //val contenturi = Uri.parse("android.resource://" + context.packageName + "/drawable/" + "test")
+
+        val shareIntent = ShareCompat.IntentBuilder.from(context)
+            .setChooserTitle("Share via")
+            //.setStream(contenturi)
+            //.setType(image/**/)
+            .setText("Click this: http://www.example.com/detail")
+            .setType("text/plain")
+            .createChooserIntent()
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        startActivity(context, shareIntent, null)
     }
-     */
+    */
 
     /*
     private fun startEnterTransitionAfterLoadingImage(imageAddress: Int, imageView: ImageView) {

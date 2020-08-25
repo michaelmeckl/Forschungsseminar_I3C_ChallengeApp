@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.fragment_about.*
 // TODO: merge this with the about fragment and instead add a fragment for some corona guidelines and links to who etc.!
 
 // TODO: außerdem die guidelines von der frau böhm mit für die challenges verwenden!!!!
-class CreditsFragment : Fragment() {
+class AboutFragment : Fragment() {
 
     private lateinit var aboutAdapter: AboutAdapter
 
