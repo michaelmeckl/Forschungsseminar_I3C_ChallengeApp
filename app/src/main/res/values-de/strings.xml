@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- navigation titles -->
     <string name="label_overview">Übersicht</string>
     <string name="label_challenges">Challenges</string>
     <string name="label_social">Soziales</string>
     <string name="label_category_detail">Kategorie</string>
-    <string name="label_credits">Quellen</string>
+    <string name="label_about">Über diese App</string>
+    <string name="label_add_friend">Freund hinzufügen</string>
+    <string name="label_profile">Profil</string>
+    <string name="label_edit_profile">Profil bearbeiten</string>
+    <string name="label_create_challenge">Neue Challenge erstellen</string>
 
     <!-- toolbar actions -->
-    <string name="action_profile">Mein Profil</string>
+    <string name="action_profile">Profil</string>
     <string name="action_about">Über</string>
     <string name="action_share">Teilen</string>
-    <string name="action_credits">Quellen</string>
 
     <!-- Firebase -->
     <string name="default_notification_channel_name">Challenges</string>
@@ -20,7 +24,7 @@
     <string name="splash_screen_load">Laden …</string>
     <string name="no_internet">Keine Internetverbindung</string>
     <string name="no_internet_warning">Neue Daten können nicht geladen werden ohne Internet! Überprüfe deine Verbindung und versuch es nochmal.</string>
-    <string name="share_title">Share this challenge via</string>
+    <string name="share_title">Teile diese Challenge</string>
 
     <string name="edit_profile">Profil bearbeiten</string>
     <string name="save_changes">Änderungen speichern</string>

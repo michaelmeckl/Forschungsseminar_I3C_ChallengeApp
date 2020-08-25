@@ -30,13 +30,13 @@
     <dialog
         android:id="@+id/navigation_add_friend"
         android:name="com.example.challengecovid.ui.profile.AddFriendFragment"
-        android:label="AddFriendDialog"
+        android:label="@string/label_add_friend"
         tools:layout="@layout/popup_add_friend"/>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.challengecovid.ui.profile.ProfileFragment"
-        android:label="ProfileFragment"
+        android:label="@string/label_profile"
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileDialog"
@@ -49,7 +49,7 @@
     <fragment
         android:id="@+id/navigation_edit_profile"
         android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
-        android:label="EditProfileDialog"
+        android:label="@string/label_edit_profile"
         tools:layout="@layout/popup_edit_profile">
     </fragment>
 
@@ -76,15 +76,15 @@
         tools:layout="@layout/fragment_social" />
 
     <fragment
-        android:id="@+id/navigation_credits"
+        android:id="@+id/navigation_about"
         android:name="com.example.challengecovid.ui.CreditsFragment"
-        android:label="@string/label_credits"
-        tools:layout="@layout/fragment_credits" />
+        android:label="@string/label_about"
+        tools:layout="@layout/fragment_about" />
 
     <dialog
         android:id="@+id/navigation_create_challenge"
         android:name="com.example.challengecovid.ui.CreateChallengeFragment"
-        android:label="CreateChallengeFragment"
+        android:label="@string/label_create_challenge"
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 
