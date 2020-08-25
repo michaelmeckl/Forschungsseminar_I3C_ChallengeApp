@@ -50,9 +50,6 @@ class CharacterCreationActivity : AppCompatActivity() {
 
         // save the user in firestore
         userRepo.saveNewUser(newUser)
-
-        //TODO: remove this later, only a sanity check
-        userRepo.fetchAllUsers()
     }
 
 

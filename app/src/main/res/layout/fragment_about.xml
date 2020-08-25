@@ -6,13 +6,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/credits_title"
+        android:id="@+id/about_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="@string/credits_used_icons"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_constraintBottom_toTopOf="@id/credits_scroll_view"
+        app:layout_constraintBottom_toTopOf="@id/about_scroll_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +21,7 @@
     bottom navigation bar! (56dp is the height of a bottom navigation
     bar according to Material Design) -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/credits_scroll_view"
+        android:id="@+id/about_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp"
@@ -29,16 +29,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/credits_title">
+        app:layout_constraintTop_toBottomOf="@id/about_title">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/credits_recycler_view"
+            android:id="@+id/about_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:spanCount="1"
-            tools:listitem="@layout/credits_list_item"
+            tools:listitem="@layout/about_list_item"
             />
 
     </androidx.core.widget.NestedScrollView>
