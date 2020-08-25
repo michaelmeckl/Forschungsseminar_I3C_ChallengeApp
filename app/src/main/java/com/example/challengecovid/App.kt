@@ -1,6 +1,7 @@
 package com.example.challengecovid
 
 import android.app.Application
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,6 +21,8 @@ class App: Application() {
         // Static reference to the application context
         // This should be used carefully (to prevent memory leaks) and only when no activity context is available!
         lateinit var instance: App private set
+
+        lateinit var firebaseAnalytics: FirebaseAnalytics
     }
 
     override fun onCreate() {
@@ -39,6 +42,12 @@ class App: Application() {
 
             // if in Debug Mode enable logging with Timber
             if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+
+            setupFirebase()
         }
+    }
+
+    private fun setupFirebase() {
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 }

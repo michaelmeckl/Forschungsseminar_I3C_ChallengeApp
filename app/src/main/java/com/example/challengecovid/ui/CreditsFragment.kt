@@ -45,7 +45,8 @@ class CreditsFragment : Fragment() {
         // all attributions go here:
         val allCredits = listOf(
             CreditsItem(R.drawable.ic_coronavirus, "Icon made by Freepik from https://flaticon.com"),
-            CreditsItem(R.drawable.icon_protective_suit_corona, "Illustration by Olha Khomich from https://icons8.com")
+            CreditsItem(R.drawable.icon_protective_suit_corona, "Illustration by Olha Khomich from https://icons8.com"),
+            CreditsItem(R.drawable.ic_flame, "Taken from Streaky (https://github.com/alexakasanjeev/streak-counter)")
         )
     }
 }
