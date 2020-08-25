@@ -17,11 +17,13 @@ interface UserDao : BaseDao<User> {
     @Query("SELECT * FROM user_table")
     fun getAllUsers(): LiveData<List<User>>
 
+
     @Query("UPDATE user_table SET username = :username WHERE userId = :key")
-    fun updateUserName(key: String, username: String):  LiveData<User>
+    suspend fun updateUserName(key: String, username: String):  LiveData<User>
+
 
     @Query("UPDATE user_table SET userIcon = :userIcon WHERE userId = :key")
-    fun updateUserIcon(key: String, userIcon: String):  LiveData<User>
+    suspend fun updateUserIcon(key: String, userIcon: String):  LiveData<User>
 
     @Update
     suspend fun updateUser(user: User)

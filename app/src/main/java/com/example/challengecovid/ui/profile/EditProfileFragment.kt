@@ -69,6 +69,7 @@ class EditProfileFragment : Fragment() {
             val newName = change_name.toString()
             val someId = "123456"
             profileViewModel.updateUserName(someId,newName)
+            name.text = newName
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
     }

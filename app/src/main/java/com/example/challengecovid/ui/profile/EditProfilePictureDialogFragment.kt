@@ -53,7 +53,7 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
 
         save_changes_profile_picture.setOnClickListener{
             val someID = "123456"
-            profileViewModel.updateUserIcon(someID, chosenPicture)
+          //  profileViewModel.updateUserIcon(someID, chosenPicture)
 
             val bmImg = BitmapFactory.decodeFile(chosenPicture)
             profile_picture.setImageBitmap(bmImg)

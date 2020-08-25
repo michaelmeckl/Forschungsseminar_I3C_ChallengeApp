@@ -41,13 +41,13 @@ class UserRepository (database: ChallengeAppDatabase) {
         return userDao.getAllUsers()
     }
 
-    fun updateUserName(id: String,username: String ){
+    suspend fun updateUserName(id: String, username: String ){
         userDao.updateUserName(id,username)
         Timber.i("update username $id: $username")
 
     }
 
-    fun updateUserIcon(id: String,usericon: String ){
+    suspend fun updateUserIcon(id: String, usericon: String ){
         userDao.updateUserName(id,usericon)
         Timber.i("update usericon $id: $usericon")
 
