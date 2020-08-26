@@ -36,13 +36,13 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
 
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: UserChallenge, clicklistener: UserChallengeOnClickListener) {
-            itemView.name_challenge.text = data.title
-            itemView.xp_challenge.text= String.format("%s XP", data.difficulty.points)
-            itemView.description_challenge.text = data.description
-            //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
-            if (data.completed) {
-                Timber.d("bind, data.completed = true")
+        fun bind(userChallenge: UserChallenge, clicklistener: UserChallengeOnClickListener) {
+            itemView.name_challenge.text = userChallenge.title
+            itemView.xp_challenge.text= String.format("%s XP", userChallenge.difficulty.points)
+            itemView.description_challenge.text = userChallenge.description
+            //itemView.icon_challenge.setImageResource(userChallenge.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+            if (userChallenge.completed) {
+                Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as CardView
 
                 cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
@@ -52,7 +52,7 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
             }
 
             itemView.setOnClickListener{
-                clicklistener.onItemClick(data)
+                clicklistener.onItemClick(userChallenge)
             }
         }
 
