@@ -1,6 +1,7 @@
 package com.example.challengecovid.model.firebase_model
 
 data class User_Firebase(
+    val registrationToken: String,
     val username: String,
     //val gender: Gender,
     val level: Int,

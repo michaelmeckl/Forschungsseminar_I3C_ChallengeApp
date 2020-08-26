@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.challengecovid.BuildConfig
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
+import com.example.challengecovid.firebase.MessagingService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
@@ -32,6 +33,8 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        Timber.tag("FIREBASE").d("in onCreate in splash activity")
 
         checkFirstRun()
         animateSplashScreen()

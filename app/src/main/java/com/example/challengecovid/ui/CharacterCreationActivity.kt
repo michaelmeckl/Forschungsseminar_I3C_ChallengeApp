@@ -8,6 +8,7 @@ import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.firebase_model.User_Firebase
 import kotlinx.android.synthetic.main.activity_character_creation.*
+import timber.log.Timber
 
 
 class CharacterCreationActivity : AppCompatActivity() {
@@ -19,6 +20,8 @@ class CharacterCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character_creation)
+
+        Timber.tag("FIREBASE").d("in onCreate in character creation activity")
 
         profile_image.setImageResource(R.drawable.iconfinder_avatar_368_456320_6415359)     // set a default image
         profile_image.setOnClickListener {
@@ -40,6 +43,7 @@ class CharacterCreationActivity : AppCompatActivity() {
             username_edit_field.text.toString()
 
         val newUser = User_Firebase(
+            "hk57gds",      //TODO: get registration token
             username,
             0,
             0,

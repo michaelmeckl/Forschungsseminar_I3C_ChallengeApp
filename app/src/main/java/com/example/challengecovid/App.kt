@@ -47,7 +47,9 @@ class App: Application() {
         }
     }
 
+    //TODO: also setup db and subscribe here to new challenges
     private fun setupFirebase() {
+        Timber.d("In setup firebase in application class now")
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 }

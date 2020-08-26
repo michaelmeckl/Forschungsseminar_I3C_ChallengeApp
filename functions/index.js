@@ -2,7 +2,8 @@
 const functions = require('firebase-functions');
 // The Firebase Admin SDK to access Cloud Firestore.
 const admin = require('firebase-admin');
-admin.initializeApp();
+//admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
 
 
 // The topic name can be optionally prefixed with "/topics/".
@@ -90,6 +91,77 @@ exports.addWelcomeMessages = functions.auth.user().onCreate(async (user) => {
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
   });
   console.log('Welcome message written to database.');
+});
+
+
+exports.pushNotificationNewPost = functions.database.ref('/posts/{postId}').onCreate((snap, context) => {
+    const postId = context.params.postId;
+
+    console.log('New post was created');
+
+    // Get post authorID.
+    const getAuthorIdTask = admin.database().ref(`/posts/${postId}/authorId`).once('value');
+
+    return getAuthorIdTask.then(authorId => {
+
+        console.log('post author id', authorId.val());
+
+        // Create a notification
+        const payload = {
+            data: {
+                actionType: actionTypeNewPost,
+                postId: postId,
+                authorId: authorId.val(),
+            },
+        };
+
+        // Send a message to devices subscribed to the provided topic.
+        return admin.messaging().sendToTopic(postsTopic, payload).then(response => {
+            // See the MessagingTopicResponse reference documentation for the
+            // contents of response.
+            console.log("Successfully sent info about new post :", response);
+            return response;
+        })
+            .catch(error => {
+                console.log("Error sending info about new post:", error);
+            });
+    }).catch(fallback => {
+        console.error('Failure getPostTask', fallback);
+    });
+
+});
+
+
+exports.addNewPostToFollowers = functions.database.ref('/posts/{postId}').onCreate((snap, context) => {
+    const postId = context.params.postId;
+
+    console.log('New post was created');
+
+    // Get post authorID.
+    const getAuthorIdTask = admin.database().ref(`/posts/${postId}/authorId`).once('value');
+
+    return getAuthorIdTask.then(authorId => {
+
+        console.log('post author id', authorId.val());
+
+        // Get followers ids.
+        return admin.database().ref().child(followingDbKey).child(authorId.val()).child(followersDbKey).once('value', function(snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                let followerId = childSnapshot.val().profileId;
+                console.log('setNewPostValuesToFollower', "followerId:", followerId, "postId:", postId);
+
+                admin.database().ref().child(followingPosDbKey).child(followerId).child(postId).set({
+                    postId:postId
+                });
+            });
+        }).catch(fallback => {
+            console.error('Failure get followers ids', fallback);
+        });
+
+    }).catch(fallback => {
+        console.error('Failure getPostTask', fallback);
+    });
+
 });
 
 

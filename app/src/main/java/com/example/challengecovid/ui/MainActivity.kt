@@ -20,8 +20,10 @@ import com.example.challengecovid.R
 import com.example.challengecovid.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 
 
+//TODO: comment out or remove all timber logs later!
 class MainActivity : AppCompatActivity() {
 
     private val navController: NavController by lazy { setupNavController() }
@@ -42,6 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         // setup custom toolbar
         setupToolbar()
+
+        Timber.tag("FIREBASE").d("in onCreate in main activity")
 
         // setup bottom navigation with the nav controller
         bottom_nav_view.setupWithNavController(navController)
