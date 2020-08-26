@@ -1,5 +1,6 @@
 package com.example.challengecovid.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
+import timber.log.Timber
 
 class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListener) : RecyclerView.Adapter<UserChallengeAdapter.ChallengeViewHolder>() {
 
@@ -39,9 +41,18 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
             itemView.xp_challenge.text= String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
             //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+            if (data.completed) {
+                Timber.d("bind, data.completed = true")
+                val cardView = itemView as CardView
+
+                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
+                cardView.description_challenge.text = "Heute Abgeschlossen"
+                cardView.xp_challenge.visibility = View.INVISIBLE
+                cardView.checkmark_completed_challenge.visibility = View.VISIBLE
+            }
 
             itemView.setOnClickListener{
-                clicklistener.onItemClick(it as CardView, data)
+                clicklistener.onItemClick(data)
             }
         }
 
@@ -55,7 +66,7 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
         }
     }
     interface UserChallengeOnClickListener {
-        fun onItemClick(view: CardView, userChallenge: UserChallenge)
+        fun onItemClick(userChallenge: UserChallenge)
     }
 
 }

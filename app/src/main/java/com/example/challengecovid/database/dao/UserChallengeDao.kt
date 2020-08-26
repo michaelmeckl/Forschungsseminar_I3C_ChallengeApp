@@ -18,4 +18,7 @@ interface UserChallengeDao : BaseDao<UserChallenge> {
     @Query("SELECT * FROM user_challenge_table ORDER BY createdAt DESC")
     fun getAllUserChallenges(): LiveData<List<UserChallenge>>
 
+    @Query("UPDATE user_challenge_table SET completed = 1 WHERE challengeId = :key")
+    fun setChallengeCompleted(key: String)
+
 }

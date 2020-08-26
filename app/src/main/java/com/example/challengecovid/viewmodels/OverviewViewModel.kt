@@ -105,6 +105,13 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
         _showSnackbarEvent.value = true
     }
 
+    fun setChallengeCompleted(challenge_id: String) = uiScope.launch {
+        withContext(Dispatchers.IO) {
+            challengeRepository.setChallengeCompleted(challenge_id)
+        }
+        _showSnackbarEvent.value = true
+    }
+
     /**
      * Called when the ViewModel is dismantled.
      * At this point, we want to cancel all coroutines; otherwise we end up with processes that have nowhere to return

@@ -79,6 +79,11 @@ class ChallengeRepository(database: ChallengeAppDatabase) {
         Timber.i("deleted all user created challenges in repository")
     }
 
+    suspend fun setChallengeCompleted(challenge_id: String) {
+        userChallengeDao.setChallengeCompleted(challenge_id)
+        Timber.i("challenge set completed in repository: $challenge_id")
+    }
+
     fun getUserChallenge(id: String): LiveData<UserChallenge> {
         Timber.i("get user created challenge in repository: $id")
         return userChallengeDao.getUserChallenge(id)
