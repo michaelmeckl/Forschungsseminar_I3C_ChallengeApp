@@ -89,8 +89,8 @@ class OverviewFragment : Fragment() {
 
     private fun setChallengeCompleted(itemView: CardView, userChallenge: UserChallenge) {
         Timber.d(userChallenge.toString())
-        val newUserChallenge = UserChallenge(userChallenge.title, userChallenge.description, userChallenge.difficulty, completed = true, userChallenge.duration, userChallenge.creatorId)
-        overviewViewModel.updateChallenge(newUserChallenge)
+        userChallenge.completed = true
+        Timber.d(userChallenge.toString())
         itemView.setCardBackgroundColor(Color.parseColor("#A1E887"))
         itemView.description_challenge.text = "Heute Abgeschlossen"
         itemView.xp_challenge.visibility = View.INVISIBLE

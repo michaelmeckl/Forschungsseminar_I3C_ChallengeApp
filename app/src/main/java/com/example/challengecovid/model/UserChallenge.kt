@@ -7,7 +7,7 @@ data class UserChallenge (
     override val title: String,
     override val description: String,
     override val difficulty: Difficulty,
-    override val completed: Boolean,
+    override var completed: Boolean,
     override val duration: Int,
     val creatorId: String   // which user created this challenge
 ) : BaseChallenge()
