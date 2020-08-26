@@ -27,6 +27,32 @@
             app:destination="@id/navigation_category_detail"/>
     </fragment>
 
+    <dialog
+        android:id="@+id/navigation_add_friend"
+        android:name="com.example.challengecovid.ui.profile.AddFriendFragment"
+        android:label="AddFriendDialog"
+        tools:layout="@layout/popup_add_friend"/>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.challengecovid.ui.profile.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileDialog"
+            app:destination="@id/navigation_edit_profile" />
+        <action
+            android:id="@+id/action_profileFragment_to_addFriend"
+            app:destination="@id/navigation_add_friend" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_profile"
+        android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
+        android:label="EditProfileDialog"
+        tools:layout="@layout/popup_edit_profile">
+    </fragment>
+
     <fragment
         android:id="@+id/navigation_category_detail"
         android:name="com.example.challengecovid.ui.CategoryDetailFragment"

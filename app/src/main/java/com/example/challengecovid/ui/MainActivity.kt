@@ -1,9 +1,15 @@
 package com.example.challengecovid.ui
 
+import android.content.Intent
+import android.R.attr
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -11,6 +17,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
+import com.example.challengecovid.ui.profile.ProfileFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -51,8 +59,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        setSupportActionBar(custom_toolbar)
-        custom_toolbar.setupWithNavController(navController, appBarConfiguration)
+        setSupportActionBar(custom_toolbar as? Toolbar)
+        (custom_toolbar as? Toolbar)?.setupWithNavController(navController, appBarConfiguration)
     }
 
     /**
@@ -70,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 
     // Inflate the menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
