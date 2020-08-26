@@ -32,7 +32,16 @@ class ProfileViewModel (private val userRepository: UserRepository): ViewModel()
     fun insertNewUser(user: User){
         uiScope.launch {
             withContext(Dispatchers.IO){
-                userRepository.updateUser(user)
+                userRepository.insertNewUser(user)
+            }
+            _showSnackbarEvent.value = true
+        }
+    }
+
+    fun getUser(userID: String){
+        uiScope.launch {
+            withContext(Dispatchers.IO){
+                userRepository.getUser(userID)
             }
             _showSnackbarEvent.value = true
         }
@@ -63,7 +72,7 @@ class ProfileViewModel (private val userRepository: UserRepository): ViewModel()
         }
         _showSnackbarEvent.value = true
     }
-
+/*
     fun updateUserName(userID: String, userName: String) = uiScope.launch {
         withContext(Dispatchers.IO){
             userRepository.updateUserName(userID,userName)
@@ -77,7 +86,7 @@ class ProfileViewModel (private val userRepository: UserRepository): ViewModel()
         }
         _showSnackbarEvent.value = true
     }
-
+*/
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()

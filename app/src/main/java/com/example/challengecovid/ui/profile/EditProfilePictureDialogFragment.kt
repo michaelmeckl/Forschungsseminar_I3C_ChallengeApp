@@ -1,6 +1,7 @@
 package com.example.challengecovid.ui.profile
 
 import android.app.Application
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,19 +12,30 @@ import androidx.navigation.findNavController
 import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.UserRepository
+import com.example.challengecovid.model.User
+import com.example.challengecovid.ui.CharacterSelectActivity
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.popup_edit_profile_picture.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import java.io.IOException
+import java.nio.channels.AsynchronousFileChannel.open
+import kotlin.properties.Delegates
 
 
 class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
 
     private lateinit var chosenPicture: String
 
+    private  var resID : Int = 0
+
     private lateinit var profileViewModel: ProfileViewModel
+
+    var profile = CharacterSelectActivity()
+    private var currentUserId = profile.currentUser.userId
+    private lateinit var currentUser: User
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,11 +64,12 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
         profile_picture_6.setOnClickListener(this)
 
         save_changes_profile_picture.setOnClickListener{
-            val someID = "123456"
-          //  profileViewModel.updateUserIcon(someID, chosenPicture)
 
-            val bmImg = BitmapFactory.decodeFile(chosenPicture)
-            profile_picture.setImageBitmap(bmImg)
+            currentUser = profileViewModel.getUser(currentUserId)
+            currentUser.userIcon = chosenPicture
+
+            profileViewModel.updateUser(currentUser)
+
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
 
@@ -65,34 +78,49 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
     override fun onClick(v: View?){
             when(v!!.id){
                 R.id.profile_picture_1 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_367_456319_6415373)
-                    chosenPicture = "drawable/iconfinder_avatar_367_456319_6415373.png"
+
+                    chosenPicture = "ic_user_man_1"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
 
                 }
                 R.id.profile_picture_2 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_368_456320_6415359)
-                    chosenPicture = "drawable/iconfinder_avatar_368_456320_6415359.png"
+                    chosenPicture = "ic_user_man_2"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
+
+
                 }
                 R.id.profile_picture_3 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_369_456321_6415374)
-                    chosenPicture = "drawable/iconfinder_avatar_369_456321_6415374.png"
+
+                    chosenPicture = "ic_user_woman_1"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
                 }
                 R.id.profile_picture_4 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_370_456322_6415362)
-                    chosenPicture = "drawable/iconfinder_avatar_370_456322_6415362.png"
+
+                    chosenPicture = "ic_user_woman_2"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
                 }
                 R.id.profile_picture_5 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_373_456325_6415360)
-                    chosenPicture = "drawable/iconfinder_avatar_373_456325_6415360.png"
+
+                    chosenPicture = "ic_user_woman_3"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
                 }
                 R.id.profile_picture_6 -> {
-                    profile_picture_new.setImageResource(R.drawable.iconfinder_avatar_378_456330_6415368)
-                    chosenPicture = "drawable/iconfinder_avatar_378_456330_6415368.png"
+
+                    chosenPicture = "ic_user_man_3"
+                    resID = resources.getIdentifier(chosenPicture, "drawable", "com.example.challengecovid")
+                    profile_picture_new.setImageResource(resID)
                 }
 
             }
 
     }
+
+
 
 
 

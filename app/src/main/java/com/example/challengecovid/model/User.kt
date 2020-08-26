@@ -17,11 +17,11 @@ enum class Gender {
 )
 data class User (
     @PrimaryKey val userId: String = UUID.randomUUID().toString(),
-    val username: String = "Anonym",
+    var username: String = "Anonym",
     val gender: Gender,
     val level: Int,
     val points: Int,
-    val userIcon: String,
+    var userIcon: String,
     val dailyStreakCount: Int
     //val friends: List<User> //necessary ??
     //val currentChallenges: List<Challenge>

@@ -2,71 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:padding="5dp">
-    <!-- TODO dont set both widht AND heigt manually! use wrap content or else  -->
-    <!--de.hdodenhof.circleimageview.CircleImageView -->
-
-    <!--  1  app:layout_constraintBottom_toTopOf="@+id/profile_picture_4"
-       app:layout_constraintRight_toLeftOf="@+id/profile_picture_2" /> -->
-
-    <!-- 2  app:layout_constraintBottom_toTopOf="@id/profile_picture_5"
-        app:layout_constraintLeft_toRightOf="@id/profile_picture_1"
-        app:layout_constraintRight_toLeftOf="@id/profile_picture_3" /> -->
-
-    <!-- 3   app:layout_constraintBottom_toTopOf="@id/profile_picture_6"
-        app:layout_constraintLeft_toRightOf="@id/profile_picture_2" /> -->
-
-    <!-- 4  app:layout_constraintRight_toLeftOf="@id/profile_picture_5"
-        app:layout_constraintTop_toBottomOf="@id/profile_picture_1" /> -->
-
-    <!--  5  app:layout_constraintLeft_toRightOf="@id/profile_picture_4"
-       app:layout_constraintRight_toLeftOf="@id/profile_picture_6"
-       app:layout_constraintTop_toBottomOf="@id/profile_picture_2" /> -->
-
-
-    <!-- 6   app:layout_constraintLeft_toRightOf="@id/profile_picture_4"
-        app:layout_constraintRight_toLeftOf="@id/profile_picture_6"
-        app:layout_constraintTop_toBottomOf="@id/profile_picture_2" /> -->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Profilbild bearbeiten"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/profile_picture_new"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/desc"
-        android:src="@drawable/ic_user_icon_default"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/set_profile_picture"
+        android:layout_width="111dp"
+        android:layout_height="111dp"
+        android:elevation="2dp"
+        android:layout_margin="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/set_name"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.095" />
+        android:src="@drawable/ic_user_icon_default" />
 
-    <Button
-        android:id="@+id/save_changes_profile_picture"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/set_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="112dp"
-        android:text="Änderung sichern"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92"
-        android:contentDescription="@string/desc"/>
-
+        android:layout_marginHorizontal="@dimen/margin_normal"
+        android:layout_marginVertical="32dp"
+        android:text="Name"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/set_profile_picture"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout_row1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="Gib einen Namen ein"
+        android:inputType="textPersonName"
+        tools:ignore="LabelFor" />
     <LinearLayout
         android:id="@+id/linearLayout_row1"
         android:layout_width="match_parent"
@@ -76,11 +43,11 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout_row2"
-        app:layout_constraintTop_toBottomOf="@id/profile_picture_new"
-   >
+        app:layout_constraintTop_toBottomOf="@id/set_name"
+        >
 
         <ImageButton
-            android:id="@+id/profile_picture_1"
+            android:id="@+id/set_profile_picture_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -91,7 +58,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/profile_picture_2"
+            android:id="@+id/set_profile_picture_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -102,7 +69,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/profile_picture_3"
+            android:id="@+id/set_profile_picture_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -120,13 +87,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/save_changes_profile_picture"
+        app:layout_constraintBottom_toTopOf="@+id/save_profile"
         app:layout_constraintTop_toBottomOf="@id/linearLayout_row1"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
         <ImageButton
-            android:id="@+id/profile_picture_4"
+            android:id="@+id/set_profile_picture_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
@@ -138,7 +105,7 @@
             app:layout_constraintVertical_bias="0.693" />
 
         <ImageButton
-            android:id="@+id/profile_picture_5"
+            android:id="@+id/set_profile_picture_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -149,7 +116,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/profile_picture_6"
+            android:id="@+id/set_profile_picture_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -159,6 +126,17 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
+    <Button
+        android:id="@+id/save_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:text="Änderung sichern"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_row2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

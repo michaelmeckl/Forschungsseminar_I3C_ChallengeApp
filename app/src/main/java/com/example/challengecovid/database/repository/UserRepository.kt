@@ -40,7 +40,7 @@ class UserRepository (database: ChallengeAppDatabase) {
         Timber.i("get all Users in repository")
         return userDao.getAllUsers()
     }
-
+/*
     suspend fun updateUserName(id: String, username: String ){
         userDao.updateUserName(id,username)
         Timber.i("update username $id: $username")
@@ -52,5 +52,5 @@ class UserRepository (database: ChallengeAppDatabase) {
         Timber.i("update usericon $id: $usericon")
 
     }
-
+*/
 }

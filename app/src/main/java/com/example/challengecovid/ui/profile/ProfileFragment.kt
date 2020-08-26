@@ -14,6 +14,8 @@ import androidx.navigation.findNavController
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.ChallengeRepository
 import com.example.challengecovid.database.repository.UserRepository
+import com.example.challengecovid.model.User
+import com.example.challengecovid.ui.CharacterSelectActivity
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
@@ -23,8 +25,11 @@ import kotlinx.coroutines.Dispatchers
 
 class ProfileFragment : Fragment() {
 
-    private lateinit var myDialog: Dialog
     private lateinit var profileViewModel: ProfileViewModel
+
+    var profile = CharacterSelectActivity()
+    private var currentUserId = profile.currentUser.userId
+    private lateinit var currentUser: User
 
 
     override fun onCreateView(
@@ -45,6 +50,13 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentUser = profileViewModel.getUser(currentUserId)
+
+        val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
+        profile_picture.setImageResource(resID)
+
+        val name = currentUser.username
+        profile_name.text = name
 
         add_friend_button.setOnClickListener {
             requireActivity().findNavController(R.id.nav_host_fragment)

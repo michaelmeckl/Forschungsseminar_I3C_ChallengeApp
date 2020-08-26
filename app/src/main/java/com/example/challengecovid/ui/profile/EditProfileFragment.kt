@@ -19,12 +19,16 @@ import android.content.pm.PackageManager
 
 import android.os.Build.*
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.UserRepository
+import com.example.challengecovid.model.User
+import com.example.challengecovid.ui.CharacterSelectActivity
 import com.example.challengecovid.ui.MainActivity
 import com.example.challengecovid.ui.profile.ProfileFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
@@ -37,8 +41,12 @@ import kotlinx.coroutines.Dispatchers
 
 class EditProfileFragment : Fragment() {
 
-    lateinit var myDialog: Dialog
+    var profile = CharacterSelectActivity()
+    private var currentUserId = profile.currentUser.userId
+    private lateinit var currentUser: User
+
     private lateinit var profileViewModel: ProfileViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,11 +60,19 @@ class EditProfileFragment : Fragment() {
 
         profileViewModel = getViewModel { ProfileViewModel(userRepository) }
 
+
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        currentUser = profileViewModel.getUser(currentUserId)
+
+
+
+        val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
+        profile_picture_edit_profile_fragment.setImageResource(resID)
 
         edit_profile_picture.setOnClickListener {
             requireActivity().findNavController(R.id.nav_host_fragment)
@@ -67,9 +83,11 @@ class EditProfileFragment : Fragment() {
         save_changes.setOnClickListener {
             //remove this fragment from the backstack to navigate back
             val newName = change_name.toString()
-            val someId = "123456"
-            profileViewModel.updateUserName(someId,newName)
-            name.text = newName
+            currentUser.username = newName
+            profileViewModel.updateUser(currentUser)
+
+
+
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
     }

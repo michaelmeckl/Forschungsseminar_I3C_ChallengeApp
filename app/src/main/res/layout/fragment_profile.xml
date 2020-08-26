@@ -10,7 +10,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:background="#4A412A"
+
         app:layout_constraintBottom_toBottomOf="@+id/friends_list"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -29,7 +29,7 @@
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/profile_picture"
                 android:layout_width="115dp"
                 android:layout_height="115dp"
@@ -37,29 +37,29 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:elevation="2dp"
-                android:src="@drawable/test" />
+                android:src="@drawable/ic_user_icon_default" />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_toEndOf="@id/profile_picture"
                 android:text="Name"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="30sp" />
 
             <TextView
                 android:id="@+id/level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/name"
+                android:layout_below="@id/profile_name"
                 android:layout_toEndOf="@id/profile_picture"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:text="Level: 5"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
             <Button
