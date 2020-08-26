@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.challengecovid.R
 
-class SocialFragment : Fragment() {
+class SocialFeedFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_social, container, false)
+        val root = inflater.inflate(R.layout.fragment_social_feed, container, false)
 
         return root
     }

@@ -18,10 +18,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_challenges"
-        android:name="com.example.challengecovid.ui.ChallengesFragment"
-        android:label="@string/label_challenges"
-        tools:layout="@layout/fragment_challenges">
+        android:id="@+id/navigation_categories"
+        android:name="com.example.challengecovid.ui.CategoriesFragment"
+        android:label="@string/label_categories"
+        tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_category_to_detail"
             app:destination="@id/navigation_category_detail"/>
@@ -70,10 +70,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_social"
-        android:name="com.example.challengecovid.ui.SocialFragment"
-        android:label="@string/label_social"
-        tools:layout="@layout/fragment_social" />
+        android:id="@+id/navigation_feed"
+        android:name="com.example.challengecovid.ui.SocialFeedFragment"
+        android:label="@string/label_social_feed"
+        tools:layout="@layout/fragment_social_feed" />
 
     <fragment
         android:id="@+id/navigation_about"

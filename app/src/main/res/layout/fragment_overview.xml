@@ -9,7 +9,7 @@
 
     <!-- TODO show a message if the recyclerview is empty! (wie in MMusic) -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_challenges"
+        android:id="@+id/recyclerview_overview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

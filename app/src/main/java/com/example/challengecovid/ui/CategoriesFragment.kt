@@ -18,15 +18,15 @@ import com.example.challengecovid.adapter.CategoryClickListener
 import com.example.challengecovid.model.ChallengeCategory
 import com.example.challengecovid.viewmodels.CategoryViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.android.synthetic.main.fragment_challenges.*
+import kotlinx.android.synthetic.main.fragment_categories.*
 
-class ChallengesFragment : Fragment() {
+class CategoriesFragment : Fragment() {
 
     private lateinit var categoryViewmodel: CategoryViewModel
     private lateinit var categoriesAdapter: CategoriesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_challenges, container, false)
+        val root = inflater.inflate(R.layout.fragment_categories, container, false)
 
         // get the datasource (repository)
         val categoryRepository = RepositoryController.getCategoryRepository()

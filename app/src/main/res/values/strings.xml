@@ -3,9 +3,8 @@
 
     <!-- navigation titles -->
     <string name="label_overview">Overview</string>
-    <string name="label_challenges">Challenges</string>
-    <string name="label_social">Social</string>
-    <string name="label_category_detail">Category</string>
+    <string name="label_categories">Categories</string>
+    <string name="label_social_feed">Feed</string>
     <string name="label_about">About this app</string>
     <string name="label_add_friend">Add a friend</string>
     <string name="label_profile">Profile</string>

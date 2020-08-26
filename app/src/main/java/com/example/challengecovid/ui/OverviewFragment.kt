@@ -1,7 +1,6 @@
 package com.example.challengecovid.ui
 
 import android.app.AlertDialog
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,19 +11,13 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.UserChallengeAdapter
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class OverviewFragment : Fragment() {
 
@@ -44,7 +37,7 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         challengeListAdapter = UserChallengeAdapter()
-        recyclerview_challenges.apply {
+        recyclerview_overview.apply {
             setHasFixedSize(true)
             adapter = challengeListAdapter
         }
@@ -120,6 +113,6 @@ class OverviewFragment : Fragment() {
                 }
             }
 
-        }).attachToRecyclerView(recyclerview_challenges)
+        }).attachToRecyclerView(recyclerview_overview)
     }
 }

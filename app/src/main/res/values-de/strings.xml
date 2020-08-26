@@ -2,9 +2,8 @@
 <resources>
     <!-- navigation titles -->
     <string name="label_overview">Übersicht</string>
-    <string name="label_challenges">Challenges</string>
-    <string name="label_social">Soziales</string>
-    <string name="label_category_detail">Kategorie</string>
+    <string name="label_categories">Kategorien</string>
+    <string name="label_social_feed">Feed</string>
     <string name="label_about">Über diese App</string>
     <string name="label_add_friend">Freund hinzufügen</string>
     <string name="label_profile">Profil</string>

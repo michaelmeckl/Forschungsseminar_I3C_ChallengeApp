@@ -1,10 +1,5 @@
 package com.example.challengecovid.ui
 
-import android.content.Intent
-import android.R.attr
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -17,8 +12,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
-import com.example.challengecovid.ui.profile.ProfileFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -32,8 +25,8 @@ class MainActivity : AppCompatActivity() {
             // add top level views here
             setOf(
                 R.id.navigation_overview,
-                R.id.navigation_challenges,
-                R.id.navigation_social
+                R.id.navigation_categories,
+                R.id.navigation_feed
             )
         )
     }
