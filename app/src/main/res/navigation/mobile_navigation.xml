@@ -93,7 +93,8 @@
         android:label="CreateChallengeFragment"
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
-    <fragment
+
+    <dialog
         android:id="@+id/navigation_edit_profile_picture"
         android:name="com.example.challengecovid.ui.profile.EditProfilePictureDialogFragment"
         android:label="EditProfilePictureDialogFragment" />

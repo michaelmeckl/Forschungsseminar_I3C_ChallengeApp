@@ -1,48 +1,27 @@
 package com.example.challengecovid.ui.profile
 
-import android.os.Build
-import android.os.Bundle
-
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.challengecovid.R
-import kotlinx.android.synthetic.main.popup_edit_profile.*
-import kotlinx.android.synthetic.main.popup_edit_profile.view.*
-
-import android.Manifest
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.app.Activity
 import android.app.Application
-import android.app.Dialog
-import android.content.Intent
-import android.content.pm.PackageManager
-
-import android.os.Build.*
-import android.view.*
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker.checkSelfPermission
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
+import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.UserRepository
 import com.example.challengecovid.model.User
-import com.example.challengecovid.ui.CharacterSelectActivity
-import com.example.challengecovid.ui.MainActivity
-import com.example.challengecovid.ui.profile.ProfileFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.popup_edit_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 
 
 class EditProfileFragment : Fragment() {
 
-    var profile = CharacterSelectActivity()
-    private var currentUserId = profile.currentUser.userId
+    //var profile = CharacterSelectActivity()
+    //private var currentUserId = profile.currentUser.userId
     private lateinit var currentUser: User
 
     private lateinit var profileViewModel: ProfileViewModel
@@ -67,7 +46,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentUser = profileViewModel.getUser(currentUserId) ?: return
+        currentUser = profileViewModel.getUser("test test test") ?: return  //TODO richtige id
 
 
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")

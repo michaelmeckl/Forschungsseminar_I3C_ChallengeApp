@@ -13,7 +13,6 @@ import com.example.challengecovid.R
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.UserRepository
 import com.example.challengecovid.model.User
-import com.example.challengecovid.ui.CharacterSelectActivity
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.popup_edit_profile_picture.*
@@ -32,8 +31,8 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-    var profile = CharacterSelectActivity()
-    private var currentUserId = profile.currentUser.userId
+    //var profile = CharacterSelectActivity()
+    //private var currentUserId = profile.currentUser.userId
     private lateinit var currentUser: User
 
 
@@ -65,7 +64,7 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
 
         save_changes_profile_picture.setOnClickListener{
 
-            currentUser = profileViewModel.getUser(currentUserId) ?: return@setOnClickListener
+            currentUser = profileViewModel.getUser("test tes test") ?: return@setOnClickListener    //TODO
             currentUser.userIcon = chosenPicture
 
             profileViewModel.updateUser(currentUser)
