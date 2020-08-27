@@ -6,12 +6,12 @@ import com.example.challengecovid.model.User
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
-class UserRepository(database: ChallengeAppDatabase) {
+class UserRepository(database: ChallengeAppDatabase? = null) {
 
     // reference to the firestore db
     private val firestore = FirebaseFirestore.getInstance()
 
-    private val userDao = database.userDao()
+    private val userDao = database!!.userDao()      //TODO: crashes when used! rewrite models!!
 
 
     suspend fun insertNewUser(user: User) {

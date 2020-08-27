@@ -11,10 +11,11 @@ import timber.log.Timber
 /**
  * Used as an abstraction layer between data source(s) and the frontend (client business logic)
  */
-class ChallengeRepository(database: ChallengeAppDatabase) {
+class ChallengeRepository(database: ChallengeAppDatabase? = null) {
 
-    private val challengeDao = database.challengeDao()
-    private val userChallengeDao = database.userChallengeDao()
+    //TODO:
+    private val challengeDao = database!!.challengeDao()
+    private val userChallengeDao = database!!.userChallengeDao()
 
     /**
      * ################################################
