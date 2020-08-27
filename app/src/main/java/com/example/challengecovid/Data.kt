@@ -21,17 +21,20 @@ object Data {
         ChallengeCategory(
             title = "Gesunder Lebensstil",
             description = "Diese Kategorie enthält Challenges, die einen gesunden Lebensstil zum Ziel haben.",
-            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_vergeben)
+            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_vergeben),
+            containedChallenges = emptyList()   //TODO add the challenges below to this
         ),
         ChallengeCategory(
             title = "Sport",
             description = "Diese Kategorie enthält Challenges, die Bewegung und körperliche Aktivitäten fördern.",
-            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_96)
+            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_96),
+            containedChallenges = emptyList()   //TODO add the challenges below to this
         ),
         ChallengeCategory(
             title = "Entspannen",
             description = "Diese Kategorie enthält Challenges, die für etwas Ruhe und Entspannung im Alltag hilfreich sind.",
-            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.humaaans__3_)
+            categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.humaaans__3_),
+            containedChallenges = emptyList()   //TODO add the challenges below to this
         )
     )
 
@@ -43,7 +46,6 @@ object Data {
             Difficulty.SCHWER,
             false,
             5,
-            "242-fhk24-242",    //TODO: set the category id manually to be able to set this??? or change to title of the category instead of id?
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
@@ -52,7 +54,6 @@ object Data {
             Difficulty.MITTEL,
             false,
             3,
-            "category id or title whatever",
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_klopapier)
         ),
         Challenge(
@@ -61,7 +62,6 @@ object Data {
             Difficulty.SCHWER,
             false,
             1,
-            "category this challenge belongs to",
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         )
     )

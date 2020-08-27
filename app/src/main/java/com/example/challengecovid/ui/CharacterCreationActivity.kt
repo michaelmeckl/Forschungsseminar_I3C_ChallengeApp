@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.firebase_model.User_Firebase
+import com.example.challengecovid.model.User
 import kotlinx.android.synthetic.main.activity_character_creation.*
 import timber.log.Timber
 
@@ -42,7 +42,7 @@ class CharacterCreationActivity : AppCompatActivity() {
         else
             username_edit_field.text.toString()
 
-        val newUser = User_Firebase(
+        val newUser = User(
             "hk57gds",      //TODO: get registration token
             username,
             0,

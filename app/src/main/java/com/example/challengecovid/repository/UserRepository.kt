@@ -3,7 +3,6 @@ package com.example.challengecovid.repository
 import androidx.lifecycle.LiveData
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.model.User
-import com.example.challengecovid.model.firebase_model.User_Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import timber.log.Timber
 
@@ -52,7 +51,7 @@ class UserRepository(database: ChallengeAppDatabase) {
      * ################################################
      */
 
-    fun saveNewUser(newUser: User_Firebase) {
+    fun saveNewUser(newUser: User) {
         firestore.collection("users")
             .add(newUser)
             .addOnSuccessListener { documentReference ->

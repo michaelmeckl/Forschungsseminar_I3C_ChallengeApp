@@ -12,7 +12,8 @@ import kotlinx.coroutines.Dispatchers
  */
 object RepositoryController {
 
-    // a local reference to the application context
+    //TODO: as room isn't used anymore the db doesn't need to be provided to the repo anymore!!
+    //a local reference to the application context
     private val application = App.instance
     private val localDB = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
 

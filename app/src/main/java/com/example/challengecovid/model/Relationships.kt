@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
+// Room Relationships Model
 //See https://developer.android.com/training/data-storage/room/relationships#kotlin
 
 /**
