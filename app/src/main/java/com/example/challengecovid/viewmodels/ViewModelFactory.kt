@@ -1,8 +1,11 @@
 package com.example.challengecovid.viewmodels
 
+import android.app.Activity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import java.lang.IllegalArgumentException
 
 // Generic ViewmodelFactory with generic parameter
 // see https://proandroiddev.com/view-model-creation-in-android-android-architecture-components-kotlin-ce9f6b93a46b
@@ -19,6 +22,19 @@ inline fun <reified T : ViewModel> Fragment.getViewModel(noinline creator: (() -
     else
         ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
 }
+//fun <reified T : ViewModel> Activity.getViewModel(creator: (() -> T)? = null): T {
+//    return if (creator == null)
+//        ViewModelProvider(application).get(T::class.java)
+//    else
+//        throw IllegalArgumentException("")
+//}
+//fun < T : ViewModel> getViewModel( creator: (() -> T)? = null): T {
+//    return if (creator == null) {
+//        ViewModelProvider(this).get(T::class.java)
+//    } else {
+//        ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
+//    }
+//}
 
 /*
 inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
