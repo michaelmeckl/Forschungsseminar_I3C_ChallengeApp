@@ -22,7 +22,8 @@ import java.net.Socket
 object Utils {
 
     private const val DEFAULT_COLUMN_WIDTH = 200F
-
+    const val SHARED_PREFS_NAME = "com.example.challengecovid"
+    const val KEY_USER_ID = "key_user_id"
     /**
      * Calculates the number of columns to use for a GridLayout.
      */

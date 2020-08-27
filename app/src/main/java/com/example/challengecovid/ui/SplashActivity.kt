@@ -81,9 +81,7 @@ class SplashActivity : AppCompatActivity() {
             // wait for 2 seconds
             delay(2000)
 
-            //TODO Remove this after implementing it
-//            if (firstRun) {
-            if (true) {
+            if (firstRun) {
                 startCharacterSelection()
             } else {
                 startMain()

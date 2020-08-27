@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.challengecovid.database.repository.ChallengeRepository
 import com.example.challengecovid.database.repository.UserRepository
+import com.example.challengecovid.model.ChallengeCategory
 import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.coroutines.*
@@ -23,6 +24,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         }
     }
 
+    private var currentUser = MutableLiveData<User>()
 
     val name = MutableLiveData<String>()
 
