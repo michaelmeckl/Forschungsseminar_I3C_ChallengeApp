@@ -7,9 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.example.challengecovid.R
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ktx.Firebase
 
 /**

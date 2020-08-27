@@ -157,7 +157,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         )
 
         Timber.d(newChallenge.toString())
-        overviewViewModel.insertNewChallenge(newChallenge)
+        overviewViewModel.addNewChallenge(newChallenge)
     }
 
 

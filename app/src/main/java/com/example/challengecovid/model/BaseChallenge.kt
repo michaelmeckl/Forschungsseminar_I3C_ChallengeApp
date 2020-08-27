@@ -22,10 +22,11 @@ abstract class BaseChallenge {
 }*/
 
 abstract class BaseChallenge {
+    val challengeId: String = UUID.randomUUID().toString()  //generate a random id
+    @ServerTimestamp val createdAt: Date? = null
     abstract val title: String
     abstract val difficulty: Difficulty
     abstract val description: String
     abstract val completed: Boolean
     abstract val duration: Int   // for how long this challenge is available (in days)
-    @ServerTimestamp var createdAt: Date? = null
 }

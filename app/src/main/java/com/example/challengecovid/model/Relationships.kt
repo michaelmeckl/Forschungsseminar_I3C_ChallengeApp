@@ -51,8 +51,6 @@ data class ChallengesInCategory(
 )
 
 
-//TODO: are the relationships below even necessary?? we only need to know if challenge was completed or?
-
 // 1 - (optional) many - relationship between a user and system challenges
 data class ChallengesForUser(
     @Embedded val user: User,

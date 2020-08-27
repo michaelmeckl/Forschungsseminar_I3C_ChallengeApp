@@ -1,5 +1,7 @@
 package com.example.challengecovid.model
 
+import java.util.UUID
+
 enum class Gender {
     MALE,
     FEMALE,
@@ -26,12 +28,13 @@ data class User (
 */
 
 data class User (
-    val registrationToken: String,
-    val username: String,
-    //val gender: Gender,
-    val level: Int,
-    val points: Int,
-    val userIcon: String,
-    val dailyStreakCount: Int,
-    val friends: List<User>
+    val userId: String = UUID.randomUUID().toString(),
+    val registrationToken: String = "",
+    val username: String = "",
+    //val gender: Gender = Gender.MALE,
+    val level: Int = 0,
+    val points: Int = 0,
+    val userIcon: String = "",
+    val dailyStreakCount: Int = 1,
+    //val friends: List<User> = emptyList()
 )

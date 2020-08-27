@@ -1,8 +1,15 @@
 package com.example.challengecovid.repository
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
+import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 /**
@@ -10,36 +17,115 @@ import timber.log.Timber
  */
 class ChallengeRepository {
 
+    // reference to the root default challenge collection in firestore
+    private val challengeCollection = FirebaseFirestore.getInstance().collection("challenges")  //TODO: eigtl. in categories
+
+    // reference to the root userChallenge collection in firestore
+    private val userChallengeCollection = FirebaseFirestore.getInstance().collection("userChallenges")
+
+
+    companion object {
+        const val CHALLENGE_REPO_TAG = "CHALLENGE_REPOSITORY"
+    }
+
     /**
      * ################################################
      *                  App Challenges
      * ################################################
      */
 
-    suspend fun insertNewChallenge(challenge: Challenge) {
-        challengeDao.insert(challenge)
-        Timber.i("new challenge inserted in repository")
+    // GET-ALL
+    fun getAllChallenges(): LiveData<List<Challenge>> = liveData(Dispatchers.Main) {
+        val allChallenges = fetchChallengesFromFirebase()
+        allChallenges?.let { emit(it) }
     }
 
-    suspend fun insertChallenges(challenges: List<Challenge>) {
-        challengeDao.insertAll(challenges)
-        Timber.i("list of challenges inserted in repository")
+    private suspend fun fetchChallengesFromFirebase(): List<Challenge>? {
+        return try {
+            val challengeList: MutableList<Challenge> = ArrayList()
+            val docSnapshots = challengeCollection.get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    snapshot.toObject(Challenge::class.java)?.let {
+                        challengeList.add(it)
+                    }
+            }
+
+            challengeList
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
     }
 
-    suspend fun updateChallenge(challenge: Challenge) {
-        challengeDao.update(challenge)
-        Timber.i("challenge updated in repository: $challenge")
+    //GET
+    fun getChallenge(id: String): Challenge? = runBlocking(Dispatchers.Main) {
+        // use an async coroutine builder to defer the work to the IO-Thread and return a value to this scope
+        val deferredResult = async(Dispatchers.IO) {
+            val challengeSnapshot = challengeCollection.document(id).get().await()
+            return@async challengeSnapshot.toObject(Challenge::class.java)
+        }
+        // return the completed result
+        deferredResult.await()
     }
 
-    fun getChallenge(id: String): LiveData<Challenge> {
-        Timber.i("get challenge in repository: $id")
-        return challengeDao.getChallenge(id)
+
+    //CREATE
+    fun saveNewChallenge(challenge: Challenge): String {
+        //val challengeReference = challengeCollection.document()   // create a new document with an auto-generated id
+        val challengeReference = challengeCollection.document(challenge.challengeId)
+
+        //NOTE: use set(challenge, SetOptions.merge()) to only update the parts that changed!
+        challengeReference.set(challenge).addOnSuccessListener {
+            Toast.makeText(App.instance, "Challenge saved successfully!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { e ->
+            Toast.makeText(App.instance, "Failed to save new challenge: $e", Toast.LENGTH_SHORT).show()
+        }
+
+        return challengeReference.id
     }
 
-    fun getAllChallenges(): LiveData<List<Challenge>> {
-        Timber.i("get all challenges in repository")
-        return challengeDao.getAllChallenges()
+    //CREATE-MULTIPLE
+    fun saveMultipleChallenges(challengeList: List<Challenge>) {
+        //use a batched write to insert all at the same time to prevent possible inconsistencies!
+        val batchWrite = FirebaseFirestore.getInstance().batch()
+
+        for (challenge in challengeList) {
+            // create a new reference for this challenge
+            val docRef = challengeCollection.document(challenge.challengeId)
+            // and add it to the WriteBatch
+            batchWrite.set(docRef, challenge)
+        }
+
+        // commit the batch (i.e. write all to the db)
+        batchWrite.commit().addOnSuccessListener {
+            Timber.tag(CHALLENGE_REPO_TAG).d("Challenge Batch inserted successfully!")
+        }.addOnFailureListener { e ->
+            Timber.tag(CHALLENGE_REPO_TAG).d("Failed to insert challenge batch: $e!")
+        }
     }
+
+    //UPDATE
+    fun updateChallenge(challenge: Challenge) {
+        val oldChallengeRef = challengeCollection.document(challenge.challengeId)
+
+        oldChallengeRef
+            //.update("description", challenge.description, "title", challenge.title)
+            .set(challenge)     //using set(data, SetOptions.merge()) to only update the parts that changed!
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
+    }
+
+    //DELETE
+    fun deleteChallenge(challenge: Challenge) {
+        val challengeRef = challengeCollection.document(challenge.challengeId)
+
+        challengeRef.delete()
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully deleted!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting Challenge: $e") }
+    }
+
 
     /**
      * ################################################
@@ -47,40 +133,97 @@ class ChallengeRepository {
      * ################################################
      */
 
-    suspend fun insertUserChallenge(userChallenge: UserChallenge) {
-        userChallengeDao.insert(userChallenge)
-        Timber.i("new user challenge inserted in repository")
+    // GET-ALL
+    //TODO: is there a better way than infinity loop with delay?
+    fun getAllUserChallenges(): LiveData<List<UserChallenge>> = liveData {
+        while (true) {
+            val allChallenges = fetchUserChallengesFromFirebase()
+            allChallenges?.let { emit(it) }
+            delay(1000)     // refetch new data every second
+        }
     }
 
-    suspend fun insertUserChallenges(userChallenges: List<UserChallenge>) {
-        userChallengeDao.insertAll(userChallenges)
-        Timber.i("list of user challenges inserted in repository")
+    private suspend fun fetchUserChallengesFromFirebase(): List<UserChallenge>? {
+        return try {
+            val challengeList: MutableList<UserChallenge> = ArrayList()
+            val docSnapshots =
+                userChallengeCollection.orderBy("createdAt", Query.Direction.DESCENDING).get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    snapshot.toObject(UserChallenge::class.java)?.let {
+                        challengeList.add(it)
+                    }
+            }
+
+            challengeList
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
     }
 
-    suspend fun updateUserChallenge(userChallenge: UserChallenge) {
-        userChallengeDao.update(userChallenge)
-        Timber.i("user challenge updated in repository: $userChallenge")
+    //GET
+    fun getUserChallenge(id: String): UserChallenge? = runBlocking(Dispatchers.Main) {
+        val deferredResult = async(Dispatchers.IO) {
+            val challengeSnapshot = userChallengeCollection.document(id).get().await()
+            return@async challengeSnapshot.toObject(UserChallenge::class.java)
+        }
+        deferredResult.await()
     }
 
-    // only allow delete for user challenges, not for the app challenges!
-    suspend fun deleteUserChallenge(userChallenge: UserChallenge) {
-        Timber.i("delete challenge in repository: $userChallenge")
-        return userChallengeDao.delete(userChallenge)
+    //CREATE
+    fun saveNewUserChallenge(userChallenge: UserChallenge): String {
+        val challengeReference = userChallengeCollection.document(userChallenge.challengeId)
+
+        challengeReference.set(userChallenge).addOnSuccessListener {
+            Toast.makeText(App.instance, "User Challenge saved successfully!", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener { e ->
+            Toast.makeText(App.instance, "Failed to save new user challenge: $e", Toast.LENGTH_SHORT).show()
+        }
+
+        return challengeReference.id
     }
 
-    suspend fun deleteAllUserChallenges() {
-        userChallengeDao.clear()
-        Timber.i("deleted all user created challenges in repository")
+    //CREATE-MULTIPLE
+    fun saveMultipleUserChallenges(userChallengeList: List<UserChallenge>) {
+        //use a batched write to insert all at the same time to prevent possible inconsistencies!
+        val batchWrite = FirebaseFirestore.getInstance().batch()
+
+        for (challenge in userChallengeList) {
+            // create a new reference for this challenge
+            val docRef = userChallengeCollection.document(challenge.challengeId)
+            // and add it to the WriteBatch
+            batchWrite.set(docRef, challenge)
+        }
+
+        // commit the batch (i.e. write all to the db)
+        batchWrite.commit().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Timber.tag(CHALLENGE_REPO_TAG).d("Writing user Challenge Batch was successful!")
+            } else {
+                Timber.tag(CHALLENGE_REPO_TAG).d("Failed to write user challenge batch!")
+            }
+        }
     }
 
-    fun getUserChallenge(id: String): LiveData<UserChallenge> {
-        Timber.i("get user created challenge in repository: $id")
-        return userChallengeDao.getUserChallenge(id)
+    //UPDATE
+    fun updateUserChallenge(userChallenge: UserChallenge) {
+        val oldChallengeRef = userChallengeCollection.document(userChallenge.challengeId)
+
+        oldChallengeRef
+            .set(userChallenge)
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating user challenge: $e") }
     }
 
-    fun getAllUserChallenges(): LiveData<List<UserChallenge>> {
-        Timber.i("get all user created challenges in repository")
-        return userChallengeDao.getAllUserChallenges()
+    //DELETE
+    fun deleteUserChallenge(userChallenge: UserChallenge) {
+        val challengeRef = userChallengeCollection.document(userChallenge.challengeId)
+
+        challengeRef.delete()
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully deleted!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting User Challenge: $e") }
     }
 
 
@@ -182,9 +325,9 @@ class ChallengeRepository {
     suspend fun refreshChallenges() {
         withContext(Dispatchers.IO) {
             Timber.d("refresh challenges is called")
-            //TODO: fetch new challenges from internet and insert them
+            // fetch new challenges from internet and insert them
             /*
-            val challenges = TODO()
+            val challenges = emptyList()
             challengeDao.insertAll(challenges.asDatabaseModel())
             */
         }

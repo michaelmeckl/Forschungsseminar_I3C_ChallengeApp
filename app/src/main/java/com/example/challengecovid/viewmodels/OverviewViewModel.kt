@@ -3,23 +3,19 @@ package com.example.challengecovid.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.model.UserChallenge
-import kotlinx.coroutines.*
+import com.example.challengecovid.repository.ChallengeRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
  * allows data to survive configuration changes such as screen rotations. In addition, background
  * work such as fetching network results or performing database operations can continue through
  * configuration changes and deliver results after the new Fragment or Activity is available.
- *
- * @param application The application that this viewmodel is attached to, it's safe to hold a
- * reference to applications across rotation since Application is never recreated during actiivty
- * or fragment lifecycle events.
  */
-class OverviewViewModel (private val challengeRepository: ChallengeRepository) : ViewModel() {
+class OverviewViewModel(private val challengeRepository: ChallengeRepository) : ViewModel() {
 
     /**
      * This is the job for all coroutines started by this ViewModel.
@@ -41,6 +37,7 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
 
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
+    //TODO: don't fetch all challenges but only the challenges for this specific user!!!
     val allChallenges: LiveData<List<UserChallenge>> = challengeRepository.getAllUserChallenges()
 
     /**
@@ -66,42 +63,35 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
 
     /**
      * Add a new challenge to the database.
-     */
-    fun insertNewChallenge(userChallenge: UserChallenge) {
+    fun addNewChallenge(userChallenge: UserChallenge) {
         //launch on the main thread because the result affects the UI
         uiScope.launch {
-            // insert the new challenge on a separate I/O thread that is optimized for room interaction
-            // to avoid blocking the main / UI thread
-            withContext(Dispatchers.IO) {
-                challengeRepository.insertUserChallenge(userChallenge)
-            }
-            _showSnackbarEvent.value = true
+        // insert the new challenge on a separate I/O thread that is optimized for room interaction
+        // to avoid blocking the main / UI thread
+        withContext(Dispatchers.IO) {
+        challengeRepository.saveUserChallenge(userChallenge)
         }
+        _showSnackbarEvent.value = true
+        }
+    }
+     */
+
+    fun addNewChallenge(userChallenge: UserChallenge) {
+        _showSnackbarEvent.value = true
+        challengeRepository.saveNewUserChallenge(userChallenge)
     }
 
     private fun initializeChallenge(challengeID: String) {
-        uiScope.launch {
-            currentChallenge.value = getUserChallengeFromDatabase(challengeID)
-        }
+        currentChallenge.value = challengeRepository.getUserChallenge(challengeID)
     }
 
-    private suspend fun getUserChallengeFromDatabase(challengeID: String): UserChallenge? {
-        return withContext(Dispatchers.IO) {
-            challengeRepository.getUserChallenge(challengeID).value
-        }
-    }
-
-    fun updateChallenge(userChallenge: UserChallenge) = uiScope.launch {
-        withContext(Dispatchers.IO) {
-            challengeRepository.updateUserChallenge(userChallenge)
-        }
+    fun updateChallenge(userChallenge: UserChallenge) {
+        challengeRepository.updateUserChallenge(userChallenge)
         _showSnackbarEvent.value = true
     }
 
-    fun removeChallenge(userChallenge: UserChallenge) = uiScope.launch {
-        withContext(Dispatchers.IO) {
-            challengeRepository.deleteUserChallenge(userChallenge)
-        }
+    fun removeChallenge(userChallenge: UserChallenge) {
+        challengeRepository.deleteUserChallenge(userChallenge)
         _showSnackbarEvent.value = true
     }
 

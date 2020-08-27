@@ -11,10 +11,7 @@ import android.view.View.ALPHA
 import android.view.View.TRANSLATION_Y
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.challengecovid.BuildConfig
-import com.example.challengecovid.Constants
-import com.example.challengecovid.R
-import com.example.challengecovid.Utils
+import com.example.challengecovid.*
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
@@ -38,6 +35,9 @@ class SplashActivity : AppCompatActivity() {
 
         checkFirstRun()
         animateSplashScreen()
+
+        // if this is the first start prepopulate the firestore db
+        if (firstRun) initDatabase()
 
         handleIncomingCloudMessages()
 
@@ -85,6 +85,16 @@ class SplashActivity : AppCompatActivity() {
 
         // Update the shared preferences with the current version code
         prefs.edit().putInt(PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
+    }
+
+    private fun initDatabase() {
+        val categoryRepo = RepositoryController.getCategoryRepository()
+        val challengeRepo = RepositoryController.getChallengeRepository()
+
+        categoryRepo.saveMultipleCategories(Data.getChallengeCategories())
+
+        //TODO: ist das notwendig?? die system challenges gehören doch eh alle zu den kategorien oder?
+        challengeRepo.saveMultipleChallenges(Data.getChallenges())
     }
 
     //TODO:

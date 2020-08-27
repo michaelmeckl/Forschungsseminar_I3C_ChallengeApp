@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -18,6 +19,7 @@ import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
+
 
 class OverviewFragment : Fragment() {
 
@@ -36,11 +38,31 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val linearLayoutManager = LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
+        //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
+
         challengeListAdapter = UserChallengeAdapter()
         recyclerview_overview.apply {
             setHasFixedSize(true)
             adapter = challengeListAdapter
+            layoutManager = linearLayoutManager
         }
+
+        //TODO: does not scroll to top :(
+        recyclerview_overview.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if(oldTop < top) {
+                // scroll to the top where the new item was inserted when the list gets bigger!
+                recyclerview_overview.smoothScrollToPosition(0)
+            }
+        }
+        /*
+        // Scroll to top on new messages
+        challengeListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                recyclerview_overview.smoothScrollToPosition(0)
+            }
+        })
+        */
 
         setupObservers()
         setupSwipeListener()
@@ -62,6 +84,35 @@ class OverviewFragment : Fragment() {
                 .navigate(OverviewFragmentDirections.actionOverviewToCreate())
         }
     }
+
+    //TODO: für firestore ui und firestoreadapter
+    /*
+    private open fun newAdapter(): RecyclerView.Adapter<*>? {
+        val options: FirestoreRecyclerOptions<Chat> = Builder<Chat>()
+            .setQuery(sChatQuery, Chat::class.java)
+            .setLifecycleOwner(this)
+            .build()
+        return object : FirestoreRecyclerAdapter<Chat?, ChatHolder?>(options) {
+            @NonNull
+            fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ChatHolder? {
+                return ChatHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.message, parent, false)
+                )
+            }
+
+            protected fun onBindViewHolder(@NonNull holder: ChatHolder, position: Int, @NonNull model: Chat?) {
+                holder.bind(model)
+            }
+
+            fun onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+                mEmptyListMessage.setVisibility(if (getItemCount() === 0) View.VISIBLE else View.GONE)
+            }
+        }
+    }
+
+     */
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->

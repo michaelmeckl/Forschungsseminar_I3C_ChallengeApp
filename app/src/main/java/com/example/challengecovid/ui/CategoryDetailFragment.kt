@@ -73,6 +73,41 @@ class CategoryDetailFragment : Fragment() {
         }
     }
 
+
+    //TODO: add this to top: EventListener<DocumentSnapshot>
+    /**
+     * Listener for the Restaurant document ([.restaurantRef]).
+     */
+    /*
+    override fun onEvent(snapshot: DocumentSnapshot?, e: FirebaseFirestoreException?) {
+        if (e != null) {
+            Log.w(TAG, "restaurant:onEvent", e)
+            return
+        }
+
+        snapshot?.let {
+            val restaurant = snapshot.toObject<Restaurant>()
+            if (restaurant != null) {
+                onRestaurantLoaded(restaurant)
+            }
+        }
+    }
+
+    private fun onRestaurantLoaded(restaurant: Restaurant) {
+        binding.restaurantName.text = restaurant.name
+        binding.restaurantRating.rating = restaurant.avgRating.toFloat()
+        binding.restaurantNumRatings.text = getString(R.string.fmt_num_ratings, restaurant.numRatings)
+        binding.restaurantCity.text = restaurant.city
+        binding.restaurantCategory.text = restaurant.category
+        binding.restaurantPrice.text = RestaurantUtil.getPriceString(restaurant)
+
+        // Background image
+        Glide.with(binding.restaurantImage.context)
+            .load(restaurant.photo)
+            .into(binding.restaurantImage)
+    }
+    */
+
     /*
     // Helper function for calling a share functionality.
     // Should be used when user presses a share button/menu item.

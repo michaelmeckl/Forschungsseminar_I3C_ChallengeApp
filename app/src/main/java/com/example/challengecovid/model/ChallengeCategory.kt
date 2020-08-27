@@ -1,5 +1,7 @@
 package com.example.challengecovid.model
 
+import java.util.UUID
+
 /*
 //Room Model
 @Entity(tableName = "challenge_category_table")
@@ -12,9 +14,9 @@ data class ChallengeCategory (
 */
 
 data class ChallengeCategory (
-    //val categoryId: String = UUID.randomUUID().toString(),
-    val title: String,
-    val description: String,
-    val categoryIcon: String,
-    val containedChallenges: List<Challenge>
+    val categoryId: String = UUID.randomUUID().toString(),
+    val title: String = "",
+    val description: String = "",
+    val categoryIcon: String = "",
+    val containedChallenges: List<Challenge> = emptyList()
 )

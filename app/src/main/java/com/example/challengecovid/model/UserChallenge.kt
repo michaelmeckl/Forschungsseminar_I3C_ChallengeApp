@@ -14,10 +14,10 @@ data class UserChallenge (
 */
 
 data class UserChallenge (
-    override val title: String,
-    override val description: String,
-    override val difficulty: Difficulty,
-    override val completed: Boolean,
-    override val duration: Int,
-    val creatorId: String   // which user created this challenge
+    override val title: String = "",
+    override val description: String = "",
+    override val difficulty: Difficulty = Difficulty.LEICHT,
+    override val completed: Boolean = false,
+    override val duration: Int = 7,     // in days
+    val creatorId: String = ""   // which user created this challenge
 ) : BaseChallenge()

@@ -10,6 +10,35 @@ import com.example.challengecovid.R
 import com.example.challengecovid.model.ChallengeCategory
 import kotlinx.android.synthetic.main.category_list_item.view.*
 
+//TODO: von : FirestoreAdapter<RatingAdapter.ViewHolder>(query) erben lassen?
+/* like so:
+
+    in onCreateView:
+
+        adapter = object : RestaurantAdapter(query, this@MainActivity) {
+            override fun onDataChanged() {
+                // Show/hide content if the query returns empty.
+                if (itemCount == 0) {
+                    binding.recyclerRestaurants.visibility = View.GONE
+                    binding.viewEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.recyclerRestaurants.visibility = View.VISIBLE
+                    binding.viewEmpty.visibility = View.GONE
+                }
+            }
+
+            override fun onError(e: FirebaseFirestoreException) {
+                // Show a snackbar on errors
+                Snackbar.make(binding.root,
+                        "Error: check logs for info.", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+
+     in onStart: adapter.startListening()
+
+     in onStop: adapter.stopListening()
+ */
 class CategoriesAdapter(private val clickListener: CategoryClickListener) :
     ListAdapter<ChallengeCategory, CategoriesAdapter.ViewHolder>(DiffCallback()) {
 

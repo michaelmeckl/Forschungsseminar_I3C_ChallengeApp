@@ -1,42 +1,141 @@
 package com.example.challengecovid.repository
 
 import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.User
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 class UserRepository {
 
-    // reference to the firestore db
-    private val firestore = FirebaseFirestore.getInstance()
+    // reference to the root user collection in firestore
+    private val userCollection = FirebaseFirestore.getInstance().collection("users")
 
-    fun saveNewUser(newUser: User): String {
-        val userReference = firestore.collection("users").document()
-        userReference.set(newUser).addOnSuccessListener {
-            Toast.makeText(App.instance, "User inserted successfully!", Toast.LENGTH_SHORT).show()
+    private lateinit var snapshotListener: ListenerRegistration
+
+
+    companion object {
+        const val USER_REPO_TAG = "USER_REPOSITORY"
+    }
+
+
+    // GET-ALL
+    fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.Main) {
+        val allUsers = fetchUsersFromFirebase()
+        allUsers?.let { emit(it) }
+    }
+
+    private suspend fun fetchUsersFromFirebase(): List<User>? {
+        return try {
+            val userList = mutableListOf<User>()
+            val docSnapshots = userCollection.get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    snapshot.toObject(User::class.java)?.let {
+                        userList.add(it)
+                    }
+            }
+
+            userList
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    //GET
+    fun getUser(id: String): User? = runBlocking(Dispatchers.Main) {
+        val deferredResult = async(Dispatchers.IO) {
+            val userSnapshot = userCollection.document(id).get().await()
+            return@async userSnapshot.toObject(User::class.java)
+        }
+        deferredResult.await()
+    }
+
+    //CREATE
+    fun saveNewUser(user: User): String {
+        val userReference = userCollection.document(user.userId)
+
+        userReference.set(user).addOnSuccessListener {
+            Toast.makeText(App.instance, "User saved successfully!", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to insert new user: $e", Toast.LENGTH_SHORT).show()
+            Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
         }
 
         return userReference.id
     }
 
-    fun addUser(user: User) {
-        firestore.collection("users").add(user).addOnSuccessListener { documentReference ->
-            Timber.tag("FIREBASE_INSERT_USER").d(
-                "DocumentSnapshot set with ID: ${documentReference.id} at path ${documentReference.path}; ${documentReference.get()}"
-            )
+    //CREATE-MULTIPLE
+    fun saveMultipleUsers(userList: List<User>) {
+        //use a batched write to insert all at the same time to prevent possible inconsistencies!
+        val batchWrite = FirebaseFirestore.getInstance().batch()
+
+        for (user in userList) {
+            // create a new reference for this user
+            val docRef = userCollection.document(user.userId)
+            // and add it to the WriteBatch
+            batchWrite.set(docRef, user)
         }
-            .addOnFailureListener { e ->
-                Timber.tag("FIREBASE_INSERT_USER").d(
-                    "Error adding document $e"
-                )
-            }
+
+        // commit the batch (i.e. write all to the db)
+        batchWrite.commit().addOnSuccessListener {
+            Timber.tag(USER_REPO_TAG).d("User Batch inserted successfully!")
+        }.addOnFailureListener { e ->
+            Timber.tag(USER_REPO_TAG).d("Failed to insert user batch: $e!")
+        }
     }
 
-    fun getAllUsers() {
-        firestore.collection("users")
+    //UPDATE
+    fun updateUser(user: User) {
+        val oldUserRef = userCollection.document(user.userId)
+
+        oldUserRef
+            .set(user)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("User successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
+    }
+
+    //DELETE
+    fun deleteUser(user: User) {
+        val userRef = userCollection.document(user.userId)
+
+        userRef.delete()
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("User successfully deleted!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting user: $e") }
+    }
+
+
+    /*
+    //TODO:
+    fun getUsersWithMinLevel(level: Int) {
+        db.collection("cities")
+            .whereEqualTo("capital", true)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents: ", exception)
+            }
+    }
+    */
+
+    /*
+    //TODO:
+    fun getBestUsers() {
+        userCollection
+            .orderBy("level", Query.Direction.DESCENDING)
+            .limit(10)
             .get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -48,6 +147,51 @@ class UserRepository {
                 }
             }
     }
+     */
+
+    //listen for realtime updates
+    //TODO:
+    fun listenOnUpdates() {
+        val listener = userCollection.whereEqualTo("state", "CA")
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Timber.tag("FIREBASE_ALL_USERS").d("Listen failed: $e")
+                    return@addSnapshotListener
+                }
+
+                val source = if (snapshots != null && snapshots.metadata.hasPendingWrites())
+                    "Local"
+                else
+                    "Server"
+
+
+                val cities = ArrayList<String>()
+                for (doc in snapshots!!) {
+                    doc.getString("name")?.let {
+                        cities.add(it)
+                    }
+                }
+
+                //TODO Oder so:
+                /*
+                for (dc in snapshots.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> Log.d("FIREBASE_LISTENER", "New city: ${dc.document.data}")
+                        DocumentChange.Type.MODIFIED -> Log.d("FIREBASE_LISTENER", "Modified city: ${dc.document.data}")
+                        DocumentChange.Type.REMOVED -> Log.d("FIREBASE_LISTENER", "Removed city: ${dc.document.data}")
+                    }
+                }
+                */
+            }
+    }
+
+
+    //call this in the onStop lifecycle methods to save bandwith!
+    fun detachListener() {
+        // Stop listening to changes
+        snapshotListener.remove()
+    }
+
 
 
     /**

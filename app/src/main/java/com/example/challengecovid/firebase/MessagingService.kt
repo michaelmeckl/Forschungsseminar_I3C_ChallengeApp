@@ -77,6 +77,104 @@ class MessagingService : FirebaseMessagingService() {
 
     /*
     //TODO:
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(NotificationChannel(channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW))
+        }
+
+        // If a notification message is tapped, any data accompanying the notification
+        // message is available in the intent extras. In this sample the launcher
+        // intent is fired when the notification is tapped, so any accompanying data would
+        // be handled here. If you want a different intent fired, set the click_action
+        // field of the notification message to the desired intent. The launcher intent
+        // is used when no click_action is specified.
+        //
+        // Handle possible data accompanying notification message.
+        // [START handle_data_extras]
+        intent.extras?.let {
+            for (key in it.keySet()) {
+                val value = intent.extras?.get(key)
+                Log.d(TAG, "Key: $key Value: $value")
+            }
+        }
+        // [END handle_data_extras]
+
+        binding.subscribeButton.setOnClickListener {
+            Log.d(TAG, "Subscribing to weather topic")
+            // [START subscribe_topics]
+            FirebaseMessaging.getInstance().subscribeToTopic("weather")
+                    .addOnCompleteListener { task ->
+                        var msg = getString(R.string.msg_subscribed)
+                        if (!task.isSuccessful) {
+                            msg = getString(R.string.msg_subscribe_failed)
+                        }
+                        Log.d(TAG, msg)
+                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    }
+            // [END subscribe_topics]
+        }
+
+        binding.logTokenButton.setOnClickListener {
+            // Get token
+            // [START retrieve_current_token]
+            FirebaseInstanceId.getInstance().instanceId
+                    .addOnCompleteListener(OnCompleteListener { task ->
+                        if (!task.isSuccessful) {
+                            Log.w(TAG, "getInstanceId failed", task.exception)
+                            return@OnCompleteListener
+                        }
+
+                        // Get new Instance ID token
+                        val token = task.result?.token
+
+                        // Log and toast
+                        val msg = getString(R.string.msg_token_fmt, token)
+                        Log.d(TAG, msg)
+                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    })
+            // [END retrieve_current_token]
+        }
+     */
+
+    /*
+    //TODO:
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("Messages", "Messages", importance)
+            channel.description = "All messages."
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(channel)
+        }
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        createNotificationChannel()
+
+        // Check if message contains a data payload.
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.data)
+            val manager = NotificationManagerCompat.from(this)
+            val notification = NotificationCompat.Builder(this, "Messages")
+                    .setContentText(remoteMessage.data["text"])
+                    .setContentTitle("New message")
+                    .setSmallIcon(R.drawable.ic_stat_notification)
+                    .build()
+            manager.notify(0, notification)
+        }
+    }
+     */
+
+    /*
+    //TODO:
     private fun handleRemoteMessage(remoteMessage: RemoteMessage) {
         val receivedActionType = remoteMessage.data[ACTION_TYPE_KEY]
         LogUtil.logDebug(TAG, "Message Notification Action Type: $receivedActionType")

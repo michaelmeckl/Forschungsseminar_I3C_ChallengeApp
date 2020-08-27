@@ -44,13 +44,12 @@ class CharacterCreationActivity : AppCompatActivity() {
             username_edit_field.text.toString()
 
         val newUser = User(
-            "hk57gds",      //TODO: get registration token
-            username,
-            0,
-            0,
-            imagePath,
-            1,
-            emptyList()
+            registrationToken = "hk57gds",      //TODO: get registration token
+            username = username,
+            level = 0,
+            points = 0,
+            userIcon = imagePath,
+            dailyStreakCount = 1
         )
 
         // save the user in firestore
@@ -59,8 +58,6 @@ class CharacterCreationActivity : AppCompatActivity() {
         // store the generated userId in the shared prefs to be able to access this user later
         val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
-
-        userRepo.addUser(newUser)       //TODO: only for testing!
     }
 
 
@@ -69,5 +66,11 @@ class CharacterCreationActivity : AppCompatActivity() {
         startActivity(intent)
 
         finish()
+    }
+
+    override fun finish() {
+        super.finish()
+        // use a custom transition when this activity finishes
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 }
