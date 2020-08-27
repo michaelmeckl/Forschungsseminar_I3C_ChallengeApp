@@ -10,6 +10,7 @@ import com.example.challengecovid.model.UserChallenge
 @Dao
 interface ChallengeDao : BaseDao<Challenge> {
 
+    /*
     @Query("SELECT * from challenge_table WHERE challengeId = :key")
     fun getChallenge(key: String): LiveData<Challenge>   // no suspend for LiveData!!
 
@@ -18,5 +19,7 @@ interface ChallengeDao : BaseDao<Challenge> {
      */
     @Query("SELECT * FROM challenge_table ORDER BY createdAt DESC")
     fun getAllChallenges(): LiveData<List<Challenge>>
+
+     */
 
 }

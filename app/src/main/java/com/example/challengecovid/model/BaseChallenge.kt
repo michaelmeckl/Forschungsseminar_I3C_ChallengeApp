@@ -1,6 +1,5 @@
 package com.example.challengecovid.model
 
-import androidx.room.PrimaryKey
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 
@@ -29,5 +28,4 @@ abstract class BaseChallenge {
     abstract val completed: Boolean
     abstract val duration: Int   // for how long this challenge is available (in days)
     @ServerTimestamp var createdAt: Date? = null
-    @PrimaryKey var challengeId: String = UUID.randomUUID().toString()  //generate a random id
 }

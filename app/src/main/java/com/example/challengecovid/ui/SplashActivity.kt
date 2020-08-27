@@ -15,7 +15,6 @@ import com.example.challengecovid.BuildConfig
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
-import com.example.challengecovid.firebase.MessagingService
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
@@ -64,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
         val currentVersionCode: Int = BuildConfig.VERSION_CODE
 
         // Get saved version code
-        val prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         val savedVersionCode = prefs.getInt(PREFS_VERSION_CODE_KEY, -1)
 
         // Check for first run or upgrade

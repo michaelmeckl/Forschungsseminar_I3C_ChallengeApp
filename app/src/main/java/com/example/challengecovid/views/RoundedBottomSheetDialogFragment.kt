@@ -1,9 +1,10 @@
-package com.example.challengecovid
+package com.example.challengecovid.views
 
 import android.app.Dialog
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import com.example.challengecovid.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

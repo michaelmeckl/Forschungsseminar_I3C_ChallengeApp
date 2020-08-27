@@ -63,7 +63,7 @@ class CategoriesAdapter(private val clickListener: CategoryClickListener) :
 // This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
 class DiffCallback : DiffUtil.ItemCallback<ChallengeCategory>() {
     override fun areItemsTheSame(oldItem: ChallengeCategory, newItem: ChallengeCategory): Boolean {
-        return oldItem.categoryId == newItem.categoryId
+        return oldItem.title == newItem.title   // actually the id should be used, but since we use Firebase there is none
     }
 
     override fun areContentsTheSame(oldItem: ChallengeCategory, newItem: ChallengeCategory): Boolean {

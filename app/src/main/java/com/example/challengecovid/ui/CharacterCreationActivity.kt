@@ -57,7 +57,7 @@ class CharacterCreationActivity : AppCompatActivity() {
         val userId = userRepo.saveNewUser(newUser)
 
         // store the generated userId in the shared prefs to be able to access this user later
-        val sharedPrefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
 
         userRepo.addUser(newUser)       //TODO: only for testing!
