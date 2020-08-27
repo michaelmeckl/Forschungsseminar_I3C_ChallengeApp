@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.challengecovid.App
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
@@ -53,7 +54,13 @@ class CharacterCreationActivity : AppCompatActivity() {
         )
 
         // save the user in firestore
-        userRepo.saveNewUser(newUser)
+        val userId = userRepo.saveNewUser(newUser)
+
+        // store the generated userId in the shared prefs to be able to access this user later
+        val sharedPrefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
+        sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
+
+        userRepo.addUser(newUser)       //TODO: only for testing!
     }
 
 

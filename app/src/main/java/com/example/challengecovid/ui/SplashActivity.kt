@@ -12,6 +12,7 @@ import android.view.View.TRANSLATION_Y
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.challengecovid.BuildConfig
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.Utils
 import com.example.challengecovid.firebase.MessagingService
@@ -63,7 +64,7 @@ class SplashActivity : AppCompatActivity() {
         val currentVersionCode: Int = BuildConfig.VERSION_CODE
 
         // Get saved version code
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE)
         val savedVersionCode = prefs.getInt(PREFS_VERSION_CODE_KEY, -1)
 
         // Check for first run or upgrade
@@ -182,7 +183,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val PREFS_NAME = "challengeCovidSharedPrefs"
         const val PREFS_VERSION_CODE_KEY = "version_code"
     }
 }
