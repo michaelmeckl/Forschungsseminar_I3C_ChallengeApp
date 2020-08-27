@@ -67,8 +67,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        currentUser = profileViewModel.getUser(currentUserId)
-
+        currentUser = profileViewModel.getUser(currentUserId) ?: return
 
 
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")

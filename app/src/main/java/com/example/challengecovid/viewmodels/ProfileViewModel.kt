@@ -38,12 +38,15 @@ class ProfileViewModel (private val userRepository: UserRepository): ViewModel()
         }
     }
 
-    fun getUser(userID: String){
-        uiScope.launch {
-            withContext(Dispatchers.IO){
-                userRepository.getUser(userID)
+    fun getUser(userID: String): User? {
+        //TODO: sind die coroutinen wirklich noch notwendig wenn mit firebase? -> anschauen!
+        return runBlocking {
+            val result = async(Dispatchers.IO){
+                userRepository.getUser(userID).value
             }
             _showSnackbarEvent.value = true
+
+            result.await()
         }
     }
 

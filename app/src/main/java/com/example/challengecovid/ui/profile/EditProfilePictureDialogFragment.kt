@@ -65,7 +65,7 @@ class EditProfilePictureDialogFragment: DialogFragment(), View.OnClickListener {
 
         save_changes_profile_picture.setOnClickListener{
 
-            currentUser = profileViewModel.getUser(currentUserId)
+            currentUser = profileViewModel.getUser(currentUserId) ?: return@setOnClickListener
             currentUser.userIcon = chosenPicture
 
             profileViewModel.updateUser(currentUser)

@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUser = profileViewModel.getUser(currentUserId)
+        currentUser = profileViewModel.getUser(currentUserId) ?: return
 
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
         profile_picture.setImageResource(resID)
@@ -65,7 +65,7 @@ class ProfileFragment : Fragment() {
 
         edit_profile.setOnClickListener {
             requireActivity().findNavController(R.id.nav_host_fragment)
-                .navigate(ProfileFragmentDirections.actionProfileFragmentToEditProfileDialog())
+                .navigate(ProfileFragmentDirections.actionProfileFragmentToEditProfileDialog(currentUser.userIcon))
         }
     }
 
