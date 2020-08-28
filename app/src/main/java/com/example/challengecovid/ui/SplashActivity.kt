@@ -94,7 +94,7 @@ class SplashActivity : AppCompatActivity() {
         categoryRepo.saveMultipleCategories(Data.getChallengeCategories())
 
         //TODO: ist das notwendig?? die system challenges gehören doch eh alle zu den kategorien oder?
-        challengeRepo.saveMultipleChallenges(Data.getChallenges())
+        challengeRepo.saveMultipleChallenges(Data.getDailyChallenges())
     }
 
     //TODO:

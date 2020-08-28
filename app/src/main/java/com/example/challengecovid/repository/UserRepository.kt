@@ -4,11 +4,13 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
-import com.example.challengecovid.model.User
+import com.example.challengecovid.model.*
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -28,8 +30,11 @@ class UserRepository {
 
     // GET-ALL
     fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.Main) {
-        val allUsers = fetchUsersFromFirebase()
-        allUsers?.let { emit(it) }
+        while (true) {
+            val allUsers = fetchUsersFromFirebase()
+            allUsers?.let { emit(it) }
+            delay(3000)     // refresh for new data every 3 seconds
+        }
     }
 
     private suspend fun fetchUsersFromFirebase(): List<User>? {
@@ -45,6 +50,42 @@ class UserRepository {
             }
 
             userList
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.Main) {
+        Timber.tag("FIREBASE userId in repo").d(userId)
+        while (true) {
+            val challengesForUser = fetchChallengesForUser(userId)
+            challengesForUser?.let { emit(it) }
+            delay(1000)     // refresh for new data every second
+        }
+    }
+
+    private suspend fun fetchChallengesForUser(userId: String): List<BaseChallenge>? {
+        return try {
+            val challengeList = mutableListOf<BaseChallenge>()
+            val docSnapshots = userCollection.document(userId)
+                .collection("activeChallenges")
+                .get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    if (snapshot.get("type") == ChallengeType.USER_CHALLENGE) {
+                        snapshot.toObject(UserChallenge::class.java)?.let {
+                            challengeList.add(it)
+                        }
+                    } else {
+                        snapshot.toObject(Challenge::class.java)?.let {
+                            challengeList.add(it)
+                        }
+                    }
+            }
+
+            challengeList
         } catch (e: Exception) {
             Timber.tag(USER_REPO_TAG).d(e)
             null
@@ -71,6 +112,18 @@ class UserRepository {
         }
 
         return userReference.id
+    }
+
+    fun addActiveChallenge(challenge: BaseChallenge, userId: String) {
+        userCollection.document(userId)
+            .collection("activeChallenges")
+            .document(challenge.challengeId)
+            .set(challenge)
+            .addOnSuccessListener {
+                Toast.makeText(App.instance, "Added to active challenges!", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener { e ->
+                Toast.makeText(App.instance, "Failed to add to active challenges: $e", Toast.LENGTH_SHORT).show()
+            }
     }
 
     //CREATE-MULTIPLE
@@ -112,6 +165,16 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting user: $e") }
     }
 
+    fun removeActiveChallenge(challenge: BaseChallenge, userId: String) {
+        val challengeRef = userCollection.document(userId)
+            .collection("activeChallenges")
+            .document(challenge.challengeId)
+
+        //userRef.update("activeChallenges", FieldValue.arrayRemove(challenge))
+        challengeRef.delete()
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully deleted from array!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting challenge from array: $e") }
+    }
 
     /*
     //TODO:
@@ -191,7 +254,6 @@ class UserRepository {
         // Stop listening to changes
         snapshotListener.remove()
     }
-
 
 
     /**

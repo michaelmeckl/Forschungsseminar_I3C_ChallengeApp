@@ -8,6 +8,7 @@ import com.example.challengecovid.model.ChallengeCategory
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -26,8 +27,11 @@ class CategoryRepository {
 
     // GET-ALL
     fun getAllCategories(): LiveData<List<ChallengeCategory>> = liveData(Dispatchers.Main) {
-        val allCategories = fetchCategoriesFromFirebase()
-        allCategories?.let { emit(it) }
+        while (true) {
+            val allCategories = fetchCategoriesFromFirebase()
+            allCategories?.let { emit(it) }
+            delay(10_000)     // refresh for new data every 10 seconds
+        }
     }
 
     private suspend fun fetchCategoriesFromFirebase(): List<ChallengeCategory>? {

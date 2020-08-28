@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.adapter.UserChallengeAdapter
+import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -24,13 +24,15 @@ import kotlinx.android.synthetic.main.fragment_overview.*
 class OverviewFragment : Fragment() {
 
     private lateinit var overviewViewModel: OverviewViewModel
-    private lateinit var challengeListAdapter: UserChallengeAdapter
+    private lateinit var overviewAdapter: OverviewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
 
         return root
     }
@@ -41,22 +43,22 @@ class OverviewFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
         //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
 
-        challengeListAdapter = UserChallengeAdapter()
+        overviewAdapter = OverviewAdapter()
         recyclerview_overview.apply {
             setHasFixedSize(true)
-            adapter = challengeListAdapter
+            adapter = overviewAdapter
             layoutManager = linearLayoutManager
         }
 
         //TODO: does not scroll to top :(
         recyclerview_overview.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if(oldTop < top) {
-                // scroll to the top where the new item was inserted when the list gets bigger!
+                // scroll to the top when the list gets bigger!
                 recyclerview_overview.smoothScrollToPosition(0)
             }
         }
         /*
-        // Scroll to top on new messages
+        // Scroll to top on new challenges
         challengeListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 recyclerview_overview.smoothScrollToPosition(0)
@@ -118,7 +120,7 @@ class OverviewFragment : Fragment() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
             it?.let {
                 // update the list in the adapter with the new challenge list
-                challengeListAdapter.userChallenges = it
+                overviewAdapter.activeChallenges = it
             }
         })
 
@@ -152,12 +154,12 @@ class OverviewFragment : Fragment() {
                     setTitle("Challenge löschen?")
                     setPositiveButton("Ja") { _, _ ->
                         // remove this item
-                        overviewViewModel.removeChallenge(challengeListAdapter.getChallengeAt(viewHolder.adapterPosition))
+                        overviewViewModel.removeChallenge(overviewAdapter.getChallengeAt(viewHolder.adapterPosition))
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     setNegativeButton("Nein") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
-                        challengeListAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                        overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
                         Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()

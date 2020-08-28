@@ -51,12 +51,13 @@ class CategoriesFragment : Fragment() {
         val numberOfColumns = this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
         // setup the Grid Layout with the recycler adapter
-        //FIXME: this leaks memory for some reason
         recycler_category_list.apply {
             setHasFixedSize(true) //can improve performance if changes in content do not change the layout size of the RecyclerView
             adapter = categoriesAdapter
             layoutManager = GridLayoutManager(activity, numberOfColumns)
 
+            /*
+            //FIXME: this leaks memory for some reason and shows the overview fragment for a blink at first
             // postpone the transitions to await loading of all list items before the shared element transitions returns
             // (otherwise the transition would only work on Exit but not on Return to this view!)
             postponeEnterTransition()
@@ -69,6 +70,7 @@ class CategoriesFragment : Fragment() {
                     return true
                 }
             })
+             */
         }
     }
 

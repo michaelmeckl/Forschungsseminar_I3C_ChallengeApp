@@ -64,7 +64,7 @@ class CategoriesAdapter(private val clickListener: CategoryClickListener) :
             //itemView.list_item.setBackgroundColor(ResourcesCompat.getColor(itemView.context.resources, R.color.content_background, null))
 
             itemView.item_title.text = data.title
-            itemView.item_description.text = data.description
+            //itemView.item_description.text = data.description
             val iconIdentifier =
                 itemView.context.resources.getIdentifier(data.categoryIcon, "drawable", itemView.context.packageName)
             itemView.item_image.setImageResource(iconIdentifier)

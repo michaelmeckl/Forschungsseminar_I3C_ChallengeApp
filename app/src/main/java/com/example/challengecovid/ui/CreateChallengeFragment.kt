@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.Difficulty
@@ -39,7 +41,9 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         super.onViewCreated(view, savedInstanceState)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
 
         setupSpinner()
 
@@ -147,13 +151,20 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
             selectedChallengeDuration.toFloat()
         }
 
+        val sharedPrefs =
+            activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        // return early if fetching the user id didn't work
+        if (currentUserId == "") return
+
         val newChallenge = UserChallenge(
-            name_create_new_challenge.text.toString(),
-            description_create_new_challenge.text.toString(),
-            Difficulty.MITTEL,
-            false,
-            2,
-            "123456789"     //TODO: hier später die userId des nutzers rein, der diese challenge angelegt hat
+            title = name_create_new_challenge.text.toString(),
+            description = description_create_new_challenge.text.toString(),
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 2,
+            creatorId = currentUserId
         )
 
         Timber.d(newChallenge.toString())

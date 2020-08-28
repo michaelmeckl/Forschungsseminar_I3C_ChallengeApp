@@ -22,7 +22,7 @@ object Data {
             title = "Gesunder Lebensstil",
             description = "Diese Kategorie enthält Challenges, die einen gesunden Lebensstil zum Ziel haben.",
             categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_vergeben),
-            containedChallenges = emptyList()   //TODO add the challenges below to this
+            containedChallenges = getHealthyChallenges()
         ),
         ChallengeCategory(
             title = "Sport",
@@ -38,31 +38,38 @@ object Data {
         )
     )
 
-    // (app) challenges
-    fun getChallenges(): List<Challenge> = listOf(
+    //TODO: these challenges should not be used in the categories, instead create own challenges and add them instead of the emptylist!
+    // (system) challenges
+    fun getDailyChallenges(): List<Challenge> = listOf(
         Challenge(
-            "Versuche heute alle Corona-Richtlinien einzuhalten",
-            "Versuche dich den heutigen Tag an alle dir bekannten Corona-Umgangsregeln und Richtlinien zu halten, wie beispielsweise 1,50m Abstand zu anderen zu halten, Niesen und Husten nur in Armbeuge und natürlich deine Maske zu tragen, wenn du raus gehst. Damit schützt du deine Mitmenschen und hilfst mit den Virus zu besiegen!",
-            Difficulty.SCHWER,
-            false,
-            5,
+            title="Versuche heute alle Corona-Richtlinien einzuhalten",
+            description ="Versuche dich den heutigen Tag an alle dir bekannten Corona-Umgangsregeln und Richtlinien zu halten, wie beispielsweise 1,50m Abstand zu anderen zu halten, Niesen und Husten nur in Armbeuge und natürlich deine Maske zu tragen, wenn du raus gehst. Damit schützt du deine Mitmenschen und hilfst mit den Virus zu besiegen!",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 5,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            "Mehr Sport machen",
-            "Für 3 Tage hintereinander jeden Tag 10 Liegestütze und 15 Push Ups machen!",
-            Difficulty.MITTEL,
-            false,
-            3,
+            title="Mehr Sport machen",
+            description ="Für 3 Tage hintereinander jeden Tag 10 Liegestütze und 15 Push Ups machen!",
+            difficulty = Difficulty.MITTEL,
+            completed =false,
+            duration = 3,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_klopapier)
         ),
         Challenge(
-            "Versuche dich diese Woche etwas gesünder zu ernähren",
-            "An apple a day, keeps the doctor away!",
-            Difficulty.SCHWER,
-            false,
-            1,
+            title="Versuche dich diese Woche etwas gesünder zu ernähren",
+            description ="An apple a day, keeps the doctor away!",
+            difficulty = Difficulty.SCHWER,
+            completed =false,
+            duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         )
+    )
+
+    //TODO:
+    private fun getHealthyChallenges(): List<Challenge> = listOf(
+        Challenge(),
+        Challenge()
     )
 }

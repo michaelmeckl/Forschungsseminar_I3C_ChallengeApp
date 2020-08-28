@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
+import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,7 +19,8 @@ import timber.log.Timber
 class ChallengeRepository {
 
     // reference to the root default challenge collection in firestore
-    private val challengeCollection = FirebaseFirestore.getInstance().collection("challenges")  //TODO: eigtl. in categories
+    private val challengeCollection =
+        FirebaseFirestore.getInstance().collection("challenges")  //TODO: eigtl. in categories
 
     // reference to the root userChallenge collection in firestore
     private val userChallengeCollection = FirebaseFirestore.getInstance().collection("userChallenges")
@@ -36,8 +38,11 @@ class ChallengeRepository {
 
     // GET-ALL
     fun getAllChallenges(): LiveData<List<Challenge>> = liveData(Dispatchers.Main) {
-        val allChallenges = fetchChallengesFromFirebase()
-        allChallenges?.let { emit(it) }
+        while (true) {
+            val allChallenges = fetchChallengesFromFirebase()
+            allChallenges?.let { emit(it) }
+            delay(3000)     // refresh for new data every 3 seconds
+        }
     }
 
     private suspend fun fetchChallengesFromFirebase(): List<Challenge>? {
@@ -118,6 +123,7 @@ class ChallengeRepository {
     }
 
     //DELETE
+    /*
     fun deleteChallenge(challenge: Challenge) {
         val challengeRef = challengeCollection.document(challenge.challengeId)
 
@@ -125,6 +131,8 @@ class ChallengeRepository {
             .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully deleted!") }
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting Challenge: $e") }
     }
+
+     */
 
 
     /**
@@ -135,19 +143,23 @@ class ChallengeRepository {
 
     // GET-ALL
     //TODO: is there a better way than infinity loop with delay?
-    fun getAllUserChallenges(): LiveData<List<UserChallenge>> = liveData {
+    fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData {
+        // `while(true)` is fine because the `delay` below will cooperate in
+        // cancellation if LiveData is not actively observed anymore
         while (true) {
-            val allChallenges = fetchUserChallengesFromFirebase()
+            val allChallenges = fetchPublicChallengesFromFirebase()
             allChallenges?.let { emit(it) }
-            delay(1000)     // refetch new data every second
+            delay(3000)     // refresh for new data every 3 seconds
         }
     }
 
-    private suspend fun fetchUserChallengesFromFirebase(): List<UserChallenge>? {
+    private suspend fun fetchPublicChallengesFromFirebase(): List<UserChallenge>? {
         return try {
             val challengeList: MutableList<UserChallenge> = ArrayList()
-            val docSnapshots =
-                userChallengeCollection.orderBy("createdAt", Query.Direction.DESCENDING).get().await().documents
+            val docSnapshots = userChallengeCollection
+                .whereEqualTo("isPublic", true)   // get the user challenges that are public
+                .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
+                .get().await().documents    // wait for completion and convert them to document snapshots
 
             if (docSnapshots.isNotEmpty()) {
                 for (snapshot in docSnapshots)
@@ -162,6 +174,65 @@ class ChallengeRepository {
             null
         }
     }
+
+    /*
+    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData {
+        while (true) {
+            val userChallengesForUser = fetchUserChallengesForUser(userId)
+            val systemChallengesForUser = fetchSystemChallengesForUser(userId)
+            val allChallenges = ArrayList<BaseChallenge>()
+            userChallengesForUser?.let { allChallenges.addAll(it) }
+            systemChallengesForUser?.let { allChallenges.addAll(it) }
+            emit(allChallenges)
+            delay(1000)     // refresh for new data every second
+        }
+    }
+
+    private suspend fun fetchUserChallengesForUser(userId: String): List<UserChallenge>? {
+        return try {
+            val challengeList: MutableList<UserChallenge> = ArrayList()
+            val docSnapshots = userChallengeCollection
+                .whereEqualTo("creatorId", userId)   // get the user challenges for this user
+                .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
+                .get().await().documents    // wait for completion and convert them to document snapshots
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    snapshot.toObject(UserChallenge::class.java)?.let {
+                        challengeList.add(it)
+                    }
+            }
+
+            challengeList
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    private suspend fun fetchSystemChallengesForUser(userId: String): List<Challenge>? {
+        return try {
+            val challengeList: MutableList<Challenge> = ArrayList()
+            val docSnapshots = challengeCollection
+                //TODO.whereEqualTo("creatorId", userId)   // get the system challenges for this user
+                .orderBy("acceptedDate", Query.Direction.DESCENDING)
+                .get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    snapshot.toObject(Challenge::class.java)?.let {
+                        challengeList.add(it)
+                    }
+            }
+
+            challengeList
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
+    }
+
+     */
 
     //GET
     fun getUserChallenge(id: String): UserChallenge? = runBlocking(Dispatchers.Main) {

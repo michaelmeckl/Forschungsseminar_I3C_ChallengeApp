@@ -40,8 +40,18 @@
             app:layout_constraintTop_toBottomOf="@+id/feed_item_title"
             tools:text="Beschreibung Hier steht ein langer Beispieltext um zu prüfen ob das Layout auch wirklich so funktioniert wie es soll" />
 
+        <TextView
+            android:id="@+id/feed_item_creator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_small"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/feed_creator_icon"
+            app:layout_constraintTop_toBottomOf="@+id/feed_item_description"
+            tools:text="von Hans Jürgen"/>
+
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/creator_icon"
+            android:id="@+id/feed_creator_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="4dp"

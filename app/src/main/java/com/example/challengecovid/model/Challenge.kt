@@ -22,9 +22,11 @@ data class Challenge(
     override val title: String = "",
     override val description: String = "",
     override val difficulty: Difficulty = Difficulty.LEICHT,
+    override val type: ChallengeType = ChallengeType.SYSTEM_CHALLENGE,
     override val completed: Boolean = false,
     override val duration: Int = 7,     // in days
     // IMPORTANT: Don't save the resource identifier for the image as this is generated at compile time and can therefore change!
     // instead use the name of the drawable
-    val challengeIcon: String = ""
+    val challengeIcon: String = "",
+    val acceptedDate: Long = System.currentTimeMillis()     // when this challenge was accepted by a user
 ) : BaseChallenge()
