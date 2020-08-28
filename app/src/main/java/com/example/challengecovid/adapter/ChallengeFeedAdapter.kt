@@ -6,8 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.social_feed_item.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
     RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
@@ -41,12 +46,18 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             itemView.feed_item_description.text = data.description
 
             // get the creator of this challenge
-            val creator = userRepository.getUser(data.creatorId)
+            var creator: User? = null
+
+            //TODO: this doesn't show an image right now!
+            CoroutineScope(Dispatchers.IO).launch {
+                val user = userRepository.getUser(data.creatorId)
+                creator = user
+            }
+
             if (creator != null) {
                 // set icon and name of the user that created that challenge
-                itemView.feed_item_creator.text = creator.username
-                val userIcon =
-                    itemView.context.resources.getIdentifier(creator.userIcon, "drawable", itemView.context.packageName)
+                itemView.feed_item_creator.text = creator?.username
+                val userIcon = itemView.context.resources.getIdentifier(creator?.userIcon, "drawable", itemView.context.packageName)
                 itemView.feed_creator_icon.setImageResource(userIcon)
 
             } else {

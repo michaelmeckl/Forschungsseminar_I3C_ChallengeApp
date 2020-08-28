@@ -157,7 +157,7 @@ class ChallengeRepository {
         return try {
             val challengeList: MutableList<UserChallenge> = ArrayList()
             val docSnapshots = userChallengeCollection
-                .whereEqualTo("public", true)   // get the user challenges that are public
+                .whereEqualTo("isPublic", true)   // get the user challenges that are public
                 .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
                 .get().await().documents    // wait for completion and convert them to document snapshots
 
@@ -293,7 +293,7 @@ class ChallengeRepository {
         val challengeRef = userChallengeCollection.document(challengeId)
 
         challengeRef
-            .update("public", publicStatus)
+            .update("isPublic", publicStatus)
             .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") }
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") }
     }

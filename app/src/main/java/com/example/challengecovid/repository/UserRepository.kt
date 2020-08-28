@@ -7,6 +7,7 @@ import com.example.challengecovid.App
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -29,7 +30,7 @@ class UserRepository {
 
 
     // GET-ALL
-    fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.Main) {
+    fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.IO) {
         while (true) {
             val allUsers = fetchUsersFromFirebase()
             allUsers?.let { emit(it) }
@@ -93,12 +94,9 @@ class UserRepository {
     }
 
     //GET
-    fun getUser(id: String): User? = runBlocking(Dispatchers.Main) {
-        val deferredResult = async(Dispatchers.IO) {
-            val userSnapshot = userCollection.document(id).get().await()
-            return@async userSnapshot.toObject(User::class.java)
-        }
-        deferredResult.await()
+    suspend fun getUser(id: String): User? {
+        val userSnapshot = userCollection.document(id).get().await()
+        return userSnapshot.toObject(User::class.java)
     }
 
     //CREATE
