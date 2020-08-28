@@ -32,7 +32,7 @@ class EditProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.popup_edit_profile, container, false)
+        val root = inflater.inflate(R.layout.fragment_character_selection, container, false)
         val application: Application = requireNotNull(this.activity).application
         val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
         val userRepository = UserRepository(db)
@@ -52,11 +52,7 @@ class EditProfileFragment : Fragment() {
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
         profile_picture_edit_profile_fragment.setImageResource(resID)
 
-        edit_profile_picture.setOnClickListener {
-            requireActivity().findNavController(R.id.nav_host_fragment)
-                .navigate(EditProfileFragmentDirections.actionNavigationEditProfileToNavigationEditProfilePicture())
 
-        }
 
         save_changes.setOnClickListener {
             //remove this fragment from the backstack to navigate back

@@ -39,24 +39,11 @@
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile">
         <action
-            android:id="@+id/action_profileFragment_to_editProfileDialog"
-            app:destination="@id/navigation_edit_profile" />
-        <action
             android:id="@+id/action_profileFragment_to_addFriend"
             app:destination="@id/navigation_add_friend" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/navigation_edit_profile"
-        android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
-        android:label="EditProfileDialog"
-        tools:layout="@layout/popup_edit_profile">
         <action
-            android:id="@+id/action_navigation_edit_profile_to_navigation_edit_profile_picture"
-            app:destination="@id/navigation_edit_profile_picture" />
-        <argument
-            android:name="iconID"
-            app:argType="string" />
+            android:id="@+id/action_profile_to_character_select"
+            app:destination="@id/navigation_character_select" />
     </fragment>
 
     <fragment
@@ -94,9 +81,21 @@
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 
-    <dialog
-        android:id="@+id/navigation_edit_profile_picture"
-        android:name="com.example.challengecovid.ui.profile.EditProfilePictureDialogFragment"
-        android:label="EditProfilePictureDialogFragment" />
+    <activity
+        android:id="@+id/nacigation_splash_activity"
+        android:name="com.example.challengecovid.ui.SplashActivity"
+        android:label="SplashActivity" >
+        <action
+            android:id="@+id/action_nacigation_splash_activity_to_navigation_character_select"
+            app:destination="@id/navigation_character_select" />
+    </activity>
+    <fragment
+        android:id="@+id/navigation_character_select"
+        android:name="com.example.challengecovid.ui.CharacterSelectFragment"
+        android:label="CharacterSelectFragment" >
+        <argument
+            android:name="firstRun"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

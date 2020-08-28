@@ -90,13 +90,10 @@ class SplashActivity : AppCompatActivity() {
 
     // TODO navigate to Character Selection
     private fun startCharacterSelection() {
-        /*
-        val intent = Intent(this@SplashActivity, CharacterSelectActivity::class.java)
-        startActivity(intent)
-
-        // close this activity so the user can't navigate back to it!
-        finish()
-        */
+        val fragment = CharacterSelectFragment()
+        supportFragmentManager.beginTransaction()
+            .add(android.R.id.content, fragment)
+            .commit()
     }
 
     // navigate to Main Activity

@@ -47,6 +47,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //currentUserId = (profile as CharacterSelectActivity).currentUser.userId
+        /*
         currentUser = profileViewModel.getUser("test test test") ?: return  //TODO
 
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
@@ -54,16 +55,19 @@ class ProfileFragment : Fragment() {
 
         val name = currentUser.username
         profile_name.text = name
-
+        */
         add_friend_button.setOnClickListener {
             requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(ProfileFragmentDirections.actionProfileFragmentToAddFriend())
         }
 
         edit_profile.setOnClickListener {
+            val action = ProfileFragmentDirections.actionProfileToCharacterSelect("editProfile")
             requireActivity().findNavController(R.id.nav_host_fragment)
-                .navigate(ProfileFragmentDirections.actionProfileFragmentToEditProfileDialog(currentUser.userIcon))
+                .navigate(action)
         }
+
+
     }
 
 
