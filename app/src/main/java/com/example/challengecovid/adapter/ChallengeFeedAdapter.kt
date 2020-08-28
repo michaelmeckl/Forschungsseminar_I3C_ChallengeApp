@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.UserChallenge
+import kotlinx.android.synthetic.main.category_list_item.view.*
 import kotlinx.android.synthetic.main.social_feed_item.view.*
 
-class ChallengeFeedAdapter : RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
+class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
+    RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
 
     var publicChallenges = listOf<UserChallenge>()
         set(value) {
@@ -26,7 +28,7 @@ class ChallengeFeedAdapter : RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewH
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.bind(publicChallenges[position])
+        holder.bind(publicChallenges[position], clickListener = clickListener)
     }
 
     override fun getItemCount() = publicChallenges.size
@@ -35,7 +37,7 @@ class ChallengeFeedAdapter : RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewH
 
         private val userRepository = RepositoryController.getUserRepository()
 
-        fun bind(data: UserChallenge) {
+        fun bind(data: UserChallenge, clickListener: ChallengeFeedClickListener) {
             itemView.feed_item_title.text = data.title
             itemView.feed_item_description.text = data.description
 
@@ -53,6 +55,11 @@ class ChallengeFeedAdapter : RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewH
                 itemView.feed_item_creator.text = "Anonym"
                 itemView.feed_creator_icon.setImageResource(R.drawable.ic_person)
             }
+
+            //set an item click listener
+            itemView.setOnClickListener {
+                clickListener.onChallengeClick(it.feed_item_title, data)
+            }
         }
 
         companion object {
@@ -64,6 +71,11 @@ class ChallengeFeedAdapter : RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewH
             }
         }
     }
+}
+
+// ClickListener - Interface for the recycler view items
+interface ChallengeFeedClickListener {
+    fun onChallengeClick(itemView: View, challenge: UserChallenge)
 }
 
 

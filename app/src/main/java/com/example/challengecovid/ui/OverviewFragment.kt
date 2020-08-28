@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.adapter.ChallengeClickListener
+import com.example.challengecovid.adapter.ChallengeFeedClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
+import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -43,7 +47,12 @@ class OverviewFragment : Fragment() {
         val linearLayoutManager = LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
         //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
 
-        overviewAdapter = OverviewAdapter()
+        overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
+            override fun onChallengeClick(challenge: BaseChallenge) {
+                showChallengeDetails(challenge)
+            }
+        })
+
         recyclerview_overview.apply {
             setHasFixedSize(true)
             adapter = overviewAdapter
@@ -136,6 +145,11 @@ class OverviewFragment : Fragment() {
                 overviewViewModel.doneShowingSnackbar()
             }
         })
+    }
+
+    private fun showChallengeDetails(challenge: BaseChallenge) {
+        //TODO:
+        Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupSwipeListener() {

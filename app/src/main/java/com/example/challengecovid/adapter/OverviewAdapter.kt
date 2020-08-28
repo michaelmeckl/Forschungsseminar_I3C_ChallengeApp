@@ -8,7 +8,8 @@ import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
 
-class OverviewAdapter : RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
+class OverviewAdapter(private val clickListener: ChallengeClickListener) :
+    RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
 
     var activeChallenges = listOf<BaseChallenge>()
         set(value) {
@@ -25,18 +26,23 @@ class OverviewAdapter : RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder
     }
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
-        holder.bind(activeChallenges[position])
+        holder.bind(activeChallenges[position], clickListener)
     }
 
     override fun getItemCount() = activeChallenges.size
 
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: BaseChallenge) {
+        fun bind(data: BaseChallenge, clickListener: ChallengeClickListener) {
             itemView.name_challenge.text = data.title
-            itemView.xp_challenge.text= String.format("%s XP", data.difficulty.points)
+            itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
             //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+
+            //set an item click listener
+            itemView.setOnClickListener {
+                clickListener.onChallengeClick(data)
+            }
         }
 
         companion object {
@@ -48,6 +54,11 @@ class OverviewAdapter : RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder
             }
         }
     }
+}
+
+// ClickListener - Interface for the recycler view items
+interface ChallengeClickListener {
+    fun onChallengeClick(challenge: BaseChallenge)
 }
 
 
