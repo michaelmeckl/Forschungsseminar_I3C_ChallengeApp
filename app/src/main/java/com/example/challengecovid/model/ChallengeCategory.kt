@@ -1,13 +1,22 @@
 package com.example.challengecovid.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import java.util.UUID
 
+/*
+//Room Model
 @Entity(tableName = "challenge_category_table")
 data class ChallengeCategory (
     @PrimaryKey val categoryId: String = UUID.randomUUID().toString(),
     val title: String,
     val description: String,
     val categoryIcon: String
+)
+*/
+
+data class ChallengeCategory (
+    val categoryId: String = UUID.randomUUID().toString(),
+    var title: String = "",
+    var description: String = "",
+    var categoryIcon: String = "",
+    val containedChallenges: List<Challenge> = emptyList()
 )

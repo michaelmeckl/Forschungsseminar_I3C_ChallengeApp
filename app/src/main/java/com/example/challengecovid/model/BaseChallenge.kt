@@ -1,7 +1,6 @@
 package com.example.challengecovid.model
 
-import androidx.room.PrimaryKey
-import java.util.UUID
+import java.util.*
 
 enum class Difficulty (val points: Int) {
     SCHWER(20),
@@ -9,6 +8,13 @@ enum class Difficulty (val points: Int) {
     LEICHT(5)
 }
 
+enum class ChallengeType {
+    USER_CHALLENGE,
+    SYSTEM_CHALLENGE
+}
+
+/*
+//Room Model
 abstract class BaseChallenge {
     abstract val title: String
     abstract val difficulty: Difficulty
@@ -17,4 +23,14 @@ abstract class BaseChallenge {
     abstract val duration: Int   // for how long this challenge is available (in days)
     var createdAt: Long = System.currentTimeMillis()  //needs to be var so Kotlin automatically generates setter (which is needed for room)
     @PrimaryKey var challengeId: String = UUID.randomUUID().toString()  //generate a random id
+}*/
+
+abstract class BaseChallenge {
+    val challengeId: String = UUID.randomUUID().toString()  //generate a random id
+    abstract var title: String
+    abstract var difficulty: Difficulty
+    abstract val type: ChallengeType
+    abstract var description: String
+    abstract var completed: Boolean
+    abstract var duration: Int   // for how long this challenge is available (in days)
 }

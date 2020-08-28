@@ -2,32 +2,44 @@ package com.example.challengecovid.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View.ALPHA
 import android.view.View.TRANSLATION_Y
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.challengecovid.BuildConfig
-import com.example.challengecovid.R
-import com.example.challengecovid.Utils
+import com.example.challengecovid.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 
-//TODO: find a better splash screen logo?
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
     private var firstRun: Boolean = false
-    private var firstTimeThisDay: Boolean = false     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
+
+    //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
+    // alternativ vllt über firebase in app messaging gut umsetzbar!
+    private var firstTimeThisDay: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        Timber.tag("FIREBASE").d("in onCreate in splash activity")
+
         checkFirstRun()
         animateSplashScreen()
+
+        // if this is the first start prepopulate the firestore db
+        if (firstRun) initDatabase()
+
+        handleIncomingCloudMessages()
 
         //TODO: loadNewChallengeData()
         showSplashScreen()
@@ -51,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
         val currentVersionCode: Int = BuildConfig.VERSION_CODE
 
         // Get saved version code
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        val prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         val savedVersionCode = prefs.getInt(PREFS_VERSION_CODE_KEY, -1)
 
         // Check for first run or upgrade
@@ -75,31 +87,66 @@ class SplashActivity : AppCompatActivity() {
         prefs.edit().putInt(PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
     }
 
+    private fun initDatabase() {
+        val categoryRepo = RepositoryController.getCategoryRepository()
+        val challengeRepo = RepositoryController.getChallengeRepository()
+
+        categoryRepo.saveMultipleCategories(Data.getChallengeCategories())
+
+        //TODO: ist das notwendig?? die system challenges gehören doch eh alle zu den kategorien oder?
+        challengeRepo.saveMultipleChallenges(Data.getDailyChallenges())
+    }
+
+    //TODO:
+    private fun handleIncomingCloudMessages() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create channel to show notifications.
+            val channelId = getString(R.string.default_notification_channel_id)
+            val channelName = getString(R.string.default_notification_channel_name)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager?.createNotificationChannel(
+                NotificationChannel(
+                    channelId,
+                    channelName, NotificationManager.IMPORTANCE_LOW
+                )
+            )
+        }
+
+        // Handle possible data accompanying notification message.
+        intent.extras?.let {
+            for (key in it.keySet()) {
+                val value = intent.extras?.get(key)
+                Timber.tag("FIREBASE_CLOUD_MESSAGE").d("Key: $key Value: $value")
+            }
+        }
+    }
+
     private fun showSplashScreen() {
         job = CoroutineScope(Dispatchers.Default).launch {
             // wait for 2 seconds
             delay(2000)
 
+            //TODO: revert this later!!!
+            startCharacterCreation()
+            /*
             if (firstRun) {
-                startCharacterSelection()
+                startCharacterCreation()
             } else {
                 startMain()
             }
+            */
         }
     }
 
-    // TODO navigate to Character Selection
-    private fun startCharacterSelection() {
-        /*
-        val intent = Intent(this@SplashActivity, CharacterSelectActivity::class.java)
+    private fun startCharacterCreation() {
+        val intent = Intent(this@SplashActivity, CharacterCreationActivity::class.java)
         startActivity(intent)
 
         // close this activity so the user can't navigate back to it!
         finish()
-        */
     }
 
-    // navigate to Main Activity
+    // navigate direct to Main Activity
     private fun startMain() {
         val intent = Intent(this@SplashActivity, MainActivity::class.java)
         startActivity(intent)
@@ -113,8 +160,13 @@ class SplashActivity : AppCompatActivity() {
             if (Utils.isNetworkConnected(it)) {
                 fetchNewData()
             } else {
-                //TODO: oder vllt lieber nur einen Toast damit nicht zu aufdringlich?
-                showConnectionAlert()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.no_internet + R.string.no_internet_warning,
+                    Snackbar.LENGTH_LONG
+                ).show()
+
+                //showConnectionAlert()
             }
         }
     }
@@ -129,7 +181,7 @@ class SplashActivity : AppCompatActivity() {
             .setTitle(R.string.no_internet)
             .setMessage(R.string.no_internet_warning)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }     // TODO: dialog.dismiss() and retry ?
+            .setPositiveButton(android.R.string.ok) { _, _ -> }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
     }
@@ -140,7 +192,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val PREFS_NAME = "challengeCovidSharedPrefs"
         const val PREFS_VERSION_CODE_KEY = "version_code"
     }
 }

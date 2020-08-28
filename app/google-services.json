@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "754263614391",
+    "firebase_url": "https://challengecovid-i3c-2020.firebaseio.com",
+    "project_id": "challengecovid-i3c-2020",
+    "storage_bucket": "challengecovid-i3c-2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754263614391:android:eb10dee998a961e78d3e32",
+        "android_client_info": {
+          "package_name": "com.example.challengecovid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754263614391-tic5d9k4bj2eqa3g7c8jsufu8thovkf1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvxaGDFGaMkWCehwFDcZnne4TUU5gsyW8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754263614391-tic5d9k4bj2eqa3g7c8jsufu8thovkf1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

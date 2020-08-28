@@ -12,7 +12,6 @@
         />
     -->
 
-    <!-- TODO find a better icon for this ! -->
     <item
         android:id="@+id/navigation_profile"
         android:menuCategory="secondary"
@@ -20,18 +19,11 @@
         android:title="@string/action_profile"
         app:showAsAction="never" />
 
-    <!-- TODO merge both below to one -->
-    <item
-        android:id="@+id/action_about"
-        android:menuCategory="secondary"
-        android:title="@string/action_about"
-        app:showAsAction="never" />
-
     <!-- This id has to be the same as the one in the navigation graph!-->
     <item
-        android:id="@+id/navigation_credits"
+        android:id="@+id/navigation_about"
         android:menuCategory="secondary"
-        android:title="@string/action_credits"
+        android:title="@string/action_about"
         app:showAsAction="never" />
 
 </menu>

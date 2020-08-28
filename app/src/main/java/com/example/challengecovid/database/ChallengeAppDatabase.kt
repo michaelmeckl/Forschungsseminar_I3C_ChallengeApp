@@ -1,18 +1,6 @@
 package com.example.challengecovid.database
 
-import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.challengecovid.database.ChallengeAppDatabase.Companion.DB_VERSION
-import com.example.challengecovid.database.dao.*
-import com.example.challengecovid.model.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
-
+/*
 @Database(
     entities = [Challenge::class, ChallengeCategory::class, UserChallenge::class, User::class, ChallengeUserCrossRef::class],
     version = DB_VERSION,
@@ -116,3 +104,4 @@ abstract class ChallengeAppDatabase : RoomDatabase() {
         }
     }
 }
+*/
