@@ -8,6 +8,7 @@ import com.example.challengecovid.model.UserChallenge
 @Dao
 interface UserChallengeDao : BaseDao<UserChallenge> {
 
+    /*
     // deletes all values from the table. This does not delete the table, only its contents.
     @Query("DELETE FROM user_challenge_table")
     suspend fun clear()
@@ -17,5 +18,7 @@ interface UserChallengeDao : BaseDao<UserChallenge> {
 
     @Query("SELECT * FROM user_challenge_table ORDER BY createdAt DESC")
     fun getAllUserChallenges(): LiveData<List<UserChallenge>>
+
+     */
 
 }

@@ -15,13 +15,18 @@
             app:destination="@id/navigation_create_challenge"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_challenge_detail"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"/>
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_challenges"
-        android:name="com.example.challengecovid.ui.ChallengesFragment"
-        android:label="@string/label_challenges"
-        tools:layout="@layout/fragment_challenges">
+        android:id="@+id/navigation_categories"
+        android:name="com.example.challengecovid.ui.CategoriesFragment"
+        android:label="@string/label_categories"
+        tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_category_to_detail"
             app:destination="@id/navigation_category_detail"/>
@@ -30,17 +35,27 @@
     <dialog
         android:id="@+id/navigation_add_friend"
         android:name="com.example.challengecovid.ui.profile.AddFriendFragment"
-        android:label="AddFriendDialog"
+        android:label="@string/label_add_friend"
         tools:layout="@layout/popup_add_friend"/>
 
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.challengecovid.ui.profile.ProfileFragment"
-        android:label="ProfileFragment"
+        android:label="@string/label_profile"
         tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileDialog"
+            app:destination="@id/navigation_edit_profile" />
         <action
             android:id="@+id/action_profileFragment_to_addFriend"
             app:destination="@id/navigation_add_friend" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_profile"
+        android:name="com.example.challengecovid.ui.profile.EditProfileFragment"
+        android:label="@string/label_edit_profile"
+        tools:layout="@layout/popup_edit_profile">
         <action
             android:id="@+id/action_profile_to_character_select"
             app:destination="@id/navigation_character_select" />
@@ -63,21 +78,40 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_social"
-        android:name="com.example.challengecovid.ui.SocialFragment"
-        android:label="@string/label_social"
-        tools:layout="@layout/fragment_social" />
+        android:id="@+id/navigation_challenge_detail"
+        android:name="com.example.challengecovid.ui.ChallengeDetailFragment"
+        android:label="Detail Ansicht"
+        tools:layout="@layout/fragment_challenge_detail">
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="com.example.challengecovid.model.ChallengeType" />
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_credits"
-        android:name="com.example.challengecovid.ui.CreditsFragment"
-        android:label="@string/label_credits"
-        tools:layout="@layout/fragment_credits" />
+        android:id="@+id/navigation_feed"
+        android:name="com.example.challengecovid.ui.SocialFeedFragment"
+        android:label="@string/label_social_feed"
+        tools:layout="@layout/fragment_social_feed" />
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.example.challengecovid.ui.AboutFragment"
+        android:label="@string/label_about"
+        tools:layout="@layout/fragment_about" />
 
     <dialog
         android:id="@+id/navigation_create_challenge"
         android:name="com.example.challengecovid.ui.CreateChallengeFragment"
-        android:label="CreateChallengeFragment"
+        android:label="@string/label_create_challenge"
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 

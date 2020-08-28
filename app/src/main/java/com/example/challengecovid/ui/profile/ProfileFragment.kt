@@ -1,22 +1,23 @@
 package com.example.challengecovid.ui.profile
 
+import android.app.Dialog
 import android.app.Application
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.challengecovid.R
-import kotlinx.android.synthetic.main.fragment_profile.*
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.example.challengecovid.Constants
+import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.database.ChallengeAppDatabase
 import com.example.challengecovid.database.repository.UserRepository
 import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 
 class ProfileFragment : Fragment() {
@@ -34,10 +35,7 @@ class ProfileFragment : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-        val userRepository = UserRepository(db)
-
+        val userRepository = RepositoryController.getUserRepository()
         profileViewModel = getViewModel { ProfileViewModel(userRepository) }
 
         return root
@@ -46,16 +44,13 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //currentUserId = (profile as CharacterSelectActivity).currentUser.userId
-        /*
-        currentUser = profileViewModel.getUser("test test test") ?: return  //TODO
+        val sharedPrefs =
+            activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-        val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
-        profile_picture.setImageResource(resID)
+        // return early if fetching the user id didn't work
+        if (currentUserId == "") return
 
-        val name = currentUser.username
-        profile_name.text = name
-        */
         add_friend_button.setOnClickListener {
             requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(ProfileFragmentDirections.actionProfileFragmentToAddFriend())

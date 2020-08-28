@@ -1,8 +1,5 @@
 package com.example.challengecovid.model
 
-import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
 import java.util.UUID
 
 enum class Gender {
@@ -11,6 +8,8 @@ enum class Gender {
     DIVERS
 }
 
+/*
+//Room Model
 @Entity(
     tableName = "user_table",
     indices = [Index(value = ["userId"], unique = true)]
@@ -25,4 +24,18 @@ data class User (
     val dailyStreakCount: Int
     //val friends: List<User> //necessary ??
     //val currentChallenges: List<Challenge>
+)
+*/
+
+data class User (
+    val userId: String = UUID.randomUUID().toString(),
+    val registrationToken: String = "",
+    var username: String = "",
+    //var gender: Gender = Gender.MALE,
+    var level: Int = 0,
+    var points: Int = 0,
+    var userIcon: String = "",
+    var dailyStreakCount: Int = 1,
+    val activeChallenges: List<BaseChallenge> = emptyList()
+    //val friends: List<User> = emptyList()
 )

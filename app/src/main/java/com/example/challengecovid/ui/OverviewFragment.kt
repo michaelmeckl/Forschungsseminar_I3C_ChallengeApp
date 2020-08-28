@@ -1,7 +1,6 @@
 package com.example.challengecovid.ui
 
 import android.app.AlertDialog
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,33 +10,31 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.R
-import com.example.challengecovid.adapter.UserChallengeAdapter
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.adapter.ChallengeClickListener
+import com.example.challengecovid.adapter.OverviewAdapter
+import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+
 
 class OverviewFragment : Fragment() {
 
     private lateinit var overviewViewModel: OverviewViewModel
-    private lateinit var challengeListAdapter: UserChallengeAdapter
+    private lateinit var overviewAdapter: OverviewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-        val challengeRepository = ChallengeRepository(db)
-
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
+        val challengeRepository = RepositoryController.getChallengeRepository()
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
 
         return root
     }
@@ -45,11 +42,36 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        challengeListAdapter = UserChallengeAdapter()
-        recyclerview_challenges.apply {
+        val linearLayoutManager = LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
+        //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
+
+        overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
+            override fun onChallengeClick(challenge: BaseChallenge) {
+                showChallengeDetails(challenge)
+            }
+        })
+
+        recyclerview_overview.apply {
             setHasFixedSize(true)
-            adapter = challengeListAdapter
+            adapter = overviewAdapter
+            layoutManager = linearLayoutManager
         }
+
+        //TODO: does not scroll to top :(
+        recyclerview_overview.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if(oldTop < top) {
+                // scroll to the top when the list gets bigger!
+                recyclerview_overview.smoothScrollToPosition(0)
+            }
+        }
+        /*
+        // Scroll to top on new challenges
+        challengeListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                recyclerview_overview.smoothScrollToPosition(0)
+            }
+        })
+        */
 
         setupObservers()
         setupSwipeListener()
@@ -72,11 +94,40 @@ class OverviewFragment : Fragment() {
         }
     }
 
+    //TODO: für firestore ui und firestoreadapter
+    /*
+    private open fun newAdapter(): RecyclerView.Adapter<*>? {
+        val options: FirestoreRecyclerOptions<Chat> = Builder<Chat>()
+            .setQuery(sChatQuery, Chat::class.java)
+            .setLifecycleOwner(this)
+            .build()
+        return object : FirestoreRecyclerAdapter<Chat?, ChatHolder?>(options) {
+            @NonNull
+            fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ChatHolder? {
+                return ChatHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.message, parent, false)
+                )
+            }
+
+            protected fun onBindViewHolder(@NonNull holder: ChatHolder, position: Int, @NonNull model: Chat?) {
+                holder.bind(model)
+            }
+
+            fun onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+                mEmptyListMessage.setVisibility(if (getItemCount() === 0) View.VISIBLE else View.GONE)
+            }
+        }
+    }
+
+     */
+
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
             it?.let {
                 // update the list in the adapter with the new challenge list
-                challengeListAdapter.userChallenges = it
+                overviewAdapter.activeChallenges = it
             }
         })
 
@@ -92,6 +143,20 @@ class OverviewFragment : Fragment() {
                 overviewViewModel.doneShowingSnackbar()
             }
         })
+    }
+
+    private fun showChallengeDetails(challenge: BaseChallenge) {
+        //Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
+
+        val action = OverviewFragmentDirections.actionOverviewToDetail(
+            id = challenge.challengeId,
+            title = challenge.title,
+            description = challenge.description,
+            type = challenge.type
+        )
+
+        // navigate to another fragment on click
+        requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     private fun setupSwipeListener() {
@@ -110,18 +175,18 @@ class OverviewFragment : Fragment() {
                     setTitle("Challenge löschen?")
                     setPositiveButton("Ja") { _, _ ->
                         // remove this item
-                        overviewViewModel.removeChallenge(challengeListAdapter.getChallengeAt(viewHolder.adapterPosition))
+                        overviewViewModel.removeChallenge(overviewAdapter.getChallengeAt(viewHolder.adapterPosition))
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     setNegativeButton("Nein") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
-                        challengeListAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                        overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
                         Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()
                 }
             }
 
-        }).attachToRecyclerView(recyclerview_challenges)
+        }).attachToRecyclerView(recyclerview_overview)
     }
 }
