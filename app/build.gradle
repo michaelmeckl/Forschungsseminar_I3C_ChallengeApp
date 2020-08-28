@@ -58,12 +58,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
     //firebase
-    implementation 'com.google.firebase:firebase-analytics:17.5.0'   // Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'   // Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:19.1.0' // In-App Messaging
     implementation 'com.google.firebase:firebase-functions-ktx:19.0.2'  // Cloud Functions
     implementation 'com.google.firebase:firebase-messaging:20.2.4'  // Cloud Messaging
-    implementation 'com.google.firebase:firebase-firestore:21.5.0'  // Cloud Firestore
-    implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'     // Firebase UI for Firestore
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.6.0'  // Cloud Firestore
+    //implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'     // Firebase UI for Firestore
     //implementation 'com.google.firebase:firebase-database:19.3.1'   // Real-time database
     //implementation 'com.firebaseui:firebase-ui-auth:6.3.0'  // FirebaseUI for Firebase Auth
 
