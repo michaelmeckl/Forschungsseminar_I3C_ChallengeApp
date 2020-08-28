@@ -32,7 +32,7 @@ data class User (
     val registrationToken: String = "",
     var username: String = "",
     //var gender: Gender = Gender.MALE,
-    var level: Int = 0,
+    var level: Int = 1,
     var points: Int = 0,
     var userIcon: String = "",
     var dailyStreakCount: Int = 1,

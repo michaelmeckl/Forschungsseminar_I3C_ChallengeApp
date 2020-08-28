@@ -8,6 +8,7 @@ import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
+import com.example.challengecovid.ui.profile.CharacterSelectFragment
 import kotlinx.android.synthetic.main.activity_character_creation.*
 import timber.log.Timber
 
@@ -26,7 +27,8 @@ class CharacterCreationActivity : AppCompatActivity() {
 
         profile_image.setImageResource(R.drawable.iconfinder_avatar_368_456320_6415359)     // set a default image
         profile_image.setOnClickListener {
-            //TODO: show the icon selection fragment here and return the R.id of the chosen image (s. oben)!
+            //TODO: return the R.id of the chosen image (s. oben)! -> maybe use the profile viewmodel for this?
+            startCharacterSelection()
         }
 
         finish_character_creation_btn.setOnClickListener {
@@ -46,10 +48,7 @@ class CharacterCreationActivity : AppCompatActivity() {
         val newUser = User(
             registrationToken = "hk57gds",      //TODO: get registration token
             username = username,
-            level = 0,
-            points = 0,
-            userIcon = imagePath,
-            dailyStreakCount = 1
+            userIcon = imagePath
         )
 
         // save the user in firestore
@@ -60,6 +59,13 @@ class CharacterCreationActivity : AppCompatActivity() {
         sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
     }
 
+    // TODO navigate to Character Selection
+    private fun startCharacterSelection() {
+        val fragment = CharacterSelectFragment()
+        supportFragmentManager.beginTransaction()
+            .add(android.R.id.content, fragment)        //TODO: to the android content? create a fragment container instead!
+            .commit()
+    }
 
     private fun navigateToMain() {
         val intent = Intent(this@CharacterCreationActivity, MainActivity::class.java)

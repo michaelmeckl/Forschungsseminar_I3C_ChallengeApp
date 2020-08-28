@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 
+//TODO: load the content of the social feed here and only use the local cache later to reduce latency and save bandwith??
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
@@ -41,7 +42,6 @@ class SplashActivity : AppCompatActivity() {
 
         handleIncomingCloudMessages()
 
-        //TODO: loadNewChallengeData()
         showSplashScreen()
     }
 
@@ -58,6 +58,8 @@ class SplashActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
+    //TODO: move this to Utils and provide context -> then use it here and in character select:
+    // val firstrun = checkFirstRun(ctx)
     private fun checkFirstRun() {
         // Get current version code
         val currentVersionCode: Int = BuildConfig.VERSION_CODE
@@ -92,8 +94,6 @@ class SplashActivity : AppCompatActivity() {
         val challengeRepo = RepositoryController.getChallengeRepository()
 
         categoryRepo.saveMultipleCategories(Data.getChallengeCategories())
-
-        //TODO: ist das notwendig?? die system challenges gehören doch eh alle zu den kategorien oder?
         challengeRepo.saveMultipleChallenges(Data.getDailyChallenges())
     }
 
@@ -144,12 +144,6 @@ class SplashActivity : AppCompatActivity() {
 
         // close this activity so the user can't navigate back to it!
         finish()
-    // TODO navigate to Character Selection
-    private fun startCharacterSelection() {
-        val fragment = CharacterSelectFragment()
-        supportFragmentManager.beginTransaction()
-            .add(android.R.id.content, fragment)
-            .commit()
     }
 
     // navigate direct to Main Activity

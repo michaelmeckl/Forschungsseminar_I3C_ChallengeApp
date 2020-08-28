@@ -32,12 +32,6 @@
             app:destination="@id/navigation_category_detail"/>
     </fragment>
 
-    <dialog
-        android:id="@+id/navigation_add_friend"
-        android:name="com.example.challengecovid.ui.profile.AddFriendFragment"
-        android:label="@string/label_add_friend"
-        tools:layout="@layout/popup_add_friend"/>
-
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.challengecovid.ui.profile.ProfileFragment"
@@ -46,9 +40,6 @@
         <action
             android:id="@+id/action_profileFragment_to_editProfileDialog"
             app:destination="@id/navigation_edit_profile" />
-        <action
-            android:id="@+id/action_profileFragment_to_addFriend"
-            app:destination="@id/navigation_add_friend" />
     </fragment>
 
     <fragment
@@ -115,21 +106,10 @@
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 
-    <activity
-        android:id="@+id/nacigation_splash_activity"
-        android:name="com.example.challengecovid.ui.SplashActivity"
-        android:label="SplashActivity" >
-        <action
-            android:id="@+id/action_nacigation_splash_activity_to_navigation_character_select"
-            app:destination="@id/navigation_character_select" />
-    </activity>
     <fragment
         android:id="@+id/navigation_character_select"
-        android:name="com.example.challengecovid.ui.CharacterSelectFragment"
+        android:name="com.example.challengecovid.ui.profile.CharacterSelectFragment"
         android:label="CharacterSelectFragment" >
-        <argument
-            android:name="firstRun"
-            app:argType="string" />
     </fragment>
 
 </navigation>

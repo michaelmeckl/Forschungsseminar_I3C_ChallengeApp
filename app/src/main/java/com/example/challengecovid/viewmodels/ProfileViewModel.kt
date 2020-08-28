@@ -1,97 +1,62 @@
 package com.example.challengecovid.viewmodels
 
-import androidx.lifecycle.LiveData
+import android.app.Application
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.challengecovid.App
+import com.example.challengecovid.Constants
 import com.example.challengecovid.model.User
 import com.example.challengecovid.repository.UserRepository
-import com.example.challengecovid.model.UserChallenge
 import kotlinx.coroutines.*
 
-class ProfileViewModel (private val userRepository: UserRepository): ViewModel() {
+class ProfileViewModel(private val userRepository: UserRepository, application: Application) :
+    AndroidViewModel(application) {
+
     val name = MutableLiveData<String>()
 
-    private var viewModelJob = SupervisorJob()
+    private var currentUserId: String = ""
+    var currentUser = MutableLiveData<User>()
 
-    private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
+    init {
+        val app = App.instance
+        val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-    private var currentUser = MutableLiveData<User>()
+        if (currentUserId == "") {
+            Toast.makeText(app, "Provided user id is not correct!", Toast.LENGTH_LONG).show()
+        }
 
-    val allUsers: LiveData<List<User>> = userRepository.getAllUsers()
+        //currentUser.value = getUser(currentUserId)  //TODO
 
-    private var _showSnackbarEvent = MutableLiveData<Boolean?>()
-
-    val showSnackBarEvent: LiveData<Boolean?>
-        get() = _showSnackbarEvent
-
-    fun sendName(text: String) {
-        name.value = text
+        viewModelScope.launch {
+            currentUser.value = userRepository.getUser(currentUserId)
+        }
     }
 
-    fun insertNewUser(user: User){
-        uiScope.launch {
-            withContext(Dispatchers.IO){
-                userRepository.insertNewUser(user)
+    fun insertNewUser(user: User) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                userRepository.saveNewUser(user)
             }
-            _showSnackbarEvent.value = true
         }
     }
 
     fun getUser(userID: String): User? {
-        //TODO: sind die coroutinen wirklich noch notwendig wenn mit firebase? -> anschauen!
         return runBlocking {
-            val result = async(Dispatchers.IO){
-                userRepository.getUser(userID).value
+            val result = async(Dispatchers.IO) {
+                userRepository.getUser(userID)
             }
-            _showSnackbarEvent.value = true
 
             result.await()
         }
     }
 
-    private fun initializeUser(userID: String) {
-        uiScope.launch {
-            currentUser.value = getUserFromDatabase(userID)
-        }
-    }
-
-    private suspend fun getUserFromDatabase(userID: String): User? {
-        return withContext(Dispatchers.IO) {
-            userRepository.getUser(userID).value
-        }
-    }
-
-    fun updateUser(user: User) = uiScope.launch {
+    fun updateUser(user: User) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             userRepository.updateUser(user)
         }
-        _showSnackbarEvent.value = true
     }
-
-    fun removeUser(user: User) = uiScope.launch {
-        withContext(Dispatchers.IO) {
-            userRepository.deleteUser(user)
-        }
-        _showSnackbarEvent.value = true
-    }
-/*
-    fun updateUserName(userID: String, userName: String) = uiScope.launch {
-        withContext(Dispatchers.IO){
-            userRepository.updateUserName(userID,userName)
-        }
-        _showSnackbarEvent.value = true
-    }
-
-    fun updateUserIcon(userID: String, userIcon: String) = uiScope.launch {
-        withContext(Dispatchers.IO){
-            userRepository.updateUserIcon(userID,userIcon)
-        }
-        _showSnackbarEvent.value = true
-    }
-*/
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
-
 }

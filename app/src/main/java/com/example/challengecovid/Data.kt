@@ -1,12 +1,9 @@
 package com.example.challengecovid
 
-import com.example.challengecovid.App
-import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
 import com.example.challengecovid.model.Difficulty
 
-//TODO: insert this in Firebase on startup if not exists already !!!!!!
 /**
  * Simple data class that returns all pre-generated challenges and categories with whom the db is initially populated.
  */
