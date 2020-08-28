@@ -6,12 +6,15 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.model.ChallengeType
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
 
 class ChallengeDetailFragment: Fragment() {
 
     // get the given navigation arguments lazily
     private val arguments: ChallengeDetailFragmentArgs by navArgs()
+    private val challengeRepository = RepositoryController.getChallengeRepository()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_challenge_detail, container, false)
@@ -21,20 +24,26 @@ class ChallengeDetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (title, description) = arguments
+        val (id, title, description, type) = arguments
 
         challenge_detail_title.text = title
         challenge_detail_description.text = description
 
-        publish_switch.setOnClickListener {
+        if(type == ChallengeType.SYSTEM_CHALLENGE) {
+            // hide the option to publish for system challenges
+            publish_switch.visibility = View.GONE
+        }
 
+        publish_switch.setOnCheckedChangeListener { _, isChecked ->
+            //update the public status of the challenge
+            challengeRepository.updatePublicStatus(id, publicStatus = isChecked)
         }
 
     }
 
     // Create the Share Intent
     private fun getShareIntent() : Intent {
-        val message = "Challenge:\n${arguments.title}\n\n${arguments.description}"
+        val message = "Challenge:\n${arguments.title}\n${arguments.description}"
 
         // Create intent to show the chooser dialog
         return Intent.createChooser(Intent().apply {

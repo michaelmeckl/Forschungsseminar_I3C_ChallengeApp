@@ -9,18 +9,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
-import com.example.challengecovid.adapter.ChallengeFeedClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -150,11 +146,13 @@ class OverviewFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
-        Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
 
         val action = OverviewFragmentDirections.actionOverviewToDetail(
+            id = challenge.challengeId,
             title = challenge.title,
-            description = challenge.description
+            description = challenge.description,
+            type = challenge.type
         )
 
         // navigate to another fragment on click

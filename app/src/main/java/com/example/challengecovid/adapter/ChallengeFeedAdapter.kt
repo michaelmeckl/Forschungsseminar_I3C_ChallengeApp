@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.UserChallenge
-import kotlinx.android.synthetic.main.category_list_item.view.*
 import kotlinx.android.synthetic.main.social_feed_item.view.*
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :

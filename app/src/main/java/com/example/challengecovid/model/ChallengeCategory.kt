@@ -15,8 +15,8 @@ data class ChallengeCategory (
 
 data class ChallengeCategory (
     val categoryId: String = UUID.randomUUID().toString(),
-    val title: String = "",
-    val description: String = "",
-    val categoryIcon: String = "",
+    var title: String = "",
+    var description: String = "",
+    var categoryIcon: String = "",
     val containedChallenges: List<Challenge> = emptyList()
 )

@@ -27,10 +27,10 @@ abstract class BaseChallenge {
 
 abstract class BaseChallenge {
     val challengeId: String = UUID.randomUUID().toString()  //generate a random id
-    abstract val title: String
-    abstract val difficulty: Difficulty
+    abstract var title: String
+    abstract var difficulty: Difficulty
     abstract val type: ChallengeType
-    abstract val description: String
-    abstract val completed: Boolean
-    abstract val duration: Int   // for how long this challenge is available (in days)
+    abstract var description: String
+    abstract var completed: Boolean
+    abstract var duration: Int   // for how long this challenge is available (in days)
 }

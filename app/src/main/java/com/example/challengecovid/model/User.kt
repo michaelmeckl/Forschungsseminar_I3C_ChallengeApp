@@ -30,12 +30,12 @@ data class User (
 data class User (
     val userId: String = UUID.randomUUID().toString(),
     val registrationToken: String = "",
-    val username: String = "",
-    //val gender: Gender = Gender.MALE,
-    val level: Int = 0,
-    val points: Int = 0,
-    val userIcon: String = "",
-    val dailyStreakCount: Int = 1,
+    var username: String = "",
+    //var gender: Gender = Gender.MALE,
+    var level: Int = 0,
+    var points: Int = 0,
+    var userIcon: String = "",
+    var dailyStreakCount: Int = 1,
     val activeChallenges: List<BaseChallenge> = emptyList()
     //val friends: List<User> = emptyList()
 )

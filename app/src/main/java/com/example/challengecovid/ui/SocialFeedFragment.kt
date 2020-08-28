@@ -16,6 +16,7 @@ import com.example.challengecovid.viewmodels.FeedViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_social_feed.*
 
+//FIXME: aus irgendeinem grund hängt er sich hier ständig auf?????????????????????????????????????????????????????????????
 class SocialFeedFragment : Fragment() {
 
     private lateinit var feedViewModel: FeedViewModel
@@ -64,7 +65,8 @@ class SocialFeedFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: UserChallenge) {
-        //TODO:
+        //TODO: make this acceptible? or show a detail with everybody that is already in that challenge and a button to accept?
+        // or show the accept button directly in the list?
         Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
     }
 }

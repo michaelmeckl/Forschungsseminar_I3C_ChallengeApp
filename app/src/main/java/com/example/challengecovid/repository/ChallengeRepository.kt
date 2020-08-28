@@ -143,13 +143,13 @@ class ChallengeRepository {
 
     // GET-ALL
     //TODO: is there a better way than infinity loop with delay?
-    fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData {
+    fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {
         // `while(true)` is fine because the `delay` below will cooperate in
         // cancellation if LiveData is not actively observed anymore
         while (true) {
             val allChallenges = fetchPublicChallengesFromFirebase()
             allChallenges?.let { emit(it) }
-            delay(3000)     // refresh for new data every 3 seconds
+            delay(2000)     // refresh for new data every 2 seconds
         }
     }
 
@@ -157,7 +157,7 @@ class ChallengeRepository {
         return try {
             val challengeList: MutableList<UserChallenge> = ArrayList()
             val docSnapshots = userChallengeCollection
-                .whereEqualTo("isPublic", true)   // get the user challenges that are public
+                .whereEqualTo("public", true)   // get the user challenges that are public
                 .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
                 .get().await().documents    // wait for completion and convert them to document snapshots
 
@@ -286,6 +286,16 @@ class ChallengeRepository {
             .set(userChallenge)
             .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully updated!") }
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating user challenge: $e") }
+    }
+
+    //UPDATE
+    fun updatePublicStatus(challengeId: String, publicStatus: Boolean) {
+        val challengeRef = userChallengeCollection.document(challengeId)
+
+        challengeRef
+            .update("public", publicStatus)
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") }
     }
 
     //DELETE
