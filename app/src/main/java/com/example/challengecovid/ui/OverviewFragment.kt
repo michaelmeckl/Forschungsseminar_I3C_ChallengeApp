@@ -9,9 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
@@ -148,8 +150,15 @@ class OverviewFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
-        //TODO:
         Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
+
+        val action = OverviewFragmentDirections.actionOverviewToDetail(
+            title = challenge.title,
+            description = challenge.description
+        )
+
+        // navigate to another fragment on click
+        requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 
     private fun setupSwipeListener() {

@@ -40,8 +40,8 @@ class SocialFeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         feedAdapter = ChallengeFeedAdapter(object : ChallengeFeedClickListener {
-            override fun onChallengeClick(itemView: View, challenge: UserChallenge) {
-                showChallengeDetails(itemView, challenge)
+            override fun onChallengeClick(challenge: UserChallenge) {
+                showChallengeDetails(challenge)
             }
         })
 
@@ -63,7 +63,7 @@ class SocialFeedFragment : Fragment() {
         })
     }
 
-    private fun showChallengeDetails(itemView: View, challenge: UserChallenge) {
+    private fun showChallengeDetails(challenge: UserChallenge) {
         //TODO:
         Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
     }

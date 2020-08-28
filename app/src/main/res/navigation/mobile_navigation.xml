@@ -15,6 +15,11 @@
             app:destination="@id/navigation_create_challenge"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_challenge_detail"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"/>
     </fragment>
 
     <fragment
@@ -67,6 +72,19 @@
         <argument
             android:name="imageName"
             app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_challenge_detail"
+        android:name="com.example.challengecovid.ui.ChallengeDetailFragment"
+        android:label="Detail Ansicht"
+        tools:layout="@layout/fragment_challenge_detail">
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
     </fragment>
 
     <fragment

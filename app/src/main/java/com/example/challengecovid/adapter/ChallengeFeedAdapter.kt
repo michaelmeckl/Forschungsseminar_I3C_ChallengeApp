@@ -58,7 +58,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
 
             //set an item click listener
             itemView.setOnClickListener {
-                clickListener.onChallengeClick(it.feed_item_title, data)
+                clickListener.onChallengeClick(data)
             }
         }
 
@@ -75,7 +75,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
 
 // ClickListener - Interface for the recycler view items
 interface ChallengeFeedClickListener {
-    fun onChallengeClick(itemView: View, challenge: UserChallenge)
+    fun onChallengeClick(challenge: UserChallenge)
 }
 
 
