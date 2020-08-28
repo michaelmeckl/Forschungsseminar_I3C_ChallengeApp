@@ -25,6 +25,8 @@
     <string name="no_internet_warning">Neue Daten können nicht geladen werden ohne Internet! Überprüfe deine Verbindung und versuch es nochmal.</string>
     <string name="share_title">Teile diese Challenge</string>
 
+    <string name="username_placeholder">Anonym</string>
+
     <string name="edit_profile">Profil bearbeiten</string>
     <string name="save_changes">Änderungen speichern</string>
     <string name="add_friend">Anfrage abschicken</string>

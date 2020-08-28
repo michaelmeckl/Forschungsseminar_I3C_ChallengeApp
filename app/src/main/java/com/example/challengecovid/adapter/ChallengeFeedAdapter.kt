@@ -6,13 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.social_feed_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
     RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
@@ -45,25 +44,28 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             itemView.feed_item_title.text = data.title
             itemView.feed_item_description.text = data.description
 
-            // get the creator of this challenge
-            var creator: User? = null
-
-            //TODO: this doesn't show an image right now!
+            // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {
-                val user = userRepository.getUser(data.creatorId)
-                creator = user
-            }
+                val creator = userRepository.getUser(data.creatorId)
 
-            if (creator != null) {
-                // set icon and name of the user that created that challenge
-                itemView.feed_item_creator.text = creator?.username
-                val userIcon = itemView.context.resources.getIdentifier(creator?.userIcon, "drawable", itemView.context.packageName)
-                itemView.feed_creator_icon.setImageResource(userIcon)
+                // set the text on the Main / UI thread
+                withContext(Dispatchers.Main) {
+                    if (creator != null) {
+                        // set icon and name of the user that created that challenge
+                        itemView.feed_item_creator.text = creator.username
+                        val userIcon = itemView.context.resources.getIdentifier(
+                            creator.userIcon,
+                            "drawable",
+                            itemView.context.packageName
+                        )
+                        itemView.feed_creator_icon.setImageResource(userIcon)
 
-            } else {
-                // set default userIcon and name
-                itemView.feed_item_creator.text = "Anonym"
-                itemView.feed_creator_icon.setImageResource(R.drawable.ic_person)
+                    } else {
+                        // set default userIcon and name
+                        itemView.feed_item_creator.text = itemView.resources.getString(R.string.username_placeholder)
+                        itemView.feed_creator_icon.setImageResource(R.drawable.ic_person)
+                    }
+                }
             }
 
             //set an item click listener

@@ -27,6 +27,8 @@
     <string name="no_internet_warning">No new data can be loaded without a connection! Please check your internet connection and try again.</string>
     <string name="share_title">Share this challenge via</string>
 
+    <string name="username_placeholder">Anonymous</string>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
