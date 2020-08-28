@@ -5,14 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.*
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -57,7 +53,7 @@ class UserRepository {
         }
     }
 
-    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.Main) {
+    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.IO) {
         Timber.tag("FIREBASE userId in repo").d(userId)
         while (true) {
             val challengesForUser = fetchChallengesForUser(userId)
@@ -122,26 +118,6 @@ class UserRepository {
             }.addOnFailureListener { e ->
                 Toast.makeText(App.instance, "Failed to add to active challenges: $e", Toast.LENGTH_SHORT).show()
             }
-    }
-
-    //CREATE-MULTIPLE
-    fun saveMultipleUsers(userList: List<User>) {
-        //use a batched write to insert all at the same time to prevent possible inconsistencies!
-        val batchWrite = FirebaseFirestore.getInstance().batch()
-
-        for (user in userList) {
-            // create a new reference for this user
-            val docRef = userCollection.document(user.userId)
-            // and add it to the WriteBatch
-            batchWrite.set(docRef, user)
-        }
-
-        // commit the batch (i.e. write all to the db)
-        batchWrite.commit().addOnSuccessListener {
-            Timber.tag(USER_REPO_TAG).d("User Batch inserted successfully!")
-        }.addOnFailureListener { e ->
-            Timber.tag(USER_REPO_TAG).d("Failed to insert user batch: $e!")
-        }
     }
 
     //UPDATE
@@ -233,7 +209,7 @@ class UserRepository {
                     }
                 }
 
-                //TODO Oder so:
+                //Oder so:
                 /*
                 for (dc in snapshots.documentChanges) {
                     when (dc.type) {

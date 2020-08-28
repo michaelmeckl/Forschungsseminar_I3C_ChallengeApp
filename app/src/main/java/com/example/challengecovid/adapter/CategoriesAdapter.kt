@@ -10,9 +10,9 @@ import com.example.challengecovid.R
 import com.example.challengecovid.model.ChallengeCategory
 import kotlinx.android.synthetic.main.category_list_item.view.*
 
-//TODO: von : FirestoreAdapter<RatingAdapter.ViewHolder>(query) erben lassen?
-/* like so:
-
+//von : FirestoreAdapter<RatingAdapter.ViewHolder>(query) erben lassen?
+//like so:
+/*
     in onCreateView:
 
         adapter = object : RestaurantAdapter(query, this@MainActivity) {

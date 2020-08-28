@@ -4,12 +4,12 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
-import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -19,8 +19,7 @@ import timber.log.Timber
 class ChallengeRepository {
 
     // reference to the root default challenge collection in firestore
-    private val challengeCollection =
-        FirebaseFirestore.getInstance().collection("challenges")  //TODO: eigtl. in categories
+    private val challengeCollection = FirebaseFirestore.getInstance().collection("challenges")
 
     // reference to the root userChallenge collection in firestore
     private val userChallengeCollection = FirebaseFirestore.getInstance().collection("userChallenges")
@@ -37,7 +36,7 @@ class ChallengeRepository {
      */
 
     // GET-ALL
-    fun getAllChallenges(): LiveData<List<Challenge>> = liveData(Dispatchers.Main) {
+    fun getAllChallenges(): LiveData<List<Challenge>> = liveData(Dispatchers.IO) {
         while (true) {
             val allChallenges = fetchChallengesFromFirebase()
             allChallenges?.let { emit(it) }
@@ -65,14 +64,9 @@ class ChallengeRepository {
     }
 
     //GET
-    fun getChallenge(id: String): Challenge? = runBlocking(Dispatchers.Main) {
-        // use an async coroutine builder to defer the work to the IO-Thread and return a value to this scope
-        val deferredResult = async(Dispatchers.IO) {
-            val challengeSnapshot = challengeCollection.document(id).get().await()
-            return@async challengeSnapshot.toObject(Challenge::class.java)
-        }
-        // return the completed result
-        deferredResult.await()
+    suspend fun getChallenge(id: String): Challenge? {
+        val challengeSnapshot = challengeCollection.document(id).get().await()
+        return challengeSnapshot.toObject(Challenge::class.java)
     }
 
 
@@ -122,18 +116,6 @@ class ChallengeRepository {
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
     }
 
-    //DELETE
-    /*
-    fun deleteChallenge(challenge: Challenge) {
-        val challengeRef = challengeCollection.document(challenge.challengeId)
-
-        challengeRef.delete()
-            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully deleted!") }
-            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting Challenge: $e") }
-    }
-
-     */
-
 
     /**
      * ################################################
@@ -142,7 +124,6 @@ class ChallengeRepository {
      */
 
     // GET-ALL
-    //TODO: is there a better way than infinity loop with delay?
     fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {
         // `while(true)` is fine because the `delay` below will cooperate in
         // cancellation if LiveData is not actively observed anymore
@@ -214,7 +195,7 @@ class ChallengeRepository {
         return try {
             val challengeList: MutableList<Challenge> = ArrayList()
             val docSnapshots = challengeCollection
-                //TODO.whereEqualTo("creatorId", userId)   // get the system challenges for this user
+                .whereEqualTo("creatorId", userId)   // get the system challenges for this user
                 .orderBy("acceptedDate", Query.Direction.DESCENDING)
                 .get().await().documents
 
@@ -235,12 +216,9 @@ class ChallengeRepository {
      */
 
     //GET
-    fun getUserChallenge(id: String): UserChallenge? = runBlocking(Dispatchers.Main) {
-        val deferredResult = async(Dispatchers.IO) {
-            val challengeSnapshot = userChallengeCollection.document(id).get().await()
-            return@async challengeSnapshot.toObject(UserChallenge::class.java)
-        }
-        deferredResult.await()
+    suspend fun getUserChallenge(id: String): UserChallenge? {
+        val challengeSnapshot = userChallengeCollection.document(id).get().await()
+        return challengeSnapshot.toObject(UserChallenge::class.java)
     }
 
     //CREATE
@@ -254,28 +232,6 @@ class ChallengeRepository {
         }
 
         return challengeReference.id
-    }
-
-    //CREATE-MULTIPLE
-    fun saveMultipleUserChallenges(userChallengeList: List<UserChallenge>) {
-        //use a batched write to insert all at the same time to prevent possible inconsistencies!
-        val batchWrite = FirebaseFirestore.getInstance().batch()
-
-        for (challenge in userChallengeList) {
-            // create a new reference for this challenge
-            val docRef = userChallengeCollection.document(challenge.challengeId)
-            // and add it to the WriteBatch
-            batchWrite.set(docRef, challenge)
-        }
-
-        // commit the batch (i.e. write all to the db)
-        batchWrite.commit().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Timber.tag(CHALLENGE_REPO_TAG).d("Writing user Challenge Batch was successful!")
-            } else {
-                Timber.tag(CHALLENGE_REPO_TAG).d("Failed to write user challenge batch!")
-            }
-        }
     }
 
     //UPDATE

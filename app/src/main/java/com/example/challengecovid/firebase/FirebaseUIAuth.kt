@@ -1,13 +1,7 @@
 package com.example.challengecovid.firebase
 
-import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
-import com.example.challengecovid.R
-import com.google.firebase.ktx.Firebase
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Demonstrate authentication using the FirebaseUI-Android library. This activity demonstrates

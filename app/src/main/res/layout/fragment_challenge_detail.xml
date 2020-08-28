@@ -29,12 +29,12 @@
         app:layout_constraintTop_toBottomOf="@+id/challenge_detail_title"
         tools:text="Challenge Description jflalakjflajlk jalfjlaj lfjalafjklaj fjlajljfl fjlajflajlaj" />
 
+    <!-- TODO this needs to be improved! looks shitty -->
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/publish_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
-        android:background="@android:color/white"
         android:checked="false"
         android:text="Challenge veröffentlichen:  "
         android:textOn="Öffentlich"

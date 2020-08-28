@@ -44,7 +44,7 @@ class CategoryDetailFragment : Fragment() {
     }
 
 
-    //TODO: add this to top: EventListener<DocumentSnapshot>
+    //TODO: add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
     /**
      * Listener for the Restaurant document ([.restaurantRef]).
      */

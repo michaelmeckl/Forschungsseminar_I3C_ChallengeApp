@@ -29,8 +29,6 @@ class SocialFeedFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_social_feed, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
-        //val userRepository = RepositoryController.getUserRepository()
-        //val application = requireNotNull(this.activity).application
         feedViewModel = getViewModel { FeedViewModel(challengeRepository) }
 
         return root

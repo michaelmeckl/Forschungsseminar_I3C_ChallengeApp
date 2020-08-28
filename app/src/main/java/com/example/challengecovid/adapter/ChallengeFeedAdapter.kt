@@ -44,11 +44,14 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             itemView.feed_item_title.text = data.title
             itemView.feed_item_description.text = data.description
 
+            //FIXME: eigentlich sollte das im viewmodel passieren und nicht im Adapter
+            // -> schlechte Performance und keine saubere Trennung von View und Logic!
+
             // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {
                 val creator = userRepository.getUser(data.creatorId)
 
-                // set the text on the Main / UI thread
+                // switch to the Main thread to update the UI
                 withContext(Dispatchers.Main) {
                     if (creator != null) {
                         // set icon and name of the user that created that challenge

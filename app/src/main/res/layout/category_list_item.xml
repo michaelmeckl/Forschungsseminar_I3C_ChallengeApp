@@ -34,12 +34,11 @@
             tools:text="Challenge Title:"
             />
 
-        <!-- TODO add a real placeholder drawable -->
-
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             app:layout_constraintTop_toBottomOf="@id/item_title"

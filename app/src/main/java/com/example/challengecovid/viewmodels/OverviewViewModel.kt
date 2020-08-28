@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import com.example.challengecovid.App
 import com.example.challengecovid.Constants
 import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
@@ -18,6 +17,7 @@ import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -52,11 +52,7 @@ class OverviewViewModel(
 
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
-    private val allUserChallenges: MutableLiveData<List<UserChallenge>> by lazy { MutableLiveData() }
-    private val allSystemChallenges: MutableLiveData<List<Challenge>> by lazy { MutableLiveData() }
-
     private var currentUserId: String = ""
-
     var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
 
     init {
@@ -115,7 +111,9 @@ class OverviewViewModel(
     }
 
     private fun initializeChallenge(challengeID: String) {
-        currentChallenge.value = challengeRepository.getUserChallenge(challengeID)
+        uiScope.launch {
+            currentChallenge.value = challengeRepository.getUserChallenge(challengeID)
+        }
     }
 
     fun updateChallenge(userChallenge: UserChallenge) {
@@ -125,7 +123,7 @@ class OverviewViewModel(
 
     fun removeChallenge(challenge: BaseChallenge) {
         if(challenge.type == ChallengeType.USER_CHALLENGE) {
-            //TODO: so nicht:
+            //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
             // challengeRepository.deleteUserChallenge(challenge as? UserChallenge) //TODO: löscht das dann auch aus social??
             userRepository.removeActiveChallenge(challenge, currentUserId)
         }

@@ -27,15 +27,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/feed_item_description"
-            tools:text="Titel Test Test Titel Titel Test Test Test" />
+            tools:text="Titel Test Test Titel Titel Test TEST Test Test" />
 
         <TextView
             android:id="@+id/feed_item_description"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/creator_icon"
-            app:layout_constraintEnd_toStartOf="@+id/creator_icon"
+            app:layout_constraintBottom_toTopOf="@+id/feed_creator_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/feed_item_title"
             tools:text="Beschreibung Hier steht ein langer Beispieltext um zu prüfen ob das Layout auch wirklich so funktioniert wie es soll" />
@@ -45,11 +45,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintEnd_toStartOf="@+id/feed_creator_icon"
             app:layout_constraintTop_toBottomOf="@+id/feed_item_description"
             tools:text="von Hans Jürgen"/>
 
+        <!-- TODO: set custom heigth and withd instead of wrap Content? -->
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/feed_creator_icon"
             android:layout_width="wrap_content"
