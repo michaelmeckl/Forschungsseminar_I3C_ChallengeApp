@@ -17,6 +17,21 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/challenge_item" />
 
+
+<!--    TODO: Man könnte hier noch vllt zusätzlich ein Icon hinklatschen wenn Zeit übrig -->
+    <TextView
+        android:id="@+id/empty_recyclerview_overview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        android:gravity="center"
+        android:visibility="gone"
+        android:clipToPadding="false"
+        android:padding="4dp"
+        android:text="@string/empty_recyclerview_overview_message" />
+
+
     <!--    <TextView-->
     <!--        android:id="@+id/text_challenges"-->
     <!--        android:layout_width="match_parent"-->
