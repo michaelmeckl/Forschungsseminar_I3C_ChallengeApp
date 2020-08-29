@@ -1,13 +1,11 @@
 package com.example.challengecovid.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
-import com.example.challengecovid.createShareIntent
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 
 class CategoryDetailFragment : Fragment() {
@@ -41,85 +39,42 @@ class CategoryDetailFragment : Fragment() {
         detail_description.text = description
     }
 
-    // Create the Share Intent
-    private fun getShareIntent() : Intent {
-        val message = "Challenge:\n${arguments.title}\n\n${arguments.description}"
-
-        // Create intent to show the chooser dialog
-        return Intent.createChooser(Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, message)
-            type = "text/plain"
-        },  requireActivity().getString(R.string.share_title))
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()    // don't show the main menu in this fragment!
-        inflater.inflate(R.menu.share_menu, menu)   // instead show a custom menu here
-
-        // decide dynamically if the share icon should be shown by checking if the activity resolves
-        if (null == getShareIntent().resolveActivity(requireActivity().packageManager)) {
-            // hide the menu item if it doesn't resolve
-            menu.findItem(R.id.action_share)?.isVisible = false
-        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_share -> {
-                startActivity(getShareIntent())
-                true
+
+    //TODO: add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
+    /**
+     * Listener for the Restaurant document ([.restaurantRef]).
+     */
+    /*
+    override fun onEvent(snapshot: DocumentSnapshot?, e: FirebaseFirestoreException?) {
+        if (e != null) {
+            Log.w(TAG, "restaurant:onEvent", e)
+            return
+        }
+
+        snapshot?.let {
+            val restaurant = snapshot.toObject<Restaurant>()
+            if (restaurant != null) {
+                onRestaurantLoaded(restaurant)
             }
-            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    /*
-    // TODO: sort of a "hack" for fullscreen dialog fragment
-    // see https://stackoverflow.com/questions/12478520/how-to-set-dialogfragments-width-and-height
-    override fun onResume() {
-        // Get existing layout params for the window
-        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        // Assign window properties to fill the parent
-        params.width = WindowManager.LayoutParams.MATCH_PARENT
-        params.height = WindowManager.LayoutParams.MATCH_PARENT
-        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
-        // Call super onResume after sizing
-        super.onResume()
+    private fun onRestaurantLoaded(restaurant: Restaurant) {
+        binding.restaurantName.text = restaurant.name
+        binding.restaurantRating.rating = restaurant.avgRating.toFloat()
+        binding.restaurantNumRatings.text = getString(R.string.fmt_num_ratings, restaurant.numRatings)
+        binding.restaurantCity.text = restaurant.city
+        binding.restaurantCategory.text = restaurant.category
+        binding.restaurantPrice.text = RestaurantUtil.getPriceString(restaurant)
+
+        // Background image
+        Glide.with(binding.restaurantImage.context)
+            .load(restaurant.photo)
+            .into(binding.restaurantImage)
     }
-     */
-
-    /*
-    private fun startEnterTransitionAfterLoadingImage(imageAddress: Int, imageView: ImageView) {
-        Glide.with(this)
-            .load(imageAddress)
-            .circleCrop()
-            //.dontTransform()
-            .dontAnimate()
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: com.bumptech.glide.request.target.Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    startPostponedEnterTransition()
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: com.bumptech.glide.request.target.Target<Drawable>,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    startPostponedEnterTransition()
-                    return false
-                }
-            })
-            .into(imageView)
-    }
-
-     */
+    */
 }

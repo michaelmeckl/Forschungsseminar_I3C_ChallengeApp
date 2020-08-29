@@ -11,6 +11,8 @@ import com.example.challengecovid.model.UsersForChallenge
 @Dao
 interface RelationshipsDao {
 
+    /*
+
     // This needs to be a transaction as there are 2 separate queries that are performed under the hood.
     // @Transaction performs them both atomically to prevent any possible inconsistencies.
     @Transaction
@@ -29,5 +31,7 @@ interface RelationshipsDao {
     @Transaction
     @Query("SELECT * FROM challenge_table")
     suspend fun getUsersForChallenge(): List<UsersForChallenge>
+
+     */
 
 }

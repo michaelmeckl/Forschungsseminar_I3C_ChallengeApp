@@ -1,6 +1,5 @@
 package com.example.challengecovid.ui
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,32 +11,25 @@ import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.TransitionInflater
 import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.Utils
 import com.example.challengecovid.adapter.CategoriesAdapter
 import com.example.challengecovid.adapter.CategoryClickListener
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.CategoryRepository
 import com.example.challengecovid.model.ChallengeCategory
 import com.example.challengecovid.viewmodels.CategoryViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import kotlinx.android.synthetic.main.fragment_challenges.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.android.synthetic.main.fragment_categories.*
 
-class ChallengesFragment : Fragment() {
+class CategoriesFragment : Fragment() {
 
     private lateinit var categoryViewmodel: CategoryViewModel
     private lateinit var categoriesAdapter: CategoriesAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_challenges, container, false)
+        val root = inflater.inflate(R.layout.fragment_categories, container, false)
 
-        // get a database instance
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-
-        // init the datasource (repository)
-        val categoryRepository = CategoryRepository(db)
+        // get the datasource (repository)
+        val categoryRepository = RepositoryController.getCategoryRepository()
 
         // init viewmodel with datasource
         categoryViewmodel = getViewModel { CategoryViewModel(categoryRepository) }
@@ -59,12 +51,13 @@ class ChallengesFragment : Fragment() {
         val numberOfColumns = this.context?.let { Utils.calculateNumberOfColumns(it) } ?: DEFAULT_NUMBER_COLUMNS
 
         // setup the Grid Layout with the recycler adapter
-        //FIXME: this leaks memory for some reason
         recycler_category_list.apply {
             setHasFixedSize(true) //can improve performance if changes in content do not change the layout size of the RecyclerView
             adapter = categoriesAdapter
             layoutManager = GridLayoutManager(activity, numberOfColumns)
 
+
+            //FIXME: this leaks memory for some reason and shows the overview fragment for a blink at first
             // postpone the transitions to await loading of all list items before the shared element transitions returns
             // (otherwise the transition would only work on Exit but not on Return to this view!)
             postponeEnterTransition()
@@ -90,7 +83,7 @@ class ChallengesFragment : Fragment() {
 
     private fun showCategoryDetails(itemView: View, category: ChallengeCategory) {
         val extras = FragmentNavigatorExtras(itemView to itemView.transitionName)
-        val action = ChallengesFragmentDirections.actionCategoryToDetail(
+        val action = CategoriesFragmentDirections.actionCategoryToDetail(
             title = category.title,
             description = category.description,
             imageName = category.categoryIcon

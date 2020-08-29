@@ -21,6 +21,17 @@
 #}
 #-dontwarn com.bumptech.glide.load.resource.bitmap.VideoDecoder
 
+# for coroutines:
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keepnames class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
+-keepnames class kotlinx.coroutines.android.AndroidDispatcherFactory {}
+
+-keep class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keep class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keep class kotlinx.coroutines.android.AndroidExceptionPreHandler {}
+-keep class kotlinx.coroutines.android.AndroidDispatcherFactory {}
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

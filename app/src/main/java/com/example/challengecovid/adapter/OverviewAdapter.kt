@@ -7,21 +7,21 @@ import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
-import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.model.BaseChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
 import timber.log.Timber
 
-class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListener) : RecyclerView.Adapter<UserChallengeAdapter.ChallengeViewHolder>() {
+class OverviewAdapter(private val clickListener: ChallengeClickListener) :
+    RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
 
-
-    var userChallenges = listOf<UserChallenge>()
+    var activeChallenges = listOf<BaseChallenge>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
 
-    fun getChallengeAt(position: Int): UserChallenge {
-        return userChallenges[position]
+    fun getChallengeAt(position: Int): BaseChallenge {
+        return activeChallenges[position]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChallengeViewHolder {
@@ -29,19 +29,20 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
     }
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
-        holder.bind(userChallenges[position], clicklistener)
+        holder.bind(activeChallenges[position], clickListener)
     }
 
-    override fun getItemCount() = userChallenges.size
+    override fun getItemCount() = activeChallenges.size
 
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(userChallenge: UserChallenge, clicklistener: UserChallengeOnClickListener) {
-            itemView.name_challenge.text = userChallenge.title
-            itemView.xp_challenge.text= String.format("%s XP", userChallenge.difficulty.points)
-            itemView.description_challenge.text = userChallenge.description
-            //itemView.icon_challenge.setImageResource(userChallenge.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
-            if (userChallenge.completed) {
+        fun bind(data: BaseChallenge, clickListener: ChallengeClickListener) {
+            itemView.name_challenge.text = data.title
+            itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
+            itemView.description_challenge.text = data.description
+            //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+
+            if (data.completed) {
                 Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as CardView
 
@@ -51,8 +52,9 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
                 cardView.checkmark_completed_challenge.visibility = View.VISIBLE
             }
 
-            itemView.setOnClickListener{
-                clicklistener.onItemClick(userChallenge)
+            //set an item click listener
+            itemView.setOnClickListener {
+                clickListener.onChallengeClick(data)
             }
         }
 
@@ -65,10 +67,11 @@ class UserChallengeAdapter(private val clicklistener: UserChallengeOnClickListen
             }
         }
     }
-    interface UserChallengeOnClickListener {
-        fun onItemClick(userChallenge: UserChallenge)
-    }
+}
 
+// ClickListener - Interface for the recycler view items
+interface ChallengeClickListener {
+    fun onChallengeClick(challenge: BaseChallenge)
 }
 
 

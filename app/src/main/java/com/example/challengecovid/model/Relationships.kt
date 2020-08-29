@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
+// Room Relationships Model
 //See https://developer.android.com/training/data-storage/room/relationships#kotlin
 
 /**
@@ -49,8 +50,6 @@ data class ChallengesInCategory(
     val associatedChallenges: List<Challenge>  // a challenge category must have at least one challenge belonging to it so it can't be null
 )
 
-
-//TODO: are the relationships below even necessary?? we only need to know if challenge was completed or?
 
 // 1 - (optional) many - relationship between a user and system challenges
 data class ChallengesForUser(

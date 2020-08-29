@@ -8,6 +8,7 @@ import com.example.challengecovid.model.User
 @Dao
 interface UserDao : BaseDao<User> {
 
+    /*
     @Query("SELECT * from user_table WHERE userId = :key")
     fun getUser(key: String): LiveData<User>
 
@@ -17,5 +18,7 @@ interface UserDao : BaseDao<User> {
 
     @Query("SELECT * FROM user_table")
     fun getAllUsers(): LiveData<List<User>>
+
+     */
 
 }

@@ -30,17 +30,32 @@
         <activity
             android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan">
-            <!--
-            <intent-filter android:label="test_intent">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http"
-                    android:host="www.example.com"
-                    android:pathPrefix="/detail" />
-            </intent-filter>
-            -->
         </activity>
+
+        <activity
+            android:name=".ui.CharacterCreationActivity">
+        </activity>
+
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <!-- default notification channel for firebase cloud messages -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <!-- color and icon for notifications without custom icon or color specified -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_flame" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorSecondary" />
 
         <!--
         <provider

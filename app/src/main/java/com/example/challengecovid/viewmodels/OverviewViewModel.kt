@@ -1,25 +1,36 @@
 package com.example.challengecovid.viewmodels
 
+import android.app.Application
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.App
+import com.example.challengecovid.Constants
+import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
-import kotlinx.coroutines.*
+import com.example.challengecovid.repository.ChallengeRepository
+import com.example.challengecovid.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
  * allows data to survive configuration changes such as screen rotations. In addition, background
  * work such as fetching network results or performing database operations can continue through
  * configuration changes and deliver results after the new Fragment or Activity is available.
- *
- * @param application The application that this viewmodel is attached to, it's safe to hold a
- * reference to applications across rotation since Application is never recreated during actiivty
- * or fragment lifecycle events.
  */
-class OverviewViewModel (private val challengeRepository: ChallengeRepository) : ViewModel() {
+class OverviewViewModel(
+    private val challengeRepository: ChallengeRepository,
+    private val userRepository: UserRepository,
+    application: Application
+) : AndroidViewModel(application) {
 
     /**
      * This is the job for all coroutines started by this ViewModel.
@@ -41,7 +52,21 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
 
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
-    val allChallenges: LiveData<List<UserChallenge>> = challengeRepository.getAllUserChallenges()
+    private var currentUserId: String = ""
+    var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
+
+    init {
+        val app = App.instance
+        val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        if (currentUserId == "") {
+            Toast.makeText(app, "Provided user id is not correct!", Toast.LENGTH_LONG).show()
+        }
+
+        Timber.tag("FIRE userId viewmodel").d(currentUserId)
+        allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+    }
 
     /**
      * Request a toast by setting this value to true.
@@ -66,42 +91,47 @@ class OverviewViewModel (private val challengeRepository: ChallengeRepository) :
 
     /**
      * Add a new challenge to the database.
+    fun addNewChallenge(userChallenge: UserChallenge) {
+    //launch on the main thread because the result affects the UI
+    uiScope.launch {
+    // insert the new challenge on a separate I/O thread that is optimized for room interaction
+    // to avoid blocking the main / UI thread
+    withContext(Dispatchers.IO) {
+    challengeRepository.saveUserChallenge(userChallenge)
+    }
+    _showSnackbarEvent.value = true
+    }
+    }
      */
-    fun insertNewChallenge(userChallenge: UserChallenge) {
-        //launch on the main thread because the result affects the UI
-        uiScope.launch {
-            // insert the new challenge on a separate I/O thread that is optimized for room interaction
-            // to avoid blocking the main / UI thread
-            withContext(Dispatchers.IO) {
-                challengeRepository.insertUserChallenge(userChallenge)
-            }
-            _showSnackbarEvent.value = true
-        }
+
+    fun addNewChallenge(userChallenge: UserChallenge) {
+        challengeRepository.saveNewUserChallenge(userChallenge)
+        userRepository.addActiveChallenge(userChallenge, currentUserId)
+        _showSnackbarEvent.value = true
     }
 
     private fun initializeChallenge(challengeID: String) {
         uiScope.launch {
-            currentChallenge.value = getUserChallengeFromDatabase(challengeID)
+            currentChallenge.value = challengeRepository.getUserChallenge(challengeID)
         }
     }
 
-    private suspend fun getUserChallengeFromDatabase(challengeID: String): UserChallenge? {
-        return withContext(Dispatchers.IO) {
-            challengeRepository.getUserChallenge(challengeID).value
-        }
-    }
-
-    fun updateChallenge(userChallenge: UserChallenge) = uiScope.launch {
-        withContext(Dispatchers.IO) {
-            challengeRepository.updateUserChallenge(userChallenge)
-        }
+    fun updateChallenge(userChallenge: UserChallenge) {
+        challengeRepository.updateUserChallenge(userChallenge)
         _showSnackbarEvent.value = true
     }
 
-    fun removeChallenge(userChallenge: UserChallenge) = uiScope.launch {
-        withContext(Dispatchers.IO) {
-            challengeRepository.deleteUserChallenge(userChallenge)
+    fun removeChallenge(challenge: BaseChallenge) {
+        if(challenge.type == ChallengeType.USER_CHALLENGE) {
+            //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
+            // challengeRepository.deleteUserChallenge(challenge as? UserChallenge) //TODO: löscht das dann auch aus social??
+            userRepository.removeActiveChallenge(challenge, currentUserId)
         }
+
+        if(challenge.type == ChallengeType.SYSTEM_CHALLENGE) {
+            userRepository.removeActiveChallenge(challenge, currentUserId)
+        }
+
         _showSnackbarEvent.value = true
     }
 

@@ -1,33 +1,24 @@
 package com.example.challengecovid.ui
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.ChallengeRepository
+import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.Difficulty
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_create_new_challenge.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
-import kotlin.random.Random
 
 
 class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedListener {
@@ -49,11 +40,10 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: das repository oder gleich das viewmodel sollte vllt besser übergeben werden statt nochmal neu initialisiert??
-        val application: Application = requireNotNull(this.activity).application
-        val db = ChallengeAppDatabase.getInstance(application, CoroutineScope(Dispatchers.IO))
-        val challengeRepository = ChallengeRepository(db)
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository) }
+        val challengeRepository = RepositoryController.getChallengeRepository()
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
 
         setupSpinner()
 
@@ -161,17 +151,24 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
             selectedChallengeDuration.toFloat()
         }
 
+        val sharedPrefs =
+            activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        // return early if fetching the user id didn't work
+        if (currentUserId == "") return
+
         val newChallenge = UserChallenge(
-            name_create_new_challenge.text.toString(),
-            description_create_new_challenge.text.toString(),
-            Difficulty.MITTEL,
-            false,
-            2,
-            "123456789"     //TODO: hier später die userId des nutzers rein, der diese challenge angelegt hat
+            title = name_create_new_challenge.text.toString(),
+            description = description_create_new_challenge.text.toString(),
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 2,
+            creatorId = currentUserId
         )
 
         Timber.d(newChallenge.toString())
-        overviewViewModel.insertNewChallenge(newChallenge)
+        overviewViewModel.addNewChallenge(newChallenge)
     }
 
 
