@@ -41,13 +41,13 @@ class ChallengeDetailFragment: Fragment() {
 
         // get the saved switch state and set it
         val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE, false) ?: false
+        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
         publish_switch.isChecked = switchState
 
         publish_switch.setOnCheckedChangeListener { _, isChecked ->
             //update the public status of the challenge
             challengeRepository.updatePublicStatus(id, publicStatus = isChecked)
-            sharedPrefs?.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE, isChecked)?.apply()
+            sharedPrefs?.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked)?.apply()
         }
 
     }

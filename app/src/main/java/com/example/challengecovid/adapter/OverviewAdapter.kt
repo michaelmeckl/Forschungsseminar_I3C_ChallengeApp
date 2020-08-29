@@ -42,6 +42,8 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
             itemView.description_challenge.text = data.description
             //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
 
+            //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
+            // ein ui update (z.B durch rotation) macht es wieder richtig ????
             if (data.completed) {
                 Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as? CardView ?: return
