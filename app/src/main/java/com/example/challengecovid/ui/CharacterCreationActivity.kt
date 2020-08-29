@@ -44,12 +44,9 @@ class CharacterCreationActivity : AppCompatActivity() {
             username_edit_field.text.toString()
 
         val newUser = User(
-            registrationToken = "hk57gds",      //TODO: get registration token
+            registrationToken = "TODO",      //TODO: get registration token
             username = username,
-            level = 0,
-            points = 0,
             userIcon = imagePath,
-            dailyStreakCount = 1
         )
 
         // save the user in firestore
