@@ -25,11 +25,14 @@ class CategoryRepository {
 
     // GET-ALL
     fun getAllCategories(): LiveData<List<ChallengeCategory>> = liveData(Dispatchers.IO) {
-        while (true) {
+        //TODO
+        /*while (true) {
             val allCategories = fetchCategoriesFromFirebase()
             allCategories?.let { emit(it) }
             delay(5_000)     // refresh for new data every 5 seconds
-        }
+        }*/
+        val allCategories = fetchCategoriesFromFirebase()
+        allCategories?.let { emit(it) }
     }
 
     private suspend fun fetchCategoriesFromFirebase(): List<ChallengeCategory>? {

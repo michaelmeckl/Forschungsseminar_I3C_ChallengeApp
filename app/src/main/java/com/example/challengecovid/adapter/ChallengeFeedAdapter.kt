@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.social_feed_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
     RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
@@ -47,6 +49,8 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             //FIXME: eigentlich sollte das im viewmodel passieren und nicht im Adapter
             // -> schlechte Performance und keine saubere Trennung von View und Logic!
 
+            //TODO: die liste blinkt ständig wenn neue items geladen werden! -> nur einmal laden?
+
             // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {
                 val creator = userRepository.getUser(data.creatorId)
@@ -70,6 +74,8 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                     }
                 }
             }
+
+
 
             //set an item click listener
             itemView.setOnClickListener {

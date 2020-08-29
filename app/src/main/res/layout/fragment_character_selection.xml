@@ -3,55 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/set_profile_picture"
         android:layout_width="115dp"
         android:layout_height="115dp"
+        android:layout_marginVertical="@dimen/margin_normal"
         android:elevation="2dp"
+        android:src="@drawable/ic_user_icon_default"
+        app:layout_constraintBottom_toTopOf="@+id/image_select_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/set_name"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_user_icon_default" />
+        tools:ignore="ContentDescription" />
 
-    <EditText
-        android:id="@+id/set_name"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/image_select_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_normal"
-        android:paddingBottom="15dp"
-        android:autofillHints="Gib einen Namen ein"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@id/linearLayout_row1"
+        android:layout_marginVertical="@dimen/margin_normal"
+        android:text="Wähle ein Profilbild:"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_row1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/set_profile_picture"
-        tools:ignore="LabelFor" />
+        app:layout_constraintTop_toBottomOf="@id/set_profile_picture" />
 
     <LinearLayout
         android:id="@+id/linearLayout_row1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:orientation="horizontal"
         android:paddingTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout_row2"
-        app:layout_constraintTop_toBottomOf="@id/set_name"
-        >
+        app:layout_constraintTop_toBottomOf="@id/set_profile_picture">
 
         <ImageButton
             android:id="@+id/set_profile_picture_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:background="@drawable/ic_user_man_1"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +56,6 @@
             android:id="@+id/set_profile_picture_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:background="@drawable/ic_user_man_2"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,8 +66,7 @@
             android:id="@+id/set_profile_picture_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_user_woman_1"
+            android:background="@drawable/ic_user_man_3"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -88,8 +80,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:paddingTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/save_profile"
         app:layout_constraintTop_toBottomOf="@id/linearLayout_row1"
@@ -99,20 +89,17 @@
             android:id="@+id/set_profile_picture_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:background="@drawable/ic_user_woman_2"
+            android:background="@drawable/ic_user_woman_1"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.693" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/set_profile_picture_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/ic_user_woman_3"
+            android:background="@drawable/ic_user_woman_2"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -122,8 +109,7 @@
             android:id="@+id/set_profile_picture_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@drawable/ic_user_man_3"
+            android:background="@drawable/ic_user_woman_3"
             android:contentDescription="@string/desc"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -134,11 +120,11 @@
         android:id="@+id/save_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="32dp"
         android:paddingTop="16dp"
         android:text="Änderung sichern"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout_row2" />
 

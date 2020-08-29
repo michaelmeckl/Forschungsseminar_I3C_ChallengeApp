@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
-    private var chosenPicture: String = "ic_user_man_1"
+    private var chosenPicture: String = "ic_user_icon_default"
     private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,33 +47,15 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         set_profile_picture_6.setOnClickListener(this)
 
         save_profile.setOnClickListener {
-            val name = set_name.toString()
-
-            if (isNullOrEmpty(name)) {
-                showEnterNameMessage()
-                return@setOnClickListener
-            }
-
-            updateUser(name)
-            //requireActivity().supportFragmentManager.popBackStack()
+            updateUser()
             dismiss()
         }
     }
 
-    private fun showEnterNameMessage() {
-        Toast.makeText(requireActivity(), "Gib einen Namen ein", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun insertUser(name: String) {
-        val newUser = User(username = name, userIcon = chosenPicture)
-        profileViewModel.insertNewUser(newUser)
-    }
-
-    private fun updateUser(name: String) {
+    private fun updateUser() {
         val currentUser = profileViewModel.currentUser.value
 
         if (currentUser != null) {
-            currentUser.username = name
             currentUser.userIcon = chosenPicture
 
             profileViewModel.updateUser(currentUser)
@@ -92,10 +74,10 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         when (v.id) {
             R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
             R.id.set_profile_picture_2 -> chosenPicture = "ic_user_man_2"
-            R.id.set_profile_picture_3 -> chosenPicture = "ic_user_woman_1"
-            R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_2"
-            R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_3"
-            R.id.set_profile_picture_6 -> chosenPicture = "ic_user_man_3"
+            R.id.set_profile_picture_3 -> chosenPicture = "ic_user_man_3"
+            R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
+            R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_2"
+            R.id.set_profile_picture_6 -> chosenPicture = "ic_user_woman_3"
         }
 
         val resID = resources.getIdentifier(chosenPicture, "drawable", activity?.packageName)

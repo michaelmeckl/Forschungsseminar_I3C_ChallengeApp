@@ -11,10 +11,13 @@ import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeFeedAdapter
 import com.example.challengecovid.adapter.ChallengeFeedClickListener
+import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_social_feed.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class SocialFeedFragment : Fragment() {
 
@@ -29,7 +32,8 @@ class SocialFeedFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_social_feed, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
-        feedViewModel = getViewModel { FeedViewModel(challengeRepository) }
+        val userRepository = RepositoryController.getUserRepository()
+        feedViewModel = getViewModel { FeedViewModel(challengeRepository, userRepository) }
 
         return root
     }

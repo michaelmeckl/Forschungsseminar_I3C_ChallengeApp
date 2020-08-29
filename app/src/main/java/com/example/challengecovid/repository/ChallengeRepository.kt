@@ -127,11 +127,14 @@ class ChallengeRepository {
     fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {
         // `while(true)` is fine because the `delay` below will cooperate in
         // cancellation if LiveData is not actively observed anymore
+        /*
         while (true) {
             val allChallenges = fetchPublicChallengesFromFirebase()
             allChallenges?.let { emit(it) }
-            delay(2000)     // refresh for new data every 2 seconds
-        }
+            delay(10_000)     // refresh for new data every 2 seconds
+        }*/
+        val allChallenges = fetchPublicChallengesFromFirebase()
+        allChallenges?.let { emit(it) }
     }
 
     private suspend fun fetchPublicChallengesFromFirebase(): List<UserChallenge>? {
