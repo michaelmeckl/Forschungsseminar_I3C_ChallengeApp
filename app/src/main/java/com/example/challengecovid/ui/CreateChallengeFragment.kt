@@ -47,7 +47,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
 
         setupSpinner()
 
-        provideMoreInformation()
+//        provideMoreInformation()
 
         button_submit_create_new_challenge.setOnClickListener {
             // check if a name was provided
@@ -64,17 +64,17 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         }
     }
 
-    private fun provideMoreInformation() {
-        // Toast showing more info for duration edittext
-        info_duration_create_challenge.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Gib an, wie viele Tage lang du deine Challenge machen willst. Lass das Feld leer, wenn die Challenge unendlich lang drin bleiben soll",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
-    }
+//    private fun provideMoreInformation() {
+//        // Toast showing more info for duration edittext
+//        info_duration_create_challenge.setOnClickListener {
+//            Toast.makeText(
+//                requireContext(),
+//                "Gib an, wie viele Tage lang du deine Challenge machen willst. Lass das Feld leer, wenn die Challenge unendlich lang drin bleiben soll",
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
+//
+//    }
 
     private fun setupSpinner() {
         // init adapter for difficulty spinner
@@ -143,13 +143,13 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
             allIcons[0] -> challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
         }
 
-        val newchallengeDuration: Float
-        val selectedChallengeDuration = duration_create_new_challenge.text.toString()
-        newchallengeDuration = if (selectedChallengeDuration.isEmpty()) {
-            Float.POSITIVE_INFINITY     //TODO: besserer default als unendlich, vllt sowas wie 7 (Tage)
-        } else {
-            selectedChallengeDuration.toFloat()
-        }
+//        val newchallengeDuration: Float
+//        val selectedChallengeDuration = duration_create_new_challenge.text.toString()
+//        newchallengeDuration = if (selectedChallengeDuration.isEmpty()) {
+//            Float.POSITIVE_INFINITY     //TODO: besserer default als unendlich, vllt sowas wie 7 (Tage)
+//        } else {
+//            selectedChallengeDuration.toFloat()
+//        }
 
         val sharedPrefs =
             activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
