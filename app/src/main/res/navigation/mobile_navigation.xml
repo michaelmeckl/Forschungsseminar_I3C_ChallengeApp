@@ -38,7 +38,7 @@
         android:label="@string/label_profile"
         tools:layout="@layout/fragment_profile">
         <action
-            android:id="@+id/action_profileFragment_to_editProfileDialog"
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/navigation_edit_profile" />
     </fragment>
 
@@ -48,7 +48,7 @@
         android:label="@string/label_edit_profile"
         tools:layout="@layout/popup_edit_profile">
         <action
-            android:id="@+id/action_profile_to_character_select"
+            android:id="@+id/action_edit_profile_to_character_select"
             app:destination="@id/navigation_character_select" />
     </fragment>
 
@@ -106,10 +106,10 @@
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 
-    <fragment
+    <dialog
         android:id="@+id/navigation_character_select"
         android:name="com.example.challengecovid.ui.profile.CharacterSelectFragment"
         android:label="CharacterSelectFragment" >
-    </fragment>
+    </dialog>
 
 </navigation>

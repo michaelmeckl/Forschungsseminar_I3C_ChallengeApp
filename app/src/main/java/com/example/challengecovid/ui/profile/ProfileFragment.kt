@@ -37,12 +37,9 @@ class ProfileFragment : Fragment() {
         currentUser = profileViewModel.currentUser.value ?: return
         currentUserId = currentUser.userId
 
-        // return early if fetching the user id didn't work
-        if (currentUserId == "") return
-
+        //TODO: this doesn't work!
         edit_profile.setOnClickListener {
-            //TODO: this doesn't work!
-            val action = ProfileFragmentDirections.actionProfileFragmentToEditProfileDialog()
+            val action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment()
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
         }
 

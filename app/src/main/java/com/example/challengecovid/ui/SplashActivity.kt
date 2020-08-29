@@ -22,7 +22,6 @@ import timber.log.Timber
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
-    private var firstRun: Boolean = false
 
     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
     // alternativ vllt über firebase in app messaging gut umsetzbar!
@@ -33,10 +32,9 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
-
-        checkFirstRun()
         animateSplashScreen()
 
+        val firstRun = Utils.checkFirstRun(this@SplashActivity)
         // if this is the first start prepopulate the firestore db
         if (firstRun) initDatabase()
 
@@ -56,37 +54,6 @@ class SplashActivity : AppCompatActivity() {
         animatorSet.playTogether(objectAnimator1, objectAnimator2, objectAnimator3)
         animatorSet.duration = 600
         animatorSet.start()
-    }
-
-    //TODO: move this to Utils and provide context -> then use it here and in character select:
-    // val firstrun = checkFirstRun(ctx)
-    private fun checkFirstRun() {
-        // Get current version code
-        val currentVersionCode: Int = BuildConfig.VERSION_CODE
-
-        // Get saved version code
-        val prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
-        val savedVersionCode = prefs.getInt(PREFS_VERSION_CODE_KEY, -1)
-
-        // Check for first run or upgrade
-        when {
-            currentVersionCode == savedVersionCode -> {
-                // This is just a normal run
-                firstRun = false
-                return
-            }
-            savedVersionCode == -1 -> {
-                // This is a new install (or the user cleared the shared preferences)
-                firstRun = true
-            }
-            /*
-            currentVersionCode > savedVersionCode -> {
-                // This is an upgrade; show infos about what has changed since the last version
-            }*/
-        }
-
-        // Update the shared preferences with the current version code
-        prefs.edit().putInt(PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
     }
 
     private fun initDatabase() {

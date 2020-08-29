@@ -9,6 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.challengecovid.ui.SplashActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -33,6 +34,42 @@ object Utils {
         val displayMetrics: DisplayMetrics = context.resources.displayMetrics
         val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
         return (screenWidthDp / columnWidthDp + 0.5).toInt()
+    }
+
+    /**
+     * Checks if this is the first time this app was started. This may happen either because of a (re-)install or because
+     * the apps' data has been deleted on the device.
+     */
+    fun checkFirstRun(context: Context): Boolean {
+        // Get current version code
+        val currentVersionCode: Int = BuildConfig.VERSION_CODE
+
+        // Get saved version code
+        val prefs = context.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val savedVersionCode = prefs.getInt(SplashActivity.PREFS_VERSION_CODE_KEY, -1)
+
+        var isFirstRun = false
+
+        // Check for first run or upgrade
+        when {
+            currentVersionCode == savedVersionCode -> {
+                // This is just a normal run, don't update the shared prefs
+                isFirstRun = false
+                return isFirstRun
+            }
+            savedVersionCode == -1 -> {
+                // This is a new install (or the user cleared the shared preferences)
+               isFirstRun = true
+            }
+            /*
+            currentVersionCode > savedVersionCode -> {
+                // This is an upgrade; show infos about what has changed since the last version
+            }*/
+        }
+
+        // Update the shared preferences with the current version code
+        prefs.edit().putInt(SplashActivity.PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
+        return isFirstRun
     }
 
     /**

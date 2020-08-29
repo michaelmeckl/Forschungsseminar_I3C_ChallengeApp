@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
@@ -15,10 +14,15 @@ import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
-class CharacterSelectFragment : Fragment(), View.OnClickListener {
+class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
-    private lateinit var chosenPicture: String
+    private var chosenPicture: String = "ic_user_man_1"
     private lateinit var profileViewModel: ProfileViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.dialogFullScreen)    // set a custom style to make the dialog fragment bigger
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_character_selection, container, false)
@@ -33,7 +37,7 @@ class CharacterSelectFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val firstRun = TODO()
+        //val firstRun = Utils.checkFirstRun(requireActivity())
 
         set_profile_picture_1.setOnClickListener(this)
         set_profile_picture_2.setOnClickListener(this)
@@ -50,13 +54,9 @@ class CharacterSelectFragment : Fragment(), View.OnClickListener {
                 return@setOnClickListener
             }
 
-            if (firstRun) {
-                insertUser(name)
-                requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()      //TODO: does this work?
-            } else {
-                updateUser(name)
-                requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
-            }
+            updateUser(name)
+            //requireActivity().supportFragmentManager.popBackStack()
+            dismiss()
         }
     }
 

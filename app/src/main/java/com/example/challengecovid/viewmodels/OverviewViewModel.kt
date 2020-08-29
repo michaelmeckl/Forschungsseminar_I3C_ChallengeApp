@@ -53,19 +53,18 @@ class OverviewViewModel(
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
     private var currentUserId: String = ""
-    var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
+    lateinit var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
 
     init {
-        val app = App.instance
-        val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-        if (currentUserId == "") {
-            Toast.makeText(app, "Provided user id is not correct!", Toast.LENGTH_LONG).show()
-        }
-
         Timber.tag("FIRE userId viewmodel").d(currentUserId)
-        allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+        if (currentUserId === "") {
+            Toast.makeText(application, "Provided user id is not correct! Please try to restart!", Toast.LENGTH_LONG).show()
+        } else {
+            allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+        }
     }
 
     /**

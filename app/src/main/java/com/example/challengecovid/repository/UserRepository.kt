@@ -130,6 +130,15 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
     }
 
+    fun updateUserName(name: String, id: String) {
+        val userRef = userCollection.document(id)
+
+        userRef
+            .update("username", name)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Username successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
+    }
+
     //DELETE
     fun deleteUser(user: User) {
         val userRef = userCollection.document(user.userId)

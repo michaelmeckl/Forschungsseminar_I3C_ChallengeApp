@@ -11,6 +11,7 @@ import com.example.challengecovid.Constants
 import com.example.challengecovid.model.User
 import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 class ProfileViewModel(private val userRepository: UserRepository, application: Application) :
     AndroidViewModel(application) {
@@ -18,21 +19,22 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
     val name = MutableLiveData<String>()
 
     private var currentUserId: String = ""
-    var currentUser = MutableLiveData<User>()
+    val currentUser: MutableLiveData<User> by lazy { MutableLiveData<User>() }
 
     init {
         val app = App.instance
         val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
+        Timber.d("userId: $currentUserId")
         if (currentUserId == "") {
-            Toast.makeText(app, "Provided user id is not correct!", Toast.LENGTH_LONG).show()
-        }
+            Toast.makeText(app, "Provided user id is not correct! Please restart!", Toast.LENGTH_LONG).show()
+        } else {
+            //currentUser.value = getUser(currentUserId)  //TODO ?
 
-        //currentUser.value = getUser(currentUserId)  //TODO
-
-        viewModelScope.launch {
-            currentUser.value = userRepository.getUser(currentUserId)
+            viewModelScope.launch {
+                currentUser.value = userRepository.getUser(currentUserId)
+            }
         }
     }
 

@@ -15,6 +15,7 @@ import timber.log.Timber
 
 class CharacterCreationActivity : AppCompatActivity() {
 
+    //TODO: eigentlich sollte hier eher das viemodel und nicht das repo verwendet werden!
     private val userRepo = RepositoryController.getUserRepository()
 
     private var imageResource = R.drawable.iconfinder_avatar_368_456320_6415359
@@ -24,30 +25,25 @@ class CharacterCreationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_character_creation)
 
         Timber.tag("FIREBASE").d("in onCreate in character creation activity")
+        val userId = createUser()
 
-        profile_image.setImageResource(R.drawable.iconfinder_avatar_368_456320_6415359)     // set a default image
+        profile_image.setImageResource(imageResource)     // set a default image
         profile_image.setOnClickListener {
             //TODO: return the R.id of the chosen image (s. oben)! -> maybe use the profile viewmodel for this?
             startCharacterSelection()
         }
 
         finish_character_creation_btn.setOnClickListener {
-            saveUserInDB()
+            updateName(userId)
             navigateToMain()
         }
     }
 
-    private fun saveUserInDB() {
+    private fun createUser(): String {
         val imagePath = App.instance.resources.getResourceEntryName(imageResource)
-
-        val username = if (username_edit_field.text.toString() == "")
-            "Anonym"
-        else
-            username_edit_field.text.toString()
-
         val newUser = User(
             registrationToken = "hk57gds",      //TODO: get registration token
-            username = username,
+            username = "Anonym",
             userIcon = imagePath
         )
 
@@ -57,14 +53,29 @@ class CharacterCreationActivity : AppCompatActivity() {
         // store the generated userId in the shared prefs to be able to access this user later
         val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
+
+        return userId
     }
 
-    // TODO navigate to Character Selection
+    private fun updateName(userId: String) {
+        if (username_edit_field.text.toString() != "") {
+            val username = username_edit_field.text.toString()
+
+            userRepo.updateUserName(username, userId)
+        }
+    }
+
     private fun startCharacterSelection() {
         val fragment = CharacterSelectFragment()
+        //TODO: nav controller geht hier noch nicht!!!!
+        /*
         supportFragmentManager.beginTransaction()
-            .add(android.R.id.content, fragment)        //TODO: to the android content? create a fragment container instead!
+            .add(R.id.character_select_container, fragment)
+            .addToBackStack(null)
             .commit()
+
+         */
+        fragment.show(supportFragmentManager, null)
     }
 
     private fun navigateToMain() {
