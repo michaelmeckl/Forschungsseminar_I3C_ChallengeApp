@@ -20,8 +20,7 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
     private var firstRun: Boolean = false
-    private var firstTimeThisDay: Boolean =
-        false     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
+    private var firstTimeThisDay: Boolean = false     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +80,7 @@ class SplashActivity : AppCompatActivity() {
             // wait for 2 seconds
             delay(2000)
 
-            //TODO Remove this after implementing it
-//            if (firstRun) {
-            if (true) {
+            if (firstRun) {
                 startCharacterSelection()
             } else {
                 startMain()
@@ -93,13 +90,13 @@ class SplashActivity : AppCompatActivity() {
 
     // TODO navigate to Character Selection
     private fun startCharacterSelection() {
-
+        /*
         val intent = Intent(this@SplashActivity, CharacterSelectActivity::class.java)
         startActivity(intent)
 
         // close this activity so the user can't navigate back to it!
         finish()
-
+        */
     }
 
     // navigate to Main Activity
