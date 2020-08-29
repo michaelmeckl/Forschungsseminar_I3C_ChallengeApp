@@ -1,7 +1,6 @@
 package com.example.challengecovid.viewmodels
 
 import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
@@ -23,11 +22,23 @@ inline fun <reified T : ViewModel> Fragment.getViewModel(noinline creator: (() -
     else
         ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
 }
+//fun <reified T : ViewModel> Activity.getViewModel(creator: (() -> T)? = null): T {
+//    return if (creator == null)
+//        ViewModelProvider(application).get(T::class.java)
+//    else
+//        throw IllegalArgumentException("")
+//}
+//fun < T : ViewModel> getViewModel( creator: (() -> T)? = null): T {
+//    return if (creator == null) {
+//        ViewModelProvider(this).get(T::class.java)
+//    } else {
+//        ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
+//    }
+//}
 
-inline fun <reified T : ViewModel> AppCompatActivity.getViewModel(noinline creator: (() -> T)? = null): T {
-    return if (creator == null)
-        ViewModelProvider(this).get(T::class.java)
-    else
-        ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
-}
-
+/*
+inline fun <VM : ViewModel> viewModelFactory(crossinline f: () -> VM) =
+    object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(aClass: Class<T>):T = f() as T
+    }
+*/
