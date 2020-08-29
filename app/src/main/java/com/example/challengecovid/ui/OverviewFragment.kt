@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
+import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
@@ -49,9 +50,13 @@ class OverviewFragment : Fragment() {
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
             override fun onChallengeClick(challenge: BaseChallenge) {
                 showChallengeDetails(challenge)
-                setChallengeCompleted(challenge)    //TODO: nur bei klick auf completed haken oder so, nicht auf ganzes!
+            }
+        }, object : CheckmarkClickListener {
+            override fun onCheckmarkClick(challenge: BaseChallenge) {
+                setChallengeCompleted(challenge)
             }
         })
+
 
         recyclerview_overview.apply {
             setHasFixedSize(true)
@@ -67,7 +72,7 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.GONE
             }
 
-            if(oldTop < top) {
+            if (oldTop < top) {
                 // scroll to the top when the list gets bigger!
                 recyclerview_overview.smoothScrollToPosition(0)
             }

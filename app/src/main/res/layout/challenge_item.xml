@@ -14,18 +14,22 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/icon_challenge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:padding="4dp"
+            android:padding="10dp"
+            android:layout_margin="-10dp"
             android:scaleType="centerInside"
+            android:background="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_home" />
+            tools:src="@drawable/ic_checkmark_unchecked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
 
         <TextView
             android:id="@+id/name_challenge"
@@ -35,6 +39,7 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:singleLine="true"
             app:layout_constraintStart_toEndOf="@+id/icon_challenge"
             app:layout_constraintEnd_toStartOf="@+id/xp_challenge"
             app:layout_constraintTop_toTopOf="parent"

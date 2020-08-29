@@ -11,7 +11,7 @@ import com.example.challengecovid.model.BaseChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
 import timber.log.Timber
 
-class OverviewAdapter(private val clickListener: ChallengeClickListener) :
+class OverviewAdapter(private val clickListener: ChallengeClickListener, private val checkmarkClickListener: CheckmarkClickListener) :
     RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
 
     var activeChallenges = listOf<BaseChallenge>()
@@ -29,18 +29,18 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
     }
 
     override fun onBindViewHolder(holder: ChallengeViewHolder, position: Int) {
-        holder.bind(activeChallenges[position], clickListener)
+        holder.bind(activeChallenges[position], clickListener, checkmarkClickListener)
     }
 
     override fun getItemCount() = activeChallenges.size
 
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: BaseChallenge, clickListener: ChallengeClickListener) {
+        fun bind(data: BaseChallenge, clickListener: ChallengeClickListener, checkmarkClickListener: CheckmarkClickListener) {
             itemView.name_challenge.text = data.title
             itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
-            //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+//            itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)   //TODO: statt icon vllt duration anzeigen oder difficulty?
 
             //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
             // ein ui update (z.B durch rotation) macht es wieder richtig ????
@@ -48,16 +48,26 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
                 Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as? CardView ?: return
 
-                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
+//                TODO: Also wenn die Zeile auskommentiert ist, scheint der Bug komplett weg zu sein. Entweder wir lassen die grüne Hintergrundfarbe weg oder ich find was wies anders gemacht werden kann
+//                Edit: nvm, die xp werden trotzdem noch manchmal nicht angezeigt
+//                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
                 cardView.description_challenge.text = "Heute Abgeschlossen"
                 cardView.xp_challenge.visibility = View.INVISIBLE
-                cardView.checkmark_completed_challenge.visibility = View.VISIBLE
+                cardView.icon_challenge.setImageResource(R.drawable.ic_checkmark_checked)
+
+            } else {
+                itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
             }
 
             //set an item click listener
             itemView.setOnClickListener {
                 clickListener.onChallengeClick(data)
             }
+
+            itemView.icon_challenge.setOnClickListener {
+                checkmarkClickListener.onCheckmarkClick(data)
+            }
+
         }
 
         companion object {
@@ -74,6 +84,9 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
 // ClickListener - Interface for the recycler view items
 interface ChallengeClickListener {
     fun onChallengeClick(challenge: BaseChallenge)
+}
+interface CheckmarkClickListener {
+    fun onCheckmarkClick(challenge: BaseChallenge)
 }
 
 
