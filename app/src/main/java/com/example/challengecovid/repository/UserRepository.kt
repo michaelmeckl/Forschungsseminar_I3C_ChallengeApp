@@ -7,6 +7,7 @@ import com.example.challengecovid.App
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -127,6 +128,20 @@ class UserRepository {
         oldUserRef
             .set(user)
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("User successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
+    }
+
+    //TODO: wäre das nicht eher einfach nur delete?
+    fun updateActiveChallenge(challenge: BaseChallenge, userId: String) {
+        val ref = userCollection
+            .document(userId)
+            .collection("activeChallenges")
+            .document(challenge.challengeId)
+
+        ref.set(challenge, SetOptions.merge())
+            .addOnSuccessListener {
+                Timber.tag(USER_REPO_TAG).d("Successfully updated completion status of active challenge!")
+            }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
     }
 

@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -116,12 +118,27 @@ class ChallengeRepository {
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
     }
 
+    fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
+        val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
+            challengeCollection.document(id)
+        } else  {
+            userChallengeCollection.document(id)
+        }
+
+        challengeRef
+            .update("completed", completed)
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully marked as completed!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
+    }
 
     /**
      * ################################################
      *              User Challenges
      * ################################################
      */
+
+    //TODO: im moment sind die doppelt drin! hier wäre eigentlich eine collection group query nötig!
+    // -> sonst inkonsistenzen!
 
     // GET-ALL
     fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {

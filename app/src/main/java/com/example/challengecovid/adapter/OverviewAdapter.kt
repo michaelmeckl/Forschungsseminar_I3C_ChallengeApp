@@ -44,7 +44,7 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
 
             if (data.completed) {
                 Timber.d("bind, userChallenge.completed = true")
-                val cardView = itemView as CardView
+                val cardView = itemView as? CardView ?: return
 
                 cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
                 cardView.description_challenge.text = "Heute Abgeschlossen"

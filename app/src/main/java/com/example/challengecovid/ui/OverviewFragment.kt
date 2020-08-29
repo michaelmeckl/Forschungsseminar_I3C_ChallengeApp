@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -18,18 +17,11 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.adapter.UserChallengeAdapter
-import com.example.challengecovid.database.ChallengeAppDatabase
-import com.example.challengecovid.database.repository.ChallengeRepository
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 
 class OverviewFragment : Fragment() {
@@ -57,7 +49,7 @@ class OverviewFragment : Fragment() {
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
             override fun onChallengeClick(challenge: BaseChallenge) {
                 showChallengeDetails(challenge)
-                //setChallengeCompleted(userChallenge)
+                setChallengeCompleted(challenge)    //TODO: nur bei klick auf completed haken oder so, nicht auf ganzes!
             }
         })
 
@@ -133,15 +125,15 @@ class OverviewFragment : Fragment() {
 
      */
 
-    private fun setChallengeCompleted(userChallenge: UserChallenge) {
+    private fun setChallengeCompleted(challenge: BaseChallenge) {
 
-        if (userChallenge.completed) {
-            Timber.d("Skipping setChallengeCompleted because userchallenge.completed = true")
+        if (challenge.completed) {
+            Timber.d("Skipping setChallengeCompleted because challenge.completed = true")
             return
         }
-        Timber.d("setChallengeCompleted, ${userChallenge.completed} before")
-        overviewViewModel.setChallengeCompleted(userChallenge.challengeId)
-        Timber.d("setChallengeCompleted, ${userChallenge.completed} after")
+        Timber.d("setChallengeCompleted, ${challenge.completed} before")
+        overviewViewModel.setChallengeCompleted(challenge)
+        Timber.d("setChallengeCompleted, ${challenge.completed} after")
 
 //        challengeListAdapter.notifyDataSetChanged()
 

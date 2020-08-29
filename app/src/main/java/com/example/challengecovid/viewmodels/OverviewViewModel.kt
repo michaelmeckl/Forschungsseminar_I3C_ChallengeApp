@@ -14,10 +14,7 @@ import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 /**
@@ -135,9 +132,12 @@ class OverviewViewModel(
         _showSnackbarEvent.value = true
     }
 
-    fun setChallengeCompleted(challenge_id: String) = uiScope.launch {
+    //TODO: use delete instead when completed?
+    fun setChallengeCompleted(challenge: BaseChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            challengeRepository.setChallengeCompleted(challenge_id)
+            challengeRepository.updateCompletionStatus(challenge.challengeId, challenge.type, completed = true)
+            challenge.completed = true
+            userRepository.updateActiveChallenge(challenge, currentUserId)
         }
         _showSnackbarEvent.value = true
     }
