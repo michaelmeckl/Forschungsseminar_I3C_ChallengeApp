@@ -34,10 +34,10 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        currentUser = profileViewModel.currentUser.value ?: return
+        //TODO: auch hier immer null!
+        currentUser = profileViewModel.getCurrentUser() ?: return
         currentUserId = currentUser.userId
 
-        //TODO: this doesn't work!
         edit_profile.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment()
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)

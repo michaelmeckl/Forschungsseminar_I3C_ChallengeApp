@@ -69,7 +69,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         info_duration_create_challenge.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "Gib an, wie viele Tage lang du deine Challenge machen willst. Lass das Feld leer, wenn die Challenge unendlich lang drin bleiben soll",
+                "Gib an, wie viele Tage lang diese Challenge aktiv sein soll. Wenn nichts eingegeben wird werden 7 Tage angenommen.",
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -123,7 +123,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
          */
     }
 
-    //TODO: das funktioniert iwie nicht immer ?? (z.B. nach rotation wird nichts angezeigt manchmal?)
     private fun addNewChallenge() {
         layout_name_create_new_challenge.error = ""
 

@@ -9,16 +9,18 @@ import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
 import com.example.challengecovid.ui.profile.CharacterSelectFragment
+import com.example.challengecovid.viewmodels.ProfileViewModel
+import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.activity_character_creation.*
 import timber.log.Timber
 
 
 class CharacterCreationActivity : AppCompatActivity() {
 
-    //TODO: eigentlich sollte hier eher das viemodel und nicht das repo verwendet werden!
-    private val userRepo = RepositoryController.getUserRepository()
+    private val userRepository = RepositoryController.getUserRepository()    //TODO: bad code design, shouldn't be accessed here
+    private lateinit var profileViewModel: ProfileViewModel
 
-    private var imageResource = R.drawable.iconfinder_avatar_368_456320_6415359
+    private var imageResource = R.drawable.ic_user_icon_default
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,28 +29,37 @@ class CharacterCreationActivity : AppCompatActivity() {
         Timber.tag("FIREBASE").d("in onCreate in character creation activity")
         val userId = createUser()
 
+        val userRepository = RepositoryController.getUserRepository()
+        profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
+
+        profileViewModel.observeImage().observe(this, { it ->
+            if (it != null) {
+                //TODO: this should be in utils as its used quite often!
+                imageResource = resources.getIdentifier(it, "drawable", packageName)
+            }
+        })
+
         profile_image.setImageResource(imageResource)     // set a default image
         profile_image.setOnClickListener {
-            //TODO: return the R.id of the chosen image (s. oben)! -> maybe use the profile viewmodel for this?
             startCharacterSelection()
         }
 
         finish_character_creation_btn.setOnClickListener {
-            updateName(userId)
+            updateName()
             navigateToMain()
         }
     }
 
-    private fun createUser(): String {
+    private fun createUser(): String? {
         val imagePath = App.instance.resources.getResourceEntryName(imageResource)
         val newUser = User(
-            registrationToken = "hk57gds",      //TODO: get registration token
-            username = "Anonym",
+            registrationToken = "TODO",      //TODO: get registration token
+            username = getString(R.string.username_placeholder),
             userIcon = imagePath
         )
 
         // save the user in firestore
-        val userId = userRepo.saveNewUser(newUser)
+        val userId = userRepository.saveNewUser(newUser)
 
         // store the generated userId in the shared prefs to be able to access this user later
         val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
@@ -57,11 +68,10 @@ class CharacterCreationActivity : AppCompatActivity() {
         return userId
     }
 
-    private fun updateName(userId: String) {
+    private fun updateName() {
         if (username_edit_field.text.toString() != "") {
             val username = username_edit_field.text.toString()
-
-            userRepo.updateUserName(username, userId)
+            profileViewModel.updateUserName(username)
         }
     }
 

@@ -38,7 +38,7 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentUser = profileViewModel.currentUser.value ?: return
+        currentUser = profileViewModel.getCurrentUser() ?: return
 
         val resID = resources.getIdentifier(currentUser.userIcon, "drawable", "com.example.challengecovid")
         profile_picture_edit_profile_fragment.setImageResource(resID)

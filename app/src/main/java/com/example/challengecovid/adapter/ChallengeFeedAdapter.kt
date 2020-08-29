@@ -6,14 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.social_feed_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
     RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
@@ -53,7 +51,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
 
             // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {
-                val creator = userRepository.getUser(data.creatorId)
+                val creator = userRepository.getUserOnce(data.creatorId)
 
                 // switch to the Main thread to update the UI
                 withContext(Dispatchers.Main) {

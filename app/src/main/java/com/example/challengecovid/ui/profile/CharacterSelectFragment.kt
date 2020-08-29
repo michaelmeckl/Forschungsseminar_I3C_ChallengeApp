@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_character_selection.*
@@ -53,13 +50,10 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
     }
 
     private fun updateUser() {
-        val currentUser = profileViewModel.currentUser.value
-
-        if (currentUser != null) {
-            currentUser.userIcon = chosenPicture
-
-            profileViewModel.updateUser(currentUser)
-        }
+        //TODO: get Current user ist hier immer null!!!!!!!!!!!!
+        val currentUser = profileViewModel.getCurrentUser() ?: return
+        currentUser.userIcon = chosenPicture
+        profileViewModel.updateUser(currentUser)
     }
 
     private fun isNullOrEmpty(str: String?): Boolean {

@@ -2,6 +2,7 @@ package com.example.challengecovid.repository
 
 import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.*
@@ -90,10 +91,19 @@ class UserRepository {
     }
 
     //GET
-    suspend fun getUser(id: String): User? {
+    suspend fun getUserOnce(id: String): User? {
         val userSnapshot = userCollection.document(id).get().await()
         return userSnapshot.toObject(User::class.java)
     }
+
+    //GET
+    suspend fun getUser(id: String): MutableLiveData<User> = liveData(Dispatchers.IO) {
+        while (true) {
+            val userSnapshot = userCollection.document(id).get().await()
+            userSnapshot.toObject(User::class.java)?.let { emit(it) }
+            //delay(3000)
+        }
+    } as MutableLiveData<User>
 
     //CREATE
     fun saveNewUser(user: User): String {
