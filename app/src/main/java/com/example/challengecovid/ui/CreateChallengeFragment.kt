@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
@@ -26,7 +25,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
     private lateinit var overviewViewModel: OverviewViewModel
 
     private var selectedSpinnerDifficulty = "Einfach"
-    private var selectedSpinnerIcon = "Kein Icon"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,56 +99,20 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         spinner_difficulties.onItemSelectedListener = this
 
 
-        /*
-        //init adapter for icon spinner
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.icons_challenges,
-            android.R.layout.simple_spinner_dropdown_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
-            spinner_icon_create_new_challenge.adapter = adapter
-        }
-        spinnerIcons = spinner_icon_create_new_challenge
-        val adapterIcons = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.icons_challenges,
-            android.R.layout.simple_spinner_dropdown_item
-        )
-        spinnerIcons.adapter = adapterIcons
-        spinnerIcons.onItemSelectedListener = this
-         */
     }
 
     //TODO: das funktioniert iwie nicht immer ?? (z.B. nach rotation wird nichts angezeigt manchmal?)
     private fun addNewChallenge() {
+        val difficulties = resources.getStringArray(R.array.difficulties_challenges)
+
         layout_name_create_new_challenge.error = ""
 
-        //TODO: use the difficulty property of the challenge instead
-        var challengeXP = 0
-        challengeXP = when (selectedSpinnerDifficulty) {
-            "Einfach" -> 5
-            "Mittel" -> 10
-            "Schwer" -> 20
-            else -> 0
+        val challengeDifficulty: Difficulty = when (selectedSpinnerDifficulty) {
+            difficulties[0] -> Difficulty.LEICHT
+            difficulties[1] -> Difficulty.MITTEL
+            difficulties[2] -> Difficulty.SCHWER
+            else -> Difficulty.LEICHT
         }
-
-        //TODO: vorerst vllt keine Icons für UserChallenges?
-        var challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
-        val allIcons = resources.getStringArray(R.array.icons_challenges)
-        when (selectedSpinnerIcon) {
-            allIcons[0] -> challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
-        }
-
-//        val newchallengeDuration: Float
-//        val selectedChallengeDuration = duration_create_new_challenge.text.toString()
-//        newchallengeDuration = if (selectedChallengeDuration.isEmpty()) {
-//            Float.POSITIVE_INFINITY     //TODO: besserer default als unendlich, vllt sowas wie 7 (Tage)
-//        } else {
-//            selectedChallengeDuration.toFloat()
-//        }
 
         val sharedPrefs =
             activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
@@ -161,7 +124,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         val newChallenge = UserChallenge(
             title = name_create_new_challenge.text.toString(),
             description = description_create_new_challenge.text.toString(),
-            difficulty = Difficulty.MITTEL,
+            difficulty = challengeDifficulty,
             completed = false,
             duration = 2,
             creatorId = currentUserId
@@ -181,7 +144,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         when (parent) {
             spinner_difficulties -> selectedSpinnerDifficulty = parent.selectedItem.toString()
-            //spinner_icon_create_new_challenge -> selectedSpinnerIcon = parent.selectedItem.toString()
         }
     }
 

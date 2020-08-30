@@ -198,6 +198,7 @@ class OverviewFragment : Fragment() {
                 return false
             }
 
+//          TODO: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {
                     setTitle("Challenge löschen?")
