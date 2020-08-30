@@ -45,7 +45,22 @@ class AboutFragment : Fragment() {
         val allAttributions = listOf(
             AttributionItem(R.drawable.ic_coronavirus, "Icon made by Freepik from https://flaticon.com"),
             AttributionItem(R.drawable.icon_protective_suit_corona, "Illustration by Olha Khomich from https://icons8.com"),
-            AttributionItem(R.drawable.ic_flame, "Taken from Streaky (https://github.com/alexakasanjeev/streak-counter)")
+            AttributionItem(R.drawable.ic_flame, "Taken from Streaky (https://github.com/alexakasanjeev/streak-counter)"),
+            AttributionItem(R.drawable.ic_user_man_1,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_user_man_2,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_user_man_3,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_user_woman_1,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_user_woman_2,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_user_woman_3,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_healthy_category,"Icon made by Icongeek26 from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_sport_category,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_relax_category,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_chore_category,"Icon made by Vectors Market from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_pleasure_category,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_productivity_category,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_social_category,"Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.ic_safety_category,"Icon made by Freepik from www.flaticon.com/")
+
         )
     }
 }

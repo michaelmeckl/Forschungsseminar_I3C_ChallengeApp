@@ -24,6 +24,8 @@ object Utils {
 
     private const val DEFAULT_COLUMN_WIDTH = 200F
 
+
+
     /**
      * Calculates the number of columns to use for a GridLayout.
      */
@@ -71,6 +73,7 @@ object Utils {
         prefs.edit().putInt(SplashActivity.PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
         return isFirstRun
     }
+
 
     /**
      * Checks if the device has a network connection.

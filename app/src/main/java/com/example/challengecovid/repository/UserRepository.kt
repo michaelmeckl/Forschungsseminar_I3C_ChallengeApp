@@ -149,6 +149,15 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
     }
 
+    fun upDateUserIcon(userIcon: String, id: String){
+        val userReF = userCollection.document(id)
+
+        userReF
+            .update("userIcon",userIcon)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Usericon successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
+    }
+
     //DELETE
     fun deleteUser(user: User) {
         val userRef = userCollection.document(user.userId)
@@ -169,6 +178,15 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting challenge from array: $e") }
     }
 
+/*
+    fun getCurrentUser(userId: String){
+        val userRef = userCollection.document(userId)
+            userRef.get()
+                .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("User successfully retrieved from array!") }
+                .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error retrieving user from array: $e") }
+    }
+
+ */
     /*
     //TODO:
     fun getUsersWithMinLevel(level: Int) {

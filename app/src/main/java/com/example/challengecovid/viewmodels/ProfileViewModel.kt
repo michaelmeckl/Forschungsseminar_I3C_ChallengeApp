@@ -22,6 +22,18 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
     private var currentUserId: String = ""
     private lateinit var currentUser: MutableLiveData<User>
 
+    object CurrentUser {
+        val app = App.instance
+        private val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        private val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        private val currentUser: User = User(currentUserId)
+
+        fun getCurrentUser(): User {
+            return currentUser
+        }
+    }
+
     init {
         if(currentUserId == "") {
             val app = App.instance
@@ -40,12 +52,19 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
         }
     }
 
+
+
+/*
     fun getCurrentUser(): User? {
         if(this::currentUser.isInitialized) {
             return currentUser.value
         }
         return null
     }
+
+
+ */
+
 
     fun observeImage(): LiveData<String> = liveData(Dispatchers.IO) {
         while (true) {
@@ -90,4 +109,11 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
         currentUser.value?.username = username
         userRepository.updateUserName(username, currentUserId)
     }
+
+    fun updateUserIcon(userIcon: String) = viewModelScope.launch {
+        currentUser.value?.userIcon = userIcon
+        userRepository.upDateUserIcon(userIcon,currentUserId)
+    }
+
+
 }

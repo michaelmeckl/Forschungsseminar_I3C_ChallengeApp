@@ -22,6 +22,8 @@ class CharacterCreationActivity : AppCompatActivity() {
 
     private var imageResource = R.drawable.ic_user_icon_default
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character_creation)
@@ -47,6 +49,7 @@ class CharacterCreationActivity : AppCompatActivity() {
         finish_character_creation_btn.setOnClickListener {
             updateName()
             navigateToMain()
+
         }
     }
 
@@ -64,6 +67,7 @@ class CharacterCreationActivity : AppCompatActivity() {
         // store the generated userId in the shared prefs to be able to access this user later
         val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
         sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
+
 
         return userId
     }

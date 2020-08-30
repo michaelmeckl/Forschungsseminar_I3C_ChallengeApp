@@ -2,13 +2,17 @@ package com.example.challengecovid.ui.profile
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
@@ -16,8 +20,12 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-    private var currentUserId: String? = null
-    private lateinit var currentUser: User
+
+
+    private var sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+    private var currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+    private val num = 36
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -34,18 +42,53 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        //TODO: auch hier immer null!
-        currentUser = profileViewModel.getCurrentUser() ?: return
-        currentUserId = currentUser.userId
+        val userRepository = RepositoryController.getUserRepository()
 
+        val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        val currentUser = ProfileViewModel.CurrentUser.getCurrentUser()
+
+
+
+
+
+
+        //setupViews()
         edit_profile.setOnClickListener {
+            /*
             val action = ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment()
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
+
+             */
+
+
+
         }
+
+
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()    // don't show the main menu in this fragment!
+    }
+
+    fun setupViews(){
+
+
+
+
+        /*
+        profile_name.text = currentUser?.username.toString()
+
+        val resID = resources.getIdentifier(currentUser?.userIcon, "drawable", activity?.packageName)
+        profile_picture.setImageResource(resID)
+
+         */
+
+
+
+
     }
 }

@@ -44,17 +44,22 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         set_profile_picture_6.setOnClickListener(this)
 
         save_profile.setOnClickListener {
-            updateUser()
+            profileViewModel.updateUserIcon(chosenPicture)
             dismiss()
         }
     }
+    /*
 
     private fun updateUser() {
         //TODO: get Current user ist hier immer null!!!!!!!!!!!!
         val currentUser = profileViewModel.getCurrentUser() ?: return
         currentUser.userIcon = chosenPicture
         profileViewModel.updateUser(currentUser)
+
+        //profileViewModel.updateUserIcon(chosenPicture)
     }
+
+     */
 
     private fun isNullOrEmpty(str: String?): Boolean {
         if (str != null && str.isNotEmpty())
