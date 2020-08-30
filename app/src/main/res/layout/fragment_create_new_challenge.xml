@@ -17,8 +17,10 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="@string/heading_create_new_challenge"
+            android:textColor="@android:color/black"
             android:textSize="26sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_name_create_new_challenge"
@@ -96,9 +98,10 @@
 
         <Spinner
             android:id="@+id/spinner_difficulties"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:layout_gravity="center_horizontal"/>
 
         <!--
         <TextView
