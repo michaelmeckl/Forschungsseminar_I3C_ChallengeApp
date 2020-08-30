@@ -1,10 +1,8 @@
 package com.example.challengecovid.adapter
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
@@ -40,30 +38,22 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
             itemView.name_challenge.text = data.title
             itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
-//            itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)   //TODO: statt icon vllt duration anzeigen oder difficulty?
 
-            //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
-            // ein ui update (z.B durch rotation) macht es wieder richtig ????
             if (data.completed) {
-                Timber.d("bind, userChallenge.completed = true")
-                val cardView = itemView as? CardView ?: return
-
-//                TODO: Also wenn die Zeile auskommentiert ist, scheint der Bug komplett weg zu sein. Entweder wir lassen die grüne Hintergrundfarbe weg oder ich find was wies anders gemacht werden kann
-//                Edit: nvm, die xp werden trotzdem noch manchmal nicht angezeigt
-//                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
-                cardView.description_challenge.text = "Heute Abgeschlossen"
-                cardView.xp_challenge.visibility = View.INVISIBLE
-                cardView.icon_challenge.setImageResource(R.drawable.ic_checkmark_checked)
-
+                itemView.description_challenge.visibility = View.GONE
+                itemView.description_challenge_completed.visibility = View.VISIBLE
+                itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_checked)
             } else {
+                itemView.description_challenge.visibility = View.VISIBLE
+                itemView.description_challenge_completed.visibility = View.GONE
                 itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
             }
 
-            //set an item click listener
+            //set challenge item click listener
             itemView.setOnClickListener {
                 clickListener.onChallengeClick(data)
             }
-
+            //set checkmark item click listener
             itemView.icon_challenge.setOnClickListener {
                 checkmarkClickListener.onCheckmarkClick(data)
             }

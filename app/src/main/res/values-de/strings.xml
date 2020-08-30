@@ -42,6 +42,7 @@
     <string name="spinner_text_icon_create_new_challenge">Kategorie (optional):</string>
     <string name="hint_duration_create_challenge">Dauer in Tagen (optional)</string>
     <string name="empty_recyclerview_overview_message">Du hast noch keine Challenge erstellt. Klicke den Button unten rechts, um eine zu erstellen.</string>
+    <string name="challenge_completed_text">Heute abgeschlossen!</string>
 
     <string-array name="difficulties_challenges">
         <item>Einfach</item>

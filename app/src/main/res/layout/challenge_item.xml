@@ -57,23 +57,25 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="15 XP" />
 
-        <ImageView
-            android:id="@+id/checkmark_completed_challenge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:visibility="gone"
-            android:src="@drawable/ic_done"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/description_challenge"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon_challenge"
+            app:layout_constraintTop_toBottomOf="@+id/name_challenge"
+            tools:text="Beschreibung Hier steht ein langer Beispieltext um zu prüfen ob das Layout auch wirklich so funktioniert wie es soll" />
+        <TextView
+            android:id="@+id/description_challenge_completed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textColor="@android:color/holo_green_light"
+            android:visibility="gone"
+            android:text="@string/challenge_completed_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/icon_challenge"
