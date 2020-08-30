@@ -19,6 +19,11 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
             field = value
             notifyDataSetChanged()
         }
+//  Das fixt den Anzeigefehler der Challenges entgültig. Ist nicht wirklich die beste Lösung
+    override fun onViewAttachedToWindow(holder: ChallengeViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        holder.setIsRecyclable(false)
+    }
 
     fun getChallengeAt(position: Int): BaseChallenge {
         return activeChallenges[position]
