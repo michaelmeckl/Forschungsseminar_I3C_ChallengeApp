@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
 import timber.log.Timber
 
@@ -47,6 +48,16 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
                 itemView.description_challenge.visibility = View.VISIBLE
                 itemView.description_challenge_completed.visibility = View.GONE
                 itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
+            }
+            Timber.d("data is of type %s", data.type)
+
+            if (data is UserChallenge) {
+//                TODO: Never getting here as of now :(
+                Timber.d("data is userchallenge")
+                if (data.isPublic) {
+                    Timber.d("data is also public")
+                    itemView.is_online_challenge.visibility = View.VISIBLE
+                }
             }
 
             //set challenge item click listener
