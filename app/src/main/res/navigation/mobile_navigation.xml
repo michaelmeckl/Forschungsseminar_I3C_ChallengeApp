@@ -91,6 +91,10 @@
         <argument
             android:name="type"
             app:argType="com.example.challengecovid.model.ChallengeType" />
+        <argument
+            android:name="difficulty"
+            app:argType="string" />
+
     </fragment>
 
     <fragment

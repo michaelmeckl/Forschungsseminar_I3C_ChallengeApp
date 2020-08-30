@@ -262,13 +262,16 @@ class ChallengeRepository {
     }
 
     //UPDATE
-    fun updatePublicStatus(challengeId: String, publicStatus: Boolean) {
+    fun updatePublicStatus(challengeId: String, publicStatus: Boolean): Boolean {
         val challengeRef = userChallengeCollection.document(challengeId)
+        // TODO: Ich wünschte das würde so gehen :(
+        var isSuccess= false
 
         challengeRef
             .update("isPublic", publicStatus)
-            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") }
-            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") }
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") ; isSuccess = true}
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") ; isSuccess = false}
+        return isSuccess
     }
 
     //DELETE

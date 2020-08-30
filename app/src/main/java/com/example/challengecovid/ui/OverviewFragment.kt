@@ -180,7 +180,8 @@ class OverviewFragment : Fragment() {
             id = challenge.challengeId,
             title = challenge.title,
             description = challenge.description,
-            type = challenge.type
+            type = challenge.type,
+            difficulty = challenge.difficulty.toString()
         )
 
         // navigate to another fragment on click
