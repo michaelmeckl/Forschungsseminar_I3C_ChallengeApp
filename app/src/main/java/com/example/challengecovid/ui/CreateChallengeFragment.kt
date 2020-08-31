@@ -26,7 +26,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
     private lateinit var overviewViewModel: OverviewViewModel
 
     private var selectedSpinnerDifficulty = "Einfach"
-    private var selectedSpinnerIcon = "Kein Icon"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +51,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         button_submit_create_new_challenge.setOnClickListener {
             // check if a name was provided
             if (name_create_new_challenge.text.toString().isBlank()) {
-                layout_name_create_new_challenge.error = "Braucht nen namen alter"      //TODO ... ¯\_(ツ)_/¯
+                layout_name_create_new_challenge.error = "Name erforderlich"
                 return@setOnClickListener
             }
 
@@ -69,7 +68,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         info_duration_create_challenge.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "Gib an, wie viele Tage lang du deine Challenge machen willst. Lass das Feld leer, wenn die Challenge unendlich lang drin bleiben soll",
+                "Gib an, wie viele Tage lang diese Challenge aktiv sein soll. Wenn nichts eingegeben wird werden 7 Tage angenommen.",
                 Toast.LENGTH_LONG
             ).show()
         }
@@ -123,37 +122,30 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
          */
     }
 
-    //TODO: das funktioniert iwie nicht immer ?? (z.B. nach rotation wird nichts angezeigt manchmal?)
     private fun addNewChallenge() {
         layout_name_create_new_challenge.error = ""
 
-        //TODO: use the difficulty property of the challenge instead
-        var challengeXP = 0
-        challengeXP = when (selectedSpinnerDifficulty) {
-            "Einfach" -> 5
-            "Mittel" -> 10
-            "Schwer" -> 20
-            else -> 0
+        val difficulty = when (selectedSpinnerDifficulty) {
+            "Einfach" -> Difficulty.LEICHT
+            "Mittel" -> Difficulty.MITTEL
+            "Schwer" -> Difficulty.SCHWER
+            else -> Difficulty.LEICHT
         }
 
-        //TODO: vorerst vllt keine Icons für UserChallenges?
-        var challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
-        val allIcons = resources.getStringArray(R.array.icons_challenges)
-        when (selectedSpinnerIcon) {
-            allIcons[0] -> challengeIcon = resources.getResourceEntryName(R.drawable.ic_trophy)
-        }
-
-        val newchallengeDuration: Float
+        val newchallengeDuration: Int
         val selectedChallengeDuration = duration_create_new_challenge.text.toString()
         newchallengeDuration = if (selectedChallengeDuration.isEmpty()) {
-            Float.POSITIVE_INFINITY     //TODO: besserer default als unendlich, vllt sowas wie 7 (Tage)
+            7     // 7 days
         } else {
-            selectedChallengeDuration.toFloat()
+            selectedChallengeDuration.toInt()
         }
 
         val sharedPrefs =
             activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        //Toast.makeText(activity, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
+        Timber.d(currentUserId)
 
         // return early if fetching the user id didn't work
         if (currentUserId == "") return
@@ -161,9 +153,9 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         val newChallenge = UserChallenge(
             title = name_create_new_challenge.text.toString(),
             description = description_create_new_challenge.text.toString(),
-            difficulty = Difficulty.MITTEL,
+            difficulty = difficulty,
             completed = false,
-            duration = 2,
+            duration = newchallengeDuration,
             creatorId = currentUserId
         )
 

@@ -1,12 +1,6 @@
 package com.example.challengecovid.database.dao
 
 import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Transaction
-import com.example.challengecovid.model.ChallengesForUser
-import com.example.challengecovid.model.ChallengesInCategory
-import com.example.challengecovid.model.UserWithChallenges
-import com.example.challengecovid.model.UsersForChallenge
 
 @Dao
 interface RelationshipsDao {

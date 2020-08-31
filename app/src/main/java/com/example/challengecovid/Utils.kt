@@ -7,11 +7,14 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.challengecovid.ui.SplashActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import timber.log.Timber
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -36,9 +39,46 @@ object Utils {
     }
 
     /**
+     * Checks if this is the first time this app was started. This may happen either because of a (re-)install or because
+     * the apps' data has been deleted on the device.
+     */
+    fun checkFirstRun(context: Context): Boolean {
+        // Get current version code
+        val currentVersionCode: Int = BuildConfig.VERSION_CODE
+
+        // Get saved version code
+        val prefs = context.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val savedVersionCode = prefs.getInt(SplashActivity.PREFS_VERSION_CODE_KEY, -1)
+
+        var isFirstRun = false
+
+        // Check for first run or upgrade
+        when {
+            currentVersionCode == savedVersionCode -> {
+                // This is just a normal run, don't update the shared prefs
+                isFirstRun = false
+                return isFirstRun
+            }
+            savedVersionCode == -1 -> {
+                // This is a new install (or the user cleared the shared preferences)
+               isFirstRun = true
+            }
+            /*
+            currentVersionCode > savedVersionCode -> {
+                // This is an upgrade; show infos about what has changed since the last version
+            }*/
+        }
+
+        // Update the shared preferences with the current version code
+        prefs.edit().putInt(SplashActivity.PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
+        return isFirstRun
+    }
+
+
+    /**
      * Checks if the device has a network connection.
      */
-    fun isNetworkConnected(context: Context): Boolean {
+    private fun isNetworkConnected(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetwork
@@ -74,10 +114,34 @@ object Utils {
      *  Checks if the device has an internet connection.
      */
     fun checkInternet(context: Context) {
-        hasInternetConnection().subscribe { hasInternet ->
-            println("Internet Access: $hasInternet")
-            Toast.makeText(context, "Has internet connection: $hasInternet", Toast.LENGTH_SHORT).show()
+        if (!isNetworkConnected(context)) {
+            // check if connected to a network first
+            showConnectionAlert(context)
+            /*
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                R.string.no_internet + R.string.no_internet_warning,
+                Snackbar.LENGTH_LONG
+            ).show()
+            */
+        } else {
+            // if it is, additionally check if pinging the Google DNS works
+            hasInternetConnection().subscribe { hasInternet ->
+                Timber.d("Internet Access: $hasInternet")
+                if(!hasInternet) showConnectionAlert(context)
+            }
         }
+    }
+
+    // show alert dialog when no internet connection
+    private fun showConnectionAlert(context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle(R.string.no_internet)
+            .setMessage(R.string.no_internet_warning)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setPositiveButton(android.R.string.ok) { _, _ -> checkInternet(context)}
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .show()
     }
 
     /*
@@ -132,23 +196,13 @@ object Utils {
 /**
  * This slides a given view to the right.
  */
-fun AppCompatActivity.slideOutView(v: View) {
-    val slideOutAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+fun Fragment.slideOutView(v: View) {
+    val slideOutAnim: Animation = AnimationUtils.loadAnimation(requireActivity(), R.anim.slide_out_right)
     v.startAnimation(slideOutAnim)
 
     // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
     v.visibility = View.GONE
     v.clearAnimation()
 }
-
-/*
-// Util-Functions to start an activity with an intent
-inline fun <reified T : Activity> Context.createIntent(vararg extras: Pair<String, Any?>) =
-    Intent(this, T::class.java).apply { putExtras(bundleOf(*extras)) }
-
-inline fun <reified T: Activity> Activity.startActivity() {
-    startActivity(createIntent<T>())
-}
-*/
 
 

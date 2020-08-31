@@ -1,8 +1,6 @@
 package com.example.challengecovid.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Query
 import com.example.challengecovid.model.UserChallenge
 
 @Dao

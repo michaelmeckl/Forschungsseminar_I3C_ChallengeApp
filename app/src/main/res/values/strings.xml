@@ -24,20 +24,21 @@
     <string name="credits_used_icons">Used Icons:</string>
     <string name="splash_screen_load">Loading …</string>
     <string name="no_internet">No Internet Connection</string>
-    <string name="no_internet_warning">No new data can be loaded without a connection! Please check your internet connection and try again.</string>
+    <string name="no_internet_warning">No new data can be loaded without a connection and the app may not behave as expected! Please check your internet connection and try again.</string>
     <string name="share_title">Share this challenge via</string>
 
     <string name="username_placeholder">Anonymous</string>
     <string name="creator_in_feed">created by %s</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="level" translatable="false">Level %d</string>
 
     <string name="edit_profile">Edit profile</string>
     <string name="save_changes">Save changes</string>
     <string name="add_friend">Send friend request</string>
     <string name="change_profile_pic">Change profile picture</string>
+    <string name="desc">Description</string>
 
+    <string name="wrong_user_id_error">Your userID wasn\'t recognized! Please contact the testers!</string>
 
 
     <!-- TODO hilfreiche Informationen zu Corona: (könnte man in einem Corona Guidelines Fragment verwenden)

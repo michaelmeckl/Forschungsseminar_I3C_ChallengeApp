@@ -1,6 +1,8 @@
 package com.example.challengecovid
 
 import android.app.Application
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +15,7 @@ import timber.log.Timber
  * Important stuff that has to be initialized before everything else should go here!
  */
 @Suppress("unused")
-class App: Application() {
+class App: Application(), ViewModelStoreOwner {
 
     private val applicationScope = CoroutineScope(Dispatchers.Default)
 
@@ -33,6 +35,18 @@ class App: Application() {
         init()
     }
 
+    private val appViewModelStore: ViewModelStore by lazy {
+        ViewModelStore()
+    }
+
+    override fun getViewModelStore(): ViewModelStore {
+        return appViewModelStore
+    }
+
+    fun clearViewModelStore() {
+        appViewModelStore.clear()
+    }
+
     /**
      * Expensive tasks like fetching data from a db or network must be performed on a separate thread
      * so the app start time is not delayed!
@@ -47,7 +61,7 @@ class App: Application() {
         }
     }
 
-    //TODO: also setup db and subscribe here to new challenges
+    //TODO: also setup db and subscribe here to new challenges -> besser in Splash screen wenn first Run!!
     private fun setupFirebase() {
         Timber.d("In setup firebase in application class now")
         firebaseAnalytics = FirebaseAnalytics.getInstance(this)

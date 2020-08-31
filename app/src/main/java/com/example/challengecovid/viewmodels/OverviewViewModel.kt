@@ -7,8 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.App
 import com.example.challengecovid.Constants
+import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
@@ -50,19 +50,20 @@ class OverviewViewModel(
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
     private var currentUserId: String = ""
-    var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
+    lateinit var allChallenges: LiveData<List<BaseChallenge>>
 
     init {
-        val app = App.instance
-        val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-        if (currentUserId == "") {
-            Toast.makeText(app, "Provided user id is not correct!", Toast.LENGTH_LONG).show()
-        }
+        //Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
+        Timber.d(currentUserId)
 
-        Timber.tag("FIRE userId viewmodel").d(currentUserId)
-        allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+        if (currentUserId === "") {
+            Toast.makeText(application, application.getString(R.string.wrong_user_id_error), Toast.LENGTH_LONG).show()
+        } else {
+            allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+        }
     }
 
     /**
@@ -89,15 +90,15 @@ class OverviewViewModel(
     /**
      * Add a new challenge to the database.
     fun addNewChallenge(userChallenge: UserChallenge) {
-    //launch on the main thread because the result affects the UI
-    uiScope.launch {
-    // insert the new challenge on a separate I/O thread that is optimized for room interaction
-    // to avoid blocking the main / UI thread
-    withContext(Dispatchers.IO) {
-    challengeRepository.saveUserChallenge(userChallenge)
-    }
-    _showSnackbarEvent.value = true
-    }
+        //launch on the main thread because the result affects the UI
+        uiScope.launch {
+            // insert the new challenge on a separate I/O thread that is optimized for room interaction
+            // to avoid blocking the main / UI thread
+            withContext(Dispatchers.IO) {
+                challengeRepository.saveUserChallenge(userChallenge)
+            }
+            _showSnackbarEvent.value = true
+        }
     }
      */
 
@@ -121,7 +122,7 @@ class OverviewViewModel(
     fun removeChallenge(challenge: BaseChallenge) {
         if(challenge.type == ChallengeType.USER_CHALLENGE) {
             //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
-            // challengeRepository.deleteUserChallenge(challenge as? UserChallenge) //TODO: löscht das dann auch aus social??
+            //challengeRepository.deleteUserChallenge(challenge as? UserChallenge)
             userRepository.removeActiveChallenge(challenge, currentUserId)
         }
 

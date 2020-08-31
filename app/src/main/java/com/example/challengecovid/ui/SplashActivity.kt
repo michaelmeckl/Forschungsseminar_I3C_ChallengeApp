@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -18,10 +19,11 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 
+//TODO: load the content of the social feed here and only use the local cache later to reduce latency and save bandwith??
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
-    private var firstRun: Boolean = false
+    private var firstRun = false
 
     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
     // alternativ vllt über firebase in app messaging gut umsetzbar!
@@ -32,16 +34,14 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
-
-        checkFirstRun()
         animateSplashScreen()
 
+        firstRun = Utils.checkFirstRun(this@SplashActivity)
         // if this is the first start prepopulate the firestore db
         if (firstRun) initDatabase()
 
         handleIncomingCloudMessages()
 
-        //TODO: loadNewChallengeData()
         showSplashScreen()
     }
 
@@ -58,42 +58,11 @@ class SplashActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
-    private fun checkFirstRun() {
-        // Get current version code
-        val currentVersionCode: Int = BuildConfig.VERSION_CODE
-
-        // Get saved version code
-        val prefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
-        val savedVersionCode = prefs.getInt(PREFS_VERSION_CODE_KEY, -1)
-
-        // Check for first run or upgrade
-        when {
-            currentVersionCode == savedVersionCode -> {
-                // This is just a normal run
-                firstRun = false
-                return
-            }
-            savedVersionCode == -1 -> {
-                // This is a new install (or the user cleared the shared preferences)
-                firstRun = true
-            }
-            /*
-            currentVersionCode > savedVersionCode -> {
-                // This is an upgrade; show infos about what has changed since the last version
-            }*/
-        }
-
-        // Update the shared preferences with the current version code
-        prefs.edit().putInt(PREFS_VERSION_CODE_KEY, currentVersionCode).apply()
-    }
-
     private fun initDatabase() {
         val categoryRepo = RepositoryController.getCategoryRepository()
         val challengeRepo = RepositoryController.getChallengeRepository()
 
         categoryRepo.saveMultipleCategories(Data.getChallengeCategories())
-
-        //TODO: ist das notwendig?? die system challenges gehören doch eh alle zu den kategorien oder?
         challengeRepo.saveMultipleChallenges(Data.getDailyChallenges())
     }
 
@@ -123,18 +92,14 @@ class SplashActivity : AppCompatActivity() {
 
     private fun showSplashScreen() {
         job = CoroutineScope(Dispatchers.Default).launch {
-            // wait for 2 seconds
-            delay(2000)
+            // show the splash screen for 1 1/2 seconds
+            delay(1500)
 
-            //TODO: revert this later!!!
-            startCharacterCreation()
-            /*
             if (firstRun) {
                 startCharacterCreation()
             } else {
                 startMain()
             }
-            */
         }
     }
 
@@ -152,38 +117,6 @@ class SplashActivity : AppCompatActivity() {
         startActivity(intent)
 
         finish()
-    }
-
-    private fun loadNewChallengeData() {
-
-        this.let {
-            if (Utils.isNetworkConnected(it)) {
-                fetchNewData()
-            } else {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.no_internet + R.string.no_internet_warning,
-                    Snackbar.LENGTH_LONG
-                ).show()
-
-                //showConnectionAlert()
-            }
-        }
-    }
-
-    private fun fetchNewData() {
-        //TODO get new challenges from internet and save them in the room db!
-    }
-
-    // show alert dialog when no internet connection
-    private fun showConnectionAlert() {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.no_internet)
-            .setMessage(R.string.no_internet_warning)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .show()
     }
 
     override fun onDestroy() {

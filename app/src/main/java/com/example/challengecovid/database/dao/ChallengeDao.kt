@@ -1,11 +1,7 @@
 package com.example.challengecovid.database.dao
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
-import com.example.challengecovid.database.dao.BaseDao
-import com.example.challengecovid.model.BaseChallenge
+import androidx.room.Dao
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.UserChallenge
 
 @Dao
 interface ChallengeDao : BaseDao<Challenge> {

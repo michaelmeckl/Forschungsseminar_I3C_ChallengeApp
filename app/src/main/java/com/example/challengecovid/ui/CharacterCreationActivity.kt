@@ -3,20 +3,24 @@ package com.example.challengecovid.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.example.challengecovid.App
-import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.Utils
 import com.example.challengecovid.model.User
+import com.example.challengecovid.ui.profile.CharacterSelectFragment
+import com.example.challengecovid.viewmodels.ProfileViewModel
+import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.activity_character_creation.*
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 
 class CharacterCreationActivity : AppCompatActivity() {
 
-    private val userRepo = RepositoryController.getUserRepository()
-
-    private var imageResource = R.drawable.iconfinder_avatar_368_456320_6415359
+    private lateinit var profileViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,39 +28,67 @@ class CharacterCreationActivity : AppCompatActivity() {
 
         Timber.tag("FIREBASE").d("in onCreate in character creation activity")
 
-        profile_image.setImageResource(R.drawable.iconfinder_avatar_368_456320_6415359)     // set a default image
+        // check if there is an internet connection otherwise show a connection alert
+        Utils.checkInternet(this)
+
+        val userRepository = RepositoryController.getUserRepository()
+        val app = App.instance
+        profileViewModel = ViewModelProvider(app, ProfileViewModelFactory(userRepository, app)).get()
+        //profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
+
+        createDefaultUser()
+
         profile_image.setOnClickListener {
-            //TODO: show the icon selection fragment here and return the R.id of the chosen image (s. oben)!
+            startCharacterSelection()
         }
 
         finish_character_creation_btn.setOnClickListener {
-            saveUserInDB()
+            updateName()
             navigateToMain()
+
         }
     }
 
-    private fun saveUserInDB() {
-        val imagePath = App.instance.resources.getResourceEntryName(imageResource)
-
-        val username = if (username_edit_field.text.toString() == "")
-            "Anonym"
-        else
-            username_edit_field.text.toString()
+    private fun createDefaultUser() {
+        val defaultImage = R.drawable.ic_user_icon_default
+        val imagePath = App.instance.resources.getResourceEntryName(defaultImage)
 
         val newUser = User(
             registrationToken = "TODO",      //TODO: get registration token
-            username = username,
-            userIcon = imagePath,
+            username = getString(R.string.username_placeholder),
+            userIcon = imagePath
         )
 
-        // save the user in firestore
-        val userId = userRepo.saveNewUser(newUser)
+        // set a default image
+        profile_image.setImageResource(defaultImage)
 
-        // store the generated userId in the shared prefs to be able to access this user later
-        val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
-        sharedPrefs.edit().putString(Constants.PREFS_USER_ID, userId).apply()
+        // save the user in firestore and wait for it to finish before continuing
+        // this is important as otherwise there would occur a race condition between inserting and requesting it in the viewmodel observer
+        runBlocking {
+            profileViewModel.saveNewUser(newUser)
+        }
+
+        observeViewModel()
     }
 
+    private fun observeViewModel() {
+        profileViewModel.currentUser.observe(this, {
+            val iconName = it.userIcon
+            profile_image.setImageResource(resources.getIdentifier(iconName, "drawable", packageName))
+        })
+    }
+
+    private fun updateName() {
+        if (username_edit_field.text.toString() != "") {
+            val username = username_edit_field.text.toString()
+            profileViewModel.updateUserName(username)
+        }
+    }
+
+    private fun startCharacterSelection() {
+        val fragment = CharacterSelectFragment()
+        fragment.show(supportFragmentManager, null)
+    }
 
     private fun navigateToMain() {
         val intent = Intent(this@CharacterCreationActivity, MainActivity::class.java)
