@@ -7,8 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.challengecovid.App
 import com.example.challengecovid.Constants
+import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
@@ -59,12 +59,11 @@ class OverviewViewModel(
         val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-        Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()  //TODO
+        //Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
         Timber.d(currentUserId)
 
-        Timber.tag("FIRE userId viewmodel").d(currentUserId)
         if (currentUserId === "") {
-            Toast.makeText(application, "Provided user id is not correct! Please try to restart!", Toast.LENGTH_LONG).show()
+            Toast.makeText(application, application.getString(R.string.wrong_user_id_error), Toast.LENGTH_LONG).show()
         } else {
             allChallenges = userRepository.getAllChallengesForUser(currentUserId)
         }
@@ -126,7 +125,7 @@ class OverviewViewModel(
     fun removeChallenge(challenge: BaseChallenge) {
         if(challenge.type == ChallengeType.USER_CHALLENGE) {
             //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
-            // challengeRepository.deleteUserChallenge(challenge as? UserChallenge) //TODO: löscht das dann auch aus social??
+            // challengeRepository.deleteUserChallenge(challenge as? UserChallenge)
             userRepository.removeActiveChallenge(challenge, currentUserId)
         }
 
