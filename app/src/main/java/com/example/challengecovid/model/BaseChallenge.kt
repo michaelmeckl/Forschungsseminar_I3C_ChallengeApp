@@ -1,7 +1,5 @@
 package com.example.challengecovid.model
 
-import java.util.*
-
 enum class Difficulty (val points: Int) {
     SCHWER(20),
     MITTEL(10),
@@ -26,7 +24,7 @@ abstract class BaseChallenge {
 }*/
 
 abstract class BaseChallenge {
-    val challengeId: String = UUID.randomUUID().toString()  //generate a random id
+    abstract val challengeId: String
     abstract var title: String
     abstract var difficulty: Difficulty
     abstract val type: ChallengeType

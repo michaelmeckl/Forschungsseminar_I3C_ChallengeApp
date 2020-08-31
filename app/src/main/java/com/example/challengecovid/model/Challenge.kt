@@ -1,5 +1,7 @@
 package com.example.challengecovid.model
 
+import java.util.UUID
+
 /*
 //Room Model
 @Entity(
@@ -19,6 +21,7 @@ data class Challenge(
 */
 
 data class Challenge(
+    override val challengeId: String = UUID.randomUUID().toString(),
     override var title: String = "",
     override var description: String = "",
     override var difficulty: Difficulty = Difficulty.LEICHT,

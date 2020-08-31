@@ -36,6 +36,5 @@ data class User (
     var points: Int = 0,
     var userIcon: String = "",
     var dailyStreakCount: Int = 1,
-    val activeChallenges: List<BaseChallenge> = emptyList()
     //val friends: List<User> = emptyList()
 )
