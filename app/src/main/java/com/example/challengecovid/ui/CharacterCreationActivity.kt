@@ -6,15 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import com.example.challengecovid.App
-import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
 import com.example.challengecovid.ui.profile.CharacterSelectFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
-import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.activity_character_creation.*
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 
@@ -34,7 +33,6 @@ class CharacterCreationActivity : AppCompatActivity() {
         //profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
 
         createDefaultUser()
-        observeViewModel()
 
         profile_image.setOnClickListener {
             startCharacterSelection()
@@ -57,9 +55,16 @@ class CharacterCreationActivity : AppCompatActivity() {
             userIcon = imagePath
         )
 
-        profile_image.setImageResource(defaultImage)     // set a default image
-        // save the user in firestore
-        profileViewModel.saveNewUser(newUser)
+        // set a default image
+        profile_image.setImageResource(defaultImage)
+
+        // save the user in firestore and wait for it to finish before continuing
+        // this is important as otherwise there would occur a race condition between inserting and requesting it in the viewmodel observer
+        runBlocking {
+            profileViewModel.saveNewUser(newUser)
+        }
+
+        observeViewModel()
     }
 
     private fun observeViewModel() {

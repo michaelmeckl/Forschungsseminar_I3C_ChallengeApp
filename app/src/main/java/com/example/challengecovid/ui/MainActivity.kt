@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
                 custom_toolbar.setLogo(R.drawable.ic_coronavirus)
             }
         }*/
+
+        //TODO check here if there is a internet connection otherwise inform the user that the app may not run as expected!
     }
 
     private fun setupToolbar() {

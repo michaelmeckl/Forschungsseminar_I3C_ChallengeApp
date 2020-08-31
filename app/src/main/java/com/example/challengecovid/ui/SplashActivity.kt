@@ -35,9 +35,11 @@ class SplashActivity : AppCompatActivity() {
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
         animateSplashScreen()
 
+        //TODO check here if there is a internet connection otherwise skip to main Activity!! (or dont allow access?)
+
         firstRun = Utils.checkFirstRun(this@SplashActivity)
         // if this is the first start prepopulate the firestore db
-        if (firstRun) initDatabase()        //TODO: wenn das bei jedem nutzer passiert ist das schlecht!!!
+        if (firstRun) initDatabase()
 
         handleIncomingCloudMessages()
 
@@ -95,7 +97,7 @@ class SplashActivity : AppCompatActivity() {
             delay(2000)
 
             //TODO: revert this later!!!
-            startCharacterCreation()
+             startCharacterCreation()
             /*
             if (firstRun) {
                 startCharacterCreation()

@@ -36,6 +36,7 @@
     <string name="change_profile_pic">Change profile picture</string>
     <string name="desc">Description</string>
 
+    <string name="wrong_user_id_error">Your userID wasn\'t recognized! Please contact the testers!</string>
 
 
     <!-- TODO hilfreiche Informationen zu Corona: (könnte man in einem Corona Guidelines Fragment verwenden)

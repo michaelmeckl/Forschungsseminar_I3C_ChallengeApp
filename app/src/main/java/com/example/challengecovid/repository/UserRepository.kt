@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class UserRepository {
@@ -107,7 +108,7 @@ class UserRepository {
     } as MutableLiveData<User>
 
     //CREATE
-    fun saveNewUser(user: User): String {
+    suspend fun saveNewUser(user: User): String = withContext(Dispatchers.IO){
         val userReference = userCollection.document(user.userId)
 
         userReference.set(user).addOnSuccessListener {
@@ -116,7 +117,7 @@ class UserRepository {
             Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
         }
 
-        return userReference.id
+        userReference.id
     }
 
     fun addActiveChallenge(challenge: BaseChallenge, userId: String) {
