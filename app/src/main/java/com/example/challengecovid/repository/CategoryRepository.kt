@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.ChallengeCategory
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -82,7 +83,7 @@ class CategoryRepository {
             // create a new reference for this category
             val docRef = categoryCollection.document(category.categoryId)
             // and add it to the WriteBatch
-            batchWrite.set(docRef, category)
+            batchWrite.set(docRef, category, SetOptions.merge())
         }
 
         // commit the batch (i.e. write all to the db)

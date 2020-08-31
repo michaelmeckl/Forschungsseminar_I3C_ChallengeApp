@@ -8,6 +8,7 @@ import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -94,7 +95,7 @@ class ChallengeRepository {
             // create a new reference for this challenge
             val docRef = challengeCollection.document(challenge.challengeId)
             // and add it to the WriteBatch
-            batchWrite.set(docRef, challenge)
+            batchWrite.set(docRef, challenge, SetOptions.merge())
         }
 
         // commit the batch (i.e. write all to the db)

@@ -37,7 +37,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        observeViewmodel()
+        observeViewModel()
 
         profile_picture.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileToCharacterSelect()
@@ -56,7 +56,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun observeViewmodel() {
+    private fun observeViewModel() {
         profileViewModel.currentUser.observe(viewLifecycleOwner, {
 
             // set only the hint instead of the text to prevent two way binding (which wouldn't allow to edit the field anymore)

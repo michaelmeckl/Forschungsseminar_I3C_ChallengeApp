@@ -1,6 +1,7 @@
 package com.example.challengecovid.viewmodels
 
 import android.app.Application
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,6 +13,7 @@ import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class ProfileViewModel(private val userRepository: UserRepository, private val app: Application) :
     AndroidViewModel(app) {
@@ -21,8 +23,12 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
     //val currentUserId: LiveData<String> = _currentUserId
 
     val currentUser: MutableLiveData<User> by lazy {
+        //TODO: hier ist noch die alte user id ?????? überall sonst die richtige, aber das bedeutet das der falsche user in firebase geupdated wird hier
         val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        //TODO
+        Timber.d(userId)
 
         /*
         Timber.d("userId: $userId")
@@ -37,12 +43,15 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val uId = userRepository.saveNewUser(user)
-                //_currentUserId.postValue(uId)    //postValue because asynchronous context
-                currentUser.postValue(user)
 
                 // store the generated userId in the shared prefs to be able to access this user later
                 val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
                 sharedPrefs.edit().putString(Constants.PREFS_USER_ID, uId).apply()
+                //TODO
+                Timber.d(uId)
+
+                //_currentUserId.postValue(uId)    //postValue because asynchronous context
+                currentUser.postValue(user)
             }
         }
     }

@@ -154,6 +154,9 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
             activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
+        Toast.makeText(activity, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()  //TODO
+        Timber.d(currentUserId)
+
         // return early if fetching the user id didn't work
         if (currentUserId == "") return
 

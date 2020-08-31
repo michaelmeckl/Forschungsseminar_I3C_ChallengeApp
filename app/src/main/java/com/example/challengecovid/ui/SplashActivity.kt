@@ -22,6 +22,7 @@ import timber.log.Timber
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
+    private var firstRun = false
 
     //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
     // alternativ vllt über firebase in app messaging gut umsetzbar!
@@ -34,9 +35,9 @@ class SplashActivity : AppCompatActivity() {
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
         animateSplashScreen()
 
-        val firstRun = Utils.checkFirstRun(this@SplashActivity)
+        firstRun = Utils.checkFirstRun(this@SplashActivity)
         // if this is the first start prepopulate the firestore db
-        if (firstRun) initDatabase()
+        if (firstRun) initDatabase()        //TODO: wenn das bei jedem nutzer passiert ist das schlecht!!!
 
         handleIncomingCloudMessages()
 
@@ -94,14 +95,12 @@ class SplashActivity : AppCompatActivity() {
             delay(2000)
 
             //TODO: revert this later!!!
-            startCharacterCreation()
-            /*
+            //startCharacterCreation()
             if (firstRun) {
                 startCharacterCreation()
             } else {
                 startMain()
             }
-            */
         }
     }
 
@@ -141,6 +140,8 @@ class SplashActivity : AppCompatActivity() {
     private fun fetchNewData() {
         //TODO get new challenges from internet and save them in the room db!
     }
+
+    //TODO: check this on the other screens too?
 
     // show alert dialog when no internet connection
     private fun showConnectionAlert() {

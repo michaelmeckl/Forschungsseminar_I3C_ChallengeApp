@@ -59,6 +59,9 @@ class OverviewViewModel(
         val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
+        Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()  //TODO
+        Timber.d(currentUserId)
+
         Timber.tag("FIRE userId viewmodel").d(currentUserId)
         if (currentUserId === "") {
             Toast.makeText(application, "Provided user id is not correct! Please try to restart!", Toast.LENGTH_LONG).show()
