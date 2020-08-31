@@ -143,7 +143,7 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
     }
 
-    //TODO: wäre das nicht eher einfach nur delete?
+
     fun updateActiveChallenge(challenge: BaseChallenge, userId: String) {
         val ref = userCollection
             .document(userId)

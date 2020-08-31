@@ -1,14 +1,11 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.ChallengeCategory
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -26,7 +23,6 @@ class CategoryRepository {
 
     // GET-ALL
     fun getAllCategories(): LiveData<List<ChallengeCategory>> = liveData(Dispatchers.IO) {
-        //TODO
         /*while (true) {
             val allCategories = fetchCategoriesFromFirebase()
             allCategories?.let { emit(it) }
@@ -61,19 +57,6 @@ class CategoryRepository {
         return categorySnapshot.toObject(ChallengeCategory::class.java)
     }
 
-    //CREATE
-    fun saveNewCategory(category: ChallengeCategory): String {
-        val categoryReference = categoryCollection.document(category.categoryId)
-
-        categoryReference.set(category).addOnSuccessListener {
-            Toast.makeText(App.instance, "Category saved successfully!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new category: $e", Toast.LENGTH_SHORT).show()
-        }
-
-        return categoryReference.id
-    }
-
     //CREATE-MULTIPLE
     fun saveMultipleCategories(categoryList: List<ChallengeCategory>) {
         //use a batched write to insert all at the same time to prevent possible inconsistencies!
@@ -102,15 +85,6 @@ class CategoryRepository {
             .set(category)
             .addOnSuccessListener { Timber.tag(CATEGORY_REPO_TAG).d("category successfully updated!") }
             .addOnFailureListener { e -> Timber.tag(CATEGORY_REPO_TAG).d("Error updating category: $e") }
-    }
-
-    //DELETE
-    fun deleteCategory(category: ChallengeCategory) {
-        val categoryRef = categoryCollection.document(category.categoryId)
-
-        categoryRef.delete()
-            .addOnSuccessListener { Timber.tag(CATEGORY_REPO_TAG).d("category successfully deleted!") }
-            .addOnFailureListener { e -> Timber.tag(CATEGORY_REPO_TAG).d("Error deleting category: $e") }
     }
 
 

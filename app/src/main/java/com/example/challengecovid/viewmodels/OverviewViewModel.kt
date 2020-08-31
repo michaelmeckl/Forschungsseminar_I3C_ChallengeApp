@@ -50,7 +50,7 @@ class OverviewViewModel(
     private var currentChallenge = MutableLiveData<UserChallenge>()
 
     private var currentUserId: String = ""
-    lateinit var allChallenges: LiveData<List<BaseChallenge>> /*by lazy { MutableLiveData<List<BaseChallenge>>() }*/
+    lateinit var allChallenges: LiveData<List<BaseChallenge>>
 
     init {
         val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
@@ -90,15 +90,15 @@ class OverviewViewModel(
     /**
      * Add a new challenge to the database.
     fun addNewChallenge(userChallenge: UserChallenge) {
-    //launch on the main thread because the result affects the UI
-    uiScope.launch {
-    // insert the new challenge on a separate I/O thread that is optimized for room interaction
-    // to avoid blocking the main / UI thread
-    withContext(Dispatchers.IO) {
-    challengeRepository.saveUserChallenge(userChallenge)
-    }
-    _showSnackbarEvent.value = true
-    }
+        //launch on the main thread because the result affects the UI
+        uiScope.launch {
+            // insert the new challenge on a separate I/O thread that is optimized for room interaction
+            // to avoid blocking the main / UI thread
+            withContext(Dispatchers.IO) {
+                challengeRepository.saveUserChallenge(userChallenge)
+            }
+            _showSnackbarEvent.value = true
+        }
     }
      */
 
@@ -122,7 +122,7 @@ class OverviewViewModel(
     fun removeChallenge(challenge: BaseChallenge) {
         if(challenge.type == ChallengeType.USER_CHALLENGE) {
             //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
-            // challengeRepository.deleteUserChallenge(challenge as? UserChallenge)
+            //challengeRepository.deleteUserChallenge(challenge as? UserChallenge)
             userRepository.removeActiveChallenge(challenge, currentUserId)
         }
 

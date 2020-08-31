@@ -149,6 +149,7 @@ class OverviewFragment : Fragment() {
             }
         })
 
+        /*
         overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, {
             if (it == true) {
                 Snackbar.make(
@@ -160,7 +161,7 @@ class OverviewFragment : Fragment() {
                 // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
-        })
+        })*/
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
