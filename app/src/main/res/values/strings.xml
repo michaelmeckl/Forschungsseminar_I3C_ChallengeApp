@@ -28,6 +28,8 @@
     <string name="share_title">Share this challenge via</string>
 
     <string name="username_placeholder">Anonymous</string>
+    <string name="creator_in_feed">created by %s</string>
+
     <string name="level" translatable="false">Level %d</string>
 
     <string name="edit_profile">Edit profile</string>

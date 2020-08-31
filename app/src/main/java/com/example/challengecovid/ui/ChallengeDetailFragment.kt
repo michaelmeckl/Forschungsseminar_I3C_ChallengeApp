@@ -1,14 +1,19 @@
 package com.example.challengecovid.ui
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.ChallengeType
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
+
 
 class ChallengeDetailFragment: Fragment() {
 
@@ -34,9 +39,15 @@ class ChallengeDetailFragment: Fragment() {
             publish_switch.visibility = View.GONE
         }
 
+        // get the saved switch state and set it
+        val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
+        publish_switch.isChecked = switchState
+
         publish_switch.setOnCheckedChangeListener { _, isChecked ->
             //update the public status of the challenge
             challengeRepository.updatePublicStatus(id, publicStatus = isChecked)
+            sharedPrefs?.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked)?.apply()
         }
 
     }
@@ -50,7 +61,7 @@ class ChallengeDetailFragment: Fragment() {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, message)
             type = "text/plain"
-        },  requireActivity().getString(R.string.share_title))
+        }, requireActivity().getString(R.string.share_title))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

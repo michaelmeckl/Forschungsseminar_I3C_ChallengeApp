@@ -26,6 +26,7 @@
     <string name="share_title">Teile diese Challenge</string>
 
     <string name="username_placeholder">Anonym</string>
+    <string name="creator_in_feed">erstellt von %s</string>
 
     <string name="edit_profile">Profil bearbeiten</string>
     <string name="save_changes">Änderungen speichern</string>

@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -107,11 +109,38 @@ class ChallengeRepository {
     }
 
     //TODO sollten die lieber alle als subcollection bei den users sein, um duplikate zu vermeiden??
+    //UPDATE
+    fun updateChallenge(challenge: Challenge) {
+        val oldChallengeRef = challengeCollection.document(challenge.challengeId)
+
+        oldChallengeRef
+            //.update("description", challenge.description, "title", challenge.title)
+            .set(challenge)     //using set(data, SetOptions.merge()) to only update the parts that changed!
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
+    }
+
+    fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
+        val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
+            challengeCollection.document(id)
+        } else  {
+            userChallengeCollection.document(id)
+        }
+
+        challengeRef
+            .update("completed", completed)
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully marked as completed!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
+    }
+
     /**
      * ################################################
      *              User Challenges
      * ################################################
      */
+
+    //TODO: im moment sind die doppelt drin! hier wäre eigentlich eine collection group query nötig!
+    // -> sonst inkonsistenzen!
 
     // GET-ALL
     fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {

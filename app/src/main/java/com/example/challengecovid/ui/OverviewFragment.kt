@@ -22,6 +22,7 @@ import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
 
+import timber.log.Timber
 
 class OverviewFragment : Fragment() {
 
@@ -49,6 +50,7 @@ class OverviewFragment : Fragment() {
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
             override fun onChallengeClick(challenge: BaseChallenge) {
                 showChallengeDetails(challenge)
+                setChallengeCompleted(challenge)    //TODO: nur bei klick auf completed haken oder so, nicht auf ganzes!
             }
         })
 
@@ -123,6 +125,21 @@ class OverviewFragment : Fragment() {
     }
 
      */
+
+    private fun setChallengeCompleted(challenge: BaseChallenge) {
+
+        if (challenge.completed) {
+            Timber.d("Skipping setChallengeCompleted because challenge.completed = true")
+            return
+        }
+        Timber.d("setChallengeCompleted, ${challenge.completed} before")
+        overviewViewModel.setChallengeCompleted(challenge)
+        Timber.d("setChallengeCompleted, ${challenge.completed} after")
+
+//        challengeListAdapter.notifyDataSetChanged()
+
+    }
+
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->

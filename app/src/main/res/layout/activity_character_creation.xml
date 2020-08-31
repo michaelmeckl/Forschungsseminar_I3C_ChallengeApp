@@ -24,7 +24,7 @@
         android:layout_marginHorizontal="32dp"
         android:elevation="2dp"
         android:src="@drawable/ic_home"
-        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
+        app:layout_constraintBottom_toTopOf="@+id/choose_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/choose_image" />
@@ -33,26 +33,37 @@
         android:id="@+id/choose_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="34dp"
         android:text="Gib einen Usernamen ein:"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintBottom_toTopOf="@+id/username_edit_field"
+        app:layout_constraintBottom_toTopOf="@+id/layout_user_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profile_image" />
 
-    <EditText
-        android:id="@+id/username_edit_field"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_user_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="54dp"
-        android:layout_marginVertical="@dimen/margin_normal"
-        android:autofillHints="Username"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="4dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginBottom="@dimen/margin_normal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/choose_username"
-        tools:ignore="LabelFor" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/finish_character_creation_btn"
+        app:layout_constraintTop_toBottomOf="@+id/choose_username">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_edit_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="Nutzername"
+            android:inputType="text"
+            android:maxLength="30" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/finish_character_creation_btn"
@@ -60,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="Weiter"
+        app:layout_constraintTop_toBottomOf="@id/layout_user_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -57,7 +57,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                 withContext(Dispatchers.Main) {
                     if (creator != null) {
                         // set icon and name of the user that created that challenge
-                        itemView.feed_item_creator.text = creator.username
+                        itemView.feed_item_creator.text = itemView.resources.getString(R.string.creator_in_feed, creator.username)
                         val userIcon = itemView.context.resources.getIdentifier(
                             creator.userIcon,
                             "drawable",
@@ -67,7 +67,8 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
 
                     } else {
                         // set default userIcon and name
-                        itemView.feed_item_creator.text = itemView.resources.getString(R.string.username_placeholder)
+                        val textAnonymousUser = itemView.resources.getString(R.string.username_placeholder)
+                        itemView.feed_item_creator.text = itemView.resources.getString(R.string.creator_in_feed, textAnonymousUser)
                         itemView.feed_creator_icon.setImageResource(R.drawable.ic_person)
                     }
                 }

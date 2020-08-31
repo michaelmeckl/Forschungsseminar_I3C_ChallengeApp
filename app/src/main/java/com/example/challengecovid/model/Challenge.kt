@@ -12,7 +12,7 @@ data class Challenge(
     override val title: String,
     override val description: String,
     override val difficulty: Difficulty,
-    override val completed: Boolean,
+    override var completed: Boolean,
     override val duration: Int,
     val containingCategory: String,     // to which category this challenge belongs
     // IMPORTANT: Don't save the resource identifier for the image as this is generated at compile time and can therefore change!
