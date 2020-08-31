@@ -27,6 +27,7 @@ class UserRepository {
 
 
     // GET-ALL
+    /*
     fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.IO) {
         while (true) {
             val allUsers = fetchUsersFromFirebase()
@@ -52,7 +53,7 @@ class UserRepository {
             Timber.tag(USER_REPO_TAG).d(e)
             null
         }
-    }
+    }*/
 
     fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.IO) {
         Timber.tag("FIREBASE userId in repo").d(userId)
@@ -101,7 +102,7 @@ class UserRepository {
         while (true) {
             val userSnapshot = userCollection.document(id).get().await()
             userSnapshot.toObject(User::class.java)?.let { emit(it) }
-            //delay(3000)
+            //delay(1000)
         }
     } as MutableLiveData<User>
 

@@ -28,12 +28,13 @@
         </activity>
 
         <activity
-            android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".ui.CharacterCreationActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".ui.CharacterCreationActivity">
+            android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
         <service
@@ -57,17 +58,11 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorSecondary" />
 
-        <!--
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.challengecovid.fileprovider"
-            android:grantUriPermissions="true"
-            android:exported="false">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths" />
-        </provider>
-        -->
+        <!-- Specifying stopWithTask="false" will cause the onTaskRemoved() method to be triggered in
+        our own service when the task is removed from the Process, e.g. when the application is closed.
+        <service android:name=".CloseService"
+            android:stopWithTask="false"/>
+           -->
 
     </application>
 

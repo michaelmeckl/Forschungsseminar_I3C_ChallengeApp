@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
 
-//TODO: comment out or remove all timber logs later!
 class MainActivity : AppCompatActivity() {
 
     private val navController: NavController by lazy { setupNavController() }
