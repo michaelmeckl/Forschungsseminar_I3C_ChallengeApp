@@ -38,7 +38,7 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
             withContext(Dispatchers.IO) {
                 val uId = userRepository.saveNewUser(user)
                 //_currentUserId.postValue(uId)    //postValue because asynchronous context
-                //currentUser.postValue(user)
+                currentUser.postValue(user)
 
                 // store the generated userId in the shared prefs to be able to access this user later
                 val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
