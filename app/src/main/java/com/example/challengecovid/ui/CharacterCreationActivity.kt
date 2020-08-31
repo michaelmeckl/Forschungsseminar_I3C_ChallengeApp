@@ -3,6 +3,8 @@ package com.example.challengecovid.ui
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import com.example.challengecovid.App
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
@@ -10,6 +12,7 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.User
 import com.example.challengecovid.ui.profile.CharacterSelectFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
+import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.activity_character_creation.*
 import timber.log.Timber
@@ -26,10 +29,12 @@ class CharacterCreationActivity : AppCompatActivity() {
         Timber.tag("FIREBASE").d("in onCreate in character creation activity")
 
         val userRepository = RepositoryController.getUserRepository()
-        profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
+        val app = App.instance
+        profileViewModel = ViewModelProvider(app, ProfileViewModelFactory(userRepository, app)).get()
+        //profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
 
         createDefaultUser()
-        observeViewmodel()
+        observeViewModel()
 
         profile_image.setOnClickListener {
             startCharacterSelection()
@@ -57,16 +62,10 @@ class CharacterCreationActivity : AppCompatActivity() {
         profileViewModel.saveNewUser(newUser)
     }
 
-    private fun observeViewmodel() {
+    private fun observeViewModel() {
         profileViewModel.currentUser.observe(this, {
-            it ?: return@observe
             val iconName = it.userIcon
             profile_image.setImageResource(resources.getIdentifier(iconName, "drawable", packageName))
-        })
-        profileViewModel.currentUserId.observe(this, {
-            // store the generated userId in the shared prefs to be able to access this user later
-            val sharedPrefs = getSharedPreferences(Constants.SHARED_PREFS_NAME, MODE_PRIVATE)
-            sharedPrefs.edit().putString(Constants.PREFS_USER_ID, it).apply()
         })
     }
 

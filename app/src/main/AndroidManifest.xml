@@ -59,10 +59,9 @@
             android:resource="@color/colorSecondary" />
 
         <!-- Specifying stopWithTask="false" will cause the onTaskRemoved() method to be triggered in
-        our own service when the task is removed from the Process, e.g. when the application is closed.
+        our own service when the task is removed from the Process, e.g. when the application is closed.-->
         <service android:name=".CloseService"
             android:stopWithTask="false"/>
-           -->
 
     </application>
 

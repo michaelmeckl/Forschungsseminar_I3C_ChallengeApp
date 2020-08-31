@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
 import androidx.navigation.findNavController
+import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
-import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
 class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
@@ -31,8 +30,11 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        val store: ViewModelStoreOwner =
-            requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
+        /*
+        val store = requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
+        profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
+        */
+        val store = App.instance
         profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
 
         return root
@@ -54,11 +56,12 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         }
     }
 
+    /*
     private fun isNullOrEmpty(str: String?): Boolean {
         if (str != null && str.isNotEmpty())
             return false
         return true
-    }
+    }*/
 
     override fun onClick(v: View?) {
         v ?: return
@@ -74,7 +77,6 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
         val resID = resources.getIdentifier(chosenPicture, "drawable", activity?.packageName)
         set_profile_picture.setImageResource(resID)
-
     }
 }
 

@@ -13,15 +13,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ProfileViewModel(private val userRepository: UserRepository, application: Application) :
-    AndroidViewModel(application) {
+class ProfileViewModel(private val userRepository: UserRepository, private val app: Application) :
+    AndroidViewModel(app) {
 
     //TODO: should be a singleLiveData actually
-    private val _currentUserId: MutableLiveData<String> by lazy { MutableLiveData<String>() }
-    val currentUserId: LiveData<String> = _currentUserId
+    //private val _currentUserId: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    //val currentUserId: LiveData<String> = _currentUserId
 
     val currentUser: MutableLiveData<User> by lazy {
-        val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
         /*
@@ -37,8 +37,12 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val uId = userRepository.saveNewUser(user)
-                _currentUserId.postValue(uId)    //postValue because asynchronous context
+                //_currentUserId.postValue(uId)    //postValue because asynchronous context
                 //currentUser.postValue(user)
+
+                // store the generated userId in the shared prefs to be able to access this user later
+                val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+                sharedPrefs.edit().putString(Constants.PREFS_USER_ID, uId).apply()
             }
         }
     }
@@ -55,22 +59,17 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
     }*/
 
     fun updateUser(user: User) = viewModelScope.launch {
-        //currentUser.value = user
         withContext(Dispatchers.IO) {
             userRepository.updateUser(user)
         }
     }
 
     fun updateUserName(username: String) = viewModelScope.launch {
-        //val us = currentUser.value
-        //us?.username = username
         val id = currentUser.value?.userId ?: return@launch
         userRepository.updateUserName(username, id)
     }
 
     fun updateUserIcon(userIcon: String) = viewModelScope.launch {
-        //val us = currentUser.value
-        //us?.userIcon = userIcon
         val id = currentUser.value?.userId ?: return@launch
         //val id = currentUserId.value
         userRepository.upDateUserIcon(userIcon, id)

@@ -102,7 +102,7 @@ class UserRepository {
         while (true) {
             val userSnapshot = userCollection.document(id).get().await()
             userSnapshot.toObject(User::class.java)?.let { emit(it) }
-            //delay(1000)
+            delay(1000)
         }
     } as MutableLiveData<User>
 

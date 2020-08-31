@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
 import androidx.navigation.findNavController
+import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
@@ -18,16 +18,16 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
 
-    //private val num = 36
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
 
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-
-        val store: ViewModelStoreOwner =
-            requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
+        /*
+        val store = requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
+        profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
+        */
+        val store = App.instance
         profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
 
         return root
@@ -48,6 +48,9 @@ class ProfileFragment : Fragment() {
             val newName = change_name_field.text.toString()
             profileViewModel.updateUserName(newName)
 
+            // clear the focus of the edit field so it won't be activated the next time the user enters the profile
+            change_name_field.clearFocus()
+
             //remove this fragment from the backstack to navigate back
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
@@ -55,14 +58,12 @@ class ProfileFragment : Fragment() {
 
     private fun observeViewmodel() {
         profileViewModel.currentUser.observe(viewLifecycleOwner, {
-            it ?: return@observe
+
+            // set only the hint instead of the text to prevent two way binding (which wouldn't allow to edit the field anymore)
+            change_name_field.hint = it.username
 
             profile_name.text = it.username
-
-            //TODO: does not work: not editable because of livedata
-            //change_name_field.setText(it.username)
-
-            profile_level.text = "Level " + it.level.toString()
+            profile_level.text = getString(R.string.level, it.level)
 
             val iconIdentifier =
                 requireActivity().resources.getIdentifier(it.userIcon, "drawable", requireActivity().packageName)
