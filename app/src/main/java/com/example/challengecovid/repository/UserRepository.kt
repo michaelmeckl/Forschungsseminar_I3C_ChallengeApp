@@ -181,7 +181,6 @@ class UserRepository {
     }
 
     /*
-    //TODO:
     fun getUsersWithMinLevel(level: Int) {
         db.collection("cities")
             .whereEqualTo("capital", true)
@@ -198,7 +197,6 @@ class UserRepository {
     */
 
     /*
-    //TODO:
     fun getBestUsers() {
         userCollection
             .orderBy("level", Query.Direction.DESCENDING)
@@ -217,7 +215,6 @@ class UserRepository {
      */
 
     //listen for realtime updates
-    //TODO:
     fun listenOnUpdates() {
         val listener = userCollection.whereEqualTo("state", "CA")
             .addSnapshotListener { snapshots, e ->

@@ -106,18 +106,7 @@ class ChallengeRepository {
         }
     }
 
-    //UPDATE
-    fun updateChallenge(challenge: Challenge) {
-        val oldChallengeRef = challengeCollection.document(challenge.challengeId)
-
-        oldChallengeRef
-            //.update("description", challenge.description, "title", challenge.title)
-            .set(challenge)     //using set(data, SetOptions.merge()) to only update the parts that changed!
-            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully updated!") }
-            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
-    }
-
-
+    //TODO sollten die lieber alle als subcollection bei den users sein, um duplikate zu vermeiden??
     /**
      * ################################################
      *              User Challenges
@@ -159,65 +148,6 @@ class ChallengeRepository {
             null
         }
     }
-
-    /*
-    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData {
-        while (true) {
-            val userChallengesForUser = fetchUserChallengesForUser(userId)
-            val systemChallengesForUser = fetchSystemChallengesForUser(userId)
-            val allChallenges = ArrayList<BaseChallenge>()
-            userChallengesForUser?.let { allChallenges.addAll(it) }
-            systemChallengesForUser?.let { allChallenges.addAll(it) }
-            emit(allChallenges)
-            delay(1000)     // refresh for new data every second
-        }
-    }
-
-    private suspend fun fetchUserChallengesForUser(userId: String): List<UserChallenge>? {
-        return try {
-            val challengeList: MutableList<UserChallenge> = ArrayList()
-            val docSnapshots = userChallengeCollection
-                .whereEqualTo("creatorId", userId)   // get the user challenges for this user
-                .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
-                .get().await().documents    // wait for completion and convert them to document snapshots
-
-            if (docSnapshots.isNotEmpty()) {
-                for (snapshot in docSnapshots)
-                    snapshot.toObject(UserChallenge::class.java)?.let {
-                        challengeList.add(it)
-                    }
-            }
-
-            challengeList
-        } catch (e: Exception) {
-            Timber.tag(CHALLENGE_REPO_TAG).d(e)
-            null
-        }
-    }
-
-    private suspend fun fetchSystemChallengesForUser(userId: String): List<Challenge>? {
-        return try {
-            val challengeList: MutableList<Challenge> = ArrayList()
-            val docSnapshots = challengeCollection
-                .whereEqualTo("creatorId", userId)   // get the system challenges for this user
-                .orderBy("acceptedDate", Query.Direction.DESCENDING)
-                .get().await().documents
-
-            if (docSnapshots.isNotEmpty()) {
-                for (snapshot in docSnapshots)
-                    snapshot.toObject(Challenge::class.java)?.let {
-                        challengeList.add(it)
-                    }
-            }
-
-            challengeList
-        } catch (e: Exception) {
-            Timber.tag(CHALLENGE_REPO_TAG).d(e)
-            null
-        }
-    }
-
-     */
 
     //GET
     suspend fun getUserChallenge(id: String): UserChallenge? {
