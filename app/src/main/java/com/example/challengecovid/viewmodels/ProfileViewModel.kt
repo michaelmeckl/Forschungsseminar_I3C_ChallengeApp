@@ -36,7 +36,8 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
             Toast.makeText(App.instance, "Provided user id is not correct! Please restart!", Toast.LENGTH_LONG).show()
         }*/
 
-        userRepository.getUser(userId)
+        //TODO userRepository.getUser(userId)
+        MutableLiveData<User>()
     }
 
     fun saveNewUser(user: User) {
@@ -51,7 +52,7 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
                 Timber.d(uId)
 
                 //_currentUserId.postValue(uId)    //postValue because asynchronous context
-                currentUser.postValue(user)
+                //TODO: bug:currentUser.postValue(user)
             }
         }
     }

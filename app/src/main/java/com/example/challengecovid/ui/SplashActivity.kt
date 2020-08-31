@@ -95,12 +95,13 @@ class SplashActivity : AppCompatActivity() {
             delay(2000)
 
             //TODO: revert this later!!!
-            //startCharacterCreation()
+            startCharacterCreation()
+            /*
             if (firstRun) {
                 startCharacterCreation()
             } else {
                 startMain()
-            }
+            }*/
         }
     }
 
