@@ -1,91 +1,47 @@
 package com.example.challengecovid.viewmodels
 
 import android.app.Application
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
-import com.example.challengecovid.App
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.challengecovid.Constants
 import com.example.challengecovid.model.User
 import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class ProfileViewModel(private val userRepository: UserRepository, application: Application) :
     AndroidViewModel(application) {
 
-    val name = MutableLiveData<String>()
+    //TODO: should be a singleLiveData actually
+    private val _currentUserId: MutableLiveData<String> by lazy { MutableLiveData<String>() }
+    val currentUserId: LiveData<String> = _currentUserId
 
-    private var currentUserId: String = ""
-    private lateinit var currentUser: MutableLiveData<User>
+    val currentUser: MutableLiveData<User> by lazy {
+        val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-    object CurrentUser {
-        val app = App.instance
-        private val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        private val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+        /*
+        Timber.d("userId: $userId")
+        if (userId == "") {
+            Toast.makeText(App.instance, "Provided user id is not correct! Please restart!", Toast.LENGTH_LONG).show()
+        }*/
 
-        private val currentUser: User = User(currentUserId)
-
-        fun getCurrentUser(): User {
-            return currentUser
-        }
+        userRepository.getUser(userId)
     }
 
-    init {
-        if(currentUserId == "") {
-            val app = App.instance
-            val sharedPrefs = app.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-            currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
-
-            Timber.d("userId: $currentUserId")
-            if (currentUserId == "") {
-                Toast.makeText(app, "Provided user id is not correct! Please restart!", Toast.LENGTH_LONG).show()
-            } else {
-                viewModelScope.launch {
-                    currentUser = userRepository.getUser(currentUserId)
-                    Timber.d("hallo")
-                }
-            }
-        }
-    }
-
-
-
-/*
-    fun getCurrentUser(): User? {
-        if(this::currentUser.isInitialized) {
-            return currentUser.value
-        }
-        return null
-    }
-
-
- */
-
-
-    fun observeImage(): LiveData<String> = liveData(Dispatchers.IO) {
-        while (true) {
-            val icon = currentUser.value?.userIcon
-            if (icon != null) {
-                emit(icon)
-            }
-            delay(3000)
-        }
-    }
-
-    /*
-    fun insertNewUser(user: User): String? {
-        var id: String? = null
+    fun saveNewUser(user: User) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                id = userRepository.saveNewUser(user)
+                val uId = userRepository.saveNewUser(user)
+                _currentUserId.postValue(uId)    //postValue because asynchronous context
+                //currentUser.postValue(user)
             }
         }
-        return id
-    }*/
+    }
 
     /*
     fun getUser(userID: String): User? {
@@ -99,20 +55,25 @@ class ProfileViewModel(private val userRepository: UserRepository, application: 
     }*/
 
     fun updateUser(user: User) = viewModelScope.launch {
-        currentUser.value = user    //TODO: this would be redundant if livedata is used for the currentuser instead!
+        //currentUser.value = user
         withContext(Dispatchers.IO) {
             userRepository.updateUser(user)
         }
     }
 
     fun updateUserName(username: String) = viewModelScope.launch {
-        currentUser.value?.username = username
-        userRepository.updateUserName(username, currentUserId)
+        //val us = currentUser.value
+        //us?.username = username
+        val id = currentUser.value?.userId ?: return@launch
+        userRepository.updateUserName(username, id)
     }
 
     fun updateUserIcon(userIcon: String) = viewModelScope.launch {
-        currentUser.value?.userIcon = userIcon
-        userRepository.upDateUserIcon(userIcon,currentUserId)
+        //val us = currentUser.value
+        //us?.userIcon = userIcon
+        val id = currentUser.value?.userId ?: return@launch
+        //val id = currentUserId.value
+        userRepository.upDateUserIcon(userIcon, id)
     }
 
 

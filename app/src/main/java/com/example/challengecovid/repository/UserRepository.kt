@@ -97,7 +97,7 @@ class UserRepository {
     }
 
     //GET
-    suspend fun getUser(id: String): MutableLiveData<User> = liveData(Dispatchers.IO) {
+    fun getUser(id: String): MutableLiveData<User> = liveData(Dispatchers.IO) {
         while (true) {
             val userSnapshot = userCollection.document(id).get().await()
             userSnapshot.toObject(User::class.java)?.let { emit(it) }
@@ -178,15 +178,6 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting challenge from array: $e") }
     }
 
-/*
-    fun getCurrentUser(userId: String){
-        val userRef = userCollection.document(userId)
-            userRef.get()
-                .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("User successfully retrieved from array!") }
-                .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error retrieving user from array: $e") }
-    }
-
- */
     /*
     //TODO:
     fun getUsersWithMinLevel(level: Int) {

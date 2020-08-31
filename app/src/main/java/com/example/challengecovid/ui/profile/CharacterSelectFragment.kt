@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.get
+import androidx.navigation.findNavController
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
+import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_character_selection.*
 
@@ -26,15 +31,15 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
+        val store: ViewModelStoreOwner =
+            requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
+        profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
 
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //val firstRun = Utils.checkFirstRun(requireActivity())
 
         set_profile_picture_1.setOnClickListener(this)
         set_profile_picture_2.setOnClickListener(this)
@@ -48,18 +53,6 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
             dismiss()
         }
     }
-    /*
-
-    private fun updateUser() {
-        //TODO: get Current user ist hier immer null!!!!!!!!!!!!
-        val currentUser = profileViewModel.getCurrentUser() ?: return
-        currentUser.userIcon = chosenPicture
-        profileViewModel.updateUser(currentUser)
-
-        //profileViewModel.updateUserIcon(chosenPicture)
-    }
-
-     */
 
     private fun isNullOrEmpty(str: String?): Boolean {
         if (str != null && str.isNotEmpty())
