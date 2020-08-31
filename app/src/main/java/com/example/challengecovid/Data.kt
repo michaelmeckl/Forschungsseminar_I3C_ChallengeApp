@@ -120,7 +120,7 @@ object Data {
     )
 
 
-    //TODO: die icons müssen noch ausgebessert werden!
+    //TODO: die icons müssten (eigentlich) noch ausgebessert werden!
     private fun getHealthyChallenges(): List<Challenge> = listOf(
         Challenge(
             challengeId="Trinke Wasser!",

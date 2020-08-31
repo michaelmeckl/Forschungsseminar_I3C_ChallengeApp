@@ -12,6 +12,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.example.challengecovid.R
+import com.example.challengecovid.Utils
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
@@ -48,12 +49,12 @@ class MainActivity : AppCompatActivity() {
                 // remove the toolbar logo in the detail view and in the credits
                 custom_toolbar.logo = null
             } else {
-                //TODO: maybe find some other suitable icon?
                 custom_toolbar.setLogo(R.drawable.ic_coronavirus)
             }
         }*/
 
-        //TODO check here if there is a internet connection otherwise inform the user that the app may not run as expected!
+        // check if there is an internet connection otherwise show a connection alert
+        Utils.checkInternet(this)
     }
 
     private fun setupToolbar() {

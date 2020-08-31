@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -34,8 +35,6 @@ class SplashActivity : AppCompatActivity() {
 
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
         animateSplashScreen()
-
-        //TODO check here if there is a internet connection otherwise skip to main Activity!! (or dont allow access?)
 
         firstRun = Utils.checkFirstRun(this@SplashActivity)
         // if this is the first start prepopulate the firestore db
@@ -93,17 +92,14 @@ class SplashActivity : AppCompatActivity() {
 
     private fun showSplashScreen() {
         job = CoroutineScope(Dispatchers.Default).launch {
-            // wait for 2 seconds
-            delay(2000)
+            // show the splash screen for 1 1/2 seconds
+            delay(1500)
 
-            //TODO: revert this later!!!
-             startCharacterCreation()
-            /*
             if (firstRun) {
                 startCharacterCreation()
             } else {
                 startMain()
-            }*/
+            }
         }
     }
 
@@ -121,40 +117,6 @@ class SplashActivity : AppCompatActivity() {
         startActivity(intent)
 
         finish()
-    }
-
-    private fun loadNewChallengeData() {
-
-        this.let {
-            if (Utils.isNetworkConnected(it)) {
-                fetchNewData()
-            } else {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.no_internet + R.string.no_internet_warning,
-                    Snackbar.LENGTH_LONG
-                ).show()
-
-                //showConnectionAlert()
-            }
-        }
-    }
-
-    private fun fetchNewData() {
-        //TODO get new challenges from internet and save them in the room db!
-    }
-
-    //TODO: check this on the other screens too?
-
-    // show alert dialog when no internet connection
-    private fun showConnectionAlert() {
-        AlertDialog.Builder(this)
-            .setTitle(R.string.no_internet)
-            .setMessage(R.string.no_internet_warning)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> }
-            .setNegativeButton(android.R.string.cancel) { _, _ -> }
-            .show()
     }
 
     override fun onDestroy() {

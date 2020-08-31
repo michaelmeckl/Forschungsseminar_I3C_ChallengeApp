@@ -8,6 +8,7 @@ import androidx.lifecycle.get
 import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.Utils
 import com.example.challengecovid.model.User
 import com.example.challengecovid.ui.profile.CharacterSelectFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
@@ -26,6 +27,9 @@ class CharacterCreationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_character_creation)
 
         Timber.tag("FIREBASE").d("in onCreate in character creation activity")
+
+        // check if there is an internet connection otherwise show a connection alert
+        Utils.checkInternet(this)
 
         val userRepository = RepositoryController.getUserRepository()
         val app = App.instance
