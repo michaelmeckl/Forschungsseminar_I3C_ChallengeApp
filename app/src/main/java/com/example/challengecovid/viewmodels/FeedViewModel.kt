@@ -2,19 +2,19 @@ package com.example.challengecovid.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FeedViewModel (private val challengeRepository: ChallengeRepository, private val userRepository: UserRepository) : ViewModel() {
 
     val publicChallenges: LiveData<List<UserChallenge>> = challengeRepository.getPublicUserChallenges()
+
+    fun acceptPublicChallenge (challenge: UserChallenge, userId: String) = viewModelScope.launch {
+        userRepository.addActiveChallenge(challenge, userId)
+    }
 
     /*
     fun getPublicChallenges(): LiveData<LinkedHashMap<UserChallenge, User>> = liveData(Dispatchers.IO) {
