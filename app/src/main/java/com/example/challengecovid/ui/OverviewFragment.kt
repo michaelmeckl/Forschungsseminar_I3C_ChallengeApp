@@ -193,12 +193,12 @@ class OverviewFragment : Fragment() {
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {
                     setTitle("Challenge löschen?")
                     setMessage("ACHTUNG: Wenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!")
-                    setPositiveButton("Ja") { _, _ ->
+                    setPositiveButton("Löschen") { _, _ ->
                         // remove this item
                         overviewViewModel.removeChallenge(challenge)
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
-                    setNegativeButton("Nein") { _, _ ->
+                    setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
                         overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
                         Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
