@@ -1,7 +1,9 @@
 package com.example.challengecovid.ui.profile
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -12,6 +14,7 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.fragment_profile.*
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 
 
 class ProfileFragment : Fragment() {
@@ -36,6 +39,21 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+
+        //TODO: make a showcase view here to show user how to change icon!
+        MaterialShowcaseView.Builder(requireActivity())
+            .setTarget(profile_picture)
+            .setDismissText("Verstanden!")
+            .setContentText("Du kannst dein Profilbild ganz einfach ändern, indem du darauf klickst!")
+            .setMaskColour(ContextCompat.getColor(requireActivity(), R.color.dark_grey_transparent))
+            .setDismissOnTouch(false)
+            .setDismissOnTargetTouch(true)
+            .setDismissTextColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark))
+            .setDismissStyle(Typeface.DEFAULT_BOLD)
+            .setTargetTouchable(true)
+            .singleUse("abcdefghijk")    // show this showcase only once
+            .setDelay(400)
+            .show()
 
         observeViewModel()
 

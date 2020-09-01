@@ -190,9 +190,11 @@ class OverviewFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
+                //TODO: when type == System.Challenge lieber eine Warnung anzeigen, dass das dann nicht mehr rückgängig gemacht werden kann?? oder dann einfach wieder accepted = false setzen?
+
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {
                     setTitle("Challenge löschen?")
-                    setMessage("ACHTUNG: Wenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!")
+                    setMessage("ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!")
                     setPositiveButton("Löschen") { _, _ ->
                         // remove this item
                         overviewViewModel.removeChallenge(challenge)

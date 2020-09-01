@@ -103,6 +103,10 @@ class CategoryDetailFragment : Fragment() {
             return
         }
 
+        //TODO: das muss in firebase immer aktualisiert werden, nicht hier!
+        //TODO oder doch lieber schauen ob in active challenges des aktuellen nutzers?
+        challenge.accepted = true
+
         categoryDetailViewModel.addToActiveChallenges(challenge, userId)
     }
 

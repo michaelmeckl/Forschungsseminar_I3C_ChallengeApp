@@ -3,6 +3,7 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
@@ -50,23 +51,22 @@ class CategoryDetailAdapter (private val clickListener: CategoryChallengeClickLi
 
             //TODO: add property isAccepted boolean to check here!
 
+            // disable the button if this challenge has already been accepted by the user
+            itemView.challenge_accept_button.isEnabled = !data.accepted
+
             //set an item click listener
             itemView.challenge_accept_button.setOnClickListener {
+
+                if (data.accepted) {
+                    Toast.makeText(itemView.context, "Du hast diese Challenge schon angenommen!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 clickListener.onCategoryChallengeClick(data)
 
-                //TODO funktioniert das für alle? oder doch lieber schauen ob in active challenges des aktuellen nutzers?
-                data.accepted = true
-
-                //TODO: or show accepted button?
-
+                //TODO: or show an accepted button instead?
                 //gray out button and disable it
                 itemView.challenge_accept_button.isEnabled = false
-
-                /*
-                itemView.challenge_accept_button.setBackgroundColor(itemView.resources.getColor(android.R.color.darker_gray, null))
-                itemView.challenge_accept_button.setTextColor(itemView.resources.getColor(R.color.browser_actions_bg_grey, null))
-                // bessere farben selber machen
-                 */
             }
         }
 

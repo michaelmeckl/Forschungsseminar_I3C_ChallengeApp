@@ -19,7 +19,6 @@ class CategoryDetailViewModel(private val categoryRepository: CategoryRepository
 
     suspend fun getChallengesForCategory(categoryId: String): List<Challenge>? = withContext(Dispatchers.IO) {
         return@withContext categoryRepository.fetchChallengesForCategory(categoryId)
-        //challengesForCategory.value = result
     }
 
     fun addToActiveChallenges(challenge: Challenge, userId: String) {
