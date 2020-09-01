@@ -18,7 +18,10 @@ import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.OverviewViewModel
+import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
@@ -29,6 +32,9 @@ class OverviewFragment : Fragment() {
 
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var overviewAdapter: OverviewAdapter
+    private lateinit var profileViewModel: ProfileViewModel
+    private lateinit var levelsHashMap: HashMap<Int, Int>
+    private lateinit var _currentUser: User
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
@@ -37,6 +43,22 @@ class OverviewFragment : Fragment() {
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
         overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
+        profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
+
+
+        // Für Level
+        levelsHashMap = HashMap()
+        levelsHashMap[1] = 30
+        levelsHashMap[2] = 40
+        levelsHashMap[3] = 50
+        levelsHashMap[4] = 60
+        levelsHashMap[5] = 70
+        levelsHashMap[6] = 80
+        levelsHashMap[7] = 90
+        levelsHashMap[8] = 100
+        levelsHashMap[9] = 130
+        levelsHashMap[10] = 150
+
 
         return root
     }
@@ -146,6 +168,9 @@ class OverviewFragment : Fragment() {
         Timber.d("setChallengeCompleted, ${challenge.completed} before")
         overviewViewModel.setChallengeCompleted(challenge)
         Timber.d("setChallengeCompleted, ${challenge.completed} after")
+        Timber.d(profileViewModel.currentUser.value.toString())
+
+        updatePointsAndLevel(_currentUser, challenge)
 
 //        challengeListAdapter.notifyDataSetChanged()
 
@@ -157,6 +182,11 @@ class OverviewFragment : Fragment() {
             it?.let {
                 // update the list in the adapter with the new challenge list
                 overviewAdapter.activeChallenges = it
+            }
+        })
+        profileViewModel.currentUser.observe(viewLifecycleOwner, {it ->
+            it?.let {
+                _currentUser = it
             }
         })
 
@@ -222,4 +252,87 @@ class OverviewFragment : Fragment() {
 
         }).attachToRecyclerView(recyclerview_overview)
     }
+
+
+
+
+
+    // LEVEL STUFF STARTING HERE
+
+
+    //helper function
+    private fun maxPointsReached(currentPoints: Int, maxPoints: Int): Boolean {
+        if (currentPoints >= maxPoints) {
+            return true
+        }
+        return false
+    }
+
+    //call when challenge got cleared
+    private fun updatePointsAndLevel(user: User, challenge: BaseChallenge) {
+        var currentMaxPoints = 0
+        var currentPoints = user.points
+        var currentLevel = user.level
+
+        when (user.level) {
+            1 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            2 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            3 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            4 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            5 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            6 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            7 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            8 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            9 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+            10 -> {
+                currentMaxPoints = levelsHashMap[currentLevel]!!
+                currentPoints += challenge.difficulty.points
+            }
+
+
+        }
+
+        if (maxPointsReached(currentPoints, currentMaxPoints)) {
+            //Levelup
+            currentPoints -= currentMaxPoints
+            //TODO: unlock icon methode
+
+            // TODO: show popup ?
+
+            profileViewModel.updateUserPoints(currentPoints)
+            profileViewModel.updateUserLevel(currentLevel + 1)
+        } else {
+            profileViewModel.updateUserPoints(currentPoints)
+        }
+
+    }
+
+
 }

@@ -32,6 +32,17 @@ class ProfileViewModel(private val userRepository: UserRepository, private val a
         userRepository.getUser(userId)
     }
 
+    fun updateUserLevel(userLevel: Int) = viewModelScope.launch {
+        val id = currentUser.value?.userId ?: return@launch
+        userRepository.updateUserLevel(userLevel, id)
+    }
+
+    fun updateUserPoints(userPoints: Int) = viewModelScope.launch {
+        val id = currentUser.value?.userId ?: return@launch
+        userRepository.updateUserPoints(userPoints, id)
+    }
+
+
     suspend fun saveNewUser(user: User) {
         val uId = userRepository.saveNewUser(user)
 

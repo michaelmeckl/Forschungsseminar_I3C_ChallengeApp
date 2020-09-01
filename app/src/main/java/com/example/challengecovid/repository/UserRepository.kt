@@ -57,6 +57,25 @@ class UserRepository {
         }
     }*/
 
+    fun updateUserLevel(userLevel: Int, id: String){
+        val userReF = userCollection.document(id)
+
+        userReF
+            .update("level",userLevel)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Userlevel successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating Userlevel: $e") }
+    }
+
+    fun updateUserPoints(userPoints: Int, id: String){
+        val userReF = userCollection.document(id)
+
+        userReF
+            .update("points",userPoints)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Userpoints successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating Userpoints: $e") }
+    }
+
+
     fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.IO) {
         Timber.tag("FIREBASE userId in repo").d(userId)
         while (true) {
