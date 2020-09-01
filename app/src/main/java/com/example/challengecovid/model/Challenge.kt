@@ -31,5 +31,6 @@ data class Challenge(
     // IMPORTANT: Don't save the resource identifier for the image as this is generated at compile time and can therefore change!
     // instead use the name of the drawable
     var challengeIcon: String = "",
+    var accepted: Boolean = false,
     val acceptedDate: Long = System.currentTimeMillis()     // when this challenge was accepted by a user
 ) : BaseChallenge()

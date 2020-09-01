@@ -34,6 +34,8 @@
     <string name="change_profile_pic">Profilbild ändern</string>
     <string name="desc">Beschreibung</string>
 
+    <string name="difficulty">Schwierigkeit: %s</string>
+
     <string name="wrong_user_id_error">Deine NutzerID wurde nicht erkannt! Bitte kontaktiere die Testleiter!</string>
 
     <string name="heading_create_new_challenge">Neue Challenge erstellen</string>

@@ -49,7 +49,7 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
                 val cardView = itemView as? CardView ?: return
 
                 cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
-                cardView.description_challenge.text = "Heute Abgeschlossen"
+                cardView.description_challenge.text = "Abgeschlossen"
                 cardView.xp_challenge.visibility = View.INVISIBLE
                 cardView.checkmark_completed_challenge.visibility = View.VISIBLE
             }

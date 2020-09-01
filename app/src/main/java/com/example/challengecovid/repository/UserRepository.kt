@@ -127,9 +127,9 @@ class UserRepository {
             .document(challenge.challengeId)
             .set(challenge)
             .addOnSuccessListener {
-                Toast.makeText(App.instance, "Added to active challenges!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(App.instance, "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener { e ->
-                Toast.makeText(App.instance, "Failed to add to active challenges: $e", Toast.LENGTH_SHORT).show()
+                Toast.makeText(App.instance, "Fehler beim Annehmen der Challenge: $e", Toast.LENGTH_SHORT).show()
             }
     }
 

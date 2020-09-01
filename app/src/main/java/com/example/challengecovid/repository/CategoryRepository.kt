@@ -2,11 +2,14 @@ package com.example.challengecovid.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -45,6 +48,18 @@ class CategoryRepository {
             }
 
             categoryList
+        } catch (e: Exception) {
+            Timber.tag(CATEGORY_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    suspend fun fetchChallengesForCategory(categoryId: String): List<Challenge>? {
+        return try {
+            val categorySnapshot = categoryCollection.document(categoryId).get().await()
+
+            val category = categorySnapshot.toObject<ChallengeCategory>()
+            category?.containedChallenges
         } catch (e: Exception) {
             Timber.tag(CATEGORY_REPO_TAG).d(e)
             null
