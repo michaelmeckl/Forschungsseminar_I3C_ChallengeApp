@@ -69,8 +69,7 @@ class CategoryDetailFragment : Fragment() {
 
         categoryDetailAdapter = CategoryDetailAdapter(object : CategoryChallengeClickListener {
             override fun onCategoryChallengeClick(challenge: Challenge) {
-                startChallenge(challenge)
-                //setChallengeCompleted(challenge)    //TODO: nur bei klick auf completed haken oder so, nicht auf ganzes!
+                acceptChallenge(challenge, categoryId)
             }
         })
 
@@ -94,7 +93,7 @@ class CategoryDetailFragment : Fragment() {
         })
     }
 
-    private fun startChallenge(challenge: Challenge) {
+    private fun acceptChallenge(challenge: Challenge, categoryId: String) {
         val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
         
@@ -104,10 +103,10 @@ class CategoryDetailFragment : Fragment() {
         }
 
         //TODO: das muss in firebase immer aktualisiert werden, nicht hier!
-        //TODO oder doch lieber schauen ob in active challenges des aktuellen nutzers?
-        challenge.accepted = true
+        //TODO oder doch lieber schauen ob challenge bereits in active challenges des aktuellen nutzers?
+        //challenge.accepted = true
 
-        categoryDetailViewModel.addToActiveChallenges(challenge, userId)
+        categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -115,7 +114,7 @@ class CategoryDetailFragment : Fragment() {
     }
 
 
-    //TODO: add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
+    //add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
     /**
      * Listener for the Restaurant document ([.restaurantRef]).
      */

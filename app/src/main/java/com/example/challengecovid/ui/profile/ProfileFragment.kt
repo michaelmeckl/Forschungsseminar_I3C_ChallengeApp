@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        //TODO: make a showcase view here to show user how to change icon!
+        //showcase view to show user how to change icon!
         MaterialShowcaseView.Builder(requireActivity())
             .setTarget(profile_picture)
             .setDismissText("Verstanden!")

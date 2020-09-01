@@ -3,7 +3,6 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.Challenge
@@ -49,19 +48,11 @@ class CategoryDetailAdapter (private val clickListener: CategoryChallengeClickLi
                 cardView.checkmark_completed_challenge.visibility = View.VISIBLE
             }*/
 
-            //TODO: add property isAccepted boolean to check here!
-
             // disable the button if this challenge has already been accepted by the user
             itemView.challenge_accept_button.isEnabled = !data.accepted
 
             //set an item click listener
             itemView.challenge_accept_button.setOnClickListener {
-
-                if (data.accepted) {
-                    Toast.makeText(itemView.context, "Du hast diese Challenge schon angenommen!", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-
                 clickListener.onCategoryChallengeClick(data)
 
                 //TODO: or show an accepted button instead?

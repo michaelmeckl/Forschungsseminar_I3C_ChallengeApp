@@ -21,9 +21,10 @@ class CategoryDetailViewModel(private val categoryRepository: CategoryRepository
         return@withContext categoryRepository.fetchChallengesForCategory(categoryId)
     }
 
-    fun addToActiveChallenges(challenge: Challenge, userId: String) {
+    fun addToActiveChallenges(categoryId: String, challenge: Challenge, userId: String) {
         viewModelScope.launch {
             userRepository.addActiveChallenge(challenge, userId)
+            categoryRepository.changeChallengeActiveStatus(categoryId, challenge, status = true)
         }
     }
 
