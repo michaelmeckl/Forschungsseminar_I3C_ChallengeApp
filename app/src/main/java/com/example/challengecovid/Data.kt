@@ -116,8 +116,50 @@ object Data {
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
         ),
+        Challenge(
+            title = "Hampelmmänner",
+            description = "Mach 20 Hampelmänner",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            title = "Dokumentaion",
+            description = "Schau dir eine Dokumentation, deiner Wahl an",
+            difficulty = Difficulty.LEICHT,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            title = "Musiker",
+            description = "Sing ein Lied deiner Wahl laut vor",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            title = "Händigkeit",
+            description = "Schreib ein paar Sätze mit deiner nicht dominanten Hand",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            title = "Hampemmänner",
+            description = "Mach 20 Hampelmänner",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
 
     )
+
+
 
 
     //TODO: die icons müssten (eigentlich) noch ausgebessert werden!
