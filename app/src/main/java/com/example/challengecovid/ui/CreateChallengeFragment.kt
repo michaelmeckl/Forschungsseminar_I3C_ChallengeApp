@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
@@ -51,7 +52,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         button_submit_create_new_challenge.setOnClickListener {
             // check if a name was provided
             if (name_create_new_challenge.text.toString().isBlank()) {
-                layout_name_create_new_challenge.error = "Braucht nen namen alter"      //TODO ... ¯\_(ツ)_/¯
+                layout_name_create_new_challenge.error = "Name erforderlich"
                 return@setOnClickListener
             }
 
@@ -65,10 +66,10 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
 
 //    private fun provideMoreInformation() {
 //        // Toast showing more info for duration edittext
-//        info_duration_create_challenge.setOnClickListener {
+//        .setOnClickListener {
 //            Toast.makeText(
 //                requireContext(),
-//                "Gib an, wie viele Tage lang du deine Challenge machen willst. Lass das Feld leer, wenn die Challenge unendlich lang drin bleiben soll",
+//                "Gib an, wie viele Tage lang diese Challenge aktiv sein soll. Wenn nichts eingegeben wird werden 7 Tage angenommen.",
 //                Toast.LENGTH_LONG
 //            ).show()
 //        }
@@ -101,7 +102,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
 
     }
 
-    //TODO: das funktioniert iwie nicht immer ?? (z.B. nach rotation wird nichts angezeigt manchmal?)
     private fun addNewChallenge() {
         val difficulties = resources.getStringArray(R.array.difficulties_challenges)
 
@@ -117,6 +117,9 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         val sharedPrefs =
             activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+        //Toast.makeText(activity, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
+        Timber.d(currentUserId)
 
         // return early if fetching the user id didn't work
         if (currentUserId == "") return

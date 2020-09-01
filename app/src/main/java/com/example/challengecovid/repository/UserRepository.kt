@@ -2,6 +2,7 @@ package com.example.challengecovid.repository
 
 import android.widget.Toast
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.*
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class UserRepository {
@@ -27,6 +29,7 @@ class UserRepository {
 
 
     // GET-ALL
+    /*
     fun getAllUsers(): LiveData<List<User>> = liveData(Dispatchers.IO) {
         while (true) {
             val allUsers = fetchUsersFromFirebase()
@@ -52,7 +55,7 @@ class UserRepository {
             Timber.tag(USER_REPO_TAG).d(e)
             null
         }
-    }
+    }*/
 
     fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData(Dispatchers.IO) {
         Timber.tag("FIREBASE userId in repo").d(userId)
@@ -91,13 +94,22 @@ class UserRepository {
     }
 
     //GET
-    suspend fun getUser(id: String): User? {
+    suspend fun getUserOnce(id: String): User? {
         val userSnapshot = userCollection.document(id).get().await()
         return userSnapshot.toObject(User::class.java)
     }
 
+    //GET
+    fun getUser(id: String): MutableLiveData<User> = liveData(Dispatchers.IO) {
+        while (true) {
+            val userSnapshot = userCollection.document(id).get().await()
+            userSnapshot.toObject(User::class.java)?.let { emit(it) }
+            delay(1000)
+        }
+    } as MutableLiveData<User>
+
     //CREATE
-    fun saveNewUser(user: User): String {
+    suspend fun saveNewUser(user: User): String = withContext(Dispatchers.IO){
         val userReference = userCollection.document(user.userId)
 
         userReference.set(user).addOnSuccessListener {
@@ -106,7 +118,7 @@ class UserRepository {
             Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
         }
 
-        return userReference.id
+        userReference.id
     }
 
     fun addActiveChallenge(challenge: BaseChallenge, userId: String) {
@@ -131,7 +143,7 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
     }
 
-    //TODO: wäre das nicht eher einfach nur delete?
+
     fun updateActiveChallenge(challenge: BaseChallenge, userId: String) {
         val ref = userCollection
             .document(userId)
@@ -143,6 +155,24 @@ class UserRepository {
                 Timber.tag(USER_REPO_TAG).d("Successfully updated completion status of active challenge!")
             }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
+    }
+
+    fun updateUserName(name: String, id: String) {
+        val userRef = userCollection.document(id)
+
+        userRef
+            .update("username", name)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Username successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
+    }
+
+    fun upDateUserIcon(userIcon: String, id: String){
+        val userReF = userCollection.document(id)
+
+        userReF
+            .update("userIcon",userIcon)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Usericon successfully updated!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
     }
 
     //DELETE
@@ -166,7 +196,6 @@ class UserRepository {
     }
 
     /*
-    //TODO:
     fun getUsersWithMinLevel(level: Int) {
         db.collection("cities")
             .whereEqualTo("capital", true)
@@ -183,7 +212,6 @@ class UserRepository {
     */
 
     /*
-    //TODO:
     fun getBestUsers() {
         userCollection
             .orderBy("level", Query.Direction.DESCENDING)
@@ -202,7 +230,6 @@ class UserRepository {
      */
 
     //listen for realtime updates
-    //TODO:
     fun listenOnUpdates() {
         val listener = userCollection.whereEqualTo("state", "CA")
             .addSnapshotListener { snapshots, e ->

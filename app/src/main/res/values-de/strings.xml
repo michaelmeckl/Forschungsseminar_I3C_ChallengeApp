@@ -22,7 +22,7 @@
     <string name="credits_used_icons">Verwendete Icons:</string>
     <string name="splash_screen_load">Laden …</string>
     <string name="no_internet">Keine Internetverbindung</string>
-    <string name="no_internet_warning">Neue Daten können nicht geladen werden ohne Internet! Überprüfe deine Verbindung und versuch es nochmal.</string>
+    <string name="no_internet_warning">Neue Daten können nicht geladen oder erstellt werden ohne Internet! Überprüfe deine Verbindung und versuch es nochmal.</string>
     <string name="share_title">Teile diese Challenge</string>
 
     <string name="username_placeholder">Anonym</string>
@@ -32,6 +32,9 @@
     <string name="save_changes">Änderungen speichern</string>
     <string name="add_friend">Anfrage abschicken</string>
     <string name="change_profile_pic">Profilbild ändern</string>
+    <string name="desc">Beschreibung</string>
+
+    <string name="wrong_user_id_error">Deine NutzerID wurde nicht erkannt! Bitte kontaktiere die Testleiter!</string>
 
     <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
     <string name="hint_name_create_new_challenge">Name der Challenge</string>

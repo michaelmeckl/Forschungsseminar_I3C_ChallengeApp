@@ -47,9 +47,11 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             //FIXME: eigentlich sollte das im viewmodel passieren und nicht im Adapter
             // -> schlechte Performance und keine saubere Trennung von View und Logic!
 
+            //TODO: die liste blinkt ständig wenn neue items geladen werden! -> nur einmal laden?
+
             // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {
-                val creator = userRepository.getUser(data.creatorId)
+                val creator = userRepository.getUserOnce(data.creatorId)
 
                 // switch to the Main thread to update the UI
                 withContext(Dispatchers.Main) {
@@ -71,6 +73,8 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                     }
                 }
             }
+
+
 
             //set an item click listener
             itemView.setOnClickListener {

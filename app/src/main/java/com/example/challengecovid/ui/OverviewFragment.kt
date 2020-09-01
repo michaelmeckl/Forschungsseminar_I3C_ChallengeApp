@@ -44,7 +44,8 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val linearLayoutManager = LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
+        val linearLayoutManager =
+            LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
         //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
 
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
@@ -159,6 +160,7 @@ class OverviewFragment : Fragment() {
             }
         })
 
+        /*
         overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, {
             if (it == true) {
                 Snackbar.make(
@@ -170,12 +172,10 @@ class OverviewFragment : Fragment() {
                 // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
-        })
+        })*/
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
-        //Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
-
         val action = OverviewFragmentDirections.actionOverviewToDetail(
             id = challenge.challengeId,
             title = challenge.title,
@@ -201,11 +201,14 @@ class OverviewFragment : Fragment() {
 
 //          TODO: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
+
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {
                     setTitle("Challenge löschen?")
+                    setMessage("ACHTUNG: Wenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!")
                     setPositiveButton("Ja") { _, _ ->
                         // remove this item
-                        overviewViewModel.removeChallenge(overviewAdapter.getChallengeAt(viewHolder.adapterPosition))
+                        overviewViewModel.removeChallenge(challenge)
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     setNegativeButton("Nein") { _, _ ->

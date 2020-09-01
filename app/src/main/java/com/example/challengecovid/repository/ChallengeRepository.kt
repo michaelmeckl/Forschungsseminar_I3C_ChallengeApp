@@ -10,8 +10,8 @@ import com.example.challengecovid.model.UserChallenge
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -38,6 +38,7 @@ class ChallengeRepository {
      */
 
     // GET-ALL
+    /*
     fun getAllChallenges(): LiveData<List<Challenge>> = liveData(Dispatchers.IO) {
         while (true) {
             val allChallenges = fetchChallengesFromFirebase()
@@ -63,28 +64,12 @@ class ChallengeRepository {
             Timber.tag(CHALLENGE_REPO_TAG).d(e)
             null
         }
-    }
+    }*/
 
     //GET
     suspend fun getChallenge(id: String): Challenge? {
         val challengeSnapshot = challengeCollection.document(id).get().await()
         return challengeSnapshot.toObject(Challenge::class.java)
-    }
-
-
-    //CREATE
-    fun saveNewChallenge(challenge: Challenge): String {
-        //val challengeReference = challengeCollection.document()   // create a new document with an auto-generated id
-        val challengeReference = challengeCollection.document(challenge.challengeId)
-
-        //NOTE: use set(challenge, SetOptions.merge()) to only update the parts that changed!
-        challengeReference.set(challenge).addOnSuccessListener {
-            Toast.makeText(App.instance, "Challenge saved successfully!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new challenge: $e", Toast.LENGTH_SHORT).show()
-        }
-
-        return challengeReference.id
     }
 
     //CREATE-MULTIPLE
@@ -96,7 +81,7 @@ class ChallengeRepository {
             // create a new reference for this challenge
             val docRef = challengeCollection.document(challenge.challengeId)
             // and add it to the WriteBatch
-            batchWrite.set(docRef, challenge)
+            batchWrite.set(docRef, challenge, SetOptions.merge())
         }
 
         // commit the batch (i.e. write all to the db)
@@ -107,17 +92,14 @@ class ChallengeRepository {
         }
     }
 
+
+    /**
+     * ################################################
+     *                     Both
+     * ################################################
+     */
+
     //UPDATE
-    fun updateChallenge(challenge: Challenge) {
-        val oldChallengeRef = challengeCollection.document(challenge.challengeId)
-
-        oldChallengeRef
-            //.update("description", challenge.description, "title", challenge.title)
-            .set(challenge)     //using set(data, SetOptions.merge()) to only update the parts that changed!
-            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Challenge successfully updated!") }
-            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating challenge: $e") }
-    }
-
     fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
         val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
             challengeCollection.document(id)
@@ -139,16 +121,20 @@ class ChallengeRepository {
 
     //TODO: im moment sind die doppelt drin! hier wäre eigentlich eine collection group query nötig!
     // -> sonst inkonsistenzen!
+    // -> sollten die user challenges lieber alle als subcollection bei den users sein, um duplikate zu vermeiden??
 
     // GET-ALL
     fun getPublicUserChallenges(): LiveData<List<UserChallenge>> = liveData(Dispatchers.IO) {
         // `while(true)` is fine because the `delay` below will cooperate in
         // cancellation if LiveData is not actively observed anymore
+        /*
         while (true) {
             val allChallenges = fetchPublicChallengesFromFirebase()
             allChallenges?.let { emit(it) }
-            delay(2000)     // refresh for new data every 2 seconds
-        }
+            delay(10_000)     // refresh for new data every 2 seconds
+        }*/
+        val allChallenges = fetchPublicChallengesFromFirebase()
+        allChallenges?.let { emit(it) }
     }
 
     private suspend fun fetchPublicChallengesFromFirebase(): List<UserChallenge>? {
@@ -173,65 +159,6 @@ class ChallengeRepository {
         }
     }
 
-    /*
-    fun getAllChallengesForUser(userId: String): LiveData<List<BaseChallenge>> = liveData {
-        while (true) {
-            val userChallengesForUser = fetchUserChallengesForUser(userId)
-            val systemChallengesForUser = fetchSystemChallengesForUser(userId)
-            val allChallenges = ArrayList<BaseChallenge>()
-            userChallengesForUser?.let { allChallenges.addAll(it) }
-            systemChallengesForUser?.let { allChallenges.addAll(it) }
-            emit(allChallenges)
-            delay(1000)     // refresh for new data every second
-        }
-    }
-
-    private suspend fun fetchUserChallengesForUser(userId: String): List<UserChallenge>? {
-        return try {
-            val challengeList: MutableList<UserChallenge> = ArrayList()
-            val docSnapshots = userChallengeCollection
-                .whereEqualTo("creatorId", userId)   // get the user challenges for this user
-                .orderBy("createdAt", Query.Direction.DESCENDING)  // order them by creation date with the newest first
-                .get().await().documents    // wait for completion and convert them to document snapshots
-
-            if (docSnapshots.isNotEmpty()) {
-                for (snapshot in docSnapshots)
-                    snapshot.toObject(UserChallenge::class.java)?.let {
-                        challengeList.add(it)
-                    }
-            }
-
-            challengeList
-        } catch (e: Exception) {
-            Timber.tag(CHALLENGE_REPO_TAG).d(e)
-            null
-        }
-    }
-
-    private suspend fun fetchSystemChallengesForUser(userId: String): List<Challenge>? {
-        return try {
-            val challengeList: MutableList<Challenge> = ArrayList()
-            val docSnapshots = challengeCollection
-                .whereEqualTo("creatorId", userId)   // get the system challenges for this user
-                .orderBy("acceptedDate", Query.Direction.DESCENDING)
-                .get().await().documents
-
-            if (docSnapshots.isNotEmpty()) {
-                for (snapshot in docSnapshots)
-                    snapshot.toObject(Challenge::class.java)?.let {
-                        challengeList.add(it)
-                    }
-            }
-
-            challengeList
-        } catch (e: Exception) {
-            Timber.tag(CHALLENGE_REPO_TAG).d(e)
-            null
-        }
-    }
-
-     */
-
     //GET
     suspend fun getUserChallenge(id: String): UserChallenge? {
         val challengeSnapshot = userChallengeCollection.document(id).get().await()
@@ -240,8 +167,10 @@ class ChallengeRepository {
 
     //CREATE
     fun saveNewUserChallenge(userChallenge: UserChallenge): String {
+        //val challengeReference = challengeCollection.document()   // create a new document with an auto-generated id
         val challengeReference = userChallengeCollection.document(userChallenge.challengeId)
 
+        //NOTE: use set(challenge, SetOptions.merge()) to only update the parts that changed!
         challengeReference.set(userChallenge).addOnSuccessListener {
             Toast.makeText(App.instance, "User Challenge saved successfully!", Toast.LENGTH_SHORT).show()
         }.addOnFailureListener { e ->
