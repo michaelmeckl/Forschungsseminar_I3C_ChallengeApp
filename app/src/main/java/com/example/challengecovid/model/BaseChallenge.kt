@@ -8,7 +8,8 @@ enum class Difficulty (val points: Int) {
 
 enum class ChallengeType {
     USER_CHALLENGE,
-    SYSTEM_CHALLENGE
+    SYSTEM_CHALLENGE,
+    DAILY_CHALLENGE
 }
 
 /*

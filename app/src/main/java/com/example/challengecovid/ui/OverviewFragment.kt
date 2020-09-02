@@ -23,6 +23,8 @@ import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.challenge_item.*
+import kotlinx.android.synthetic.main.challenge_item.view.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 
 import timber.log.Timber
@@ -170,21 +172,42 @@ class OverviewFragment : Fragment() {
     }
 
 
+    //TODO: material showcase view to show how to delete items??
     private fun setupObservers() {
-        overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
-            it?.let {
-                // update the list in the adapter with the new challenge list
-                overviewAdapter.activeChallenges = it
+        overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
+            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
+
+            val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
+
+            dailyChallenge?.let {
+                // remove the daily challenge from the challenge list so it won't be shown twice
+                challengeList.remove(dailyChallenge)
+
+                name_challenge.text = dailyChallenge.title
+                xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
+                description_challenge.text = dailyChallenge.description
             }
+
+            //TODO: sollte eher neben title: icon_challenge.setImageResource(R.drawable.icons8_parchment_80)
+
+            daily_challenge.setOnClickListener {
+                Toast.makeText(requireActivity(), "Du hast auf die Daily Challenge geklickt! Herzlichen Glückwunsch!", Toast.LENGTH_SHORT).show()
+            }
+
+            // update the list in the adapter with the new challenge list
+            overviewAdapter.activeChallenges = challengeList
         })
 
         overviewViewModel.showDailyChallengeEvent.observe(viewLifecycleOwner, {
             if (it == true) {
-                Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                val snackbar = Snackbar.make(
+                    //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                    overview_layout,
                     "Du hast eine neue Daily Challenge erhalten!",
                     Snackbar.LENGTH_LONG
-                ).show()
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
 
                 // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
@@ -221,6 +244,7 @@ class OverviewFragment : Fragment() {
                 val message = when(challenge.type) {
                     ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"  //TODO: das stimmt im moment aber nicht lol!!
                     ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!"
+                    ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"
                 }
 
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {

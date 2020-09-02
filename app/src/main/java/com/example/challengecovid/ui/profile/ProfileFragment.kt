@@ -74,6 +74,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    //TODO: add this to the character select as well to automatically show the current icon!
     private fun observeViewModel() {
         profileViewModel.currentUser.observe(viewLifecycleOwner, {
 
