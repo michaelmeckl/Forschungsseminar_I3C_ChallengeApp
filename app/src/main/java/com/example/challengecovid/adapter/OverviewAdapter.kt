@@ -49,12 +49,12 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
 
             //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
             // ein ui update (z.B durch rotation) macht es wieder richtig ????
-            // wenn neue dazu kommen funktionierts auch wieder nciht mehr
+            // wenn neue dazu kommen funktionierts auch wieder nciht mehr (vllt genau wie bei accepted machen?)
             if (data.completed) {
                 Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as? CardView ?: return
 
-                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
+                cardView.setCardBackgroundColor(itemView.resources.getColor(R.color.colorPrimary, null))
                 cardView.description_challenge.text = "Abgeschlossen"
                 cardView.xp_challenge.visibility = View.INVISIBLE
                 cardView.checkmark_completed_challenge.visibility = View.VISIBLE

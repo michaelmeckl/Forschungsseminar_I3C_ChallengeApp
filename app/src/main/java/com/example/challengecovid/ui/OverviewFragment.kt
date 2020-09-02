@@ -24,11 +24,11 @@ import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.challenge_item.*
-import kotlinx.android.synthetic.main.challenge_item.view.*
 import kotlinx.android.synthetic.main.fragment_overview.*
-
+import kotlinx.android.synthetic.main.overview_content.*
 import timber.log.Timber
 import java.util.*
+
 
 //TODO: noch alle Toasts aus den repositories und sonst wo, die nicht nötig sind, entfernen!!!
 class OverviewFragment : Fragment() {
@@ -188,10 +188,15 @@ class OverviewFragment : Fragment() {
                 description_challenge.text = dailyChallenge.description
             }
 
-            //TODO: sollte eher neben title: icon_challenge.setImageResource(R.drawable.icons8_parchment_80)
+            icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
 
             daily_challenge.setOnClickListener {
-                Toast.makeText(requireActivity(), "Du hast auf die Daily Challenge geklickt! Herzlichen Glückwunsch!", Toast.LENGTH_SHORT).show()
+                //TODO ?
+                Toast.makeText(
+                    requireActivity(),
+                    "Du hast auf die Daily Challenge geklickt! Herzlichen Glückwunsch!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             // update the list in the adapter with the new challenge list
@@ -203,7 +208,7 @@ class OverviewFragment : Fragment() {
                 val snackbar = Snackbar.make(
                     //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                     overview_layout,
-                    "Du hast eine neue Daily Challenge erhalten!",
+                    "Du hast eine neue Challenge erhalten!",
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
@@ -241,7 +246,7 @@ class OverviewFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
-                val message = when(challenge.type) {
+                val message = when (challenge.type) {
                     ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"  //TODO: das stimmt im moment aber nicht lol!!
                     ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!"
                     ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"

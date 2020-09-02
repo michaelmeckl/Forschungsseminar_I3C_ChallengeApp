@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Wrap in a coordinator layout as this enables android to make snackbars
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Wrap in a coordinator layout as this enables android to make snackbars
  more powerful (swipe to dismiss, update other views based on snackbar position)
  -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,64 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_fragment_challenge"
+            <include
+                android:id="@+id/overview_content"
+                layout="@layout/overview_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".ui.OverviewFragment">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/daily_challenge_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/margin_normal"
-                    android:text="Daily Challenge:"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    app:layout_constraintBottom_toTopOf="@+id/daily_challenge"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <include
-                    android:id="@+id/daily_challenge"
-                    layout="@layout/challenge_item"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toTopOf="@+id/active_challenges_title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/daily_challenge_title" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/active_challenges_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/margin_normal"
-                    android:text="Aktive Challenges:"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                    app:layout_constraintBottom_toTopOf="@+id/recyclerview_overview"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/daily_challenge" />
-
-                <!-- TODO show a message if the recyclerview is empty! (wie in MMusic) -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerview_overview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:padding="4dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/active_challenges_title"
-                    tools:listitem="@layout/challenge_item" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content"/>
 
         </androidx.core.widget.NestedScrollView>
 
+        <!-- This needs to be outside the scroll view so it will always stay fixed! -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_create_challenge"
             android:layout_width="wrap_content"
