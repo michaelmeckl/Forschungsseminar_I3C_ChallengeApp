@@ -43,8 +43,8 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         //show current user icon
-        val currentIcon = profileViewModel.currentUser.value?.userIcon ?: "ic_user_icon_default"
-        val resID = resources.getIdentifier(currentIcon, "drawable", activity?.packageName)
+        chosenPicture = profileViewModel.currentUser.value?.userIcon ?: "ic_user_icon_default"
+        val resID = resources.getIdentifier(chosenPicture, "drawable", activity?.packageName)
         set_profile_picture.setImageResource(resID)
 
         // setup click listeners
