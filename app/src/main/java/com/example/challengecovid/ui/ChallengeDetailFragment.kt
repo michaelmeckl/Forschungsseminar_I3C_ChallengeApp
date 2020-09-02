@@ -33,12 +33,17 @@ class ChallengeDetailFragment : Fragment() {
         val (id, title, description, type, difficulty) = arguments
 
         challenge_detail_title.text = title
+        if (description.isBlank()) {
+            challenge_detail_description.visibility = View.GONE
+        }
         challenge_detail_description.text = description
         challenge_detail_difficulty.text = difficulty
 
         if (type == ChallengeType.SYSTEM_CHALLENGE) {
             // hide the option to publish for system challenges
             publish_switch.visibility = View.GONE
+            challenge_detail_relativelayout_online.visibility = View.GONE
+            challenge_detail_relativelayout_offline.visibility = View.GONE
         }
 
         // get the saved switch state and set it
@@ -78,20 +83,20 @@ class ChallengeDetailFragment : Fragment() {
 
     private fun setStatus(switchState: Boolean) {
         if (switchState) {
-            challenge_detail_relativelayout_offline.visibility = View.INVISIBLE
+            challenge_detail_relativelayout_offline.visibility = View.GONE
             challenge_detail_relativelayout_online.visibility = View.VISIBLE
         } else {
-            challenge_detail_relativelayout_online.visibility = View.INVISIBLE
+            challenge_detail_relativelayout_online.visibility = View.GONE
             challenge_detail_relativelayout_offline.visibility = View.VISIBLE
         }
     }
 
     private fun switchStatus() {
-        if (challenge_detail_relativelayout_offline.visibility == View.INVISIBLE) {
-            challenge_detail_relativelayout_online.visibility = View.INVISIBLE
+        if (challenge_detail_relativelayout_offline.visibility == View.GONE) {
+            challenge_detail_relativelayout_online.visibility = View.GONE
             challenge_detail_relativelayout_offline.visibility = View.VISIBLE
         } else {
-            challenge_detail_relativelayout_offline.visibility = View.INVISIBLE
+            challenge_detail_relativelayout_offline.visibility = View.GONE
             challenge_detail_relativelayout_online.visibility = View.VISIBLE
         }
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)

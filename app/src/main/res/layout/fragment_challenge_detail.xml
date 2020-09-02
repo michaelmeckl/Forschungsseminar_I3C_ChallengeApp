@@ -11,9 +11,11 @@
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="@dimen/margin_normal">
 
         <TextView
@@ -58,24 +60,23 @@
             android:id="@+id/challenge_detail_relativelayout_online"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_normal"
             android:layout_margin="@dimen/margin_normal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_difficulty">
 
-        <TextView
-            android:id="@+id/challenge_detail_status_online_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status: Challenge online geteilt "/>
+            <TextView
+                android:id="@+id/challenge_detail_status_online_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: Challenge online geteilt " />
 
-        <ImageView
-            android:id="@+id/challenge_detail_status_online_imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_challenge_detail_online"
-            android:layout_toEndOf="@+id/challenge_detail_status_online_textview"/>
+            <ImageView
+                android:id="@+id/challenge_detail_status_online_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/challenge_detail_status_online_textview"
+                android:src="@drawable/ic_challenge_detail_online" />
         </RelativeLayout>
 
         <!--Show this RelativeLayout when challenge is offline-->
@@ -83,24 +84,24 @@
             android:id="@+id/challenge_detail_relativelayout_offline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:padding="@dimen/margin_normal"
             android:layout_margin="@dimen/margin_normal"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_difficulty">
-        <TextView
-            android:id="@+id/challenge_detail_status_offline_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status: Challenge nicht veröffentlicht " />
 
-        <ImageView
-            android:id="@+id/challenge_detail_status_offline_imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_challenge_detail_offline"
-            android:layout_toEndOf="@+id/challenge_detail_status_offline_textview"/>
+            <TextView
+                android:id="@+id/challenge_detail_status_offline_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status: Challenge nicht veröffentlicht " />
+
+            <ImageView
+                android:id="@+id/challenge_detail_status_offline_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/challenge_detail_status_offline_textview"
+                android:src="@drawable/ic_challenge_detail_offline" />
         </RelativeLayout>
 
         <!-- TODO this needs to be improved! looks shitty -->
@@ -108,7 +109,6 @@
             android:id="@+id/publish_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
             android:checked="false"
             android:text="Challenge veröffentlichen:  "
             android:textOff="Privat"
@@ -117,15 +117,13 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_relativelayout_online" />
 
-        <ProgressBar
-            android:id="@+id/challenge_detail_progressbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/challenge_detail_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 </androidx.cardview.widget.CardView>
