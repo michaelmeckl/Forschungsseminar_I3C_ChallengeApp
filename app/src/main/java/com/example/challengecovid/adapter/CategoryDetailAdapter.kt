@@ -5,7 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
+import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.category_detail_list_item.view.*
 
 class CategoryDetailAdapter (private val clickListener: CategoryChallengeClickListener) :
@@ -17,19 +19,21 @@ class CategoryDetailAdapter (private val clickListener: CategoryChallengeClickLi
             notifyDataSetChanged()
         }
 
+    var activeUserChallenges = setOf<BaseChallenge>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryChallengeViewHolder {
         return CategoryChallengeViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: CategoryChallengeViewHolder, position: Int) {
-        holder.bind(categoryChallenges[position], clickListener)
+        holder.bind(categoryChallenges[position], activeUserChallenges, clickListener)
     }
 
     override fun getItemCount() = categoryChallenges.size
 
     class CategoryChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(data: Challenge, clickListener: CategoryChallengeClickListener) {
+        fun bind(data: Challenge, activeUserChallenges: Set<BaseChallenge>, clickListener: CategoryChallengeClickListener) {
             itemView.challenge_title.text = data.title
             itemView.challenge_xp.text = String.format("%s XP", data.difficulty.points)
             itemView.challenge_difficulty.text = itemView.resources.getString(R.string.difficulty, data.difficulty.toString())
@@ -49,7 +53,12 @@ class CategoryDetailAdapter (private val clickListener: CategoryChallengeClickLi
             }*/
 
             // disable the button if this challenge has already been accepted by the user
-            itemView.challenge_accept_button.isEnabled = !data.accepted
+            //itemView.challenge_accept_button.isEnabled = !data.accepted
+
+            // TODO: das reicht noch nicht, wenn gelöscht, ist sie wieder aktiv, das ist aber eigentlich nicht so toll...
+            if(activeUserChallenges.contains(data)) {
+                itemView.challenge_accept_button.isEnabled = false
+            }
 
             //set an item click listener
             itemView.challenge_accept_button.setOnClickListener {

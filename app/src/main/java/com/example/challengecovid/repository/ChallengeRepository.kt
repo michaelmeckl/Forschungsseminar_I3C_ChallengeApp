@@ -130,7 +130,7 @@ class ChallengeRepository {
     //UPDATE
     fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
         val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
-            challengeCollection.document(id)
+            challengeCollection.document(id)        //TODO: das nicht machen  da ja lieber nicht verändern?
         } else  {
             userChallengeCollection.document(id)
         }

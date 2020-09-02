@@ -12,6 +12,7 @@ import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.CategoryChallengeClickListener
 import com.example.challengecovid.adapter.CategoryDetailAdapter
+import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.viewmodels.CategoryDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_category_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CategoryDetailFragment : Fragment() {
 
@@ -73,6 +75,16 @@ class CategoryDetailFragment : Fragment() {
             }
         })
 
+        CoroutineScope(Dispatchers.Main).launch {
+            val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            val userID = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+            if(userID == "") return@launch
+
+            val activeChallenges = categoryDetailViewModel.getActiveChallenges(userID) ?: return@launch
+            categoryDetailAdapter.activeUserChallenges = activeChallenges.toSet()
+        }
+
         // fetch the challenges asynchronously from firebase and set them to the adapter afterwards
         CoroutineScope(Dispatchers.Main).launch {
             val challenges = categoryDetailViewModel.getChallengesForCategory(categoryId) ?: return@launch
@@ -86,11 +98,12 @@ class CategoryDetailFragment : Fragment() {
     }
 
     private fun setupViewModelObserver() {
+        /*
         categoryDetailViewModel.challengesForCategory.observe(viewLifecycleOwner, { it ->
             it?.let {
                 categoryDetailAdapter.categoryChallenges = it
             }
-        })
+        })*/
     }
 
     private fun acceptChallenge(challenge: Challenge, categoryId: String) {

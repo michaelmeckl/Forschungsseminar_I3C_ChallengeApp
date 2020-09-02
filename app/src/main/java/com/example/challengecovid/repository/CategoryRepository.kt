@@ -108,6 +108,7 @@ class CategoryRepository {
     //  TESTEN wenn alle diesen Branch haben!
 
     //TODO: wird das eigentlich wieder überschrieben wenn sich ein neuen Nutzer das erste mal anmeldet (da ja setoptions.merge) ???
+    // -> ja deshalb nur in user challenges
 
     //TODO: abgesehen davon ist die challenge jetzt bei active Challenges des nutzers aber mit anderem accepted eintrag lol
     suspend fun changeChallengeActiveStatus(categoryId: String, activeChallenge: Challenge, status: Boolean) =

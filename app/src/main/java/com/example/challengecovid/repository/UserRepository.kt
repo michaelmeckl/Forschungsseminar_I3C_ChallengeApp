@@ -66,6 +66,10 @@ class UserRepository {
         }
     }
 
+    suspend fun getAllChallengesForUserOnce(userId: String): List<BaseChallenge>? {
+        return fetchChallengesForUser(userId)
+    }
+
     private suspend fun fetchChallengesForUser(userId: String): List<BaseChallenge>? {
         return try {
             val challengeList = mutableListOf<BaseChallenge>()
