@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
@@ -90,15 +91,15 @@ class OverviewViewModel(
     /**
      * Add a new challenge to the database.
     fun addNewChallenge(userChallenge: UserChallenge) {
-        //launch on the main thread because the result affects the UI
-        uiScope.launch {
-            // insert the new challenge on a separate I/O thread that is optimized for room interaction
-            // to avoid blocking the main / UI thread
-            withContext(Dispatchers.IO) {
-                challengeRepository.saveUserChallenge(userChallenge)
-            }
-            _showSnackbarEvent.value = true
-        }
+    //launch on the main thread because the result affects the UI
+    uiScope.launch {
+    // insert the new challenge on a separate I/O thread that is optimized for room interaction
+    // to avoid blocking the main / UI thread
+    withContext(Dispatchers.IO) {
+    challengeRepository.saveUserChallenge(userChallenge)
+    }
+    _showSnackbarEvent.value = true
+    }
     }
      */
 
@@ -132,6 +133,10 @@ class OverviewViewModel(
 
     fun removeChallenge(challengeId: String) {
         userRepository.removeActiveChallenge(challengeId, currentUserId)
+    }
+
+    fun hideChallenge(challenge: Challenge) {
+        userRepository.hideActiveChallenge(challenge, currentUserId)
     }
 
     //TODO: use delete instead when completed?

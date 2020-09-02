@@ -19,6 +19,7 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
@@ -247,7 +248,7 @@ class OverviewFragment : Fragment() {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
                 val message = when (challenge.type) {
-                    ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"  //TODO: das stimmt im moment aber nicht lol!!
+                    ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"
                     ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!"
                     ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"
                 }
@@ -257,7 +258,13 @@ class OverviewFragment : Fragment() {
                     setMessage(message)
                     setPositiveButton("Löschen") { _, _ ->
                         // remove this item
-                        overviewViewModel.removeChallenge(challenge.challengeId)
+                        if (challenge.type == ChallengeType.SYSTEM_CHALLENGE) {
+                            //TODO: "hack" um dem Nutzer zu simulieren, dass er die Challenge diese Woche nicht mehr
+                            // annehmen kann (ohne sie dafür ganz löschen zu müssen)
+                            overviewViewModel.hideChallenge(challenge as Challenge)
+                        } else {
+                            overviewViewModel.removeChallenge(challenge.challengeId)
+                        }
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     setNegativeButton("Abbrechen") { _, _ ->

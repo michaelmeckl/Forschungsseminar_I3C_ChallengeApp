@@ -81,8 +81,8 @@ class CategoryDetailFragment : Fragment() {
 
             if(userID == "") return@launch
 
-            val activeChallenges = categoryDetailViewModel.getActiveChallenges(userID) ?: return@launch
-            categoryDetailAdapter.activeUserChallenges = activeChallenges.toSet()
+            val challenges = categoryDetailViewModel.getActiveAndHiddenChallenges(userID) ?: return@launch
+            categoryDetailAdapter.activeUserChallenges = challenges.toSet()
         }
 
         // fetch the challenges asynchronously from firebase and set them to the adapter afterwards
@@ -114,8 +114,6 @@ class CategoryDetailFragment : Fragment() {
             Toast.makeText(requireActivity(), R.string.wrong_user_id_error, Toast.LENGTH_SHORT).show()
             return
         }
-
-        //TODO oder doch lieber schauen ob challenge bereits in active challenges des aktuellen nutzers?
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
     }

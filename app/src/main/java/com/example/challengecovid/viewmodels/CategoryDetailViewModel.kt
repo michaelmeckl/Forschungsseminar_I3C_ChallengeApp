@@ -22,14 +22,14 @@ class CategoryDetailViewModel(private val categoryRepository: CategoryRepository
         return@withContext categoryRepository.fetchChallengesForCategory(categoryId)
     }
 
-    suspend fun getActiveChallenges(userId: String): List<BaseChallenge>? = withContext(Dispatchers.IO) {
-        return@withContext userRepository.getAllChallengesForUserOnce(userId)
+    suspend fun getActiveAndHiddenChallenges(userId: String): List<BaseChallenge>? = withContext(Dispatchers.IO) {
+        return@withContext userRepository.getActiveAndHiddenChallengesForUser(userId)
     }
 
     fun addToActiveChallenges(categoryId: String, challenge: Challenge, userId: String) {
         viewModelScope.launch {
             userRepository.addActiveChallenge(challenge, userId)
-            //TODO nicht da ja sonst verändert
+            //TODO nicht so, da ja sonst jedesmal verändert bei jedem nutzer
             //categoryRepository.changeChallengeActiveStatus(categoryId, challenge, status = true)
         }
     }
