@@ -70,13 +70,13 @@ class OverviewViewModel(
      * Request a toast by setting this value to true.
      * This is private because we don't want to expose setting this value to the Fragment.
      */
-    private var _showSnackbarEvent = MutableLiveData<Boolean?>()
+    private var _showDailyChallengeEvent = MutableLiveData<Boolean?>()
 
     /**
      * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
      */
-    val showSnackBarEvent: LiveData<Boolean?>
-        get() = _showSnackbarEvent
+    val showDailyChallengeEvent: LiveData<Boolean?>
+        get() = _showDailyChallengeEvent
 
     /**
      * Call this immediately after calling `show()` on a toast.
@@ -84,7 +84,7 @@ class OverviewViewModel(
      * toast.
      */
     fun doneShowingSnackbar() {
-        _showSnackbarEvent.value = null
+        _showDailyChallengeEvent.value = null
     }
 
     /**
@@ -105,7 +105,6 @@ class OverviewViewModel(
     fun addNewChallenge(userChallenge: UserChallenge) {
         challengeRepository.saveNewUserChallenge(userChallenge)
         userRepository.addActiveChallenge(userChallenge, currentUserId)
-        _showSnackbarEvent.value = true
     }
 
     private fun initializeChallenge(challengeID: String) {
@@ -116,9 +115,9 @@ class OverviewViewModel(
 
     fun updateChallenge(userChallenge: UserChallenge) {
         challengeRepository.updateUserChallenge(userChallenge)
-        _showSnackbarEvent.value = true
     }
 
+    /*
     fun removeChallenge(challenge: BaseChallenge) {
         if(challenge.type == ChallengeType.USER_CHALLENGE) {
             //TODO: so nicht (Cast von BaseChallenge nicht möglich!):
@@ -129,8 +128,10 @@ class OverviewViewModel(
         if(challenge.type == ChallengeType.SYSTEM_CHALLENGE) {
             userRepository.removeActiveChallenge(challenge, currentUserId)
         }
+    }*/
 
-        _showSnackbarEvent.value = true
+    fun removeChallenge(challengeId: String) {
+        userRepository.removeActiveChallenge(challengeId, currentUserId)
     }
 
     //TODO: use delete instead when completed?
@@ -138,9 +139,17 @@ class OverviewViewModel(
         withContext(Dispatchers.IO) {
             challengeRepository.updateCompletionStatus(challenge.challengeId, challenge.type, completed = true)
             challenge.completed = true
-            userRepository.updateActiveChallenge(challenge, currentUserId)
+            userRepository.addActiveChallenge(challenge, currentUserId)
         }
-        _showSnackbarEvent.value = true
+
+    }
+
+    fun getRandomDailyChallenge(oldDailyChallenge: String?) = uiScope.launch {
+        withContext(Dispatchers.IO) {
+            val randomChallenge = challengeRepository.getRandomChallenge(oldDailyChallenge) ?: return@withContext
+            userRepository.updateActiveChallenge(randomChallenge, currentUserId)
+        }
+        _showDailyChallengeEvent.value = true
     }
 
     /**

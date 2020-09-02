@@ -127,6 +127,7 @@ class UserRepository {
             .document(challenge.challengeId)
             .set(challenge)
             .addOnSuccessListener {
+                //TODO: only log this with timber, weil an versch. stellen!
                 Toast.makeText(App.instance, "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener { e ->
                 Toast.makeText(App.instance, "Fehler beim Annehmen der Challenge: $e", Toast.LENGTH_SHORT).show()
@@ -184,10 +185,10 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting user: $e") }
     }
 
-    fun removeActiveChallenge(challenge: BaseChallenge, userId: String) {
+    fun removeActiveChallenge(challengeId: String, userId: String) {
         val challengeRef = userCollection.document(userId)
             .collection("activeChallenges")
-            .document(challenge.challengeId)
+            .document(challengeId)
 
         //userRef.update("activeChallenges", FieldValue.arrayRemove(challenge))
         challengeRef.delete()
