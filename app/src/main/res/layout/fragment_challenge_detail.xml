@@ -18,17 +18,83 @@
         android:orientation="vertical"
         android:padding="@dimen/margin_normal">
 
-        <TextView
-            android:id="@+id/challenge_detail_title"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/challenge_detail_header_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Challenge bearbeiten"
+                android:visibility="gone"
+                style="@style/TextAppearance.AppCompat.Large"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+            <ImageButton
+                android:id="@+id/challenge_detail_stop_editing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#0000"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/edit_challenge"
+                android:src="@drawable/ic_close"
+                android:visibility="gone" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:paddingHorizontal="8dp"
-            android:textAppearance="@android:style/TextAppearance.Material.Large"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Challenge Title" />
+            android:paddingHorizontal="8dp">
+
+            <TextView
+                android:id="@+id/challenge_detail_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Material.Large"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Challenge Title" />
+
+            <ImageButton
+                android:id="@+id/challenge_detail_start_editing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:background="#0000"
+                android:contentDescription="@string/edit_challenge"
+                android:src="@drawable/ic_edit"
+                app:layout_constraintBottom_toBottomOf="@+id/challenge_detail_title"
+                app:layout_constraintLeft_toRightOf="@id/challenge_detail_title"
+                app:layout_constraintTop_toTopOf="@+id/challenge_detail_title" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_challenge_detail_title_edit"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/challenge_detail_title_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Challenge Title" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/challenge_detail_description"
@@ -42,6 +108,26 @@
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_title"
             tools:text="Challenge Description jflalakjflajlk jalfjlaj lfjalafjklaj fjlajljfl fjlajflajlaj" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_challenge_detail_description_edit"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/challenge_detail_description_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:paddingHorizontal="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Challenge Description" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/challenge_detail_difficulty"
             android:layout_width="wrap_content"
@@ -54,6 +140,21 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_description"
             tools:text="Schwierigkeit: Mittel" />
+
+        <Spinner
+            android:id="@+id/challenge_detail_spinner_difficulties_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/challenge_detail_button_submit_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            android:text="Bestätigen"
+            android:visibility="gone" />
 
         <!--Show this RelativeLayout when challenge is online-->
         <RelativeLayout

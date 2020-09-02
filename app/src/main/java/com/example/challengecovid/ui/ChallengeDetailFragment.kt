@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
@@ -11,7 +12,9 @@ import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.ChallengeType
+import com.example.challengecovid.model.Difficulty
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
+import kotlinx.android.synthetic.main.fragment_create_new_challenge.*
 import timber.log.Timber
 import kotlin.concurrent.thread
 
@@ -38,6 +41,14 @@ class ChallengeDetailFragment : Fragment() {
         }
         challenge_detail_description.text = description
         challenge_detail_difficulty.text = difficulty
+
+        val adapterDifficulties = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.difficulties_challenges,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        challenge_detail_spinner_difficulties_edit.adapter = adapterDifficulties
+//        challenge_detail_spinner_difficulties_edit.onItemSelectedListener = this
 
         if (type == ChallengeType.SYSTEM_CHALLENGE) {
             // hide the option to publish for system challenges
@@ -76,6 +87,54 @@ class ChallengeDetailFragment : Fragment() {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             )
             Handler().postDelayed(this::switchStatus, 2000)
+
+        }
+
+        challenge_detail_start_editing.setOnClickListener {
+            challenge_detail_title.visibility = View.GONE
+            challenge_detail_description.visibility = View.GONE
+            challenge_detail_difficulty.visibility = View.GONE
+            challenge_detail_start_editing.visibility = View.GONE
+
+            challenge_detail_header_edit.visibility = View.VISIBLE
+            challenge_detail_stop_editing.visibility = View.VISIBLE
+            layout_challenge_detail_title_edit.visibility = View.VISIBLE
+            challenge_detail_title_edit.hint = title
+            layout_challenge_detail_description_edit.visibility = View.VISIBLE
+            challenge_detail_description_edit.hint = description
+            if (description.isBlank()) {
+                //TODO optional: string ressource
+                challenge_detail_description_edit.hint = "Beschreibung"
+            }
+            challenge_detail_spinner_difficulties_edit.visibility = View.VISIBLE
+            when (difficulty) {
+                Difficulty.LEICHT.toString() -> challenge_detail_spinner_difficulties_edit.setSelection(0)
+                Difficulty.MITTEL.toString() -> challenge_detail_spinner_difficulties_edit.setSelection(1)
+                Difficulty.SCHWER.toString() -> challenge_detail_spinner_difficulties_edit.setSelection(2)
+            }
+            challenge_detail_button_submit_edit.visibility = View.VISIBLE
+
+        }
+
+        challenge_detail_stop_editing.setOnClickListener {
+            challenge_detail_title.visibility = View.VISIBLE
+            challenge_detail_description.visibility = View.VISIBLE
+            challenge_detail_difficulty.visibility = View.VISIBLE
+            challenge_detail_start_editing.visibility = View.VISIBLE
+
+            challenge_detail_header_edit.visibility = View.GONE
+            challenge_detail_stop_editing.visibility = View.GONE
+            layout_challenge_detail_title_edit.visibility = View.GONE
+            layout_challenge_detail_description_edit.visibility = View.GONE
+            challenge_detail_spinner_difficulties_edit.visibility = View.GONE
+            challenge_detail_button_submit_edit.visibility = View.GONE
+            if (description.isBlank()) {
+                challenge_detail_description.visibility = View.GONE
+            }
+
+        }
+
+        challenge_detail_button_submit_edit.setOnClickListener{
 
         }
 

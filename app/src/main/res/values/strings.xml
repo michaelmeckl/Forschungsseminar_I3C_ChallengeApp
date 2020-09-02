@@ -105,6 +105,7 @@
     <string name="hint_duration_create_challenge">Duration in days (optional)</string>
     <string name="empty_recyclerview_overview_message">You don\'t have any challenges yet. To create one, click the button in the bottom right corner.</string>
     <string name="challenge_completed_text">Completed today!</string>
+    <string name="edit_challenge">Challenge bearbeiten</string>
 
     <string-array name="difficulties_challenges">
         <item>Easy</item>

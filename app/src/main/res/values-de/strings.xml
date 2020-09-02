@@ -46,6 +46,7 @@
     <string name="hint_duration_create_challenge">Dauer in Tagen (optional)</string>
     <string name="empty_recyclerview_overview_message">Du hast noch keine Challenge erstellt. Klicke den Button unten rechts, um eine zu erstellen.</string>
     <string name="challenge_completed_text">Heute abgeschlossen!</string>
+    <string name="edit_challenge">Challenge bearbeiten</string>
 
     <string-array name="difficulties_challenges">
         <item>Einfach</item>
