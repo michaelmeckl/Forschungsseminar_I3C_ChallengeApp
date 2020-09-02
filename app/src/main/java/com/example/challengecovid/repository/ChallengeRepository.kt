@@ -11,6 +11,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -72,6 +73,24 @@ class ChallengeRepository {
         return challengeSnapshot.toObject(Challenge::class.java)
     }
 
+    suspend fun getRandomChallenge(oldDailyChallenge: String?): Challenge? {
+        return try {
+            val docSnapshots = challengeCollection.get().await().documents
+
+            var randomChallenge = docSnapshots.random().toObject<Challenge>()
+            // make sure this challenge wont be shown twice in a row
+            while (oldDailyChallenge == randomChallenge?.challengeId) {
+                randomChallenge = docSnapshots.random().toObject<Challenge>()
+            }
+
+            // return it
+            randomChallenge
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
+    }
+
     //CREATE-MULTIPLE
     fun saveMultipleChallenges(challengeList: List<Challenge>) {
         //use a batched write to insert all at the same time to prevent possible inconsistencies!
@@ -92,6 +111,15 @@ class ChallengeRepository {
         }
     }
 
+    //DELETE
+    private fun removeDailyChallenge(challenge: Challenge) {
+        val challengeRef = challengeCollection.document(challenge.challengeId)
+
+        challengeRef.delete()
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Daily Challenge successfully deleted!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting daily Challenge: $e") }
+    }
+
 
     /**
      * ################################################
@@ -102,7 +130,7 @@ class ChallengeRepository {
     //UPDATE
     fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
         val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
-            challengeCollection.document(id)
+            challengeCollection.document(id)        //TODO: das nicht machen  da ja lieber nicht verändern?
         } else  {
             userChallengeCollection.document(id)
         }

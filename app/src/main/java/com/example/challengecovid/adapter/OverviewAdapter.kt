@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.ChallengeType
 import kotlinx.android.synthetic.main.challenge_item.view.*
 import timber.log.Timber
 
@@ -37,19 +38,24 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener) :
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(data: BaseChallenge, clickListener: ChallengeClickListener) {
-            itemView.name_challenge.text = data.title
             itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
-            //itemView.icon_challenge.setImageResource(data.iconPath)   //TODO: statt icon vllt duration anzeigen oder difficulty?
+
+            if(data.type == ChallengeType.USER_CHALLENGE) {
+                itemView.name_challenge.text = data.title + " (Eigene Challenge)"
+            } else {
+                itemView.name_challenge.text = data.title
+            }
 
             //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
             // ein ui update (z.B durch rotation) macht es wieder richtig ????
+            // wenn neue dazu kommen funktionierts auch wieder nciht mehr (vllt genau wie bei accepted machen?)
             if (data.completed) {
                 Timber.d("bind, userChallenge.completed = true")
                 val cardView = itemView as? CardView ?: return
 
-                cardView.setCardBackgroundColor(Color.parseColor("#A1E887"))
-                cardView.description_challenge.text = "Heute Abgeschlossen"
+                cardView.setCardBackgroundColor(itemView.resources.getColor(R.color.colorPrimary, null))
+                cardView.description_challenge.text = "Abgeschlossen"
                 cardView.xp_challenge.visibility = View.INVISIBLE
                 cardView.checkmark_completed_challenge.visibility = View.VISIBLE
             }

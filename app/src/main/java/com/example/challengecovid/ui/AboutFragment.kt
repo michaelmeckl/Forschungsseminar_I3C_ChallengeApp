@@ -58,7 +58,8 @@ class AboutFragment : Fragment() {
             AttributionItem(R.drawable.ic_pleasure_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_productivity_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_social_category, "Icon made by Freepik from www.flaticon.com/"),
-            AttributionItem(R.drawable.ic_safety_category, "Icon made by Freepik from www.flaticon.com/")
+            AttributionItem(R.drawable.ic_safety_category, "Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.icons8_parchment_80, "Icon made by Icons8 (https://icons8.com)"),
 
         )
     }

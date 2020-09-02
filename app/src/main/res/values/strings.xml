@@ -31,6 +31,7 @@
     <string name="creator_in_feed">created by %s</string>
 
     <string name="level" translatable="false">Level %d</string>
+    <string name="difficulty">Difficulty: %s</string>
 
     <string name="edit_profile">Edit profile</string>
     <string name="save_changes">Save changes</string>

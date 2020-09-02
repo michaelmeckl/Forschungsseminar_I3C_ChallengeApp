@@ -58,6 +58,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                     if (creator != null) {
                         // set icon and name of the user that created that challenge
                         itemView.feed_item_creator.text = itemView.resources.getString(R.string.creator_in_feed, creator.username)
+                        itemView.feed_item_creator_level.text = "Level " + creator.level
                         val userIcon = itemView.context.resources.getIdentifier(
                             creator.userIcon,
                             "drawable",

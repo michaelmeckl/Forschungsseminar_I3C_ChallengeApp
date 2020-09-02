@@ -86,6 +86,7 @@ class CategoriesFragment : Fragment() {
     private fun showCategoryDetails(itemView: View, category: ChallengeCategory) {
         val extras = FragmentNavigatorExtras(itemView to itemView.transitionName)
         val action = CategoriesFragmentDirections.actionCategoryToDetail(
+            id = category.categoryId,
             title = category.title,
             description = category.description,
             imageName = category.categoryIcon

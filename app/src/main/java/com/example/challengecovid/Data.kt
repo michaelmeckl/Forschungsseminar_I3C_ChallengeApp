@@ -2,6 +2,7 @@ package com.example.challengecovid
 
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.Difficulty
 
 /**
@@ -69,7 +70,6 @@ object Data {
         )
     )
 
-    // TODO noch verwenden!
     fun getDailyChallenges(): List<Challenge> = listOf(
         Challenge(
             challengeId = "Spazieren",
@@ -78,7 +78,7 @@ object Data {
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Der frühe Vogel",
@@ -87,7 +87,7 @@ object Data {
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Früher schlafen gehen",
@@ -96,7 +96,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Kein Fernsehen",
@@ -105,7 +105,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Kalte Dusche",
@@ -114,7 +114,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
 
     )
