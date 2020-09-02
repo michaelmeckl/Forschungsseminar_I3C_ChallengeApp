@@ -3,12 +3,12 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.model.UserChallenge
 import kotlinx.android.synthetic.main.challenge_item.view.*
-import timber.log.Timber
 
 class OverviewAdapter(private val clickListener: ChallengeClickListener, private val checkmarkClickListener: CheckmarkClickListener) :
     RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
@@ -49,15 +49,12 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
                 itemView.description_challenge_completed.visibility = View.GONE
                 itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
             }
-            Timber.d("data is of type %s", data.type)
+            val sharedPrefs =
+                itemView.context?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + data.challengeId, false) ?: false
 
-            if (data is UserChallenge) {
-//                TODO: Never getting here as of now :(
-                Timber.d("data is userchallenge")
-                if (data.isPublic) {
-                    Timber.d("data is also public")
-                    itemView.is_online_challenge.visibility = View.VISIBLE
-                }
+            if (switchState) {
+                itemView.is_online_challenge.visibility = View.VISIBLE
             }
 
             //set challenge item click listener
@@ -86,6 +83,7 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
 interface ChallengeClickListener {
     fun onChallengeClick(challenge: BaseChallenge)
 }
+
 interface CheckmarkClickListener {
     fun onCheckmarkClick(challenge: BaseChallenge)
 }
