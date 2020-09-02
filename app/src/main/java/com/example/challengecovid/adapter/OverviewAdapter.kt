@@ -49,12 +49,13 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
                 itemView.description_challenge_completed.visibility = View.GONE
                 itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
             }
-            val sharedPrefs =
-                itemView.context?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            val sharedPrefs = itemView.context?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
             val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + data.challengeId, false) ?: false
 
             if (switchState) {
                 itemView.is_online_challenge.visibility = View.VISIBLE
+            } else {
+                itemView.is_online_challenge.visibility = View.GONE
             }
 
             //set challenge item click listener
