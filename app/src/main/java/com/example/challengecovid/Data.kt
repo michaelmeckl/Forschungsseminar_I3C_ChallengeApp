@@ -101,7 +101,7 @@ object Data {
         Challenge(
             challengeId = "Kein Fernsehen",
             title = "Kein Fernsehen",
-            description = "Verzichte heute komplett auf Fernsehen oder Internet",
+            description = "Verzichte heute komplett auf Fernsehen",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,

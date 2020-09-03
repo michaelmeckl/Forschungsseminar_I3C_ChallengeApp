@@ -41,6 +41,19 @@
 
     <string name="wrong_user_id_error">Your userID wasn\'t recognized! Please contact the testers!</string>
 
+    <!--
+    <string name="corona_more_info">WHO Corona Virus Outbreak :\n<a href="https://www.who.int/health-topics/coronavirus">https://www.who.int/health-topics/coronavirus</a>
+    \n\nWHO Corona Q&amp;A :\n<a href="https://www.who.int/news-room/q-a-detail/q-a-coronaviruses">https://www.who.int/news-room/q-a-detail/q-a-coronaviruses</a>
+    </string>
+    -->
+
+    <string name="about_intro">This app was developed as part of the project seminar "Interaktionsdesign, Informationsverhalten und Informationsvisualisierung in Zeiten der Corona-Krise (I3C)" of the University of Regensburg in the summer semester 2020.</string>
+
+    <string name="about_challenge_infos">Some of the challenges and categories in this app refer to official guidelines and recommendations for dealing with Covid-19 and social isolation.\n\nMore information:\n
+        * <a href="https://www.stmgp.bayern.de/coronavirus/psychische-gesundheit-in-zeiten-der-corona-krise/">Tips for improving mental health</a>\n
+        * <a href="https://www.uni-regensburg.de/psychologie-paedagogik-sport/psychologie-muehlberger-ambulanz/psychische-gesundheit-waehrend-corona/index.html">Examples for improving mental health</a>\n
+        * <a href="https://www.infektionsschutz.de/coronavirus/verhaltensregeln.html">Official Rules of conduct and hygiene</a>
+    </string>
 
     <!-- TODO hilfreiche Informationen zu Corona: (könnte man in einem Corona Guidelines Fragment verwenden)
     <string name="corona_five_step">Wash your hands regularly for 20 seconds, with soap and water or alcohol-based hand rub.
@@ -81,7 +94,6 @@
         WHO will continue to provide updated
         information as soon as clinical findings become available.</string>
 
-    <string name="image_credit">Image Credit Ecohealth Alliance</string>
     <string name="corona_symptoms_title">Symptoms</string>
     <string name="corona_symptoms_info">The most common symptoms of COVID-19 are fever, tiredness,
         and dry cough. Some patients may have aches and pains, nasal congestion, runny nose, sore
@@ -92,8 +104,6 @@
     <string name="corona_info_credit">NOTE : All information shown here has been taken from WHO\'s official website.
     Refer to the links below for more information on Corona virus.</string>
 
-    <string name="corona_more_info">WHO Corona Virus Outbreak :\n<a href="https://www.who.int/health-topics/coronavirus">https://www.who.int/health-topics/coronavirus</a>
-    \n\nWHO Corona Q&amp;A :\n<a href="https://www.who.int/news-room/q-a-detail/q-a-coronaviruses">https://www.who.int/news-room/q-a-detail/q-a-coronaviruses</a></string>
     -->
 
     <string name="heading_create_new_challenge">Create new challenge</string>
