@@ -73,17 +73,22 @@ class SocialFeedDetail : DialogFragment() {
 
             if (challenge.creatorId == userId) {
                 // this challenge belongs to the current user
-                feed_accept_button.isEnabled = false
+                
+                //feed_accept_button.isEnabled = false
+                feed_accept_button.visibility = View.GONE
+                feed_detail_already_accepted_message.visibility = View.VISIBLE
                 return@launch
             }
 
             val allChallenges = feedDetailViewModel.getUsersChallenges(userId) ?: return@launch
             for (c in allChallenges) {
                 if (c.challengeId == challenge.challengeId) {
-                    //Toast.makeText(requireActivity(), "Du hast diese Challenge schon angenommen!", Toast.LENGTH_SHORT).show()
+                    // the challenge is already in the active challenges of the current user
+                    // so hide the accept button
 
-                    // hide accept button
-                    feed_accept_button.isEnabled = false
+                    //feed_accept_button.isEnabled = false
+                    feed_accept_button.visibility = View.GONE
+                    feed_detail_already_accepted_message.visibility = View.VISIBLE
                     return@launch
                 }
             }
@@ -110,6 +115,7 @@ class SocialFeedDetail : DialogFragment() {
         if (feedDetailAdapter.participants.isEmpty()) {
             // hide title if no participants
             feed_detail_recycler_title.visibility = View.GONE
+            feed_detail_no_participants_message.visibility = View.VISIBLE
         }
     }
 
@@ -134,6 +140,7 @@ class SocialFeedDetail : DialogFragment() {
             if (participants.isNotEmpty()) {
                 // show title if not empty
                 feed_detail_recycler_title.visibility = View.VISIBLE
+                feed_detail_no_participants_message.visibility = View.GONE
             }
         }
     }
@@ -142,8 +149,6 @@ class SocialFeedDetail : DialogFragment() {
     /**
      * TODO:
      *  2. eine angenommene Challenge sollte nicht mehr veröffentlicht werden können!! -> vllt den button nur anzeigen wenn current user id die gleiche wie die creator id der challenge ist (in challenge detail in overview fragment)
-     *  5. wenn sie in overview gelöscht wird, sollte der nutzer auch aus den participants verschwinden!!!
-     *      -> challengeRepository.removeParticipant()
      *  7. angenommene challenge sollte nicht bearbeitbar sein von anderen nutzern
      */
     private fun acceptChallenge(challenge: UserChallenge, user: User) {
