@@ -57,7 +57,7 @@ object Data {
         ChallengeCategory(
             categoryId = "Soziales",
             title = "Soziales",
-            description = "Diese Kategorie enthält Challenges, die den Kontakt zu anderen Menschen anregen.",
+            description = "Diese Kategorie enthält Challenges, die den Kontakt zu anderen Menschen anregen soll.",
             categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_social_category),
             containedChallenges = getSocialChallenges()
         ),
@@ -123,7 +123,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Dokumentaion",
@@ -132,7 +132,7 @@ object Data {
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Musiker",
@@ -141,7 +141,7 @@ object Data {
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Händigkeit",
@@ -150,7 +150,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Hampemmänner",
@@ -159,7 +159,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Master der Linguistik",
@@ -168,7 +168,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Künstler",
@@ -177,7 +177,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Dora The Explorer",
@@ -186,7 +186,7 @@ object Data {
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Podcast",
@@ -195,7 +195,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Lebenslauf",
@@ -204,7 +204,7 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+            type = ChallengeType.DAILY_CHALLENGE
         )
 
     )
