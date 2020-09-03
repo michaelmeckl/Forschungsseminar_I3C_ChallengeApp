@@ -163,7 +163,7 @@ class ChallengeDetailFragment : Fragment() {
             val userid = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
 
-//            TODO Funktioniert so nicht mit dialog, weiß nicht warum. Vermutlich brauchts den Dialog aber nicht mal
+//            TODO challenge bearbeiten. aktuell: Wenn isPublic, dann wird User gewarnt, dass Challenge auf isPublic=false gesetzt wird) Aber vllt anders umgesetzt sinnvoller? ZB nach bearbeiten automatisch auf isPublic = true setzen?
             if (switchState) {
                 AlertDialog.Builder(requireContext()).setTitle("Achtung")
                     .setMessage("Wenn du diese Challenge veränderst, wird die Challenge auf 'nicht veröffentlicht' gesetzt. Du kannst sie dann wieder veröffentlichen.")
