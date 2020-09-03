@@ -9,6 +9,7 @@ import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -131,6 +132,33 @@ class UserRepository {
             }
 
             activeAndHiddenChallenges
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    suspend fun getChallengeParticipants(challengeId: String): List<User>? {
+        return try {
+            val participants: MutableList<User> = mutableListOf()
+            val allUsers = userCollection.get().await().toObjects<User>()
+
+            for (user in allUsers) {
+                val activeChallenges = userCollection.document(user.userId)
+                    .collection("activeChallenges")
+                    .get().await()
+                    .toObjects<UserChallenge>()
+
+                activeChallenges.forEach { challenge ->
+                    if (challenge.challengeId == challengeId) {
+                        //the challenge is in this users' active challenges so add him to the participants of this challenge
+                        participants.add(user)
+                        return@forEach
+                    }
+                }
+            }
+
+            participants
         } catch (e: Exception) {
             Timber.tag(USER_REPO_TAG).d(e)
             null
