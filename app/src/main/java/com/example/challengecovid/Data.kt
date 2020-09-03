@@ -117,6 +117,7 @@ object Data {
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
         ),
         Challenge(
+            challengeId = "Hampelmmänner",
             title = "Hampelmmänner",
             description = "Mach 20 Hampelmänner",
             difficulty = Difficulty.MITTEL,
@@ -125,22 +126,25 @@ object Data {
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         ),
         Challenge(
+            challengeId = "Dokumentaion",
             title = "Dokumentaion",
-            description = "Schau dir eine Dokumentation, deiner Wahl an",
+            description = "Schau dir eine Dokumentation deiner Wahl an",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         ),
         Challenge(
+            challengeId = "Musiker",
             title = "Musiker",
             description = "Sing ein Lied deiner Wahl laut vor",
-            difficulty = Difficulty.MITTEL,
+            difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         ),
         Challenge(
+            challengeId = "Händigkeit",
             title = "Händigkeit",
             description = "Schreib ein paar Sätze mit deiner nicht dominanten Hand",
             difficulty = Difficulty.MITTEL,
@@ -149,6 +153,7 @@ object Data {
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         ),
         Challenge(
+            challengeId = "Hampemmänner",
             title = "Hampemmänner",
             description = "Mach 20 Hampelmänner",
             difficulty = Difficulty.MITTEL,
@@ -156,6 +161,51 @@ object Data {
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
         ),
+        Challenge(
+            challengeId = "Master der Linguistik",
+            title = "Master der Linguistik",
+            description = "Lerne wie man sich in 5 Sprachen begrüßt, die du noch nicht kannst",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            challengeId = "Künstler",
+            title = "Künstler",
+            description = "Mal ein Selbstportrait von dir mit Sachen, die du schon zu hause hast",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            challengeId = "Dora The Explorer",
+            title = "Dora The Explorer",
+            description = "Entdecke eine neue Route zu dir nach Hause",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            challengeId = "Podcast",
+            title = "Podcast",
+            description = "Such dir einen neuen Podcast und hör dir die erste Folge an",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        ),
+        Challenge(
+            challengeId = "Lebenslauf",
+            title = "Lebenslauf",
+            description = "Erstell dir oder update dein Lebenslauf",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.test)
+        )
 
     )
 
@@ -518,7 +568,8 @@ object Data {
             completed = false,
             duration = 5,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
-        )
+        ),
+
     )
 
 }
