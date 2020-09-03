@@ -12,10 +12,6 @@ class FeedViewModel (private val challengeRepository: ChallengeRepository, priva
 
     val publicChallenges: LiveData<List<UserChallenge>> = challengeRepository.getPublicUserChallenges()
 
-    fun acceptPublicChallenge (challenge: UserChallenge, userId: String) = viewModelScope.launch {
-        userRepository.addActiveChallenge(challenge, userId)
-    }
-
     /*
     fun getPublicChallenges(): LiveData<LinkedHashMap<UserChallenge, User>> = liveData(Dispatchers.IO) {
         while (true) {

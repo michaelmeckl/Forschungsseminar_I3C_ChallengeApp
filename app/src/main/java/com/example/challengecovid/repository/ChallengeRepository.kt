@@ -6,11 +6,9 @@ import androidx.lifecycle.liveData
 import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
+import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -187,10 +185,43 @@ class ChallengeRepository {
         }
     }
 
+    //TODO: collection group query: alle active Challenges für alle Nutzer
+    // dann alle mit Type == UserChallenge
+    // dann alle nutzer aus dem array rausholen
+    suspend fun getChallengeParticipants(challengeId: String): List<User>? {
+        return try {
+            val snapshot = userChallengeCollection.document(challengeId).get().await()
+
+            val challenge = snapshot.toObject<UserChallenge>()
+
+            return challenge?.participatingUsers
+
+        } catch (e: Exception) {
+            Timber.tag(UserRepository.USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
     //GET
     suspend fun getUserChallenge(id: String): UserChallenge? {
         val challengeSnapshot = userChallengeCollection.document(id).get().await()
         return challengeSnapshot.toObject(UserChallenge::class.java)
+    }
+
+    suspend fun addParticipantToChallenge(challengeId: String, user: User) {
+        val challengeReference = userChallengeCollection.document(challengeId)
+
+        challengeReference.update("participatingUsers", FieldValue.arrayUnion(user))
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Added participant to Challenge successfully!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error adding participant to challenge: $e") }
+    }
+
+    suspend fun removeParticipantFromChallenge(challengeId: String, user: User) {
+        val challengeReference = userChallengeCollection.document(challengeId)
+
+        challengeReference.update("participatingUsers", FieldValue.arrayRemove(user))
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Removed participant from Challenge successfully!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error removing participant from challenge: $e") }
     }
 
     //CREATE

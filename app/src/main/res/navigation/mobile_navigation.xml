@@ -71,12 +71,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_feed"
-        android:name="com.example.challengecovid.ui.SocialFeedFragment"
-        android:label="@string/label_social_feed"
-        tools:layout="@layout/fragment_social_feed" />
-
-    <fragment
         android:id="@+id/navigation_about"
         android:name="com.example.challengecovid.ui.AboutFragment"
         android:label="@string/label_about"
@@ -89,6 +83,31 @@
         tools:layout="@layout/fragment_create_new_challenge">
     </dialog>
 
+    <fragment
+        android:id="@+id/navigation_feed"
+        android:name="com.example.challengecovid.ui.SocialFeedFragment"
+        android:label="@string/label_social_feed"
+        tools:layout="@layout/fragment_social_feed">
+        <action
+            android:id="@+id/action_feed_to_detail"
+            app:destination="@id/navigation_feed_detail" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/navigation_feed_detail"
+        android:name="com.example.challengecovid.ui.SocialFeedDetail"
+        android:label="{challengeTitle}"
+        tools:layout="@layout/fragment_social_feed_detail">
+        <argument
+            android:name="challengeId"
+            app:argType="string" />
+        <argument
+            android:name="challengeTitle"
+            app:argType="string" />
+        <argument
+            android:name="challengeDescription"
+            app:argType="string" />
+    </dialog>
 
     <!-- nested graph for profile to enable shared viewmodel store -->
     <navigation android:id="@+id/profile_graph"
