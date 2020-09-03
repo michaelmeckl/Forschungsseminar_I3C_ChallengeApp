@@ -62,7 +62,6 @@ class CategoryDetailFragment : Fragment() {
         detail_image.setImageResource(imageIdentifier)
         detail_description.text = description
 
-        //setupViewModelObserver()
         showChallenges(id)
     }
 
@@ -81,6 +80,7 @@ class CategoryDetailFragment : Fragment() {
 
             if(userID == "") return@launch
 
+            // get all active challenges for the user and also those System_Challenges that have been accepted and deleted (= hidden)
             val challenges = categoryDetailViewModel.getActiveAndHiddenChallenges(userID) ?: return@launch
             categoryDetailAdapter.activeUserChallenges = challenges.toSet()
         }
@@ -95,15 +95,6 @@ class CategoryDetailFragment : Fragment() {
             setHasFixedSize(true)
             adapter = categoryDetailAdapter
         }
-    }
-
-    private fun setupViewModelObserver() {
-        /*
-        categoryDetailViewModel.challengesForCategory.observe(viewLifecycleOwner, { it ->
-            it?.let {
-                categoryDetailAdapter.categoryChallenges = it
-            }
-        })*/
     }
 
     private fun acceptChallenge(challenge: Challenge, categoryId: String) {

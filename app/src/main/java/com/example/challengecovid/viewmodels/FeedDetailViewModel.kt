@@ -2,7 +2,9 @@ package com.example.challengecovid.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.User
+import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
@@ -15,12 +17,34 @@ class FeedDetailViewModel (private val challengeRepository: ChallengeRepository,
         return@withContext challengeRepository.getChallengeParticipants(challengeId)
     }
 
-    fun acceptPublicChallenge (challengeId: String, userId: String) = viewModelScope.launch(Dispatchers.IO) {
-        //TODO: ist das die richtige collection?
-        val challenge = challengeRepository.getUserChallenge(challengeId) ?: return@launch
-        userRepository.addActiveChallenge(challenge, userId)
+    suspend fun getUsersChallenges(userId: String): List<BaseChallenge>? = withContext(Dispatchers.IO) {
+        return@withContext userRepository.getAllChallengesForUserOnce(userId, hidden = false)
+    }
 
-        val user = userRepository.getUserOnce(userId) ?: return@launch
-        challengeRepository.addParticipantToChallenge(challengeId, user)
+    suspend fun getChallenge(challengeId: String): UserChallenge? = withContext(Dispatchers.IO) {
+        return@withContext challengeRepository.getUserChallenge(challengeId)
+    }
+
+    suspend fun getCurrentUser(userId: String): User? = withContext(Dispatchers.IO) {
+        return@withContext userRepository.getUserOnce(userId)
+    }
+
+    fun acceptPublicChallenge (challenge: UserChallenge, user: User) = viewModelScope.launch(Dispatchers.IO) {
+        /*
+        //check if the user has this challenge already accepted and if so return
+        val allChallenges = userRepository.getAllChallengesForUserOnce(userId, hidden = false)?.toSet()
+        if (allChallenges != null && allChallenges.contains(challenge)) {
+            // switch to Main Thread to show toast
+            withContext(Dispatchers.Main) {
+                Toast.makeText(App.instance, "Du hast diese Challenge schon angenommen!", Toast.LENGTH_SHORT).show()
+            }
+            return@launch
+        }
+        */
+
+        // add this challenge to the users active challenges
+        userRepository.addActiveChallenge(challenge, user.userId)
+        // add the user to this challenge's participants
+        challengeRepository.addParticipantToChallenge(challenge.challengeId, user)
     }
 }

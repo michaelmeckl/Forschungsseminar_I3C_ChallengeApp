@@ -66,8 +66,16 @@ class UserRepository {
         }
     }
 
-    suspend fun getAllChallengesForUserOnce(userId: String): List<BaseChallenge>? {
-        return fetchChallengesForUser(userId)
+    /**
+     * Returns all active challenges for a user specified with the userId.
+     * @Hidden specifies if hidden challenges (i.e. system challenges that have been removed) should be returned too
+     */
+    suspend fun getAllChallengesForUserOnce(userId: String, hidden: Boolean = false): List<BaseChallenge>? {
+        return if (hidden) {
+            getActiveAndHiddenChallengesForUser(userId)
+        } else {
+            fetchChallengesForUser(userId)
+        }
     }
 
     private suspend fun fetchChallengesForUser(userId: String): List<BaseChallenge>? {

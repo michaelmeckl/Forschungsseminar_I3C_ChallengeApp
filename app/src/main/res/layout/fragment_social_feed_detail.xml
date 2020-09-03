@@ -12,6 +12,7 @@
         android:layout_marginTop="@dimen/margin_normal"
         android:paddingHorizontal="8dp"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,18 +30,30 @@
         app:layout_constraintTop_toBottomOf="@+id/feed_detail_title"
         tools:text="User Challenge Description Text User Challenge Description Text User Challenge Description Text User Challenge Description Text" />
 
+    <TextView
+        android:id="@+id/feed_detail_recycler_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Teilnehmer:"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_feed_detail_view"
+        app:layout_constraintTop_toBottomOf="@id/feed_detail_description" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_feed_detail_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="25dp"
         android:clipToPadding="false"
-        android:paddingHorizontal="6dp"
+        android:paddingHorizontal="2dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/feed_accept_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feed_detail_description"
+        app:layout_constraintTop_toBottomOf="@+id/feed_detail_recycler_title"
         tools:listitem="@layout/feed_detail_user_item"
         tools:orientation="horizontal" />
 
