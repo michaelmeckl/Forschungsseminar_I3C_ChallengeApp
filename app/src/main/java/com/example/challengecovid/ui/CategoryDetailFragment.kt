@@ -2,16 +2,33 @@ package com.example.challengecovid.ui
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.adapter.CategoryChallengeClickListener
+import com.example.challengecovid.adapter.CategoryDetailAdapter
+import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.viewmodels.CategoryDetailViewModel
+import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_category_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class CategoryDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
     private val arguments: CategoryDetailFragmentArgs by navArgs()
+
+    private lateinit var categoryDetailAdapter: CategoryDetailAdapter
+    private lateinit var categoryDetailViewModel: CategoryDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,14 +38,21 @@ class CategoryDetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_category_detail, container, false)
+        val root = inflater.inflate(R.layout.fragment_category_detail, container, false)
+
+        val categoryRepository = RepositoryController.getCategoryRepository()
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        categoryDetailViewModel = getViewModel { CategoryDetailViewModel(categoryRepository, userRepository, application) }
+
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (_, description, imageName) = arguments
+        val (id, title, description, imageName) = arguments
 
         // set the same transition name on the new image view to enable the shared element transition!
         detail_image.transitionName = imageName
@@ -37,6 +61,61 @@ class CategoryDetailFragment : Fragment() {
 
         detail_image.setImageResource(imageIdentifier)
         detail_description.text = description
+
+        //setupViewModelObserver()
+        showChallenges(id)
+    }
+
+    //TODO: die könnten auch vorgeladen und gecached werden theoretisch (für bessere Performance)
+    private fun showChallenges(categoryId: String) {
+
+        categoryDetailAdapter = CategoryDetailAdapter(object : CategoryChallengeClickListener {
+            override fun onCategoryChallengeClick(challenge: Challenge) {
+                acceptChallenge(challenge, categoryId)
+            }
+        })
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            val userID = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+            if(userID == "") return@launch
+
+            val challenges = categoryDetailViewModel.getActiveAndHiddenChallenges(userID) ?: return@launch
+            categoryDetailAdapter.activeUserChallenges = challenges.toSet()
+        }
+
+        // fetch the challenges asynchronously from firebase and set them to the adapter afterwards
+        CoroutineScope(Dispatchers.Main).launch {
+            val challenges = categoryDetailViewModel.getChallengesForCategory(categoryId) ?: return@launch
+            categoryDetailAdapter.categoryChallenges  = challenges
+        }
+
+        recycler_category_detail_list.apply {
+            setHasFixedSize(true)
+            adapter = categoryDetailAdapter
+        }
+    }
+
+    private fun setupViewModelObserver() {
+        /*
+        categoryDetailViewModel.challengesForCategory.observe(viewLifecycleOwner, { it ->
+            it?.let {
+                categoryDetailAdapter.categoryChallenges = it
+            }
+        })*/
+    }
+
+    private fun acceptChallenge(challenge: Challenge, categoryId: String) {
+        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+        
+        if (userId == "") {
+            Toast.makeText(requireActivity(), R.string.wrong_user_id_error, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -44,7 +123,7 @@ class CategoryDetailFragment : Fragment() {
     }
 
 
-    //TODO: add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
+    //add this to top: EventListener<DocumentSnapshot> to receive updates for the current category!
     /**
      * Listener for the Restaurant document ([.restaurantRef]).
      */

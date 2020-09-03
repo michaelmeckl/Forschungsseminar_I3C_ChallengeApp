@@ -38,6 +38,9 @@
         android:label="{title}"
         tools:layout="@layout/fragment_category_detail">
         <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
             android:name="title"
             app:argType="string" />
         <argument

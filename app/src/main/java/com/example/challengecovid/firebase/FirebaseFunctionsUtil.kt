@@ -11,8 +11,6 @@ object FirebaseFunctionsUtil {
 
     //TODO: die location des clusters sollte auch angegeben werden!! -> eur3 (europe-west)
     private val functions: FirebaseFunctions = Firebase.functions
-    //TODO: besser?
-    private val mFunctions = FirebaseFunctions.getInstance()
 
     fun callCloudFunctionForResult(functionName: String, data: Any): Task<String> {   //TODO: not any! make this more specific
         // Call the function and extract the operation from the result

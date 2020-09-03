@@ -16,10 +16,10 @@
 
         <ImageView
             android:id="@+id/icon_challenge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:adjustViewBounds="true"
-            android:padding="4dp"
+            android:padding="6dp"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +48,7 @@
             android:padding="4dp"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@android:color/holo_red_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="15 XP" />
