@@ -211,7 +211,8 @@ class OverviewFragment : Fragment() {
             title = challenge.title,
             description = challenge.description,
             type = challenge.type,
-            difficulty = challenge.difficulty.toString()
+            difficulty = challenge.difficulty.toString(),
+            completed = challenge.completed
         )
 
         // navigate to another fragment on click

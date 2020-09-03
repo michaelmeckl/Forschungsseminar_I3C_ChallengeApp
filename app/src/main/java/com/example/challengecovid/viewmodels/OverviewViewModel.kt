@@ -116,6 +116,7 @@ class OverviewViewModel(
 
     fun updateChallenge(userChallenge: UserChallenge) {
         challengeRepository.updateUserChallenge(userChallenge)
+        userRepository.updateActiveChallenge(userChallenge, currentUserId)
         _showSnackbarEvent.value = true
     }
 
@@ -140,7 +141,6 @@ class OverviewViewModel(
             challenge.completed = true
             userRepository.updateActiveChallenge(challenge, currentUserId)
         }
-        _showSnackbarEvent.value = true
     }
 
     /**

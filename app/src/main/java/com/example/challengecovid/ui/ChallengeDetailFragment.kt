@@ -1,18 +1,24 @@
 package com.example.challengecovid.ui
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.Difficulty
+import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.viewmodels.OverviewViewModel
+import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
 import kotlinx.android.synthetic.main.fragment_create_new_challenge.*
 import timber.log.Timber
@@ -24,8 +30,13 @@ class ChallengeDetailFragment : Fragment() {
     // get the given navigation arguments lazily
     private val arguments: ChallengeDetailFragmentArgs by navArgs()
     private val challengeRepository = RepositoryController.getChallengeRepository()
+    private lateinit var overviewViewModel: OverviewViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val userRepository = RepositoryController.getUserRepository()
+        val application = requireNotNull(this.activity).application
+        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
+
         return inflater.inflate(R.layout.fragment_challenge_detail, container, false)
     }
 
@@ -33,7 +44,7 @@ class ChallengeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (id, title, description, type, difficulty) = arguments
+        val (id, title, description, type, difficulty, completed) = arguments
 
         challenge_detail_title.text = title
         if (description.isBlank()) {
@@ -59,7 +70,7 @@ class ChallengeDetailFragment : Fragment() {
 
         // get the saved switch state and set it
         val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
+        var switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
         publish_switch.isChecked = switchState
         setStatus(switchState)
 
@@ -134,7 +145,50 @@ class ChallengeDetailFragment : Fragment() {
 
         }
 
-        challenge_detail_button_submit_edit.setOnClickListener{
+        challenge_detail_button_submit_edit.setOnClickListener {
+
+            val newTitle = challenge_detail_title_edit.text.toString()
+            if (newTitle.isBlank()) {
+                layout_challenge_detail_title_edit.error = "Name erforderlich"
+                return@setOnClickListener
+            }
+            val newDescription = challenge_detail_description_edit.text.toString()
+            val difficulties = resources.getStringArray(R.array.difficulties_challenges)
+            val newDifficulty: Difficulty = when (challenge_detail_spinner_difficulties_edit.selectedItem) {
+                difficulties[0] -> Difficulty.LEICHT
+                difficulties[1] -> Difficulty.MITTEL
+                difficulties[2] -> Difficulty.SCHWER
+                else -> Difficulty.LEICHT
+            }
+            val userid = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+
+//            TODO Funktioniert so nicht mit dialog, weiß nicht warum. Vermutlich brauchts den Dialog aber nicht mal
+            if (switchState) {
+                AlertDialog.Builder(requireContext()).setTitle("Achtung")
+                    .setMessage("Wenn du diese Challenge veränderst, wird die Challenge auf 'nicht veröffentlicht' gesetzt. Du kannst sie dann wieder veröffentlichen.")
+                    .setPositiveButton("Veränderungen bestätigen") { _: DialogInterface, _: Int ->
+                        // TODO: ispublic wird immer auf false gesetzt. Ich denk so machts am meisten sinn
+                        val newUserChallenge = UserChallenge(
+                            challengeId = id,
+                            title = newTitle,
+                            description = newDescription,
+                            difficulty = newDifficulty,
+                            type = ChallengeType.USER_CHALLENGE,
+                            completed = completed,
+                            isPublic = false,
+                            creatorId = userid
+                        )
+                        Timber.d("Neue Challenge: " + newUserChallenge.toString())
+
+                        publish_switch.isChecked = false
+
+                        overviewViewModel.updateChallenge(newUserChallenge)
+                    }
+                    .setNegativeButton("Nicht verändern") { _, _ -> return@setNegativeButton }
+                    .show()
+            }
+
 
         }
 
