@@ -8,9 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
@@ -21,11 +19,9 @@ import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_social_feed_detail.*
-import kotlinx.android.synthetic.main.social_feed_item.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SocialFeedDetail : DialogFragment() {
 
@@ -36,7 +32,10 @@ class SocialFeedDetail : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.dialogFullScreenSocialFeed)    // set a custom style to make the dialog fragment bigger
+        setStyle(
+            STYLE_NORMAL,
+            R.style.dialogFullScreenSocialFeed
+        )    // set a custom style to make the dialog fragment bigger
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,7 +48,6 @@ class SocialFeedDetail : DialogFragment() {
         return root
     }
 
-    //TODO: runBlocking with a loading progressbar to prevent ugly ui change??
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,7 +71,7 @@ class SocialFeedDetail : DialogFragment() {
 
             if (challenge.creatorId == userId) {
                 // this challenge belongs to the current user
-                
+
                 //feed_accept_button.isEnabled = false
                 feed_accept_button.visibility = View.GONE
                 feed_detail_already_accepted_message.visibility = View.VISIBLE
@@ -121,7 +119,8 @@ class SocialFeedDetail : DialogFragment() {
 
     //TODO: diese Methode könnten eigentlich auch in Utils so oft wie es gebraucht wird
     private fun getUserId(): String? {
-        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
         val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
         if (userId == "") {
@@ -135,13 +134,17 @@ class SocialFeedDetail : DialogFragment() {
     private fun showParticipants(challengeId: String) {
         CoroutineScope(Dispatchers.Main).launch {
             val participants = feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
-            feedDetailAdapter.participants  = participants
+            feedDetailAdapter.participants = participants
 
             if (participants.isNotEmpty()) {
                 // show title if not empty
                 feed_detail_recycler_title.visibility = View.VISIBLE
                 feed_detail_no_participants_message.visibility = View.GONE
             }
+
+            // finished loading stuff; hide the loading circle and show the content
+            loading_circle.visibility = View.GONE
+            social_feed_detail_dialog.visibility = View.VISIBLE
         }
     }
 
