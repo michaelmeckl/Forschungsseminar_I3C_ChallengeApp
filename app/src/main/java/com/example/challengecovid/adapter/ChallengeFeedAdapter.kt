@@ -42,7 +42,11 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
 
         fun bind(data: UserChallenge, clickListener: ChallengeFeedClickListener) {
             itemView.feed_item_title.text = data.title
-            itemView.feed_item_description.text = data.description
+            if (data.description != "") {
+                itemView.feed_item_description.text = data.description
+            } else {
+                itemView.feed_item_description.text = "Keine Beschreibung"
+            }
 
             //FIXME: eigentlich sollte das im viewmodel passieren und nicht im Adapter
             // -> schlechte Performance und keine saubere Trennung von View und Logic!
@@ -69,12 +73,12 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                     } else {
                         // set default userIcon and name
                         val textAnonymousUser = itemView.resources.getString(R.string.username_placeholder)
-                        itemView.feed_item_creator.text = itemView.resources.getString(R.string.creator_in_feed, textAnonymousUser)
+                        itemView.feed_item_creator.text =
+                            itemView.resources.getString(R.string.creator_in_feed, textAnonymousUser)
                         itemView.feed_creator_icon.setImageResource(R.drawable.ic_person)
                     }
                 }
             }
-
 
 
             //set an item click listener

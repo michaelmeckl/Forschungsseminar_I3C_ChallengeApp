@@ -1,6 +1,5 @@
 package com.example.challengecovid.firebase
 
-import android.widget.Toast
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.gms.tasks.OnCompleteListener
@@ -25,10 +24,9 @@ class MessagingService : FirebaseMessagingService() {
                 // Get new Instance ID token
                 val token = task.result?.token
 
-                // Log and toast
+                // Log token
                 val msg = "Token retrieved successfully: $token"
                 Timber.tag(TOKEN_TAG).d(msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             })
     }
 
@@ -307,7 +305,6 @@ class MessagingService : FirebaseMessagingService() {
                     msg = "Subscribing to topic failed!"
                 }
                 Timber.tag(MSG_TAG).d(msg)
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             }
     }
 

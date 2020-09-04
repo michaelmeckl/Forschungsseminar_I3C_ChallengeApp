@@ -90,12 +90,6 @@ class OverviewFragment : Fragment() {
         setupSwipeListener()
 
         fab_create_challenge.setOnClickListener {
-            /*
-            // add a simple animation
-            YoYo.with(Techniques.Wobble)
-                .duration(200)  // 300 ms
-                .playOn(fab_create_challenge)
-            */
             val navOptions = NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setEnterAnim(R.anim.fade_in)
@@ -173,7 +167,6 @@ class OverviewFragment : Fragment() {
     }
 
 
-    //TODO: material showcase view to show how to delete items??
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
             val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
@@ -195,8 +188,8 @@ class OverviewFragment : Fragment() {
                 //TODO ?
                 Toast.makeText(
                     requireActivity(),
-                    "Du hast auf die Daily Challenge geklickt! Herzlichen Glückwunsch!",
-                    Toast.LENGTH_SHORT
+                    "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                    Toast.LENGTH_LONG
                 ).show()
             }
 
@@ -215,7 +208,13 @@ class OverviewFragment : Fragment() {
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 snackbar.show()
 
-                // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
+                /*
+                YoYo.with(Techniques.Tada)
+                    .duration(200)
+                    .playOn(daily_challenge_title)
+                */
+
+                // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
         })
@@ -270,7 +269,7 @@ class OverviewFragment : Fragment() {
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
                         overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
-                        Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()
                 }

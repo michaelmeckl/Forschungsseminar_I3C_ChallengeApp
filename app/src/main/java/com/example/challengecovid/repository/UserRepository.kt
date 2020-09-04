@@ -1,14 +1,13 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -66,8 +65,16 @@ class UserRepository {
         }
     }
 
-    suspend fun getAllChallengesForUserOnce(userId: String): List<BaseChallenge>? {
-        return fetchChallengesForUser(userId)
+    /**
+     * Returns all active challenges for a user specified with the userId.
+     * @Hidden specifies if hidden challenges (i.e. system challenges that have been removed) should be returned too
+     */
+    suspend fun getAllChallengesForUserOnce(userId: String, hidden: Boolean = false): List<BaseChallenge>? {
+        return if (hidden) {
+            getActiveAndHiddenChallengesForUser(userId)
+        } else {
+            fetchChallengesForUser(userId)
+        }
     }
 
     private suspend fun fetchChallengesForUser(userId: String): List<BaseChallenge>? {
@@ -129,6 +136,33 @@ class UserRepository {
         }
     }
 
+    suspend fun getChallengeParticipants(challengeId: String): List<User>? {
+        return try {
+            val participants: MutableList<User> = mutableListOf()
+            val allUsers = userCollection.get().await().toObjects<User>()
+
+            for (user in allUsers) {
+                val activeChallenges = userCollection.document(user.userId)
+                    .collection("activeChallenges")
+                    .get().await()
+                    .toObjects<UserChallenge>()
+
+                activeChallenges.forEach { challenge ->
+                    if (challenge.challengeId == challengeId) {
+                        //the challenge is in this users' active challenges so add him to the participants of this challenge
+                        participants.add(user)
+                        return@forEach
+                    }
+                }
+            }
+
+            participants
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
     //GET
     suspend fun getUserOnce(id: String): User? {
         val userSnapshot = userCollection.document(id).get().await()
@@ -149,9 +183,9 @@ class UserRepository {
         val userReference = userCollection.document(user.userId)
 
         userReference.set(user).addOnSuccessListener {
-            Toast.makeText(App.instance, "User saved successfully!", Toast.LENGTH_SHORT).show()
+            Timber.d("User saved successfully!")
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
+            Timber.d("Failed to save new user: $e")
         }
 
         userReference.id
@@ -163,10 +197,9 @@ class UserRepository {
             .document(challenge.challengeId)
             .set(challenge)
             .addOnSuccessListener {
-                //TODO: only log this with timber, weil an versch. stellen!
-                Toast.makeText(App.instance, "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
+                Timber.d("Challenge erfolgreich angenommen!")
             }.addOnFailureListener { e ->
-                Toast.makeText(App.instance, "Fehler beim Annehmen der Challenge: $e", Toast.LENGTH_SHORT).show()
+                Timber.d("Fehler beim Annehmen der Challenge: $e")
             }
     }
 
@@ -237,7 +270,6 @@ class UserRepository {
             .collection("activeChallenges")
             .document(challenge.challengeId)
 
-        //TODO: test
         challengeRef.update("hidden", true)
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }

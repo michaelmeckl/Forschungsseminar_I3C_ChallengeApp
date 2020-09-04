@@ -26,5 +26,6 @@ data class UserChallenge(
     override var duration: Int = 7,     // in days
     @ServerTimestamp var createdAt: Date? = null,
     var isPublic: Boolean = false,  // whether this challenge is can be seen by others or only by the creator
-    val creatorId: String = ""   // which user created this challenge
+    val creatorId: String = "",   // which user created this challenge
+    val participatingUsers: List<User> = emptyList()
 ) : BaseChallenge()
