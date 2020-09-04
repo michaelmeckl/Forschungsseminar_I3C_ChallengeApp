@@ -208,7 +208,13 @@ class OverviewFragment : Fragment() {
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 snackbar.show()
 
-                // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
+                /*
+                YoYo.with(Techniques.Tada)
+                    .duration(200)
+                    .playOn(daily_challenge_title)
+                */
+
+                // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
         })
@@ -263,7 +269,7 @@ class OverviewFragment : Fragment() {
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
                         overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
-                        Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()
                 }

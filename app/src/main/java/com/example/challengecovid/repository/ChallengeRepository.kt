@@ -1,14 +1,14 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
-import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -230,9 +230,9 @@ class ChallengeRepository {
 
         //NOTE: use set(challenge, SetOptions.merge()) to only update the parts that changed!
         challengeReference.set(userChallenge).addOnSuccessListener {
-            Toast.makeText(App.instance, "User Challenge saved successfully!", Toast.LENGTH_SHORT).show()
+            Timber.d("User Challenge saved successfully!")
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new user challenge: $e", Toast.LENGTH_SHORT).show()
+            Timber.d( "Failed to save new user challenge: $e")
         }
 
         return challengeReference.id

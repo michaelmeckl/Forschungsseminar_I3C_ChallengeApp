@@ -60,8 +60,6 @@ class SocialFeedFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: UserChallenge) {
-        Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
-
         val action = SocialFeedFragmentDirections.actionFeedToDetail(
             challengeId = challenge.challengeId,
             challengeTitle = challenge.title,

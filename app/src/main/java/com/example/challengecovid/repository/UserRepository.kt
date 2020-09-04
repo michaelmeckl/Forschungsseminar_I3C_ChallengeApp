@@ -1,10 +1,8 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -185,9 +183,9 @@ class UserRepository {
         val userReference = userCollection.document(user.userId)
 
         userReference.set(user).addOnSuccessListener {
-            Toast.makeText(App.instance, "User saved successfully!", Toast.LENGTH_SHORT).show()
+            Timber.d("User saved successfully!")
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
+            Timber.d("Failed to save new user: $e")
         }
 
         userReference.id
@@ -199,10 +197,9 @@ class UserRepository {
             .document(challenge.challengeId)
             .set(challenge)
             .addOnSuccessListener {
-                //TODO: only log this with timber, weil an versch. stellen!
-                Toast.makeText(App.instance, "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
+                Timber.d("Challenge erfolgreich angenommen!")
             }.addOnFailureListener { e ->
-                Toast.makeText(App.instance, "Fehler beim Annehmen der Challenge: $e", Toast.LENGTH_SHORT).show()
+                Timber.d("Fehler beim Annehmen der Challenge: $e")
             }
     }
 
@@ -273,7 +270,6 @@ class UserRepository {
             .collection("activeChallenges")
             .document(challenge.challengeId)
 
-        //TODO: test
         challengeRef.update("hidden", true)
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }

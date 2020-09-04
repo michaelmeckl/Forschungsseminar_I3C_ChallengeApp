@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
+import com.example.challengecovid.App
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -105,6 +106,7 @@ class CategoryDetailFragment : Fragment() {
         }
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
+        Toast.makeText(requireActivity(), "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

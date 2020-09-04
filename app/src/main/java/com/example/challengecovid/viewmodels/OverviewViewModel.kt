@@ -91,15 +91,13 @@ class OverviewViewModel(
     /**
      * Add a new challenge to the database.
     fun addNewChallenge(userChallenge: UserChallenge) {
-    //launch on the main thread because the result affects the UI
-    uiScope.launch {
-    // insert the new challenge on a separate I/O thread that is optimized for room interaction
-    // to avoid blocking the main / UI thread
-    withContext(Dispatchers.IO) {
-    challengeRepository.saveUserChallenge(userChallenge)
-    }
-    _showSnackbarEvent.value = true
-    }
+        //launch on the main thread because the result affects the UI
+        uiScope.launch {
+            // insert the new challenge on a separate I/O thread that is optimized for room interaction
+            // to avoid blocking the main / UI thread
+            withContext(Dispatchers.IO) {
+            challengeRepository.saveUserChallenge(userChallenge)
+        }
     }
      */
 

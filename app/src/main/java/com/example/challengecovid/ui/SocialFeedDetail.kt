@@ -18,6 +18,8 @@ import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_social_feed_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -155,12 +157,18 @@ class SocialFeedDetail : DialogFragment() {
      *  7. angenommene challenge sollte nicht bearbeitbar sein von anderen nutzern
      */
     private fun acceptChallenge(challenge: UserChallenge, user: User) {
-        Toast.makeText(requireContext(), "Challenge accepted!", Toast.LENGTH_SHORT).show()
-
         // diasble button to prevent more clicks
         feed_accept_button.isEnabled = false
 
         feedDetailViewModel.acceptPublicChallenge(challenge, user)
+
+        val snackbar = Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+            "Du hast diese Challenge erfolgreich angenommen!",
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+        snackbar.show()
 
         // dismiss fragment
         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
