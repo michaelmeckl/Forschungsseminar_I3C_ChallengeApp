@@ -1,6 +1,5 @@
 package com.example.challengecovid.ui
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -20,9 +19,11 @@ import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
-import kotlinx.android.synthetic.main.fragment_create_new_challenge.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.concurrent.thread
 
 
 class ChallengeDetailFragment : Fragment() {
@@ -64,13 +65,17 @@ class ChallengeDetailFragment : Fragment() {
 
         // get the saved switch state and set it
         val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        var switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
+        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
         publish_switch.isChecked = switchState
         setStatus(switchState)
 
         publish_switch.setOnCheckedChangeListener { _, isChecked ->
-            if (sharedPrefs?.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, true)!!) {
-                sharedPrefs.edit()?.putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false)?.apply()
+            val firstTimeChallengePublished =
+                sharedPrefs?.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, true) ?: return@setOnCheckedChangeListener
+
+            if (firstTimeChallengePublished) {
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false).apply()
+
                 AlertDialog.Builder(requireContext())
                     .setTitle("Hinweis")
                     .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf 'nicht veröffentlicht' setzen")
@@ -87,7 +92,7 @@ class ChallengeDetailFragment : Fragment() {
                 }
             }
 
-            sharedPrefs.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked)?.apply()
+            sharedPrefs.edit().putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked).apply()
 
 //          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
             challenge_detail_progressbar.visibility = View.VISIBLE
@@ -95,9 +100,16 @@ class ChallengeDetailFragment : Fragment() {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
             )
+            //TODO: Coroutinen wären hier deutlich besser!!
+            /*
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(2000)
+            }*/
             Handler().postDelayed(this::switchStatus, 2000)
 
         }
+
+        //FIXME: statt alles ständig auf hidden oder visible zu setzen wäre hier ein neues eigenes Layout deutlich besser
         if (type == ChallengeType.SYSTEM_CHALLENGE || !is_editable) {
             // hide the option to publish for system challenges
             publish_switch.visibility = View.GONE
@@ -119,10 +131,11 @@ class ChallengeDetailFragment : Fragment() {
             challenge_detail_title_edit.hint = title
             layout_challenge_detail_description_edit.visibility = View.VISIBLE
             challenge_detail_description_edit.hint = description
+
             if (description.isBlank()) {
-                //TODO optional: string ressource
                 challenge_detail_description_edit.hint = "Beschreibung"
             }
+
             challenge_detail_spinner_difficulties_edit.visibility = View.VISIBLE
             when (difficulty) {
                 Difficulty.LEICHT.toString() -> challenge_detail_spinner_difficulties_edit.setSelection(0)
@@ -183,8 +196,8 @@ class ChallengeDetailFragment : Fragment() {
 
             overviewViewModel.updateChallenge(newUserChallenge)
 
-            requireActivity().findNavController(R.id.nav_host_fragment)
-                .navigate(ChallengeDetailFragmentDirections.actionChallengeDetailToChallenges())
+            requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+                //.navigate(ChallengeDetailFragmentDirections.actionChallengeDetailToChallenges())
 
 
         }
@@ -204,6 +217,8 @@ class ChallengeDetailFragment : Fragment() {
     }
 
     private fun switchStatus() {
+        //TODO: app crasht hier!!!!!! challenge_detail_relativelayout_offline ist null wenn geedited und neu geöffnet
+        challenge_detail_relativelayout_offline ?: return
         if (challenge_detail_relativelayout_offline.visibility == View.GONE) {
             challenge_detail_relativelayout_online.visibility = View.GONE
             challenge_detail_relativelayout_offline.visibility = View.VISIBLE
