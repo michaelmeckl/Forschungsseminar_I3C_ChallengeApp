@@ -2,11 +2,15 @@ package com.example.challengecovid.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -51,6 +55,18 @@ class CategoryRepository {
         }
     }
 
+    suspend fun fetchChallengesForCategory(categoryId: String): List<Challenge>? {
+        return try {
+            val categorySnapshot = categoryCollection.document(categoryId).get().await()
+
+            val category = categorySnapshot.toObject<ChallengeCategory>()
+            category?.containedChallenges
+        } catch (e: Exception) {
+            Timber.tag(CATEGORY_REPO_TAG).d(e)
+            null
+        }
+    }
+
     //GET
     suspend fun getCategory(id: String): ChallengeCategory? {
         val categorySnapshot = categoryCollection.document(id).get().await()
@@ -86,6 +102,30 @@ class CategoryRepository {
             .addOnSuccessListener { Timber.tag(CATEGORY_REPO_TAG).d("category successfully updated!") }
             .addOnFailureListener { e -> Timber.tag(CATEGORY_REPO_TAG).d("Error updating category: $e") }
     }
+
+    suspend fun changeChallengeActiveStatus(categoryId: String, activeChallenge: Challenge, status: Boolean) =
+        withContext(Dispatchers.IO) {
+            try {
+                val categorySnapshot = categoryCollection.document(categoryId).get().await()
+
+                val category = categorySnapshot.toObject<ChallengeCategory>()
+                val challenges = category?.containedChallenges ?: return@withContext
+
+                for (challenge in challenges) {
+                    if (challenge == activeChallenge) {
+                        //TODO: gibts dafür ne schönere möglichkeit? (andererseits wird so auch gleich mit sortiert ...)
+                        categoryCollection.document(categoryId)
+                            .update("containedChallenges", FieldValue.arrayRemove(challenge))
+                        challenge.accepted = status
+                        categoryCollection.document(categoryId)
+                            .update("containedChallenges", FieldValue.arrayUnion(challenge))
+                    }
+                }
+
+            } catch (e: Exception) {
+                Timber.tag(CATEGORY_REPO_TAG).d(e)
+            }
+        }
 
 
     /**

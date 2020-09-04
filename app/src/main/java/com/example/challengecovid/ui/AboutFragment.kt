@@ -1,8 +1,12 @@
 package com.example.challengecovid.ui
 
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.example.challengecovid.App
+import com.example.challengecovid.BuildConfig
 import com.example.challengecovid.R
 import com.example.challengecovid.adapter.AboutAdapter
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -19,6 +23,11 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)     // this fragment wants to edit the toolbar menu
 
+        //setup intro links
+        //Linkify.addLinks(about_challenge_infos, Linkify.WEB_URLS)   // add links
+        about_challenge_infos.movementMethod = LinkMovementMethod.getInstance()
+
+        //setup used icons list
         aboutAdapter = AboutAdapter()
         aboutAdapter.attributionList = allAttributions
 
@@ -58,7 +67,8 @@ class AboutFragment : Fragment() {
             AttributionItem(R.drawable.ic_pleasure_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_productivity_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_social_category, "Icon made by Freepik from www.flaticon.com/"),
-            AttributionItem(R.drawable.ic_safety_category, "Icon made by Freepik from www.flaticon.com/")
+            AttributionItem(R.drawable.ic_safety_category, "Icon made by Freepik from www.flaticon.com/"),
+            AttributionItem(R.drawable.icons8_parchment_80, "Icon made by Icons8 (https://icons8.com)"),
 
         )
     }

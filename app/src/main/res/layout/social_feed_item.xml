@@ -45,19 +45,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/feed_item_creator_level"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintVertical_bias="1.0"
             app:layout_constraintEnd_toStartOf="@+id/feed_creator_icon"
             app:layout_constraintTop_toBottomOf="@+id/feed_item_description"
             tools:text="von Hans Jürgen"/>
 
-        <!-- TODO: set custom heigth and withd instead of wrap Content? -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/feed_creator_icon"
+        <TextView
+            android:id="@+id/feed_item_creator_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintEnd_toStartOf="@+id/feed_creator_icon"
+            app:layout_constraintTop_toBottomOf="@+id/feed_item_creator"
+            tools:text="Level 3"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/feed_creator_icon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

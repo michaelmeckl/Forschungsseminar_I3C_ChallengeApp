@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -21,13 +22,20 @@ import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.User
+import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.challenge_item.*
 import kotlinx.android.synthetic.main.fragment_overview.*
-
+import kotlinx.android.synthetic.main.overview_content.*
 import timber.log.Timber
+import java.util.*
 
+
+//TODO: noch alle Toasts aus den repositories und sonst wo, die nicht nötig sind, entfernen!!!
 class OverviewFragment : Fragment() {
 
     private lateinit var overviewViewModel: OverviewViewModel
@@ -59,6 +67,8 @@ class OverviewFragment : Fragment() {
         levelsHashMap[9] = 130
         levelsHashMap[10] = 150
 
+
+        checkFirstTimeThisDay()
 
         return root
     }
@@ -113,12 +123,6 @@ class OverviewFragment : Fragment() {
         setupSwipeListener()
 
         fab_create_challenge.setOnClickListener {
-            /*
-            // add a simple animation
-            YoYo.with(Techniques.Wobble)
-                .duration(200)  // 300 ms
-                .playOn(fab_create_challenge)
-            */
             val navOptions = NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setEnterAnim(R.anim.fade_in)
@@ -127,6 +131,28 @@ class OverviewFragment : Fragment() {
 
             requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(OverviewFragmentDirections.actionOverviewToCreate())
+        }
+    }
+
+    private fun checkFirstTimeThisDay() {
+        //TODO: da die Studie im gleichen Monat durchgeführt wird, ist das ausreichend!
+        // Sonst müsste man außerdem noch Monat und Jahr vergleichen!
+        val currentDay = Calendar.DAY_OF_MONTH
+
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        // day of month starts with 1 so 0 is a good default to make sure it works the first time as well
+        val lastDay = sharedPrefs?.getInt(Constants.PREFS_LAST_DAY, 0) ?: 0
+
+        // get the id of the last daily challenge the day before (or null if the first time)
+        val lastDailyChallengeId = sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
+
+        if (currentDay > lastDay) {
+            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY, currentDay).apply()
+            overviewViewModel.getRandomDailyChallenge(lastDailyChallengeId)
+
+            // remove the old daily challenge from the users active challenges
+            overviewViewModel.removeChallenge(lastDailyChallengeId ?: return)
         }
     }
 
@@ -188,11 +214,33 @@ class OverviewFragment : Fragment() {
 
 
     private fun setupObservers() {
-        overviewViewModel.allChallenges.observe(viewLifecycleOwner, { it ->
-            it?.let {
-                // update the list in the adapter with the new challenge list
-                overviewAdapter.activeChallenges = it
+        overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
+            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
+
+            val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
+
+            dailyChallenge?.let {
+                // remove the daily challenge from the challenge list so it won't be shown twice
+                challengeList.remove(dailyChallenge)
+
+                name_challenge.text = dailyChallenge.title
+                xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
+                description_challenge.text = dailyChallenge.description
             }
+
+            icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
+
+            daily_challenge.setOnClickListener {
+                //TODO ?
+                Toast.makeText(
+                    requireActivity(),
+                    "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+            // update the list in the adapter with the new challenge list
+            overviewAdapter.activeChallenges = challengeList
         })
         profileViewModel.currentUser.observe(viewLifecycleOwner, {it ->
             it?.let {
@@ -200,19 +248,27 @@ class OverviewFragment : Fragment() {
             }
         })
 
-        /*
-        overviewViewModel.showSnackBarEvent.observe(viewLifecycleOwner, {
+        overviewViewModel.showDailyChallengeEvent.observe(viewLifecycleOwner, {
             if (it == true) {
-                Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                    "Challenge content in the DB has changed!",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val snackbar = Snackbar.make(
+                    //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                    overview_layout,
+                    "Du hast eine neue Challenge erhalten!",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
 
-                // Reset state to make sure the toast is only shown once, even if the device has a configuration change.
+                /*
+                YoYo.with(Techniques.Tada)
+                    .duration(200)
+                    .playOn(daily_challenge_title)
+                */
+
+                // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
-        })*/
+        })
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
@@ -248,18 +304,30 @@ class OverviewFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
+                val message = when (challenge.type) {
+                    ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"
+                    ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!"
+                    ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"
+                }
+
                 with(AlertDialog.Builder(viewHolder.itemView.context)) {
                     setTitle("Challenge löschen?")
-                    setMessage("ACHTUNG: Wenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!")
-                    setPositiveButton("Ja") { _, _ ->
+                    setMessage(message)
+                    setPositiveButton("Löschen") { _, _ ->
                         // remove this item
-                        overviewViewModel.removeChallenge(challenge)
+                        if (challenge.type == ChallengeType.SYSTEM_CHALLENGE) {
+                            //TODO: "hack" um dem Nutzer zu simulieren, dass er die Challenge diese Woche nicht mehr
+                            // annehmen kann (ohne sie dafür ganz löschen zu müssen)
+                            overviewViewModel.hideChallenge(challenge as Challenge)
+                        } else {
+                            overviewViewModel.removeChallenge(challenge.challengeId)
+                        }
                         Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
                     }
-                    setNegativeButton("Nein") { _, _ ->
+                    setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
                         overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
-                        Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()
                 }

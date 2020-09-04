@@ -1,14 +1,13 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -85,6 +84,18 @@ class UserRepository {
         }
     }
 
+    /**
+     * Returns all active challenges for a user specified with the userId.
+     * @Hidden specifies if hidden challenges (i.e. system challenges that have been removed) should be returned too
+     */
+    suspend fun getAllChallengesForUserOnce(userId: String, hidden: Boolean = false): List<BaseChallenge>? {
+        return if (hidden) {
+            getActiveAndHiddenChallengesForUser(userId)
+        } else {
+            fetchChallengesForUser(userId)
+        }
+    }
+
     private suspend fun fetchChallengesForUser(userId: String): List<BaseChallenge>? {
         return try {
             val challengeList = mutableListOf<BaseChallenge>()
@@ -99,6 +110,11 @@ class UserRepository {
                             challengeList.add(it)
                         }
                     } else {
+                        val hiddenState = snapshot.get("hidden")
+                        if (hiddenState == true) {
+                            // don't add this element when it is set to hidden
+                            continue
+                        }
                         snapshot.toObject(Challenge::class.java)?.let {
                             challengeList.add(it)
                         }
@@ -106,6 +122,60 @@ class UserRepository {
             }
 
             challengeList
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    suspend fun getActiveAndHiddenChallengesForUser(userId: String): List<BaseChallenge>? {
+        return try {
+            val activeAndHiddenChallenges = mutableListOf<BaseChallenge>()
+            val docSnapshots = userCollection.document(userId)
+                .collection("activeChallenges")
+                .get().await().documents
+
+            if (docSnapshots.isNotEmpty()) {
+                for (snapshot in docSnapshots)
+                    if (snapshot.get("type") == ChallengeType.USER_CHALLENGE) {
+                        snapshot.toObject(UserChallenge::class.java)?.let {
+                            activeAndHiddenChallenges.add(it)
+                        }
+                    } else {
+                        snapshot.toObject(Challenge::class.java)?.let {
+                            activeAndHiddenChallenges.add(it)
+                        }
+                    }
+            }
+
+            activeAndHiddenChallenges
+        } catch (e: Exception) {
+            Timber.tag(USER_REPO_TAG).d(e)
+            null
+        }
+    }
+
+    suspend fun getChallengeParticipants(challengeId: String): List<User>? {
+        return try {
+            val participants: MutableList<User> = mutableListOf()
+            val allUsers = userCollection.get().await().toObjects<User>()
+
+            for (user in allUsers) {
+                val activeChallenges = userCollection.document(user.userId)
+                    .collection("activeChallenges")
+                    .get().await()
+                    .toObjects<UserChallenge>()
+
+                activeChallenges.forEach { challenge ->
+                    if (challenge.challengeId == challengeId) {
+                        //the challenge is in this users' active challenges so add him to the participants of this challenge
+                        participants.add(user)
+                        return@forEach
+                    }
+                }
+            }
+
+            participants
         } catch (e: Exception) {
             Timber.tag(USER_REPO_TAG).d(e)
             null
@@ -128,13 +198,13 @@ class UserRepository {
     } as MutableLiveData<User>
 
     //CREATE
-    suspend fun saveNewUser(user: User): String = withContext(Dispatchers.IO){
+    suspend fun saveNewUser(user: User): String = withContext(Dispatchers.IO) {
         val userReference = userCollection.document(user.userId)
 
         userReference.set(user).addOnSuccessListener {
-            Toast.makeText(App.instance, "User saved successfully!", Toast.LENGTH_SHORT).show()
+            Timber.d("User saved successfully!")
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new user: $e", Toast.LENGTH_SHORT).show()
+            Timber.d("Failed to save new user: $e")
         }
 
         userReference.id
@@ -146,9 +216,9 @@ class UserRepository {
             .document(challenge.challengeId)
             .set(challenge)
             .addOnSuccessListener {
-                Toast.makeText(App.instance, "Added to active challenges!", Toast.LENGTH_SHORT).show()
+                Timber.d("Challenge erfolgreich angenommen!")
             }.addOnFailureListener { e ->
-                Toast.makeText(App.instance, "Failed to add to active challenges: $e", Toast.LENGTH_SHORT).show()
+                Timber.d("Fehler beim Annehmen der Challenge: $e")
             }
     }
 
@@ -171,9 +241,9 @@ class UserRepository {
 
         ref.set(challenge, SetOptions.merge())
             .addOnSuccessListener {
-                Timber.tag(USER_REPO_TAG).d("Successfully updated completion status of active challenge!")
+                Timber.tag(USER_REPO_TAG).d("Successfully updated active challenge!")
             }
-            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating user: $e") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating active challenge: $e") }
     }
 
     fun updateUserName(name: String, id: String) {
@@ -185,11 +255,11 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
     }
 
-    fun upDateUserIcon(userIcon: String, id: String){
+    fun upDateUserIcon(userIcon: String, id: String) {
         val userReF = userCollection.document(id)
 
         userReF
-            .update("userIcon",userIcon)
+            .update("userIcon", userIcon)
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Usericon successfully updated!") }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error updating username: $e") }
     }
@@ -203,15 +273,25 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting user: $e") }
     }
 
-    fun removeActiveChallenge(challenge: BaseChallenge, userId: String) {
+    fun removeActiveChallenge(challengeId: String, userId: String) {
         val challengeRef = userCollection.document(userId)
             .collection("activeChallenges")
-            .document(challenge.challengeId)
+            .document(challengeId)
 
         //userRef.update("activeChallenges", FieldValue.arrayRemove(challenge))
         challengeRef.delete()
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully deleted from array!") }
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error deleting challenge from array: $e") }
+    }
+
+    fun hideActiveChallenge(challenge: Challenge, userId: String) {
+        val challengeRef = userCollection.document(userId)
+            .collection("activeChallenges")
+            .document(challenge.challengeId)
+
+        challengeRef.update("hidden", true)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }
     }
 
     /*

@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -54,6 +56,12 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //show current user icon
+        chosenPicture = profileViewModel.currentUser.value?.userIcon ?: "ic_user_icon_default"
+        val resID = resources.getIdentifier(chosenPicture, "drawable", activity?.packageName)
+        set_profile_picture.setImageResource(resID)
+
+        // setup click listeners
         set_profile_picture_1.setOnClickListener(this)
         set_profile_picture_2.setOnClickListener(this)
         set_profile_picture_3.setOnClickListener(this)
@@ -98,15 +106,13 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         })
     }
 
-    /*
-    private fun isNullOrEmpty(str: String?): Boolean {
-        if (str != null && str.isNotEmpty())
-            return false
-        return true
-    }*/
-
     override fun onClick(v: View?) {
         v ?: return
+
+        // play a little animation on icon click
+        YoYo.with(Techniques.Pulse)
+            .duration(150)  // play for 150 ms
+            .playOn(v)
 
         if (thirdCharUnlocked) {
 

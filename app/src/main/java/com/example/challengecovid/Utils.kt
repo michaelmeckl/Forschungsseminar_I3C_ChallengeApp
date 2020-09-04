@@ -61,7 +61,7 @@ object Utils {
             }
             savedVersionCode == -1 -> {
                 // This is a new install (or the user cleared the shared preferences)
-               isFirstRun = true
+                isFirstRun = true
             }
             /*
             currentVersionCode > savedVersionCode -> {
@@ -128,7 +128,7 @@ object Utils {
             // if it is, additionally check if pinging the Google DNS works
             hasInternetConnection().subscribe { hasInternet ->
                 Timber.d("Internet Access: $hasInternet")
-                if(!hasInternet) showConnectionAlert(context)
+                if (!hasInternet) showConnectionAlert(context)
             }
         }
     }
@@ -139,7 +139,7 @@ object Utils {
             .setTitle(R.string.no_internet)
             .setMessage(R.string.no_internet_warning)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> checkInternet(context)}
+            .setPositiveButton(android.R.string.ok) { _, _ -> checkInternet(context) }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
     }
@@ -203,6 +203,12 @@ fun Fragment.slideOutView(v: View) {
     // https://stackoverflow.com/questions/4728908/android-view-with-view-gone-still-receives-ontouch-and-onclick
     v.visibility = View.GONE
     v.clearAnimation()
+}
+
+private fun isNullOrEmpty(str: String?): Boolean {
+    if (str != null && str.isNotEmpty())
+        return false
+    return true
 }
 
 

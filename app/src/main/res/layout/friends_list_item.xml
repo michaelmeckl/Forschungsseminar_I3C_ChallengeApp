@@ -23,7 +23,7 @@
             app:layout_constraintLeft_toLeftOf="@id/category_item"
             app:layout_constraintRight_toLeftOf="@id/friend_name"
             android:elevation="2dp"
-            android:src="@drawable/test" />
+            android:src="@drawable/image_placeholder" />
 
         <TextView
             android:id="@+id/friend_name"

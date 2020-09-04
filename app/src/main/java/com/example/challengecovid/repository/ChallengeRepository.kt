@@ -1,9 +1,7 @@
 package com.example.challengecovid.repository
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import com.example.challengecovid.App
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
@@ -11,6 +9,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -72,6 +71,24 @@ class ChallengeRepository {
         return challengeSnapshot.toObject(Challenge::class.java)
     }
 
+    suspend fun getRandomChallenge(oldDailyChallenge: String?): Challenge? {
+        return try {
+            val docSnapshots = challengeCollection.get().await().documents
+
+            var randomChallenge = docSnapshots.random().toObject<Challenge>()
+            // make sure this challenge wont be shown twice in a row
+            while (oldDailyChallenge == randomChallenge?.challengeId) {
+                randomChallenge = docSnapshots.random().toObject<Challenge>()
+            }
+
+            // return it
+            randomChallenge
+        } catch (e: Exception) {
+            Timber.tag(CHALLENGE_REPO_TAG).d(e)
+            null
+        }
+    }
+
     //CREATE-MULTIPLE
     fun saveMultipleChallenges(challengeList: List<Challenge>) {
         //use a batched write to insert all at the same time to prevent possible inconsistencies!
@@ -92,6 +109,15 @@ class ChallengeRepository {
         }
     }
 
+    //DELETE
+    private fun removeDailyChallenge(challenge: Challenge) {
+        val challengeRef = challengeCollection.document(challenge.challengeId)
+
+        challengeRef.delete()
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Daily Challenge successfully deleted!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error deleting daily Challenge: $e") }
+    }
+
 
     /**
      * ################################################
@@ -102,7 +128,7 @@ class ChallengeRepository {
     //UPDATE
     fun updateCompletionStatus(id: String, challengeType: ChallengeType, completed: Boolean) {
         val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
-            challengeCollection.document(id)
+            challengeCollection.document(id)        //TODO: das nicht machen  da ja lieber nicht verändern?
         } else  {
             userChallengeCollection.document(id)
         }
@@ -159,11 +185,43 @@ class ChallengeRepository {
         }
     }
 
+    /*
+    suspend fun getChallengeParticipants(challengeId: String): List<User>? {
+        return try {
+            val snapshot = userChallengeCollection.document(challengeId).get().await()
+
+            val challenge = snapshot.toObject<UserChallenge>()
+
+            return challenge?.participatingUsers
+
+        } catch (e: Exception) {
+            Timber.tag(UserRepository.USER_REPO_TAG).d(e)
+            null
+        }
+    }*/
+
     //GET
     suspend fun getUserChallenge(id: String): UserChallenge? {
         val challengeSnapshot = userChallengeCollection.document(id).get().await()
         return challengeSnapshot.toObject(UserChallenge::class.java)
     }
+
+    /*
+    suspend fun addParticipantToChallenge(challengeId: String, user: User) {
+        val challengeReference = userChallengeCollection.document(challengeId)
+
+        challengeReference.update("participatingUsers", FieldValue.arrayUnion(user))
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Added participant to Challenge successfully!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error adding participant to challenge: $e") }
+    }
+
+    suspend fun removeParticipantFromChallenge(challengeId: String, user: User) {
+        val challengeReference = userChallengeCollection.document(challengeId)
+
+        challengeReference.update("participatingUsers", FieldValue.arrayRemove(user))
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("Removed participant from Challenge successfully!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error removing participant from challenge: $e") }
+    }*/
 
     //CREATE
     fun saveNewUserChallenge(userChallenge: UserChallenge): String {
@@ -172,9 +230,9 @@ class ChallengeRepository {
 
         //NOTE: use set(challenge, SetOptions.merge()) to only update the parts that changed!
         challengeReference.set(userChallenge).addOnSuccessListener {
-            Toast.makeText(App.instance, "User Challenge saved successfully!", Toast.LENGTH_SHORT).show()
+            Timber.d("User Challenge saved successfully!")
         }.addOnFailureListener { e ->
-            Toast.makeText(App.instance, "Failed to save new user challenge: $e", Toast.LENGTH_SHORT).show()
+            Timber.d( "Failed to save new user challenge: $e")
         }
 
         return challengeReference.id

@@ -2,6 +2,7 @@ package com.example.challengecovid
 
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.ChallengeCategory
+import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.Difficulty
 
 /**
@@ -56,7 +57,7 @@ object Data {
         ChallengeCategory(
             categoryId = "Soziales",
             title = "Soziales",
-            description = "Diese Kategorie enthält Challenges, die den Kontakt zu anderen Menschen anregen.",
+            description = "Diese Kategorie enthält Challenges, die den Kontakt zu anderen Menschen anregen soll.",
             categoryIcon = App.instance.resources.getResourceEntryName(R.drawable.ic_social_category),
             containedChallenges = getSocialChallenges()
         ),
@@ -69,7 +70,6 @@ object Data {
         )
     )
 
-    // TODO noch verwenden!
     fun getDailyChallenges(): List<Challenge> = listOf(
         Challenge(
             challengeId = "Spazieren",
@@ -78,16 +78,16 @@ object Data {
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Der frühe Vogel",
             title = "Der frühe Vogel",
             description = "Steh morgen etwas früher auf",
-            difficulty = Difficulty.SCHWER,
+            difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Früher schlafen gehen",
@@ -96,72 +96,152 @@ object Data {
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Kein Fernsehen",
             title = "Kein Fernsehen",
-            description = "Verzichte heute komplett auf Fernsehen oder Internet",
+            description = "Verzichte heute komplett auf Fernsehen",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
         Challenge(
             challengeId = "Kalte Dusche",
             title = "Kalte Dusche",
             description = "Dusche heute nur mit kaltem Wasser",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Hampelmann",
+            title = "Hampelmann",
+            description = "Mach 20 Hampelmänner",
+            difficulty = Difficulty.LEICHT,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Dokumentaion",
+            title = "Dokumentaion",
+            description = "Schau dir eine Dokumentation deiner Wahl an",
+            difficulty = Difficulty.LEICHT,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Musiker",
+            title = "Musiker",
+            description = "Hör dir eines deiner Lieblingslieder an und sing dabei laut mit",
+            difficulty = Difficulty.LEICHT,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Händigkeit",
+            title = "Händigkeit",
+            description = "Schreib ein paar Sätze mit deiner nicht dominanten Hand",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
-            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_parchment_80)
+            type = ChallengeType.DAILY_CHALLENGE
         ),
-
+        Challenge(
+            challengeId = "Meister der Sprachen",
+            title = "Meister der Sprachen",
+            description = "Schau dir an, wie man sich in 3 Sprachen begrüßt, die du noch nicht kannst",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Künstler",
+            title = "Künstler",
+            description = "Versuche ein Selbstportrait von dir zu malen mit Sachen, die du schon zu Hause hast",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Dora The Explorer",
+            title = "Dora The Explorer",
+            description = "Entdecke eine neue Route zu dir nach Hause",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Podcast",
+            title = "Podcast",
+            description = "Such dir einen neuen Podcast und hör dir die erste Folge an",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        ),
+        Challenge(
+            challengeId = "Lebenslauf",
+            title = "Lebenslauf",
+            description = "Erstell dir einen Lebenslauf oder update dein aktuellen",
+            difficulty = Difficulty.MITTEL,
+            completed = false,
+            duration = 1,
+            type = ChallengeType.DAILY_CHALLENGE
+        )
     )
 
 
-    //TODO: die icons müssten (eigentlich) noch ausgebessert werden!
+    //die icons müssten (eigentlich) noch ausgebessert werden!
     private fun getHealthyChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Trinke Wasser!",
-            title="Trinke mehr Wasser",
-            description ="Versuche für den heutigen Tag nur Wasser als Getränk zu dir zu nehmen",
+            challengeId = "Trinke Wasser!",
+            title = "Trinke mehr Wasser",
+            description = "Versuche für den heutigen Tag nur Wasser als Getränk zu dir zu nehmen",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Vegetarisch ernähren",
-            title="Vegetarisch ernähren",
-            description ="Versuche für diese Woche kein Fleisch zu Essen und dich möglichst vegetarisch zu ernähren",
+            challengeId = "Vegetarisch ernähren",
+            title = "Vegetarisch ernähren",
+            description = "Versuche für diese Woche kein Fleisch zu Essen und dich möglichst vegetarisch zu ernähren",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 7,       //TODO: auch dafür wäre ein Enum hilfreich
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Kein Koffein für eine Woche!",
-            title="Kein Koffein für eine Woche!",
-            description ="Versuche für die Woche auf jegliche Art von Koffein, also Kaffee, Energydrinks etc., zu versichten",
+            challengeId = "Kein Koffein für eine Woche!",
+            title = "Kein Koffein für eine Woche!",
+            description = "Versuche für die Woche auf jegliche Art von Koffein, also Kaffee, Energydrinks etc., zu versichten",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Mehr Obst",
-            title="Mehr Obst",
-            description ="Versuche für diese Woche zumindest einmal täglich Obst zu essen",
+            challengeId = "Mehr Obst",
+            title = "Mehr Obst",
+            description = "Versuche für diese Woche zumindest einmal täglich Obst zu essen",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Genügend Schlaf",
-            title="Genügend Schlaf",
-            description ="Achte diese Woche besonders darauf dir genügend Schlaf zu gönnen (min. 7 Stunden täglich)",
+            challengeId = "Genügend Schlaf",
+            title = "Genügend Schlaf",
+            description = "Achte diese Woche besonders darauf dir genügend Schlaf zu gönnen (min. 7 Stunden täglich)",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 7,
@@ -171,45 +251,45 @@ object Data {
 
     private fun getSportChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Gehe für 30 Minuten joggen",
-            title="Gehe für 30 Minuten joggen",
-            description ="Versuche für heute 30 Minuten in deinem Tempo (auch Pausen sind erlaubt) zu joggen",
+            challengeId = "Gehe für 30 Minuten joggen",
+            title = "Gehe für 30 Minuten joggen",
+            description = "Versuche für heute 30 Minuten in deinem Tempo zu joggen (auch Pausen sind erlaubt)",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Abendroutine",
-            title="Abendroutine",
-            description ="Versuche für diese Woche jeden Tag vor dem Schlafen 15 Liegestütze und 15 Sit-ups zu machen",
+            challengeId = "Abendroutine",
+            title = "Abendroutine",
+            description = "Versuche für diese Woche jeden Tag vor dem Schlafen 15 Liegestütze und 15 Sit-ups zu machen",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Morgenroutine",
-            title="Morgenroutine",
-            description ="Versuche für diese Woche jeden Tag nach dem Aufstehen 15 Kniebeugen und 15 Squats zu machen",
+            challengeId = "Morgenroutine",
+            title = "Morgenroutine",
+            description = "Versuche für diese Woche jeden Tag nach dem Aufstehen 15 Kniebeugen und 15 Squats zu machen",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Zu Fuß gehen",
-            title="Zu Fuß gehen",
-            description ="Versuche heute den ganzen Tag möglichst viel zu Fuß zu gehen",
+            challengeId = "Zu Fuß gehen",
+            title = "Zu Fuß gehen",
+            description = "Versuche heute den ganzen Tag möglichst viel zu Fuß zu gehen",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Fahrrad fahren",
-            title="Fahrrad fahren",
-            description ="Versuche diese Woche mit deinem Fahrad zur Arbeit zu fahren. Wenn das nicht möglich ist, versuche zumindest zum Einkaufen nicht das Auto oder den Bus zu nehmen.",
+            challengeId = "Fahrrad fahren",
+            title = "Fahrrad fahren",
+            description = "Versuche diese Woche mit deinem Fahrad zur Arbeit zu fahren. Wenn das nicht möglich ist, versuche zumindest zum Einkaufen nicht das Auto oder den Bus zu nehmen.",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 7,
@@ -219,45 +299,45 @@ object Data {
 
     private fun getRelaxChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Baden",
-            title="Baden",
-            description ="Geh baden und nimm dir dafür heute so viel Zeit, wie du willst",
+            challengeId = "Baden",
+            title = "Baden",
+            description = "Geh baden und nimm dir dafür heute so viel Zeit, wie du willst",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Musik",
-            title="Musik",
-            description ="Nimm dir 30 Minuten, um dir deine Lieblingslieder anzuhören. Danach wirst du dich besser fühlen!",
+            challengeId = "Musik",
+            title = "Musik",
+            description = "Nimm dir 30 Minuten, um dir deine Lieblingslieder anzuhören. Danach wirst du dich besser fühlen!",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Meditation",
-            title="Meditation",
-            description ="Versuche für 30 Minuten zu meditieren.",
+            challengeId = "Meditation",
+            title = "Meditation",
+            description = "Versuche für 30 Minuten zu meditieren.",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Spaziergang",
-            title="Spaziergang",
-            description ="Geh solange spazieren wie du willst",
+            challengeId = "Spaziergang",
+            title = "Spaziergang",
+            description = "Geh solange spazieren wie du willst",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Mittagsschlaf",
-            title="Mittagsschlaf",
-            description ="Gönn dir heute einen langen Mittagsschlaf, setz dir aber einen Wecker, damit du nicht verschläfst und erst abends aufwachst!",
+            challengeId = "Mittagsschlaf",
+            title = "Mittagsschlaf",
+            description = "Gönn dir heute einen langen Mittagsschlaf, setz dir aber einen Wecker, damit du nicht verschläfst und dann erst abends aufwachst!",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
@@ -267,36 +347,36 @@ object Data {
 
     private fun getChoresChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Räume dein Zimmer auf",
-            title="Räume dein Zimmer auf",
-            description ="Ein aufgeräumtes Zimmer sorgt für eine angenehmere Atmosphäre. Wirklich!",
+            challengeId = "Räume dein Zimmer auf",
+            title = "Räume dein Zimmer auf",
+            description = "Ein aufgeräumtes Zimmer sorgt für eine angenehmere Atmosphäre. Wirklich!",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Mach dein Bett",
-            title="Mach dein Bett",
-            description ="Versuche für diese Woche jeden Tag nach dem Aufstehen dein Bett zu machen",
+            challengeId = "Mach dein Bett",
+            title = "Mach dein Bett",
+            description = "Versuche für diese Woche jeden Tag nach dem Aufstehen dein Bett zu machen",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Geschirr waschen",
-            title="Geschirr waschen",
-            description ="Wasch das schmutzie Geschirr",
+            challengeId = "Geschirr waschen",
+            title = "Geschirr waschen",
+            description = "Wasch das schmutzie Geschirr",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Fenster putzen",
-            title="Fenster putzen",
-            description ="Putz deine Fenster",      //TODO das ist echt wenig, vllt ne bessere Challenge?
+            challengeId = "Fenster putzen",
+            title = "Fenster putzen",
+            description = "Putz mal wieder die Fenster in deiner Wohnung / deinem Zimmer",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
@@ -306,45 +386,45 @@ object Data {
 
     private fun getPleasureChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Movienight",
-            title="Movienight",
-            description ="Schau dir heute abend deinen Liebliengsfilm an",
+            challengeId = "Movienight",
+            title = "Movienight",
+            description = "Schau dir heute abend deinen Liebliengsfilm an",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Serienjunkie",
-            title="Serienjunkie",
-            description ="Such dir einen neue Fernsehserie und bingewatche die ersten Staffel(n) ",
+            challengeId = "Serienjunkie",
+            title = "Serienjunkie",
+            description = "Such dir einen neue Fernsehserie und bingewatche die ersten Staffel(n) ",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Was du willst",
-            title="Was du willst",
-            description ="Nimm dir heute 2 Stunden Zeit, um einem deiner Hobbies nachzugehen.",
+            challengeId = "Was du willst",
+            title = "Was du willst",
+            description = "Nimm dir heute 2 Stunden Zeit, um einem deiner Hobbies nachzugehen.",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Lieblingsessen",
-            title="Lieblingsessen",
-            description ="Koch dir dein Lieblingsessen (oder lass es dir kochen)",
+            challengeId = "Lieblingsessen",
+            title = "Lieblingsessen",
+            description = "Koch dir dein Lieblingsessen (oder lass es dir kochen)",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Lesen",
-            title="Lesen",
-            description ="Nimm dir deinen Nachmittag frei und fang an ein Buch deiner Wahl zu lesen",
+            challengeId = "Lesen",
+            title = "Lesen",
+            description = "Nimm dir deinen Nachmittag frei und fang an ein Buch deiner Wahl zu lesen",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
@@ -354,45 +434,45 @@ object Data {
 
     private fun getProductivityChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Wochenplan",
-            title="Wochenplan",
-            description ="Erstell dir einen Wochenplan, in dem du jeden Tag aufschreibst, welche Aufgaben du zu erledigen hast und was du heute geschafft hast",
+            challengeId = "Wochenplan",
+            title = "Wochenplan",
+            description = "Erstell dir einen Wochenplan, in dem du jeden Tag aufschreibst, welche Aufgaben du zu erledigen hast und was du heute geschafft hast",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 7,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Projekt",
-            title="Projekt",
-            description ="Arbeite an deinem Projekt oder an deiner Hausarbeit weiter",
+            challengeId = "Projekt",
+            title = "Projekt",
+            description = "Arbeite an deinem Projekt oder an deiner Hausarbeit weiter",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Stundenplan",
-            title="Stundenplan",
-            description ="Erstelle dir deinen Stundenplan fürs nächste Semester",
+            challengeId = "Stundenplan",
+            title = "Stundenplan",
+            description = "Erstelle dir deinen Stundenplan fürs nächste Semester",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 3,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Neues Rezept",
-            title="Neues Rezept",
-            description ="Such dir ein neues Rezept für ein Gericht und koche es",
+            challengeId = "Neues Rezept",
+            title = "Neues Rezept",
+            description = "Such dir ein neues Rezept für ein Gericht und koche es",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 3,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="neue Fähigkeit",
-            title="neue Fähigkeit",
-            description ="Such und erlerne innerhalb von 5 Tagen eine neue Fähigkeit (egal welche)",
+            challengeId = "neue Fähigkeit",
+            title = "neue Fähigkeit",
+            description = "Such und erlerne innerhalb von 5 Tagen eine neue Fähigkeit (egal welche)",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 5,
@@ -402,36 +482,36 @@ object Data {
 
     private fun getSocialChallenges(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Alter Freund",
-            title="Alter Freund",
-            description ="Kontaktiere jemanden, mit dem/der du schon lange keinen Kontakt mehr hattest",
+            challengeId = "Alter Freund",
+            title = "Alter Freund",
+            description = "Kontaktiere jemanden, mit dem/der du schon lange keinen Kontakt mehr hattest",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 3,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Small Talk",
-            title="Small Talk",
-            description ="Ruf oder schreib jemanden an und unterhalte dich mit der Person (einfach nur so)",
+            challengeId = "Small Talk",
+            title = "Small Talk",
+            description = "Ruf oder schreib jemanden an und unterhalte dich mit der Person (einfach nur so)",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Gruppenaktivität",
-            title="Gruppenaktivität",
-            description ="Verabrede dich mit deinen Freunden/innen und unternehmt, online oder offline, etwas miteinander",
+            challengeId = "Gruppenaktivität",
+            title = "Gruppenaktivität",
+            description = "Verabrede dich mit deinen Freunden/innen und unternehmt, online oder offline, etwas miteinander",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 5,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Familie",
-            title="Familie",
-            description ="Verbringe etwas mehr Zeit mit deiner Familie",
+            challengeId = "Familie",
+            title = "Familie",
+            description = "Verbringe diese Woche etwas mehr Zeit mit deiner Familie",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 5,
@@ -439,44 +519,61 @@ object Data {
         )
     )
 
-    //TODO da gehen noch 2 oder 3 :)
     private fun getSafetyChallenge(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Händewschen",
-            title="Händewschen",
-            description ="Achte heute darauf deine Hände für mindestens 20 Sekunden zu waschen, nachdem du draußen warst oder fremde Objekte angefasst hast",
+            challengeId = "Händewschen",
+            title = "Händewschen",
+            description = "Achte heute darauf deine Hände für mindestens 20 Sekunden zu waschen, nachdem du draußen warst oder fremde Objekte angefasst hast",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Mundschutz",
-            title="Mundschutz",
-            description ="Vergiss nicht deine Maske mitzunehmen, wenn du heute rausgehst und versuche dich so gut es geht an die Trageregeln zu halten",
+            challengeId = "Mundschutz",
+            title = "Mundschutz",
+            description = "Vergiss nicht deine Maske mitzunehmen, wenn du heute rausgehst und versuche dich so gut es geht an die Trageregeln zu halten",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId= "Abstand halten",
-            title="Abstand halten",
-            description ="Wenn du heute rausgehst, achte darauf, mindestens 1,5m Abstand zu anderen Personen zu halten",
+            challengeId = "Abstand halten",
+            title = "Abstand halten",
+            description = "Wenn du heute rausgehst, achte darauf, mindestens 1,5m Abstand zu anderen Personen zu halten",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId= "Niesen / Husten",
-            title="Niesen / Husten",
-            description ="Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten / niesen und dreh dich dabei von anderen weg",
+            challengeId = "Niesen / Husten",
+            title = "Niesen / Husten",
+            description = "Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten / niesen und dreh dich dabei von anderen weg",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 5,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
-        )
+        ),
+        Challenge(
+            challengeId = "Nicht ins Gesicht fassen",
+            title = "Nicht ins Gesicht fassen",
+            description = "Achte heute den ganzen Tag bewusst darauf dein Gesicht nicht mit ungewaschenen Händen anzufassen",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
+        ),
+        Challenge(
+            challengeId = "Social Distancing",
+            title = "Social Distancing",
+            description = "Versuche für eine Woche so viel wie möglich zu Hause bleiben, und nur für essenzielle Tätigkiten, wie Bewegung, Einkaufen, etc. rauszugehen.",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
+        ),
     )
 
 }

@@ -20,6 +20,10 @@
 
     <color name="content_background">#80fae6a5</color>
 
-    <color name="black_overlay">#66000000</color>
+    <color name="dark_overlay">#66000000</color>
+
+    <color name="lightgrey">#aaaaaa</color>
+    <color name="material_grey300">#ffe0e0e0</color>
+    <color name="dark_grey_transparent">#c8000000</color>
 
 </resources>

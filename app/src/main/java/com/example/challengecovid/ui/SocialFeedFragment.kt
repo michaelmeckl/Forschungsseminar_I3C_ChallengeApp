@@ -6,29 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeFeedAdapter
 import com.example.challengecovid.adapter.ChallengeFeedClickListener
-import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_social_feed.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class SocialFeedFragment : Fragment() {
 
     private lateinit var feedViewModel: FeedViewModel
     private lateinit var feedAdapter: ChallengeFeedAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_social_feed, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
@@ -66,8 +60,13 @@ class SocialFeedFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: UserChallenge) {
-        //TODO: make this acceptible? or show a detail with everybody that is already in that challenge and a button to accept?
-        // or show the accept button directly in the list?
-        Toast.makeText(requireActivity(), "You clicked on challenge ${challenge.title}", Toast.LENGTH_SHORT).show()
+        val action = SocialFeedFragmentDirections.actionFeedToDetail(
+            challengeId = challenge.challengeId,
+            challengeTitle = challenge.title,
+            challengeDescription = challenge.description
+        )
+
+        // navigate to another fragment on click
+        requireActivity().findNavController(R.id.nav_host_fragment).navigate(action)
     }
 }

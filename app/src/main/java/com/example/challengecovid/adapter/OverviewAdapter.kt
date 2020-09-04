@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.ChallengeType
 import kotlinx.android.synthetic.main.challenge_item.view.*
 
 class OverviewAdapter(private val clickListener: ChallengeClickListener, private val checkmarkClickListener: CheckmarkClickListener) :
@@ -36,10 +37,18 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
     class ChallengeViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(data: BaseChallenge, clickListener: ChallengeClickListener, checkmarkClickListener: CheckmarkClickListener) {
-            itemView.name_challenge.text = data.title
             itemView.xp_challenge.text = String.format("%s XP", data.difficulty.points)
             itemView.description_challenge.text = data.description
 
+            if(data.type == ChallengeType.USER_CHALLENGE) {
+                itemView.name_challenge.text = data.title + " (Eigene Challenge)"
+            } else {
+                itemView.name_challenge.text = data.title
+            }
+
+            //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
+            // ein ui update (z.B durch rotation) macht es wieder richtig ????
+            // wenn neue dazu kommen funktionierts auch wieder nciht mehr (vllt genau wie bei accepted machen?)
             if (data.completed) {
                 itemView.description_challenge.visibility = View.GONE
                 itemView.description_challenge_completed.visibility = View.VISIBLE

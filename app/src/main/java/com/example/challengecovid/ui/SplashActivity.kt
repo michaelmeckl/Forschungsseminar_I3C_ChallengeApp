@@ -37,6 +37,9 @@ class SplashActivity : AppCompatActivity() {
         animateSplashScreen()
 
         firstRun = Utils.checkFirstRun(this@SplashActivity)
+
+        // TODO: comment this out for production and only do it once before!! (to make sure all have the same!!)
+
         // if this is the first start prepopulate the firestore db
         if (firstRun) initDatabase()
 
