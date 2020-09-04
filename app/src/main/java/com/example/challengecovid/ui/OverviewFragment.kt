@@ -1,29 +1,29 @@
 package com.example.challengecovid.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_overview.*
 
 import timber.log.Timber
@@ -165,9 +165,18 @@ class OverviewFragment : Fragment() {
             Timber.d("Skipping setChallengeCompleted because challenge.completed = true")
             return
         }
-        Timber.d("setChallengeCompleted, ${challenge.completed} before")
+        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+
+        if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, true)) {
+            sharedPrefs.edit()?.putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false)?.apply()
+            AlertDialog.Builder(requireContext())
+                .setTitle("Challenge abgeschlossen!")
+                .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen erneut abschließen.")
+                .setPositiveButton(android.R.string.ok) { _, _ ->  }
+                .show()
+        }
+
         overviewViewModel.setChallengeCompleted(challenge)
-        Timber.d("setChallengeCompleted, ${challenge.completed} after")
         Timber.d(profileViewModel.currentUser.value.toString())
 
         updatePointsAndLevel(_currentUser, challenge)
@@ -175,6 +184,7 @@ class OverviewFragment : Fragment() {
 //        challengeListAdapter.notifyDataSetChanged()
 
     }
+
 
 
     private fun setupObservers() {
@@ -206,13 +216,17 @@ class OverviewFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
+        val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val isEditable = sharedPrefs?.getBoolean(Constants.PREFS_IS_CHALLENGE_BY_THIS_USER + challenge.challengeId, false) ?: false
+
         val action = OverviewFragmentDirections.actionOverviewToDetail(
             id = challenge.challengeId,
             title = challenge.title,
             description = challenge.description,
             type = challenge.type,
             difficulty = challenge.difficulty.toString(),
-            completed = challenge.completed
+            completed = challenge.completed,
+            isEditable = isEditable
         )
 
         // navigate to another fragment on click

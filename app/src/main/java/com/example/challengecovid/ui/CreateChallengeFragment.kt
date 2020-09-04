@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
@@ -132,6 +131,7 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
             duration = 2,
             creatorId = currentUserId
         )
+        sharedPrefs?.edit()?.putBoolean(Constants.PREFS_IS_CHALLENGE_BY_THIS_USER + newChallenge.challengeId, true)?.apply()
 
         Timber.d(newChallenge.toString())
         overviewViewModel.addNewChallenge(newChallenge)

@@ -44,7 +44,7 @@ class ChallengeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (id, title, description, type, difficulty, completed) = arguments
+        val (id, title, description, type, difficulty, completed, is_editable) = arguments
 
         challenge_detail_title.text = title
         if (description.isBlank()) {
@@ -61,12 +61,6 @@ class ChallengeDetailFragment : Fragment() {
         challenge_detail_spinner_difficulties_edit.adapter = adapterDifficulties
 //        challenge_detail_spinner_difficulties_edit.onItemSelectedListener = this
 
-        if (type == ChallengeType.SYSTEM_CHALLENGE) {
-            // hide the option to publish for system challenges
-            publish_switch.visibility = View.GONE
-            challenge_detail_relativelayout_online.visibility = View.GONE
-            challenge_detail_relativelayout_offline.visibility = View.GONE
-        }
 
         // get the saved switch state and set it
         val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
@@ -75,21 +69,25 @@ class ChallengeDetailFragment : Fragment() {
         setStatus(switchState)
 
         publish_switch.setOnCheckedChangeListener { _, isChecked ->
+            if (sharedPrefs?.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, true)!!) {
+                sharedPrefs.edit()?.putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false)?.apply()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Hinweis")
+                    .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf 'nicht veröffentlicht' setzen")
+                    .setPositiveButton(android.R.string.ok) { _, _ -> }
+                    .show()
+            }
+
             //update the public status of the challenge
-
-
-//          TODO: Das funktioniert noch nicht, weil noch jedes mal false zurückgegeben wird :(
-            thread {
-                val isSuccess = challengeRepository.updatePublicStatus(id, publicStatus = isChecked)
-                requireActivity().runOnUiThread {
-                    if (isSuccess) {
-                        Timber.d("Success updating challenge status")
-                    } else {
-                        Timber.d("Failure updating challenge status")
-                    }
+            if (isChecked) {
+                challenge_detail_start_editing.visibility = View.GONE
+            } else {
+                if (type == ChallengeType.USER_CHALLENGE && is_editable) {
+                    challenge_detail_start_editing.visibility = View.VISIBLE
                 }
             }
-            sharedPrefs?.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked)?.apply()
+
+            sharedPrefs.edit()?.putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked)?.apply()
 
 //          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
             challenge_detail_progressbar.visibility = View.VISIBLE
@@ -99,6 +97,14 @@ class ChallengeDetailFragment : Fragment() {
             )
             Handler().postDelayed(this::switchStatus, 2000)
 
+        }
+        if (type == ChallengeType.SYSTEM_CHALLENGE || !is_editable) {
+            // hide the option to publish for system challenges
+            publish_switch.visibility = View.GONE
+
+            challenge_detail_start_editing.visibility = View.GONE
+            challenge_detail_relativelayout_online.visibility = View.GONE
+            challenge_detail_relativelayout_offline.visibility = View.GONE
         }
 
         challenge_detail_start_editing.setOnClickListener {
@@ -142,7 +148,6 @@ class ChallengeDetailFragment : Fragment() {
             if (description.isBlank()) {
                 challenge_detail_description.visibility = View.GONE
             }
-
         }
 
         challenge_detail_button_submit_edit.setOnClickListener {
@@ -162,32 +167,24 @@ class ChallengeDetailFragment : Fragment() {
             }
             val userid = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
+            val newUserChallenge = UserChallenge(
+                challengeId = id,
+                title = newTitle,
+                description = newDescription,
+                difficulty = newDifficulty,
+                type = ChallengeType.USER_CHALLENGE,
+                completed = completed,
+                isPublic = false,
+                creatorId = userid
+            )
+            Timber.d("Geänderte Challenge: " + newUserChallenge.toString())
 
-//            TODO challenge bearbeiten. aktuell: Wenn isPublic, dann wird User gewarnt, dass Challenge auf isPublic=false gesetzt wird) Aber vllt anders umgesetzt sinnvoller? ZB nach bearbeiten automatisch auf isPublic = true setzen?
-            if (switchState) {
-                AlertDialog.Builder(requireContext()).setTitle("Achtung")
-                    .setMessage("Wenn du diese Challenge veränderst, wird die Challenge auf 'nicht veröffentlicht' gesetzt. Du kannst sie dann wieder veröffentlichen.")
-                    .setPositiveButton("Veränderungen bestätigen") { _: DialogInterface, _: Int ->
-                        // TODO: ispublic wird immer auf false gesetzt. Ich denk so machts am meisten sinn
-                        val newUserChallenge = UserChallenge(
-                            challengeId = id,
-                            title = newTitle,
-                            description = newDescription,
-                            difficulty = newDifficulty,
-                            type = ChallengeType.USER_CHALLENGE,
-                            completed = completed,
-                            isPublic = false,
-                            creatorId = userid
-                        )
-                        Timber.d("Neue Challenge: " + newUserChallenge.toString())
+            publish_switch.isChecked = false
 
-                        publish_switch.isChecked = false
+            overviewViewModel.updateChallenge(newUserChallenge)
 
-                        overviewViewModel.updateChallenge(newUserChallenge)
-                    }
-                    .setNegativeButton("Nicht verändern") { _, _ -> return@setNegativeButton }
-                    .show()
-            }
+            requireActivity().findNavController(R.id.nav_host_fragment)
+                .navigate(ChallengeDetailFragmentDirections.actionChallengeDetailToChallenges())
 
 
         }
@@ -198,9 +195,11 @@ class ChallengeDetailFragment : Fragment() {
         if (switchState) {
             challenge_detail_relativelayout_offline.visibility = View.GONE
             challenge_detail_relativelayout_online.visibility = View.VISIBLE
+            challenge_detail_start_editing.visibility = View.GONE
         } else {
             challenge_detail_relativelayout_online.visibility = View.GONE
             challenge_detail_relativelayout_offline.visibility = View.VISIBLE
+            challenge_detail_start_editing.visibility = View.VISIBLE
         }
     }
 
