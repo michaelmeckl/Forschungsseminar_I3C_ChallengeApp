@@ -157,6 +157,9 @@ class SocialFeedDetail : DialogFragment() {
     private fun acceptChallenge(challenge: UserChallenge, user: User) {
         Toast.makeText(requireContext(), "Challenge accepted!", Toast.LENGTH_SHORT).show()
 
+        // diasble button to prevent more clicks
+        feed_accept_button.isEnabled = false
+
         feedDetailViewModel.acceptPublicChallenge(challenge, user)
 
         // dismiss fragment

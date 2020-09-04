@@ -12,7 +12,6 @@ import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.CategoryChallengeClickListener
 import com.example.challengecovid.adapter.CategoryDetailAdapter
-import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.viewmodels.CategoryDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
@@ -20,7 +19,6 @@ import kotlinx.android.synthetic.main.fragment_category_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class CategoryDetailFragment : Fragment() {
 

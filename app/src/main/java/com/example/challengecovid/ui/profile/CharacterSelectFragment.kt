@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -63,6 +65,11 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         v ?: return
+
+        // play a little animation on icon click
+        YoYo.with(Techniques.Pulse)
+            .duration(150)  // play for 150 ms
+            .playOn(v)
 
         when (v.id) {
             R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"

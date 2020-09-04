@@ -90,12 +90,6 @@ class OverviewFragment : Fragment() {
         setupSwipeListener()
 
         fab_create_challenge.setOnClickListener {
-            /*
-            // add a simple animation
-            YoYo.with(Techniques.Wobble)
-                .duration(200)  // 300 ms
-                .playOn(fab_create_challenge)
-            */
             val navOptions = NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setEnterAnim(R.anim.fade_in)
@@ -173,7 +167,6 @@ class OverviewFragment : Fragment() {
     }
 
 
-    //TODO: material showcase view to show how to delete items??
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
             val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
@@ -195,8 +188,8 @@ class OverviewFragment : Fragment() {
                 //TODO ?
                 Toast.makeText(
                     requireActivity(),
-                    "Du hast auf die Daily Challenge geklickt! Herzlichen Glückwunsch!",
-                    Toast.LENGTH_SHORT
+                    "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                    Toast.LENGTH_LONG
                 ).show()
             }
 
