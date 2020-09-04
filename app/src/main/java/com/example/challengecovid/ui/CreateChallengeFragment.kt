@@ -139,7 +139,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
 
 
     private fun navigateBack() {
-        //activity?.onBackPressed()
         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
     }
 
@@ -151,6 +150,6 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {
-        TODO("not implemented")
+        //TODO("not implemented")
     }
 }

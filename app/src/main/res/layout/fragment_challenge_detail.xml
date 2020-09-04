@@ -32,17 +32,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
+
             <ImageButton
                 android:id="@+id/challenge_detail_stop_editing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:background="#0000"
+                android:layout_marginStart="4dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:contentDescription="@string/edit_challenge"
                 android:src="@drawable/ic_close"
                 android:visibility="gone" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +58,7 @@
                 android:id="@+id/challenge_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.Material.Large"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -132,7 +135,7 @@
             android:id="@+id/challenge_detail_difficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginVertical="@dimen/margin_normal"
             android:paddingHorizontal="30dp"
             android:textAppearance="@android:style/TextAppearance.Material.Medium"
             app:layout_constraintBottom_toTopOf="@+id/challenge_detail_relativelayout_online"
@@ -162,6 +165,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
+            android:layout_marginTop="32dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/challenge_detail_difficulty">
@@ -176,6 +180,7 @@
                 android:id="@+id/challenge_detail_status_online_imageview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/challenge_detail_status_online_textview"
                 android:src="@drawable/ic_challenge_detail_online" />
         </RelativeLayout>
@@ -186,6 +191,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
+            android:layout_marginTop="32dp"
             android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -201,16 +207,17 @@
                 android:id="@+id/challenge_detail_status_offline_imageview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/challenge_detail_status_offline_textview"
                 android:src="@drawable/ic_challenge_detail_offline" />
         </RelativeLayout>
 
-        <!-- TODO this needs to be improved! looks shitty -->
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/publish_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
+            android:layout_marginTop="16dp"
             android:text="Challenge veröffentlichen:  "
             android:textOff="Privat"
             android:textOn="Öffentlich"
@@ -227,4 +234,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone" />
+
 </androidx.cardview.widget.CardView>

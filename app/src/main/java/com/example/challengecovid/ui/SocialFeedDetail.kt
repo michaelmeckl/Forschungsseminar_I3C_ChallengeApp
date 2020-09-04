@@ -138,6 +138,10 @@ class SocialFeedDetail : DialogFragment() {
             val participants = feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
             feedDetailAdapter.participants = participants
 
+            //TODO: das laden dauert extrem lang und wenn abgebrochen wird schmiert die app beim nächsten laden hier komplett ab!!!
+            //TODO: vllt alle nutzer oder active Challenges im feed(detail)viewmodel cachen? und doch ein shared repo?
+            //TODO: cancel all scopes in onDestroy!!!
+
             if (participants.isNotEmpty()) {
                 // show title if not empty
                 feed_detail_recycler_title.visibility = View.VISIBLE
@@ -153,9 +157,10 @@ class SocialFeedDetail : DialogFragment() {
 
     /**
      * TODO:
-     *  2. eine angenommene Challenge sollte nicht mehr veröffentlicht werden können!! -> vllt den button nur anzeigen wenn current user id die gleiche wie die creator id der challenge ist (in challenge detail in overview fragment)
-     *  7. angenommene challenge sollte nicht bearbeitbar sein von anderen nutzern
+     *  1. eine angenommene Challenge sollte nicht mehr veröffentlicht werden können!! -> vllt den button nur anzeigen wenn current user id die gleiche wie die creator id der challenge ist (in challenge detail in overview fragment)
+     *  2. angenommene challenge sollte nicht bearbeitbar sein von anderen nutzern
      */
+
     private fun acceptChallenge(challenge: UserChallenge, user: User) {
         // diasble button to prevent more clicks
         feed_accept_button.isEnabled = false
@@ -165,7 +170,7 @@ class SocialFeedDetail : DialogFragment() {
         val snackbar = Snackbar.make(
             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
             "Du hast diese Challenge erfolgreich angenommen!",
-            Snackbar.LENGTH_LONG
+            Snackbar.LENGTH_SHORT
         )
         snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
         snackbar.show()

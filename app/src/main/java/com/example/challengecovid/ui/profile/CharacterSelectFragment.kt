@@ -1,11 +1,14 @@
 package com.example.challengecovid.ui.profile
 
-import android.graphics.Color
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -14,24 +17,18 @@ import com.daimajia.androidanimations.library.YoYo
 import com.example.challengecovid.App
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_character_selection.*
-import timber.log.Timber
+
 
 class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
     private var chosenPicture: String = "ic_user_icon_default"
     private lateinit var profileViewModel: ProfileViewModel
 
-    private lateinit var _currentUser: User
     private var secondCharUnlocked = false
     private var thirdCharUnlocked = false
-
-    private val secondCharUnlockedLevel = 5
-    private val thirdCharUnlockedLevel = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +40,6 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        /*
-        val store = requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
-        profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
-        */
         val store = App.instance
         profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
 
@@ -68,11 +61,8 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         set_profile_picture_4.setOnClickListener(this)
         set_profile_picture_5.setOnClickListener(this)
         set_profile_picture_6.setOnClickListener(this)
-        set_profile_picture_2.imageAlpha = 75
-        set_profile_picture_3.imageAlpha = 75
-        set_profile_picture_5.imageAlpha = 75
-        set_profile_picture_6.imageAlpha = 75
 
+        lockAvatars()
 
         save_profile.setOnClickListener {
             profileViewModel.updateUserIcon(chosenPicture)
@@ -83,25 +73,43 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
     }
 
+    private fun lockAvatars() {
+        val grayscaleMatrix = ColorMatrix()
+        grayscaleMatrix.setSaturation(0f)
+
+        for (image in listOf(
+            set_profile_picture_2,
+            set_profile_picture_3,
+            set_profile_picture_5,
+            set_profile_picture_6
+        )) {
+            // grey out the image and and set a lock drawable in the foreground
+            image.colorFilter = ColorMatrixColorFilter(grayscaleMatrix)
+            image.foreground = ResourcesCompat.getDrawable(resources, R.drawable.ic_lock_24, null)
+        }
+    }
+
+    private fun unlockAvatars(vararg views: ImageButton) {
+        val grayscaleMatrix = ColorMatrix()
+        grayscaleMatrix.setSaturation(1f)
+
+        for (view in views) {
+            view.colorFilter = ColorMatrixColorFilter(grayscaleMatrix)
+            view.foreground = null
+        }
+    }
+
     private fun setupObservers() {
-        profileViewModel.currentUser.observe(viewLifecycleOwner, { it ->
-            it?.let {
-                _currentUser = it
+        profileViewModel.currentUser.observe(viewLifecycleOwner, {
+            val currentUser = it ?: return@observe
 
-                if (_currentUser.level >= thirdCharUnlockedLevel) {
-                    thirdCharUnlocked = true
-                    set_profile_picture_2.imageAlpha = 255
-                    set_profile_picture_3.imageAlpha = 255
-                    set_profile_picture_5.imageAlpha = 255
-                    set_profile_picture_6.imageAlpha = 255
+            if (currentUser.level >= thirdCharUnlockedLevel) {
+                thirdCharUnlocked = true
+                unlockAvatars(set_profile_picture_2, set_profile_picture_3, set_profile_picture_5, set_profile_picture_6)
 
-                } else if (_currentUser.level >= secondCharUnlockedLevel) {
-                    secondCharUnlocked = true
-                    set_profile_picture_2.imageAlpha = 255
-                    set_profile_picture_5.imageAlpha = 255
-
-                }
-
+            } else if (currentUser.level >= secondCharUnlockedLevel) {
+                secondCharUnlocked = true
+                unlockAvatars(set_profile_picture_2, set_profile_picture_5)
             }
         })
     }
@@ -114,49 +122,71 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
             .duration(150)  // play for 150 ms
             .playOn(v)
 
-        if (thirdCharUnlocked) {
+        when {
+            thirdCharUnlocked -> {
 
-            when (v.id) {
-                R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
-                R.id.set_profile_picture_2 -> chosenPicture = "ic_user_man_2"
-                R.id.set_profile_picture_3 -> chosenPicture = "ic_user_man_3"
-                R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
-                R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_2"
-                R.id.set_profile_picture_6 -> chosenPicture = "ic_user_woman_3"
+                when (v.id) {
+                    R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
+                    R.id.set_profile_picture_2 -> chosenPicture = "ic_user_man_2"
+                    R.id.set_profile_picture_3 -> chosenPicture = "ic_user_man_3"
+                    R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
+                    R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_2"
+                    R.id.set_profile_picture_6 -> chosenPicture = "ic_user_woman_3"
+                }
             }
-        } else if (secondCharUnlocked) {
+            secondCharUnlocked -> {
 
-            when (v.id) {
-                R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
-                R.id.set_profile_picture_2 -> chosenPicture = "ic_user_man_2"
-                R.id.set_profile_picture_3 -> Toast.makeText(requireContext(),"Wird erst ab Level 10 freigeschaltet", Toast.LENGTH_SHORT).show()
-                R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
-                R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_2"
-                R.id.set_profile_picture_6 -> Toast.makeText(requireContext(),"Wird erst ab Level 10 freigeschaltet", Toast.LENGTH_SHORT).show()
+                when (v.id) {
+                    R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
+                    R.id.set_profile_picture_2 -> chosenPicture = "ic_user_man_2"
+                    R.id.set_profile_picture_3 -> showNotYetUnlockedMessage(10)
+                    R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
+                    R.id.set_profile_picture_5 -> chosenPicture = "ic_user_woman_2"
+                    R.id.set_profile_picture_6 -> showNotYetUnlockedMessage(10)
+                }
             }
-        } else {
-            when (v.id) {
-                R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
-                R.id.set_profile_picture_2 -> Toast.makeText(requireContext(),"Wird erst ab Level 5 freigeschaltet", Toast.LENGTH_SHORT).show()
-                R.id.set_profile_picture_3 -> Toast.makeText(requireContext(),"Wird erst ab Level 10 freigeschaltet", Toast.LENGTH_SHORT).show()
-                R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
-                R.id.set_profile_picture_5 -> Toast.makeText(requireContext(),"Wird erst ab Level 5 freigeschaltet", Toast.LENGTH_SHORT).show()
-                R.id.set_profile_picture_6 -> Toast.makeText(requireContext(),"Wird erst ab Level 10 freigeschaltet", Toast.LENGTH_SHORT).show()
-            }
+            else -> {
+                when (v.id) {
+                    R.id.set_profile_picture_1 -> chosenPicture = "ic_user_man_1"
+                    R.id.set_profile_picture_2 -> showNotYetUnlockedMessage(5)
+                    R.id.set_profile_picture_3 -> showNotYetUnlockedMessage(10)
+                    R.id.set_profile_picture_4 -> chosenPicture = "ic_user_woman_1"
+                    R.id.set_profile_picture_5 -> showNotYetUnlockedMessage(5)
+                    R.id.set_profile_picture_6 -> showNotYetUnlockedMessage(10)
+                }
 
+            }
         }
 
         val resID = resources.getIdentifier(chosenPicture, "drawable", activity?.packageName)
         set_profile_picture.setImageResource(resID)
     }
 
-    // TODO: Wenn Zeit übrig: Snackbar statt toasts, da schicker. SB Führen aber hier noch zu Crash (nur bei initialer Char-erstellung)
-    private fun showSnackbar(lvl: Int) {
-        Snackbar.make(
-            requireActivity().findViewById(R.id.container),
-            "Dieser Avatar wird erst ab Level " + lvl.toString() + " freigeschaltet",
+
+    private fun showNotYetUnlockedMessage(lvl: Int) {
+        val toast = Toast.makeText(
+            requireActivity(),
+            "Dieser Avatar wird erst auf Level $lvl freigeschaltet!",
+            Toast.LENGTH_SHORT
+        )
+        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+        toast.view.setPadding(8, 4, 8, 4)
+        toast.show()
+
+        /*
+        val snackbar = Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            "Dieser Avatar wird erst ab Level $lvl freigeschaltet",
             Snackbar.LENGTH_SHORT
-        ).show()
+        )
+        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+        snackbar.show()
+        */
+    }
+
+    companion object {
+        private const val secondCharUnlockedLevel = 5
+        private const val thirdCharUnlockedLevel = 10
     }
 }
 

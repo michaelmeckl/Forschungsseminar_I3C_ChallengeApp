@@ -11,8 +11,7 @@ import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.ChallengeType
 import kotlinx.android.synthetic.main.challenge_item.view.*
 
-class OverviewAdapter(private val clickListener: ChallengeClickListener, private val checkmarkClickListener: CheckmarkClickListener) :
-    RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
+class OverviewAdapter(private val clickListener: ChallengeClickListener, private val checkmarkClickListener: CheckmarkClickListener) : RecyclerView.Adapter<OverviewAdapter.ChallengeViewHolder>() {
 
     var activeChallenges = listOf<BaseChallenge>()
         set(value) {
@@ -46,9 +45,6 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
                 itemView.name_challenge.text = data.title
             }
 
-            //TODO: im moment werden neue challenges auch sofort als grün markiert sobald eine als completed markiert ist!
-            // ein ui update (z.B durch rotation) macht es wieder richtig ????
-            // wenn neue dazu kommen funktionierts auch wieder nciht mehr (vllt genau wie bei accepted machen?)
             if (data.completed) {
                 itemView.description_challenge.visibility = View.GONE
                 itemView.description_challenge_completed.visibility = View.VISIBLE
@@ -58,6 +54,7 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
                 itemView.description_challenge_completed.visibility = View.GONE
                 itemView.icon_challenge.setImageResource(R.drawable.ic_checkmark_unchecked)
             }
+
             val sharedPrefs = itemView.context?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
             val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + data.challengeId, false) ?: false
 

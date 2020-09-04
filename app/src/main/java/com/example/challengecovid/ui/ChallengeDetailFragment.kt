@@ -1,8 +1,10 @@
 package com.example.challengecovid.ui
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.text.BoringLayout
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -26,15 +28,30 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
+//FIXME: wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
+// -> aber nicht immer? manchmal gehts auch? ich bin verwirrt ...
 class ChallengeDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
     private val arguments: ChallengeDetailFragmentArgs by navArgs()
-    private val challengeRepository = RepositoryController.getChallengeRepository()
+
     private lateinit var overviewViewModel: OverviewViewModel
+
+    private lateinit var sharedPrefs: SharedPreferences
+
+    // current challenge properties
+    private lateinit var id: String
+    private lateinit var title: String
+    private lateinit var description: String
+    private lateinit var difficulty: String
+    private lateinit var type: ChallengeType
+    private var completed: Boolean = false
+
+    private var isEditable: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val userRepository = RepositoryController.getUserRepository()
+        val challengeRepository = RepositoryController.getChallengeRepository()
         val application = requireNotNull(this.activity).application
         overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
 
@@ -45,72 +62,19 @@ class ChallengeDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (id, title, description, type, difficulty, completed, is_editable) = arguments
+        id = arguments.id
+        title = arguments.title
+        description = arguments.description
+        difficulty = arguments.difficulty
+        type = arguments.type
+        completed = arguments.completed
 
-        challenge_detail_title.text = title
-        if (description.isBlank()) {
-            challenge_detail_description.visibility = View.GONE
-        }
-        challenge_detail_description.text = description
-        challenge_detail_difficulty.text = difficulty
+        setupInitialUI()
 
-        val adapterDifficulties = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.difficulties_challenges,
-            android.R.layout.simple_spinner_dropdown_item
-        )
-        challenge_detail_spinner_difficulties_edit.adapter = adapterDifficulties
-//        challenge_detail_spinner_difficulties_edit.onItemSelectedListener = this
-
-
-        // get the saved switch state and set it
-        val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        val switchState = sharedPrefs?.getBoolean(Constants.PREFS_SWITCH_STATE + id, false) ?: false
-        publish_switch.isChecked = switchState
-        setStatus(switchState)
-
-        publish_switch.setOnCheckedChangeListener { _, isChecked ->
-            val firstTimeChallengePublished =
-                sharedPrefs?.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, true) ?: return@setOnCheckedChangeListener
-
-            if (firstTimeChallengePublished) {
-                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false).apply()
-
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Hinweis")
-                    .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf 'nicht veröffentlicht' setzen")
-                    .setPositiveButton(android.R.string.ok) { _, _ -> }
-                    .show()
-            }
-
-            //update the public status of the challenge
-            if (isChecked) {
-                challenge_detail_start_editing.visibility = View.GONE
-            } else {
-                if (type == ChallengeType.USER_CHALLENGE && is_editable) {
-                    challenge_detail_start_editing.visibility = View.VISIBLE
-                }
-            }
-
-            sharedPrefs.edit().putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked).apply()
-
-//          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
-            challenge_detail_progressbar.visibility = View.VISIBLE
-            requireActivity().window.setFlags(
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-            )
-            //TODO: Coroutinen wären hier deutlich besser!!
-            /*
-            CoroutineScope(Dispatchers.Main).launch {
-                delay(2000)
-            }*/
-            Handler().postDelayed(this::switchStatus, 2000)
-
-        }
+        isEditable = sharedPrefs.getBoolean(Constants.PREFS_IS_CHALLENGE_BY_THIS_USER + id, false)
 
         //FIXME: statt alles ständig auf hidden oder visible zu setzen wäre hier ein neues eigenes Layout deutlich besser
-        if (type == ChallengeType.SYSTEM_CHALLENGE || !is_editable) {
+        if (type == ChallengeType.SYSTEM_CHALLENGE || !isEditable) {
             // hide the option to publish for system challenges
             publish_switch.visibility = View.GONE
 
@@ -165,11 +129,15 @@ class ChallengeDetailFragment : Fragment() {
 
         challenge_detail_button_submit_edit.setOnClickListener {
 
+            //FIXME: lieber den Nutzer die felder bearbeiten lassen, die er auch bearbeiten will, statt alles wieder leer zu setzen!!
+            // und auf keinen Fall verlangen dass der Titel neu eingegeben werden muss -> miese UX
+            // stattdessen überprüfen, was sich verändert hat (vergleich if alterTitel != neuer Titel) und nur das updaten
             val newTitle = challenge_detail_title_edit.text.toString()
+            /*
             if (newTitle.isBlank()) {
                 layout_challenge_detail_title_edit.error = "Name erforderlich"
                 return@setOnClickListener
-            }
+            }*/
             val newDescription = challenge_detail_description_edit.text.toString()
             val difficulties = resources.getStringArray(R.array.difficulties_challenges)
             val newDifficulty: Difficulty = when (challenge_detail_spinner_difficulties_edit.selectedItem) {
@@ -178,7 +146,8 @@ class ChallengeDetailFragment : Fragment() {
                 difficulties[2] -> Difficulty.SCHWER
                 else -> Difficulty.LEICHT
             }
-            val userid = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
+
+            val userid = sharedPrefs.getString(Constants.PREFS_USER_ID, "") ?: ""
 
             val newUserChallenge = UserChallenge(
                 challengeId = id,
@@ -197,12 +166,82 @@ class ChallengeDetailFragment : Fragment() {
             overviewViewModel.updateChallenge(newUserChallenge)
 
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
-                //.navigate(ChallengeDetailFragmentDirections.actionChallengeDetailToChallenges())
-
-
         }
 
     }
+
+    private fun setupInitialUI() {
+        challenge_detail_title.text = title
+        if (description.isBlank()) {
+            challenge_detail_description.text = "Keine Beschreibung"
+        } else {
+            challenge_detail_description.text = description
+        }
+
+        challenge_detail_difficulty.text = "Schwierigkeit: $difficulty"
+
+        val adapterDifficulties = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.difficulties_challenges,
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        challenge_detail_spinner_difficulties_edit.adapter = adapterDifficulties
+
+
+        // get the saved switch state and set it
+        sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE) ?: return
+        val switchState = sharedPrefs.getBoolean(Constants.PREFS_SWITCH_STATE + id, false)
+        publish_switch.isChecked = switchState
+        setStatus(switchState)
+
+        publish_switch.setOnCheckedChangeListener { _, isChecked ->
+            handleSwitchPositionChanged(isChecked)
+        }
+    }
+
+    private fun handleSwitchPositionChanged(isChecked: Boolean) {
+        val firstTimeChallengePublished =
+            sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, true)
+
+        if (firstTimeChallengePublished) {
+            sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false).apply()
+
+            //TODO: nur einmal anzeigen?? vielleicht besser jedesmal wenn er versucht sie zu bearbeiten!
+            AlertDialog.Builder(requireContext())
+                .setTitle("Hinweis")
+                .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf 'nicht veröffentlicht' setzen")
+                .setPositiveButton(android.R.string.ok) { _, _ -> }
+                .show()
+        }
+
+        //update the public status of the challenge
+        if (isChecked) {
+            challenge_detail_start_editing.visibility = View.GONE
+            overviewViewModel.updatePublicStatus(id, isChecked)
+        } else {
+            if (type == ChallengeType.USER_CHALLENGE && isEditable) {
+                challenge_detail_start_editing.visibility = View.VISIBLE
+            }
+        }
+
+        sharedPrefs.edit().putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked).apply()
+
+//          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
+
+        challenge_detail_progressbar.visibility = View.VISIBLE
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        /*
+        runBlocking {
+            switchStatus()
+            delay(2000)
+        }*/
+        Handler().postDelayed(this::switchStatus, 2000)
+    }
+
+    //FIXME: man kann das veröffentlichen layout noch sehen wenn im bearbeitungsmodus! Das führt ständig zu abstürzen!!!
 
     private fun setStatus(switchState: Boolean) {
         if (switchState) {
@@ -217,8 +256,9 @@ class ChallengeDetailFragment : Fragment() {
     }
 
     private fun switchStatus() {
-        //TODO: app crasht hier!!!!!! challenge_detail_relativelayout_offline ist null wenn geedited und neu geöffnet
-        challenge_detail_relativelayout_offline ?: return
+        //TODO: app crasht hier!!!!!!
+        // challenge_detail_relativelayout_offline ist null wenn geedited und dann neu geöffnet
+        //challenge_detail_relativelayout_offline ?: return
         if (challenge_detail_relativelayout_offline.visibility == View.GONE) {
             challenge_detail_relativelayout_online.visibility = View.GONE
             challenge_detail_relativelayout_offline.visibility = View.VISIBLE

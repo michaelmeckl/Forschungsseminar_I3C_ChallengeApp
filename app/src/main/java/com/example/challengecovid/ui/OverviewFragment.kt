@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -20,10 +19,7 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
-import com.example.challengecovid.model.BaseChallenge
-import com.example.challengecovid.model.User
-import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.ChallengeType
+import com.example.challengecovid.model.*
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
@@ -35,13 +31,12 @@ import timber.log.Timber
 import java.util.*
 
 
-//TODO: noch alle Toasts aus den repositories und sonst wo, die nicht nötig sind, entfernen!!!
 class OverviewFragment : Fragment() {
 
     private lateinit var overviewViewModel: OverviewViewModel
     private lateinit var overviewAdapter: OverviewAdapter
     private lateinit var profileViewModel: ProfileViewModel
-    private lateinit var levelsHashMap: HashMap<Int, Int>
+
     private lateinit var _currentUser: User
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,20 +47,6 @@ class OverviewFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
         profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
-
-
-        // Für Level
-        levelsHashMap = HashMap()
-        levelsHashMap[1] = 30
-        levelsHashMap[2] = 40
-        levelsHashMap[3] = 50
-        levelsHashMap[4] = 60
-        levelsHashMap[5] = 70
-        levelsHashMap[6] = 80
-        levelsHashMap[7] = 90
-        levelsHashMap[8] = 100
-        levelsHashMap[9] = 130
-        levelsHashMap[10] = 150
 
 
         checkFirstTimeThisDay()
@@ -186,31 +167,43 @@ class OverviewFragment : Fragment() {
      */
 
     private fun setChallengeCompleted(challenge: BaseChallenge) {
-
         if (challenge.completed) {
             Timber.d("Skipping setChallengeCompleted because challenge.completed = true")
             return
         }
+
         val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
 
         if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, true)) {
-            sharedPrefs.edit()?.putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false)?.apply()
+            // this is the first time this user has ticked the 'completed' button
             AlertDialog.Builder(requireContext())
-                .setTitle("Challenge abgeschlossen!")
-                .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen erneut abschließen.")
-                .setPositiveButton(android.R.string.ok) { _, _ ->  }
+                .setTitle("Challenge abschließen")
+                .setMessage("Hier kannst du diese Challenge als \"erledigt\" markieren und dafür Erfahrungspunkte bekommen. Beachte aber, dass du diese Entscheidung nicht mehr rückgängig machen kannst für den Rest des Tages! Möchtest du diese Challenge als abgeschlossen markieren?")
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false).apply()
+                    showChallengeCompletedDialog(challenge)
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
+        } else {
+            overviewViewModel.setChallengeCompleted(challenge)
+            //Timber.d(profileViewModel.currentUser.value.toString())
+
+            updatePointsAndLevel(_currentUser, challenge)
         }
-
-        overviewViewModel.setChallengeCompleted(challenge)
-        Timber.d(profileViewModel.currentUser.value.toString())
-
-        updatePointsAndLevel(_currentUser, challenge)
-
-//        challengeListAdapter.notifyDataSetChanged()
-
     }
 
+
+    private fun showChallengeCompletedDialog(challenge: BaseChallenge) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Challenge abgeschlossen!")
+            .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen dann erneut abschließen.")
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                overviewViewModel.setChallengeCompleted(challenge)
+                updatePointsAndLevel(_currentUser, challenge)
+            }
+            .show()
+    }
 
 
     private fun setupObservers() {
@@ -242,6 +235,8 @@ class OverviewFragment : Fragment() {
             // update the list in the adapter with the new challenge list
             overviewAdapter.activeChallenges = challengeList
         })
+
+
         profileViewModel.currentUser.observe(viewLifecycleOwner, {it ->
             it?.let {
                 _currentUser = it
@@ -272,17 +267,13 @@ class OverviewFragment : Fragment() {
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
-        val sharedPrefs = activity?.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
-        val isEditable = sharedPrefs?.getBoolean(Constants.PREFS_IS_CHALLENGE_BY_THIS_USER + challenge.challengeId, false) ?: false
-
         val action = OverviewFragmentDirections.actionOverviewToDetail(
             id = challenge.challengeId,
             title = challenge.title,
             description = challenge.description,
             type = challenge.type,
             difficulty = challenge.difficulty.toString(),
-            completed = challenge.completed,
-            isEditable = isEditable
+            completed = challenge.completed
         )
 
         // navigate to another fragment on click
@@ -300,13 +291,13 @@ class OverviewFragment : Fragment() {
                 return false
             }
 
-//          TODO: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
+//          FIXME: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
                 val message = when (challenge.type) {
                     ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"
-                    ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur deine eigene Version gelöscht! Um die Challenge auch aus den veröffentlichten Challenges zu löschen, musst du sie vor dem Löschen erst auf privat setzen!"
+                    ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur die eigene Version gelöscht! Wenn du der Ersteller der Challenge bist und sie auch aus den veröffentlichten Challenges löschen willst, musst du sie vor dem Löschen erst auf privat setzen!"
                     ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"
                 }
 
@@ -337,76 +328,31 @@ class OverviewFragment : Fragment() {
     }
 
 
-
-
-
     // LEVEL STUFF STARTING HERE
-
 
     //helper function
     private fun maxPointsReached(currentPoints: Int, maxPoints: Int): Boolean {
-        if (currentPoints >= maxPoints) {
-            return true
-        }
-        return false
+        return currentPoints >= maxPoints
     }
 
     //call when challenge got cleared
     private fun updatePointsAndLevel(user: User, challenge: BaseChallenge) {
-        var currentMaxPoints = 0
         var currentPoints = user.points
-        var currentLevel = user.level
+        val currentLevel = user.level
 
-        when (user.level) {
-            1 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            2 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            3 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            4 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            5 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            6 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            7 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            8 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            9 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-            10 -> {
-                currentMaxPoints = levelsHashMap[currentLevel]!!
-                currentPoints += challenge.difficulty.points
-            }
-
-
+        if (currentLevel >= levelsMap.size) {
+            Toast.makeText(requireActivity(), "Du hast das maximale Level bereits erreicht!", Toast.LENGTH_LONG).show()
+            return
         }
 
-        if (maxPointsReached(currentPoints, currentMaxPoints)) {
-            //Levelup
-            currentPoints -= currentMaxPoints
-            //TODO: unlock icon methode
+        val currentMaxPoints = levelsMap[currentLevel] ?: return
+        currentPoints += challenge.difficulty.points
 
+        if (maxPointsReached(currentPoints, currentMaxPoints)) {
+            //Levelup (reset points)
+            currentPoints -= currentMaxPoints
+
+            //TODO: unlock icon methode
             // TODO: show popup ?
 
             profileViewModel.updateUserPoints(currentPoints)
@@ -417,5 +363,30 @@ class OverviewFragment : Fragment() {
 
     }
 
+    companion object {
+        // map with xp per level
+        private val levelsMap = hashMapOf(
+            1 to 30,
+            2 to 40,
+            3 to 50,
+            4 to 60,
+            5 to 70,
+            6 to 80,
+            7 to 80,
+            8 to 90,
+            9 to 100,
+            10 to 150,
+            11 to 170,
+            12 to 200,
+            13 to 230,
+            14 to 260,
+            15 to 300,
+            16 to 350,
+            17 to 400,
+            18 to 460,
+            19 to 510,
+            20 to 600
+        )
+    }
 
 }

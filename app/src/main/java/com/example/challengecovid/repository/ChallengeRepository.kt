@@ -12,6 +12,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
@@ -243,22 +244,19 @@ class ChallengeRepository {
         val oldChallengeRef = userChallengeCollection.document(userChallenge.challengeId)
 
         oldChallengeRef
-            .set(userChallenge)
+            .set(userChallenge, SetOptions.merge())
             .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully updated!") }
             .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error updating user challenge: $e") }
     }
 
     //UPDATE
-    fun updatePublicStatus(challengeId: String, publicStatus: Boolean): Boolean {
+    suspend fun updatePublicStatus(challengeId: String, publicStatus: Boolean) = withContext(Dispatchers.IO){
         val challengeRef = userChallengeCollection.document(challengeId)
-        // TODO: Ich wünschte das würde so gehen :(
-        var isSuccess= false
 
         challengeRef
             .update("isPublic", publicStatus)
-            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") ; isSuccess = true}
-            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") ; isSuccess = false}
-        return isSuccess
+            .addOnSuccessListener { Timber.tag(CHALLENGE_REPO_TAG).d("User Challenge successfully published!") }
+            .addOnFailureListener { e -> Timber.tag(CHALLENGE_REPO_TAG).d("Error publishing user challenge: $e") }
     }
 
     //DELETE

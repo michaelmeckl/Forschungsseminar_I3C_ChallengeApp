@@ -3,10 +3,7 @@ package com.example.challengecovid.viewmodels
 import android.app.Application
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
@@ -115,6 +112,10 @@ class OverviewViewModel(
     fun updateChallenge(userChallenge: UserChallenge) {
         challengeRepository.updateUserChallenge(userChallenge)
         userRepository.updateActiveChallenge(userChallenge, currentUserId)
+    }
+
+    fun updatePublicStatus(challengeId: String, status: Boolean) = viewModelScope.launch {
+        challengeRepository.updatePublicStatus(challengeId, status)
     }
 
     /*

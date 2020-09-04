@@ -26,10 +26,6 @@ class ProfileFragment : Fragment() {
 
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        /*
-        val store = requireActivity().findNavController(R.id.nav_host_fragment).getViewModelStoreOwner(R.id.profile_graph)
-        profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
-        */
         val store = App.instance
         profileViewModel = ViewModelProvider(store, ProfileViewModelFactory(userRepository, application)).get()
 

@@ -74,12 +74,6 @@
         <argument
             android:name="completed"
             app:argType="boolean" />
-        <argument
-            android:name="isEditable"
-            app:argType="boolean" />
-        <action
-            android:id="@+id/action_challenge_detail_to_challenges"
-            app:destination="@id/navigation_overview"/>
 
     </fragment>
 
