@@ -534,42 +534,60 @@ object Data {
     //TODO da gehen noch 2 oder 3 :)
     private fun getSafetyChallenge(): List<Challenge> = listOf(
         Challenge(
-            challengeId="Händewschen",
-            title="Händewschen",
-            description ="Achte heute darauf deine Hände für mindestens 20 Sekunden zu waschen, nachdem du draußen warst oder fremde Objekte angefasst hast",
+            challengeId = "Händewschen",
+            title = "Händewschen",
+            description = "Achte heute darauf deine Hände für mindestens 20 Sekunden zu waschen, nachdem du draußen warst oder fremde Objekte angefasst hast",
             difficulty = Difficulty.MITTEL,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId="Mundschutz",
-            title="Mundschutz",
-            description ="Vergiss nicht deine Maske mitzunehmen, wenn du heute rausgehst und versuche dich so gut es geht an die Trageregeln zu halten",
+            challengeId = "Mundschutz",
+            title = "Mundschutz",
+            description = "Vergiss nicht deine Maske mitzunehmen, wenn du heute rausgehst und versuche dich so gut es geht an die Trageregeln zu halten",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId= "Abstand halten",
-            title="Abstand halten",
-            description ="Wenn du heute rausgehst, achte darauf, mindestens 1,5m Abstand zu anderen Personen zu halten",
+            challengeId = "Abstand halten",
+            title = "Abstand halten",
+            description = "Wenn du heute rausgehst, achte darauf, mindestens 1,5m Abstand zu anderen Personen zu halten",
             difficulty = Difficulty.SCHWER,
             completed = false,
             duration = 1,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId= "Niesen / Husten",
-            title="Niesen / Husten",
-            description ="Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten / niesen und dreh dich dabei von anderen weg",
+            challengeId = "Niesen / Husten",
+            title = "Niesen / Husten",
+            description = "Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten / niesen und dreh dich dabei von anderen weg",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 5,
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
+        Challenge(
+            challengeId = "Nicht ins Gesicht fassen",
+            title = "Nicht ins Gesicht fassen",
+            description = "Achte heute den ganzen Tag bewusst darauf dein Gesicht nicht anzufassen",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
+        ),
+        Challenge(
+            challengeId = "Social Distancing",
+            title = "Social Distancing",
+            description = "Bleib die ganze Woche nur zu Hauser, außer für essenzielle Tätigkiten, wie Sport, Einkaufen, etc.",
+            difficulty = Difficulty.SCHWER,
+            completed = false,
+            duration = 1,
+            challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
+        ),
 
-    )
+        )
 
 }
