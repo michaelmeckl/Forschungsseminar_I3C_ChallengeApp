@@ -7,7 +7,7 @@ import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.toObjects
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
@@ -16,8 +16,10 @@ import timber.log.Timber
 
 class UserRepository {
 
+    private val firestore = FirebaseFirestore.getInstance()
+
     // reference to the root user collection in firestore
-    private val userCollection = FirebaseFirestore.getInstance().collection("users")
+    private val userCollection = firestore.collection("users")
 
     private lateinit var snapshotListener: ListenerRegistration
 
@@ -158,6 +160,21 @@ class UserRepository {
     suspend fun getChallengeParticipants(challengeId: String): List<User>? {
         return try {
             val participants: MutableList<User> = mutableListOf()
+
+            // get all the challenge versions across all users for the challenge with the given challengeId
+            val allActiveVersions = firestore.collectionGroup("activeChallenges")
+                    .whereEqualTo("challengeId", challengeId)
+                    .get().await()
+
+            for (challenge in allActiveVersions) {
+                // get the parent user document of this challenge
+                val ownerSnapshot = challenge.reference.parent.parent?.get()?.await()
+                val user = ownerSnapshot?.toObject<User>() ?: continue
+                // add him as a participant
+                participants.add(user)
+            }
+
+            /*
             val allUsers = userCollection.get().await().toObjects<User>()
 
             for (user in allUsers) {
@@ -173,7 +190,7 @@ class UserRepository {
                         return@forEach
                     }
                 }
-            }
+            }*/
 
             participants
         } catch (e: Exception) {
