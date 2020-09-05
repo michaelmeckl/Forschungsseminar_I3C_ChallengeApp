@@ -211,4 +211,24 @@ private fun isNullOrEmpty(str: String?): Boolean {
     return true
 }
 
+/**
+ * Util-Function to measure execution time of a function.
+ * `Is called like this:
+ * val file: File =
+ *   measureTimeMillis({ time -> Log.d(TAG, "Read and decode took $time") }) {
+ *      readAndDecodeFile()
+ * }`
+ *
+ * See https://proandroiddev.com/measuring-execution-times-in-kotlin-460a0285e5ea for more information.
+ */
+inline fun <T> measureTimeMillis(loggingFunction: (Long) -> Unit,
+                                 function: () -> T): T {
+
+    val startTime = System.currentTimeMillis()
+    val result: T = function.invoke()
+    loggingFunction.invoke(System.currentTimeMillis() - startTime)
+
+    return result
+}
+
 

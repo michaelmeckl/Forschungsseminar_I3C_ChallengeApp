@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -19,11 +19,17 @@ import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
 import com.example.challengecovid.adapter.CheckmarkClickListener
 import com.example.challengecovid.adapter.OverviewAdapter
-import com.example.challengecovid.model.*
+import com.example.challengecovid.model.BaseChallenge
+import com.example.challengecovid.model.Challenge
+import com.example.challengecovid.model.ChallengeType
+import com.example.challengecovid.model.User
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.inappmessaging.ktx.inAppMessaging
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.challenge_item.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_content.*
@@ -352,8 +358,14 @@ class OverviewFragment : Fragment() {
             //Levelup (reset points)
             currentPoints -= currentMaxPoints
 
+            // send a firebase in-app-message to the user to congratulate him!
+            //TODO: does this work only 1 time per day ? -> Test more
+            Firebase.analytics.logEvent("level_up", null)
+            Firebase.inAppMessaging.triggerEvent("level_up")
+
             //TODO: unlock icon methode
-            // TODO: show popup ?
+            // TODO: show popup
+            //  or show snackbar attached to android.R.id.content ?
 
             profileViewModel.updateUserPoints(currentPoints)
             profileViewModel.updateUserLevel(currentLevel + 1)
@@ -364,28 +376,28 @@ class OverviewFragment : Fragment() {
     }
 
     companion object {
-        // map with xp per level
+        // map with necessary xp for levelup per level
         private val levelsMap = hashMapOf(
-            1 to 30,
-            2 to 40,
-            3 to 50,
-            4 to 60,
-            5 to 70,
-            6 to 80,
-            7 to 80,
-            8 to 90,
-            9 to 100,
-            10 to 150,
-            11 to 170,
-            12 to 200,
-            13 to 230,
-            14 to 260,
-            15 to 350,
-            16 to 400,
-            17 to 520,
-            18 to 670,
-            19 to 800,
-            20 to 1000
+            1 to 15,
+            2 to 20,
+            3 to 25,
+            4 to 30,
+            5 to 35,
+            6 to 40,
+            7 to 45,
+            8 to 50,
+            9 to 55,
+            10 to 60,
+            11 to 70,
+            12 to 80,
+            13 to 90,
+            14 to 100,
+            15 to 150,
+            16 to 180,
+            17 to 200,
+            18 to 250,
+            19 to 350,
+            20 to 500
         )
     }
 
