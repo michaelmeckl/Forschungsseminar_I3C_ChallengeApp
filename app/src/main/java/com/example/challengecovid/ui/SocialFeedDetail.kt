@@ -19,11 +19,8 @@ import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.fragment_social_feed_detail.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class SocialFeedDetail : DialogFragment() {
 
@@ -31,6 +28,9 @@ class SocialFeedDetail : DialogFragment() {
 
     private lateinit var feedDetailViewModel: FeedDetailViewModel
     private lateinit var feedDetailAdapter: FeedDetailAdapter
+
+    private var socialFeedJob = SupervisorJob()
+    private val socialFeedScope = CoroutineScope(Dispatchers.Main + socialFeedJob)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +68,7 @@ class SocialFeedDetail : DialogFragment() {
         setupParticipantList()
         showParticipants(id)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        socialFeedScope.launch {
             val challenge = feedDetailViewModel.getChallenge(id) ?: return@launch
 
             if (challenge.creatorId == userId) {
@@ -134,13 +134,12 @@ class SocialFeedDetail : DialogFragment() {
     }
 
     private fun showParticipants(challengeId: String) {
-        CoroutineScope(Dispatchers.Main).launch {
+        socialFeedScope.launch {
             val participants = feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
             feedDetailAdapter.participants = participants
 
             //TODO: das laden dauert extrem lang und wenn abgebrochen wird schmiert die app beim nächsten laden hier komplett ab!!!
             //TODO: vllt alle nutzer oder active Challenges im feed(detail)viewmodel cachen? und doch ein shared repo?
-            //TODO: cancel all scopes in onDestroy!!!
 
             if (participants.isNotEmpty()) {
                 // show title if not empty
@@ -153,13 +152,6 @@ class SocialFeedDetail : DialogFragment() {
             social_feed_detail_dialog.visibility = View.VISIBLE
         }
     }
-
-
-    /**
-     * TODO:
-     *  1. eine angenommene Challenge sollte nicht mehr veröffentlicht werden können!! -> vllt den button nur anzeigen wenn current user id die gleiche wie die creator id der challenge ist (in challenge detail in overview fragment)
-     *  2. angenommene challenge sollte nicht bearbeitbar sein von anderen nutzern
-     */
 
     private fun acceptChallenge(challenge: UserChallenge, user: User) {
         // diasble button to prevent more clicks
@@ -179,4 +171,8 @@ class SocialFeedDetail : DialogFragment() {
         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        socialFeedJob.cancel()  // cancel all coroutines that might still be running to prevent memory leaks and crashes
+    }
 }
