@@ -548,9 +548,9 @@ object Data {
             challengeIcon = App.instance.resources.getResourceEntryName(R.drawable.icons8_protection_mask_128)
         ),
         Challenge(
-            challengeId = "Niesen / Husten",
-            title = "Niesen / Husten",
-            description = "Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten / niesen und dreh dich dabei von anderen weg",
+            challengeId = "Hygiene bei Niesen und Husten",
+            title = "Hygiene bei Niesen und Husten",
+            description = "Achte heute den ganzen Tag bewusst darauf in ein Taschentusch oder zumindest deine Armbeuge zu husten und zu niesen und dreh dich dabei von anderen weg",
             difficulty = Difficulty.LEICHT,
             completed = false,
             duration = 5,
