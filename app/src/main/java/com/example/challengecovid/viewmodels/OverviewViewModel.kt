@@ -8,7 +8,6 @@ import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
-import com.example.challengecovid.model.ChallengeType
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository

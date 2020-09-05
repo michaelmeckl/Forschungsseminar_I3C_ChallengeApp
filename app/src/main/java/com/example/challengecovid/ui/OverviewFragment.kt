@@ -307,7 +307,7 @@ class OverviewFragment : Fragment() {
                     setPositiveButton("Löschen") { _, _ ->
                         // remove this item
                         if (challenge.type == ChallengeType.SYSTEM_CHALLENGE) {
-                            //TODO: "hack" um dem Nutzer zu simulieren, dass er die Challenge diese Woche nicht mehr
+                            //TODO: das ist ein "hack" um dem Nutzer zu simulieren, dass er die Challenge diese Woche nicht mehr
                             // annehmen kann (ohne sie dafür ganz löschen zu müssen)
                             overviewViewModel.hideChallenge(challenge as Challenge)
                         } else {

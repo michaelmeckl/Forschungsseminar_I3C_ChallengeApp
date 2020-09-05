@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
-import android.text.BoringLayout
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -21,15 +20,11 @@ import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
+//FIXME: wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
 
-//FIXME: wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
-// -> aber nicht immer? manchmal gehts auch? ich bin verwirrt ...
+// TODO -> aber nicht immer? manchmal gehts auch? ich bin verwirrt ... -> muss trotzdem gefixt werden
 class ChallengeDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
@@ -77,7 +72,7 @@ class ChallengeDetailFragment : Fragment() {
         if (type == ChallengeType.SYSTEM_CHALLENGE || !isEditable) {
             // hide the option to publish and to edit for system challenges
             setVisibility(
-                publish_switch,
+                switch_layout,
                 challenge_detail_start_editing,
                 challenge_detail_relativelayout_online,
                 challenge_detail_relativelayout_offline,
@@ -92,7 +87,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_description,
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
-                publish_switch,
+                switch_layout,
                 visible = false
             )
             setVisibility(
@@ -126,7 +121,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_description,
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
-                publish_switch,
+                switch_layout,
                 visible = true
             )
 
@@ -188,10 +183,10 @@ class ChallengeDetailFragment : Fragment() {
         if (firstTimeChallengePublished) {
             sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false).apply()
 
-            //TODO: nur einmal anzeigen?? vielleicht besser jedesmal wenn er versucht sie zu bearbeiten!
+            //TODO: nur einmal anzeigen?? oder vielleicht besser jedesmal wenn er versucht sie zu bearbeiten!
             AlertDialog.Builder(requireContext())
                 .setTitle("Hinweis")
-                .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf 'nicht veröffentlicht' setzen")
+                .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf \"Privat\" setzen")
                 .setPositiveButton(android.R.string.ok) { _, _ -> }
                 .show()
         }
