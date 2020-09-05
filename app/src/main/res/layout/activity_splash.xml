@@ -35,6 +35,7 @@
         android:paddingHorizontal="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         tools:text="Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde"
         />
