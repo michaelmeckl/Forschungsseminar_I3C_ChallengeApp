@@ -32,11 +32,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:paddingHorizontal="32dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="@string/splash_screen_load"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        tools:text="Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde"
         />
 
 </RelativeLayout>

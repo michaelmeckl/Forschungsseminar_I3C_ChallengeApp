@@ -29,6 +29,11 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Timber.tag("FIREBASE").d("in onCreate in splash activity")
+
+        // get a random message to show the user in the splash screen
+        val text: String = splashMessages.random()
+        splash_text.text = text
+
         animateSplashScreen()
 
         firstRun = Utils.checkFirstRun(this@SplashActivity)
@@ -46,7 +51,6 @@ class SplashActivity : AppCompatActivity() {
         val objectAnimator1: ObjectAnimator = ObjectAnimator.ofFloat(splash_title, TRANSLATION_Y, 100f)
         val objectAnimator2: ObjectAnimator = ObjectAnimator.ofFloat(splash_logo, ALPHA, 0F, 1F)
         val objectAnimator3: ObjectAnimator = ObjectAnimator.ofFloat(splash_text, TRANSLATION_Y, -100f)
-        //TODO: was anderes als Laden ... anzeigen? z.B. irgendwas wie "Bekämpfe Covid durch Zusammenhalt!" oder so...
 
         val animatorSet = AnimatorSet()
         animatorSet.playTogether(objectAnimator1, objectAnimator2, objectAnimator3)
@@ -122,5 +126,11 @@ class SplashActivity : AppCompatActivity() {
 
     companion object {
         const val PREFS_VERSION_CODE_KEY = "version_code"
+
+        //TODO: bessere Splash Screen Nachrichten hinzufügen als die unten!!!
+        val splashMessages = arrayOf(
+                "Laden ...",
+                "Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde"
+        )
     }
 }
