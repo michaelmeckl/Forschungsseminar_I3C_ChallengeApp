@@ -194,13 +194,13 @@ class ChallengeDetailFragment : Fragment() {
         //update the public status of the challenge
         if (isChecked) {
             setVisibility(challenge_detail_start_editing, visible = false)
-            overviewViewModel.updatePublicStatus(id, isChecked)
         } else {
             if (type == ChallengeType.USER_CHALLENGE && isEditable) {
                 setVisibility(challenge_detail_start_editing, visible = true)
             }
         }
 
+        overviewViewModel.updatePublicStatus(id, isChecked)
         sharedPrefs.edit().putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked).apply()
 
 //          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
