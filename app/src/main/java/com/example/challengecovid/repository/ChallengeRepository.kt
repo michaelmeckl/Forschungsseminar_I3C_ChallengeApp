@@ -131,7 +131,10 @@ class ChallengeRepository {
         val challengeRef: DocumentReference = if(challengeType == ChallengeType.SYSTEM_CHALLENGE) {
             challengeCollection.document(id)        //TODO: das nicht machen  da ja lieber nicht verändern?
         } else  {
-            userChallengeCollection.document(id)
+            //userChallengeCollection.document(id)
+            // TODO IMPORTANT: Challenges in the user challenge collection shouldn't be marked as completed as this breaks the
+            //  feed functionality!
+            return
         }
 
         challengeRef

@@ -4,16 +4,16 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View.ALPHA
 import android.view.View.TRANSLATION_Y
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.challengecovid.*
-import com.google.android.material.snackbar.Snackbar
+import com.example.challengecovid.Data
+import com.example.challengecovid.R
+import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.Utils
 import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.coroutines.*
 import timber.log.Timber
@@ -23,10 +23,6 @@ class SplashActivity : AppCompatActivity() {
 
     private lateinit var job: Job
     private var firstRun = false
-
-    //TODO: check if this user is logged in the first time this day and should get a new daily challenge!
-    // alternativ vllt über firebase in app messaging gut umsetzbar!
-    private var firstTimeThisDay: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

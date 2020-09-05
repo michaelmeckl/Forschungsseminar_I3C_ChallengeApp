@@ -78,7 +78,6 @@ class OverviewFragment : Fragment() {
             layoutManager = linearLayoutManager
         }
 
-        //TODO: does not scroll to top :(
         recyclerview_overview.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if (overviewAdapter.activeChallenges.isEmpty()) {
                 empty_recyclerview_overview.visibility = View.VISIBLE
@@ -86,10 +85,12 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.GONE
             }
 
+            /*
+            // does not scroll to top :(
             if (oldTop < top) {
                 // scroll to the top when the list gets bigger!
                 recyclerview_overview.smoothScrollToPosition(0)
-            }
+            }*/
         }
         /*
         // Scroll to top on new challenges

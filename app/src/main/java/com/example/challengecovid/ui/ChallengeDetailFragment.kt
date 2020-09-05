@@ -22,9 +22,8 @@ import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
 import timber.log.Timber
 
-//FIXME: wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
-
-// TODO -> aber nicht immer? manchmal gehts auch? ich bin verwirrt ... -> muss trotzdem gefixt werden
+//wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
+// -> das sollte jetzt gefixet sein TODO: überprüfen, dass es wirklich immer klappt!
 class ChallengeDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily

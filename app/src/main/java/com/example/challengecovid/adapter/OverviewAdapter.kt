@@ -40,9 +40,9 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
             itemView.description_challenge.text = data.description
 
             if(data.type == ChallengeType.USER_CHALLENGE) {
-                itemView.name_challenge.text = data.title + " (Eigene Challenge)"
-            } else {
                 itemView.name_challenge.text = data.title
+            } else {
+                itemView.name_challenge.text = data.title + " (Kategorie Challenge)"
             }
 
             if (data.completed) {

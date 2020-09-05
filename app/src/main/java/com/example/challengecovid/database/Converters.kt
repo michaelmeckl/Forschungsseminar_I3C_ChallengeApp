@@ -2,7 +2,6 @@ package com.example.challengecovid.database
 
 import androidx.room.TypeConverter
 import com.example.challengecovid.model.Difficulty
-import com.example.challengecovid.model.Gender
 import java.util.*
 
 class Converters {
@@ -16,6 +15,7 @@ class Converters {
         return difficulty.name
     }
 
+    /*
     @TypeConverter
     fun fromGender(value: String): Gender {
         return enumValueOf(value)
@@ -24,7 +24,7 @@ class Converters {
     @TypeConverter
     fun genderToString(gender: Gender): String {
         return gender.name
-    }
+    }*/
 
     @TypeConverter
     fun toDate(timestamp: Long): Date {
