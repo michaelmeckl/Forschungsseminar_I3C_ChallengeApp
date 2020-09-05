@@ -14,6 +14,7 @@ import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.FeedDetailAdapter
+import com.example.challengecovid.measureTimeMillis
 import com.example.challengecovid.model.User
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.FeedDetailViewModel
@@ -21,6 +22,7 @@ import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_social_feed_detail.*
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 class SocialFeedDetail : DialogFragment() {
 
@@ -135,11 +137,11 @@ class SocialFeedDetail : DialogFragment() {
 
     private fun showParticipants(challengeId: String) {
         socialFeedScope.launch {
-            val participants = feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
-            feedDetailAdapter.participants = participants
+            val participants = measureTimeMillis({ time -> Timber.d("Get Participants took $time ms") }) {
+                feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
+            }
 
-            //TODO: das laden dauert extrem lang und wenn abgebrochen wird schmiert die app beim nächsten laden hier komplett ab!!!
-            //TODO: vllt alle nutzer oder active Challenges im feed(detail)viewmodel cachen? und doch ein shared repo?
+            feedDetailAdapter.participants = participants
 
             if (participants.isNotEmpty()) {
                 // show title if not empty
