@@ -380,12 +380,12 @@ class OverviewFragment : Fragment() {
             12 to 200,
             13 to 230,
             14 to 260,
-            15 to 300,
-            16 to 350,
-            17 to 400,
-            18 to 460,
-            19 to 510,
-            20 to 600
+            15 to 350,
+            16 to 400,
+            17 to 520,
+            18 to 670,
+            19 to 800,
+            20 to 1000
         )
     }
 
