@@ -3,7 +3,6 @@ package com.example.challengecovid
 import android.app.Application
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ class App: Application(), ViewModelStoreOwner {
         // This should be used carefully (to prevent memory leaks) and only when no activity context is available!
         lateinit var instance: App private set
 
-        lateinit var firebaseAnalytics: FirebaseAnalytics
+        //lateinit var firebaseAnalytics: FirebaseAnalytics
     }
 
     override fun onCreate() {
@@ -61,9 +60,8 @@ class App: Application(), ViewModelStoreOwner {
         }
     }
 
-    //TODO: also setup db and subscribe here to new challenges -> besser in Splash screen wenn first Run!!
     private fun setupFirebase() {
         Timber.d("In setup firebase in application class now")
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        //firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 }

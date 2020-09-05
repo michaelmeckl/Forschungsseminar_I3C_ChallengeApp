@@ -49,9 +49,7 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
             }
 
             //FIXME: eigentlich sollte das im viewmodel passieren und nicht im Adapter
-            // -> schlechte Performance und keine saubere Trennung von View und Logic!
-
-            //TODO: die liste blinkt ständig wenn neue items geladen werden! -> nur einmal laden?
+            // -> schlechte Performance und keine saubere Trennung von View und Logic! (aber funktioniert im Moment so)
 
             // get the creator of this challenge on the IO scope
             CoroutineScope(Dispatchers.IO).launch {

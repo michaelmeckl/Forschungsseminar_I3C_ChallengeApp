@@ -224,7 +224,6 @@ class OverviewFragment : Fragment() {
             icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
 
             daily_challenge.setOnClickListener {
-                //TODO ?
                 Toast.makeText(
                     requireActivity(),
                     "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",

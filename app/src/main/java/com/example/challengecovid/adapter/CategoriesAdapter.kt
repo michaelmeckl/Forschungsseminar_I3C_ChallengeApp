@@ -66,7 +66,7 @@ class CategoriesAdapter(private val clickListener: CategoryClickListener) :
             itemView.item_title.text = data.title
             //itemView.item_description.text = data.description
 
-            //TODO: this should be in utils as its used quite often!
+            //this should be in utils as its used quite often!
             val iconIdentifier =
                 itemView.context.resources.getIdentifier(data.categoryIcon, "drawable", itemView.context.packageName)
             itemView.item_image.setImageResource(iconIdentifier)

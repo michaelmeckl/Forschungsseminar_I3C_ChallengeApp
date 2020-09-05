@@ -2,11 +2,12 @@ package com.example.challengecovid.model
 
 import java.util.UUID
 
+/*
 enum class Gender {
     MALE,
     FEMALE,
     DIVERS
-}
+}*/
 
 /*
 //Room Model
