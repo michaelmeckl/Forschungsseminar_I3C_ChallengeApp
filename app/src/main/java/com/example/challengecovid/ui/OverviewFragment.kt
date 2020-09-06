@@ -45,13 +45,18 @@ class OverviewFragment : Fragment() {
 
     private lateinit var _currentUser: User
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
+        overviewViewModel =
+            getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
         profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
 
 
@@ -128,12 +133,16 @@ class OverviewFragment : Fragment() {
         val currentDay = Calendar.DAY_OF_MONTH
 
         val sharedPrefs =
-            requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
         // day of month starts with 1 so 0 is a good default to make sure it works the first time as well
         val lastDay = sharedPrefs?.getInt(Constants.PREFS_LAST_DAY, 0) ?: 0
 
         // get the id of the last daily challenge the day before (or null if the first time)
-        val lastDailyChallengeId = sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
+        val lastDailyChallengeId =
+            sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
 
         if (currentDay > lastDay) {
             sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY, currentDay).apply()
@@ -179,7 +188,10 @@ class OverviewFragment : Fragment() {
             return
         }
 
-        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
 
         if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, true)) {
             // this is the first time this user has ticked the 'completed' button
@@ -187,7 +199,8 @@ class OverviewFragment : Fragment() {
                 .setTitle("Challenge abschließen")
                 .setMessage("Hier kannst du diese Challenge als \"erledigt\" markieren und dafür Erfahrungspunkte bekommen. Beachte aber, dass du diese Entscheidung nicht mehr rückgängig machen kannst für den Rest des Tages! Möchtest du diese Challenge als abgeschlossen markieren?")
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false).apply()
+                    sharedPrefs.edit()
+                        .putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false).apply()
                     showChallengeCompletedDialog(challenge)
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
@@ -215,9 +228,11 @@ class OverviewFragment : Fragment() {
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
-            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
+            val challengeList: MutableList<BaseChallenge> =
+                (it ?: return@observe) as MutableList<BaseChallenge>
 
-            val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
+            val dailyChallenge =
+                challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
 
             dailyChallenge?.let {
                 // remove the daily challenge from the challenge list so it won't be shown twice
@@ -240,11 +255,21 @@ class OverviewFragment : Fragment() {
             icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
 
             daily_challenge.setOnClickListener {
-                Toast.makeText(
-                    requireActivity(),
-                    "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
-                    Toast.LENGTH_LONG
-                ).show()
+                if (dailyChallenge != null) {
+                    if (!dailyChallenge.completed) {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
             }
             icon_challenge.setOnClickListener {
                 if (dailyChallenge != null) {
@@ -257,7 +282,7 @@ class OverviewFragment : Fragment() {
         })
 
 
-        profileViewModel.currentUser.observe(viewLifecycleOwner, {it ->
+        profileViewModel.currentUser.observe(viewLifecycleOwner, { it ->
             it?.let {
                 _currentUser = it
             }
@@ -302,7 +327,8 @@ class OverviewFragment : Fragment() {
 
     private fun setupSwipeListener() {
 
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -311,7 +337,7 @@ class OverviewFragment : Fragment() {
                 return false
             }
 
-//          FIXME: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
+            //          FIXME: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
@@ -333,7 +359,8 @@ class OverviewFragment : Fragment() {
                         } else {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
-                        Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
+                            .show()
                     }
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
@@ -361,7 +388,11 @@ class OverviewFragment : Fragment() {
         val currentLevel = user.level
 
         if (currentLevel >= levelsMap.size) {
-            Toast.makeText(requireActivity(), "Du hast das maximale Level bereits erreicht!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireActivity(),
+                "Du hast das maximale Level bereits erreicht!",
+                Toast.LENGTH_LONG
+            ).show()
             return
         }
 
