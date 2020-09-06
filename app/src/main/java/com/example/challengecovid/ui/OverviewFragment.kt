@@ -222,10 +222,19 @@ class OverviewFragment : Fragment() {
             dailyChallenge?.let {
                 // remove the daily challenge from the challenge list so it won't be shown twice
                 challengeList.remove(dailyChallenge)
-
                 name_challenge.text = dailyChallenge.title
                 xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
-                description_challenge.text = dailyChallenge.description
+
+                if (!dailyChallenge.completed) {
+                    description_challenge.text = dailyChallenge.description
+                    icon_challenge.visibility = View.VISIBLE
+                    icon_challenge_completed.visibility = View.GONE
+                } else {
+                    description_challenge.visibility = View.GONE
+                    description_challenge_completed.visibility = View.VISIBLE
+                    icon_challenge.visibility = View.INVISIBLE
+                    icon_challenge_completed.visibility = View.VISIBLE
+                }
             }
 
             icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
@@ -236,6 +245,11 @@ class OverviewFragment : Fragment() {
                     "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+            icon_challenge.setOnClickListener {
+                if (dailyChallenge != null) {
+                    setChallengeCompleted(dailyChallenge)
+                }
             }
 
             // update the list in the adapter with the new challenge list
