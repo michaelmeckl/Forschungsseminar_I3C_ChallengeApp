@@ -27,9 +27,6 @@ import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.inappmessaging.ktx.inAppMessaging
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.challenge_item.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_content.*
@@ -260,12 +257,6 @@ class OverviewFragment : Fragment() {
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 snackbar.show()
 
-                /*
-                YoYo.with(Techniques.Tada)
-                    .duration(200)
-                    .playOn(daily_challenge_title)
-                */
-
                 // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
                 overviewViewModel.doneShowingSnackbar()
             }
@@ -358,14 +349,22 @@ class OverviewFragment : Fragment() {
             //Levelup (reset points)
             currentPoints -= currentMaxPoints
 
-            // send a firebase in-app-message to the user to congratulate him!
-            //TODO: does this work only 1 time per day ? -> Test more
-            Firebase.analytics.logEvent("level_up", null)
-            Firebase.inAppMessaging.triggerEvent("level_up")
+            // send a firebase in-app-message to the user to congratulate him! //TODO works only once a day unfortunately
+            //Firebase.analytics.logEvent("level_up", null)
+            //Firebase.inAppMessaging.triggerEvent("level_up")
 
             //TODO: unlock icon methode
             // TODO: show popup
-            //  or show snackbar attached to android.R.id.content ?
+            //  or show snackbar attached to android.R.id.content, like:
+            /*
+            val snackbar = Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                    "Du bist ein Level aufgestiegen! Mach weiter so!",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
+             */
 
             profileViewModel.updateUserPoints(currentPoints)
             profileViewModel.updateUserLevel(currentLevel + 1)
