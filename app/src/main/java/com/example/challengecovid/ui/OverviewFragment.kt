@@ -206,6 +206,8 @@ class OverviewFragment : Fragment() {
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
         } else {
+            val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+            sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
             overviewViewModel.setChallengeCompleted(challenge)
             //Timber.d(profileViewModel.currentUser.value.toString())
 
@@ -398,6 +400,11 @@ class OverviewFragment : Fragment() {
 
         val currentMaxPoints = levelsMap[currentLevel] ?: return
         currentPoints += challenge.difficulty.points
+
+        // save total amount of xp for achievements in profile fragment
+        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val prevTotalXPValue = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0)
+        sharedPrefs.edit().putInt(Constants.PREFS_COUNT_TOTAL_XP, prevTotalXPValue + challenge.difficulty.points).apply()
 
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)

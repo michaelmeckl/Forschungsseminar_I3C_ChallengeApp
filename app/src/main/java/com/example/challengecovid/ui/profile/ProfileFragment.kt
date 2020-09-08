@@ -3,12 +3,14 @@ package com.example.challengecovid.ui.profile
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import com.example.challengecovid.App
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.viewmodels.ProfileViewModel
@@ -68,6 +70,13 @@ class ProfileFragment : Fragment() {
             //remove this fragment from the backstack to navigate back
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
+
+        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+
+        // Set achievement values in profile fragment
+        achievements_total_completed_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0).toString()
+        achievements_xp_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0).toString()
+        achievements_total_created_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0).toString()
     }
 
     private fun observeViewModel() {

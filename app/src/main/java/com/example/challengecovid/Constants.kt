@@ -10,4 +10,7 @@ object Constants {
     const val PREFS_FIRST_TIME_CHALLENGE_COMPLETED = "FirstTimeChallengeCompleted"
     const val PREFS_FIRST_TIME_CHALLENGE_PUBLISHED = "FirstTimeChallengePublished"
     const val PREFS_IS_CHALLENGE_BY_THIS_USER = "IsChallengeByThisUser"
+    const val PREFS_COUNT_TOTAL_XP = "CountTotalXP"
+    const val PREFS_COUNT_COMPLETED_CHALLENGES = "CountCompletedChallenges"
+    const val PREFS_COUNT_CREATED_CHALLENGES = "CountCreatedChallenges"
 }
