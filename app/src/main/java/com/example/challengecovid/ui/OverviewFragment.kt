@@ -127,6 +127,31 @@ class OverviewFragment : Fragment() {
         }
     }
 
+    private fun checkChallengeCompletedFirstTimeThisDay() {
+
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
+
+        val currentDay = Calendar.DAY_OF_MONTH
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, 0)
+        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
+
+        if(lastDay == currentDay - 1){
+            // CONSECUTIVE DAYS
+            counterOfConsecutiveDays += 1
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)?.apply()
+        } else {
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)?.apply()
+        }
+
+
+    }
+
     private fun checkFirstTimeThisDay() {
         //TODO: da die Studie im gleichen Monat durchgeführt wird, ist das ausreichend!
         // Sonst müsste man außerdem noch Monat und Jahr vergleichen!
@@ -208,6 +233,9 @@ class OverviewFragment : Fragment() {
         } else {
             val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
             sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+
+            checkChallengeCompletedFirstTimeThisDay()
+
             overviewViewModel.setChallengeCompleted(challenge)
             //Timber.d(profileViewModel.currentUser.value.toString())
 
@@ -402,9 +430,15 @@ class OverviewFragment : Fragment() {
         currentPoints += challenge.difficulty.points
 
         // save total amount of xp for achievements in profile fragment
-        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
         val prevTotalXPValue = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0)
-        sharedPrefs.edit().putInt(Constants.PREFS_COUNT_TOTAL_XP, prevTotalXPValue + challenge.difficulty.points).apply()
+        sharedPrefs.edit().putInt(
+            Constants.PREFS_COUNT_TOTAL_XP,
+            prevTotalXPValue + challenge.difficulty.points
+        ).apply()
 
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)
