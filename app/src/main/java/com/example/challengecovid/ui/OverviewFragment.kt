@@ -478,15 +478,17 @@ class OverviewFragment : Fragment() {
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)
             currentPoints -= currentMaxPoints
+            val toast = Toast.makeText(requireActivity(), "Glückwunsch, du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
+            toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+            toast.view.setPadding(8, 4, 8, 4)
+            toast.show()
+
 
             // send a firebase in-app-message to the user to congratulate him!
-            //TODO: does this work only 1 time per day ? -> Test more
-            Firebase.analytics.logEvent("level_up", null)
-            Firebase.inAppMessaging.triggerEvent("level_up")
+//            Firebase.analytics.logEvent("level_up", null)
+//            Firebase.inAppMessaging.triggerEvent("level_up")
 
             //TODO: unlock icon methode
-            // TODO: show popup
-            //  or show snackbar attached to android.R.id.content ?
 
             profileViewModel.updateUserPoints(currentPoints)
             profileViewModel.updateUserLevel(currentLevel + 1)
