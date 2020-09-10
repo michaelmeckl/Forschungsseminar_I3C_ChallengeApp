@@ -265,6 +265,11 @@ class UserRepository {
 
 
     fun updateActiveChallenge(challenge: BaseChallenge, userId: String) {
+        // Without this, daily challenges would keep their completed = true indefinitely once completed
+        if (challenge.type == ChallengeType.DAILY_CHALLENGE) {
+            challenge.completed = false
+        }
+
         val ref = userCollection
             .document(userId)
             .collection("activeChallenges")
