@@ -303,17 +303,25 @@ class OverviewFragment : Fragment() {
             daily_challenge.setOnClickListener {
                 if (dailyChallenge != null) {
                     if (!dailyChallenge.completed) {
-                        Toast.makeText(
+                        val toast = Toast.makeText(
                             requireActivity(),
                             "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
                             Toast.LENGTH_LONG
-                        ).show()
+                        )
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
                     } else {
-                        Toast.makeText(
+                        val toast = Toast.makeText(
                             requireActivity(),
                             "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue.",
                             Toast.LENGTH_LONG
-                        ).show()
+                        )
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
                     }
                 }
             }
@@ -405,8 +413,11 @@ class OverviewFragment : Fragment() {
                         } else {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
-                        Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
-                            .show()
+                        val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
                     }
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
@@ -433,12 +444,24 @@ class OverviewFragment : Fragment() {
         var currentPoints = user.points
         val currentLevel = user.level
 
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+
         if (currentLevel >= levelsMap.size) {
-            Toast.makeText(
+
+            val toast = Toast.makeText(
                 requireActivity(),
                 "Du hast das maximale Level bereits erreicht!",
                 Toast.LENGTH_LONG
-            ).show()
+            )
+            toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+            toast.view.setPadding(8, 4, 8, 4)
+            toast.show()
+
+
             return
         }
 
@@ -446,10 +469,6 @@ class OverviewFragment : Fragment() {
         currentPoints += challenge.difficulty.points
 
         // save total amount of xp for achievements in profile fragment
-        val sharedPrefs = requireActivity().getSharedPreferences(
-            Constants.SHARED_PREFS_NAME,
-            AppCompatActivity.MODE_PRIVATE
-        )
         val prevTotalXPValue = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0)
         sharedPrefs.edit().putInt(
             Constants.PREFS_COUNT_TOTAL_XP,
