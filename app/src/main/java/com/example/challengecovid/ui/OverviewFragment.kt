@@ -94,6 +94,8 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.VISIBLE
             } else {
                 empty_recyclerview_overview.visibility = View.GONE
+                // TODO OMG Find another place to call this
+                checkIfNewDayToSetCompletedToFalse()
             }
 
             /*
@@ -127,6 +129,20 @@ class OverviewFragment : Fragment() {
         }
     }
 
+    private fun checkIfNewDayToSetCompletedToFalse() {
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
+        val currentDay = Calendar.DAY_OF_MONTH
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
+        if (currentDay > lastDay) {
+            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
+            overviewViewModel.setAllChallengesToNotCompleted(overviewAdapter.activeChallenges)
+        }
+    }
+
     private fun checkChallengeCompletedFirstTimeThisDay() {
 
         val sharedPrefs =
@@ -139,7 +155,7 @@ class OverviewFragment : Fragment() {
         val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, 0)
         var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
 
-        if(lastDay == currentDay - 1){
+        if (lastDay == currentDay - 1) {
             // CONSECUTIVE DAYS
             counterOfConsecutiveDays += 1
             sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()

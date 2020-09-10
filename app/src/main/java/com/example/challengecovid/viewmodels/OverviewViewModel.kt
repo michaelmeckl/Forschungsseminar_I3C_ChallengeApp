@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
+import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
@@ -50,14 +51,21 @@ class OverviewViewModel(
     lateinit var allChallenges: LiveData<List<BaseChallenge>>
 
     init {
-        val sharedPrefs = application.getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = application.getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
         //Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
         Timber.d(currentUserId)
 
         if (currentUserId === "") {
-            Toast.makeText(application, application.getString(R.string.wrong_user_id_error), Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                application,
+                application.getString(R.string.wrong_user_id_error),
+                Toast.LENGTH_LONG
+            ).show()
         } else {
             allChallenges = userRepository.getAllChallengesForUser(currentUserId)
         }
@@ -87,13 +95,13 @@ class OverviewViewModel(
     /**
      * Add a new challenge to the database.
     fun addNewChallenge(userChallenge: UserChallenge) {
-        //launch on the main thread because the result affects the UI
-        uiScope.launch {
-            // insert the new challenge on a separate I/O thread that is optimized for room interaction
-            // to avoid blocking the main / UI thread
-            withContext(Dispatchers.IO) {
-            challengeRepository.saveUserChallenge(userChallenge)
-        }
+    //launch on the main thread because the result affects the UI
+    uiScope.launch {
+    // insert the new challenge on a separate I/O thread that is optimized for room interaction
+    // to avoid blocking the main / UI thread
+    withContext(Dispatchers.IO) {
+    challengeRepository.saveUserChallenge(userChallenge)
+    }
     }
      */
 
@@ -141,16 +149,34 @@ class OverviewViewModel(
     //TODO: use delete instead when completed?
     fun setChallengeCompleted(challenge: BaseChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            challengeRepository.updateCompletionStatus(challenge.challengeId, challenge.type, completed = true)
+            challengeRepository.updateCompletionStatus(
+                challenge.challengeId,
+                challenge.type,
+                completed = true
+            )
             challenge.completed = true
             userRepository.addActiveChallenge(challenge, currentUserId)
         }
+    }
+
+    fun setAllChallengesToNotCompleted(challengeList: List<BaseChallenge>) = uiScope.launch {
+        withContext(Dispatchers.IO) {
+            for (challenge in challengeList) {
+//            val challengeSnapshot = userChallengeCollection.document(challenge.challengeId).get().await()
+                if (challenge.completed) {
+                    challenge.completed = false
+                    userRepository.addActiveChallenge(challenge, currentUserId)
+                }
+            }
+        }
+
 
     }
 
     fun getRandomDailyChallenge(oldDailyChallenge: String?) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            val randomChallenge = challengeRepository.getRandomChallenge(oldDailyChallenge) ?: return@withContext
+            val randomChallenge =
+                challengeRepository.getRandomChallenge(oldDailyChallenge) ?: return@withContext
             userRepository.updateActiveChallenge(randomChallenge, currentUserId)
         }
         _showDailyChallengeEvent.value = true

@@ -239,6 +239,20 @@ class UserRepository {
             }
     }
 
+// TODO: Für bessere performance das da implementieren mit batch
+//    fun addActiveChallengeBulk(challengeList: List<BaseChallenge>, userId: String) {
+//        userCollection.document(userId)
+//            .collection("activeChallenges")
+//            .document(challenge.challengeId)
+//            .set(challenge)
+//            .addOnSuccessListener {
+//                Timber.d("Challenge erfolgreich angenommen!")
+//            }.addOnFailureListener { e ->
+//                Timber.d("Fehler beim Annehmen der Challenge: $e")
+//            }
+//    }
+
+
     //UPDATE
     fun updateUser(user: User) {
         val oldUserRef = userCollection.document(user.userId)
