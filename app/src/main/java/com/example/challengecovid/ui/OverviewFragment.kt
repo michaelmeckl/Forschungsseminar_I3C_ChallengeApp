@@ -478,10 +478,38 @@ class OverviewFragment : Fragment() {
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)
             currentPoints -= currentMaxPoints
-            val toast = Toast.makeText(requireActivity(), "Glückwunsch, du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
-            toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-            toast.view.setPadding(8, 4, 8, 4)
-            toast.show()
+
+            // Inform user that he unlocked new avatars/chars
+            when {
+                currentLevel + 1 == 5 -> {
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
+                        Toast.LENGTH_LONG
+                    )
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+
+                }
+                currentLevel + 1 == 10 -> {
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
+                        Toast.LENGTH_LONG
+                    )
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+                }
+                else -> {
+                    val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+                }
+            }
+
 
 
             // send a firebase in-app-message to the user to congratulate him!
