@@ -285,11 +285,11 @@
                 android:id="@+id/challenge_detail_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:layout_marginTop="32dp"
-                android:backgroundTint="@android:color/holo_red_light"
+                android:backgroundTint="@color/errorLight"
                 android:text="Challenge löschen"
-                android:textColor="@color/design_default_color_surface" />
+                android:textColor="@color/design_default_color_surface"
+                app:icon="@drawable/ic_delete" />
 
         </LinearLayout>
 
@@ -301,4 +301,5 @@
             android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
+
 </androidx.core.widget.NestedScrollView>
