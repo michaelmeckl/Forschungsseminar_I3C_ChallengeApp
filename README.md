@@ -7,8 +7,8 @@ In der Smartphone-Anwendung werden jeden Tag verschiedene Challenges für den Nu
 [Offizielle Coding Conventions für Kotlin](https://kotlinlang.org/docs/reference/coding-conventions.html "Coding Conventions for Kotlin")  
 [Offizieller Styleguide für Android-Programmierung mit Kotlin](https://developer.android.com/kotlin/style-guide "Styleguide for Android Programming with Kotlin")
 
-## Verwendete Bibliotheken:
-* Android Jetpack
+## Verwendete Bibliotheken und Komponenten:
+* Android Jetpack (Navigation Component, Livedata, Viewmodel, ...) und MVVM - Architektur
 * Firebase Android SDK
 
 ## Empfohlene Android Architektur:    
