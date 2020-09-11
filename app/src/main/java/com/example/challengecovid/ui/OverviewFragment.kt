@@ -44,6 +44,8 @@ class OverviewFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var _currentUser: User
+    private lateinit var _challengeList: List<BaseChallenge>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,9 +139,9 @@ class OverviewFragment : Fragment() {
             )
         val currentDay = Calendar.DAY_OF_MONTH
         val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
-        if (currentDay > lastDay) {
+        if (currentDay > lastDay && ::_challengeList.isInitialized) {
             sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
-            overviewViewModel.setAllChallengesToNotCompleted(overviewAdapter.activeChallenges)
+            overviewViewModel.setAllChallengesToNotCompleted(_challengeList)
         }
     }
 
@@ -276,6 +278,7 @@ class OverviewFragment : Fragment() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
             val challengeList: MutableList<BaseChallenge> =
                 (it ?: return@observe) as MutableList<BaseChallenge>
+            _challengeList = challengeList
 
             val dailyChallenge =
                 challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
