@@ -264,6 +264,10 @@ class OverviewFragment : Fragment() {
             .setTitle("Challenge abgeschlossen!")
             .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen dann erneut abschließen.")
             .setPositiveButton(android.R.string.ok) { _, _ ->
+                val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+                val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+                checkChallengeCompletedFirstTimeThisDay()
                 overviewViewModel.setChallengeCompleted(challenge)
                 updatePointsAndLevel(_currentUser, challenge)
             }
