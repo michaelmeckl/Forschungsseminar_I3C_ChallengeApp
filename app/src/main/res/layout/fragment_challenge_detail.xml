@@ -95,6 +95,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/challenge_detail_title_edit"
+                android:hint="Neuer Titel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -127,6 +128,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/challenge_detail_description_edit"
+                android:hint="Neue Beschreibung"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -222,7 +224,6 @@
 
         </RelativeLayout>
 
-        <!-- TODO das switch layout verschwindet irgendwie wenn handy gedreht wird?? -->
         <!-- Switch Layout -->
         <RelativeLayout
             android:id="@+id/switch_layout"
