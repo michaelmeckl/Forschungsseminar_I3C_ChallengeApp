@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+<androidx.cardview.widget.CardView
     android:id="@+id/cardview"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     card_view:cardCornerRadius="@dimen/card_view_corner_radius"
     card_view:cardElevation="4dp"
     card_view:cardUseCompatPadding="true">
@@ -62,7 +66,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Challenge Title" />
+                android:singleLine="true"
+                android:layout_marginHorizontal="32dp"
+                tools:text="Challenge Title jknjf adksfj kjklasdfj kjsdkj fkljsdklf " />
 
             <ImageButton
                 android:id="@+id/challenge_detail_start_editing"
@@ -231,7 +237,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:layout_centerHorizontal="true"
                 android:text="Challenge veröffentlichen:"/>
 
@@ -273,6 +279,16 @@
 
         </RelativeLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/challenge_detail_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:layout_marginTop="32dp"
+            android:text="Challenge löschen"
+            android:textColor="@color/design_default_color_surface" />
+
     </LinearLayout>
 
     <ProgressBar
@@ -283,3 +299,4 @@
         android:visibility="gone" />
 
 </androidx.cardview.widget.CardView>
+</androidx.core.widget.NestedScrollView>
