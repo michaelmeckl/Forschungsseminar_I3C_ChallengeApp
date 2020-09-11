@@ -63,13 +63,32 @@
 
             </RelativeLayout>
 
+            <ProgressBar
+                android:id="@+id/level_progressbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/profile_header_section_top"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/level_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/level_progressbar"
+                android:layout_centerHorizontal="true"
+                android:text="%1$d von %2$d"
+                android:textSize="15sp"
+                tools:text="Du hast das maximale Level erreicht!" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/profile_change_username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/profile_header_section_top"
+                android:layout_below="@id/level_progress"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginVertical="16dp"
                 android:layout_marginTop="25dp">

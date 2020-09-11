@@ -535,7 +535,7 @@ class OverviewFragment : Fragment() {
 
     companion object {
         // map with necessary xp for levelup per level
-        private val levelsMap = hashMapOf(
+        val levelsMap = hashMapOf(
             1 to 15,
             2 to 20,
             3 to 25,

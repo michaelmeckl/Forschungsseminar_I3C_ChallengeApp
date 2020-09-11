@@ -13,6 +13,7 @@ import com.example.challengecovid.App
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.ui.OverviewFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -22,6 +23,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
+    private val levelsHashMap = OverviewFragment.levelsMap
+    private val MAX_LEVEL = 20
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -89,6 +92,19 @@ class ProfileFragment : Fragment() {
             profile_name.text = it.username
             profile_level.text = getString(R.string.level, it.level)
 
+//            level_progress.text = getString(R.string.levelProgress,it.points,levelsHashMap[it.level])
+            if (it.level == MAX_LEVEL) {
+                level_progressbar.max = 100
+                level_progressbar.progress = 100
+                level_progress.text = "Du hast das maximale Level erreicht!"
+            } else {
+                if (levelsHashMap[it.level] != null) {
+                    val remainingXPForLevelUp = levelsHashMap[it.level]?.minus(it.points)
+                    level_progressbar.max = levelsHashMap[it.level]!!
+                    level_progressbar.progress = it.points
+                    level_progress.text = "Noch $remainingXPForLevelUp XP bis Level ${it.level + 1}"
+                }
+            }
             val iconIdentifier =
                 requireActivity().resources.getIdentifier(it.userIcon, "drawable", requireActivity().packageName)
             profile_picture.setImageResource(iconIdentifier)
