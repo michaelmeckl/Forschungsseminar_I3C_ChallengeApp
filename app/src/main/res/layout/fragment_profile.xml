@@ -97,9 +97,9 @@
                     android:id="@+id/change_name_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Neuer Name:"
+                    android:hint="Namen ändern: "
                     android:inputType="textPersonName"
-                    android:maxLength="30"
+                    android:maxLength="25"
                     android:textAlignment="center" />
             </com.google.android.material.textfield.TextInputLayout>
 

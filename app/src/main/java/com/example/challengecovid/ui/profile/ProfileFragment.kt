@@ -86,7 +86,7 @@ class ProfileFragment : Fragment() {
         profileViewModel.currentUser.observe(viewLifecycleOwner, {
 
             // set only the hint instead of the text to prevent two way binding (which wouldn't allow to edit the field anymore)
-            change_name_field.hint = it.username
+            //change_name_field.hint = it.username
 
             profile_name.text = it.username
             profile_level.text = getString(R.string.level, it.level)
