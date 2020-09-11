@@ -27,9 +27,6 @@ import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.inappmessaging.ktx.inAppMessaging
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.challenge_item.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_content.*
@@ -452,31 +449,34 @@ class OverviewFragment : Fragment() {
             AppCompatActivity.MODE_PRIVATE
         )
 
-
-        if (currentLevel >= levelsMap.size) {
-
-            val toast = Toast.makeText(
-                requireActivity(),
-                "Du hast das maximale Level bereits erreicht!",
-                Toast.LENGTH_LONG
-            )
-            toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-            toast.view.setPadding(8, 4, 8, 4)
-            toast.show()
-
-
-            return
-        }
-
-        val currentMaxPoints = levelsMap[currentLevel] ?: return
-        currentPoints += challenge.difficulty.points
-
         // save total amount of xp for achievements in profile fragment
         val prevTotalXPValue = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0)
         sharedPrefs.edit().putInt(
             Constants.PREFS_COUNT_TOTAL_XP,
             prevTotalXPValue + challenge.difficulty.points
         ).apply()
+
+
+
+        if (currentLevel >= levelsMap.size) {
+            if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, true)) {
+                // this is the first time this user has reached max level
+                val toast = Toast.makeText(
+                    requireActivity(),
+                    "Du hast das maximale Level erreicht!",
+                    Toast.LENGTH_LONG
+                )
+                toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                toast.view.setPadding(8, 4, 8, 4)
+                toast.show()
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
+            }
+            return
+        }
+
+        val currentMaxPoints = levelsMap[currentLevel] ?: return
+        currentPoints += challenge.difficulty.points
+
 
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)
