@@ -101,12 +101,20 @@ class CategoryDetailFragment : Fragment() {
         val userId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
         
         if (userId == "") {
-            Toast.makeText(requireActivity(), R.string.wrong_user_id_error, Toast.LENGTH_SHORT).show()
+            val toast = Toast.makeText(requireActivity(), R.string.wrong_user_id_error, Toast.LENGTH_SHORT)
+            toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+            toast.view.setPadding(8, 4, 8, 4)
+            toast.show()
+
             return
         }
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
-        Toast.makeText(requireActivity(), "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT).show()
+        val toast = Toast.makeText(requireActivity(), "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT)
+        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+        toast.view.setPadding(8, 4, 8, 4)
+        toast.show()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

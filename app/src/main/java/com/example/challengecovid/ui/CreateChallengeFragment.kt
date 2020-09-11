@@ -133,6 +133,11 @@ class CreateChallengeFragment : DialogFragment(), AdapterView.OnItemSelectedList
         )
         sharedPrefs?.edit()?.putBoolean(Constants.PREFS_IS_CHALLENGE_BY_THIS_USER + newChallenge.challengeId, true)?.apply()
 
+        val prevCreatedChallenges = sharedPrefs?.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0)
+        if (prevCreatedChallenges != null) {
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, prevCreatedChallenges + 1)?.apply()
+        }
+
         Timber.d(newChallenge.toString())
         overviewViewModel.addNewChallenge(newChallenge)
     }

@@ -239,6 +239,20 @@ class UserRepository {
             }
     }
 
+// TODO: Für bessere performance das da implementieren mit batch
+//    fun addActiveChallengeBulk(challengeList: List<BaseChallenge>, userId: String) {
+//        userCollection.document(userId)
+//            .collection("activeChallenges")
+//            .document(challenge.challengeId)
+//            .set(challenge)
+//            .addOnSuccessListener {
+//                Timber.d("Challenge erfolgreich angenommen!")
+//            }.addOnFailureListener { e ->
+//                Timber.d("Fehler beim Annehmen der Challenge: $e")
+//            }
+//    }
+
+
     //UPDATE
     fun updateUser(user: User) {
         val oldUserRef = userCollection.document(user.userId)
@@ -251,6 +265,11 @@ class UserRepository {
 
 
     fun updateActiveChallenge(challenge: BaseChallenge, userId: String) {
+        // Without this, daily challenges would keep their completed = true indefinitely once completed
+        if (challenge.type == ChallengeType.DAILY_CHALLENGE) {
+            challenge.completed = false
+        }
+
         val ref = userCollection
             .document(userId)
             .collection("activeChallenges")
@@ -305,6 +324,16 @@ class UserRepository {
         val challengeRef = userCollection.document(userId)
             .collection("activeChallenges")
             .document(challenge.challengeId)
+
+        challengeRef.update("hidden", true)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }
+    }
+
+    fun hideActiveChallengeWithID(challengeId: String, userId: String) {
+        val challengeRef = userCollection.document(userId)
+            .collection("activeChallenges")
+            .document(challengeId)
 
         challengeRef.update("hidden", true)
             .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }

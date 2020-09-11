@@ -14,12 +14,14 @@ import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.ChallengeType
-import com.example.challengecovid.model.Difficulty
-import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.model.*
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 //wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
@@ -30,6 +32,9 @@ class ChallengeDetailFragment : Fragment() {
     private val arguments: ChallengeDetailFragmentArgs by navArgs()
 
     private lateinit var overviewViewModel: OverviewViewModel
+
+    private var challengeDetailJob = SupervisorJob()
+    private val challengeDetailScope = CoroutineScope(Dispatchers.Main + challengeDetailJob)
 
     private lateinit var sharedPrefs: SharedPreferences
 
@@ -42,6 +47,8 @@ class ChallengeDetailFragment : Fragment() {
     private var completed: Boolean = false
 
     private var isEditable: Boolean = false
+
+    private lateinit var userChallenge: UserChallenge
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val userRepository = RepositoryController.getUserRepository()
@@ -62,6 +69,12 @@ class ChallengeDetailFragment : Fragment() {
         difficulty = arguments.difficulty
         type = arguments.type
         completed = arguments.completed
+
+        challengeDetailScope.launch {
+            if (type == ChallengeType.USER_CHALLENGE){
+                userChallenge = overviewViewModel.getUserChallenge(id)!!
+            }
+        }
 
         setupInitialUI()
 
@@ -87,6 +100,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
                 switch_layout,
+                challenge_detail_delete,
                 visible = false
             )
             setVisibility(
@@ -97,12 +111,9 @@ class ChallengeDetailFragment : Fragment() {
                 visible = true
             )
 
-            challenge_detail_title_edit.hint = title
-            challenge_detail_description_edit.hint = description
+            challenge_detail_title_edit.setText(title)
+            challenge_detail_description_edit.setText(description)
 
-            if (description.isBlank()) {
-                challenge_detail_description_edit.hint = "Beschreibung"
-            }
 
             setVisibility(challenge_detail_spinner_difficulties_edit, visible = true)
             when (difficulty) {
@@ -121,6 +132,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
                 switch_layout,
+                challenge_detail_delete,
                 visible = true
             )
 
@@ -134,14 +146,28 @@ class ChallengeDetailFragment : Fragment() {
                 visible = false
             )
 
-            if (description.isBlank()) {
-                setVisibility(challenge_detail_description, visible = false)
-            }
         }
 
         challenge_detail_button_submit_edit.setOnClickListener {
             saveUpdatedChallenge()
         }
+
+        challenge_detail_delete.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Willst du diese Challenge wirklich löschen?")
+                .setPositiveButton("Löschen") { _, _ ->
+                    if (type == ChallengeType.SYSTEM_CHALLENGE) {
+                        overviewViewModel.hideChallengeWithID(id)
+                        requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+                    } else {
+                        overviewViewModel.removeChallenge(id)
+                        requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+                    }
+                }.setNegativeButton("Abbrechen") {
+                    _, _ ->
+                    return@setNegativeButton
+                }.show()
+            }
 
     }
 
@@ -182,7 +208,6 @@ class ChallengeDetailFragment : Fragment() {
         if (firstTimeChallengePublished) {
             sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_PUBLISHED, false).apply()
 
-            //TODO: nur einmal anzeigen?? oder vielleicht besser jedesmal wenn er versucht sie zu bearbeiten!
             AlertDialog.Builder(requireContext())
                 .setTitle("Hinweis")
                 .setMessage("Eine veröffentlichte Challenge kann nicht bearbeitet werden. Wenn du die Challenge bearbeiten willst, musst du sie erst wieder auf \"Privat\" setzen")
@@ -217,16 +242,12 @@ class ChallengeDetailFragment : Fragment() {
         Handler().postDelayed(this::switchStatus, 2000)
     }
 
-    //FIXME: lieber den Nutzer die felder bearbeiten lassen, die er auch bearbeiten will, statt alles wieder leer zu setzen!!
-    // und auf keinen Fall verlangen dass der Titel neu eingegeben werden muss -> miese UX
-    // stattdessen überprüfen, was sich verändert hat (vergleich if alterTitel != neuer Titel) und nur das updaten
     private fun saveUpdatedChallenge() {
         val newTitle = challenge_detail_title_edit.text.toString()
-        /*
         if (newTitle.isBlank()) {
             layout_challenge_detail_title_edit.error = "Name erforderlich"
-            return@setOnClickListener
-        }*/
+            return
+        }
         val newDescription = challenge_detail_description_edit.text.toString()
         val difficulties = resources.getStringArray(R.array.difficulties_challenges)
         val newDifficulty: Difficulty = when (challenge_detail_spinner_difficulties_edit.selectedItem) {
@@ -236,23 +257,19 @@ class ChallengeDetailFragment : Fragment() {
             else -> Difficulty.LEICHT
         }
 
-        val userid = sharedPrefs.getString(Constants.PREFS_USER_ID, "") ?: ""
+        if (userChallenge.title != newTitle) {
+            userChallenge.title = newTitle
+        }
+        if (userChallenge.description != newDescription) {
+            userChallenge.description = newDescription
+        }
+        if (userChallenge.difficulty != newDifficulty) {
+            userChallenge.difficulty = newDifficulty
+        }
+//        Das wird komischerweise zurückgesetzt auf false ohne dieser Zeile
+        userChallenge.completed = completed
 
-        val newUserChallenge = UserChallenge(
-            challengeId = id,
-            title = newTitle,
-            description = newDescription,
-            difficulty = newDifficulty,
-            type = ChallengeType.USER_CHALLENGE,
-            completed = completed,
-            isPublic = false,
-            creatorId = userid
-        )
-        Timber.d("Geänderte Challenge: " + newUserChallenge.toString())
-
-        publish_switch.isChecked = false
-
-        overviewViewModel.updateChallenge(newUserChallenge)
+        overviewViewModel.updateChallenge(userChallenge)
 
         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
     }

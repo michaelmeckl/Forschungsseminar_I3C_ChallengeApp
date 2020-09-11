@@ -41,6 +41,7 @@ class OverviewFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var _currentUser: User
+    private lateinit var _challengeList: List<BaseChallenge>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
@@ -86,6 +87,8 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.VISIBLE
             } else {
                 empty_recyclerview_overview.visibility = View.GONE
+                // TODO OMG Find another place to call this
+                checkIfNewDayToSetCompletedToFalse()
             }
 
             /*
@@ -117,6 +120,45 @@ class OverviewFragment : Fragment() {
             requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(OverviewFragmentDirections.actionOverviewToCreate())
         }
+    }
+
+    private fun checkIfNewDayToSetCompletedToFalse() {
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
+        val currentDay = Calendar.DAY_OF_MONTH
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
+        if (currentDay > lastDay && ::_challengeList.isInitialized) {
+            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
+            overviewViewModel.setAllChallengesToNotCompleted(_challengeList)
+        }
+    }
+
+    private fun checkChallengeCompletedFirstTimeThisDay() {
+
+        val sharedPrefs =
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
+
+        val currentDay = Calendar.DAY_OF_MONTH
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, 0)
+        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
+
+        if (lastDay == currentDay - 1) {
+            // CONSECUTIVE DAYS
+            counterOfConsecutiveDays += 1
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)?.apply()
+        } else {
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
+            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)?.apply()
+        }
+
+
     }
 
     private fun checkFirstTimeThisDay() {
@@ -184,12 +226,18 @@ class OverviewFragment : Fragment() {
                 .setTitle("Challenge abschließen")
                 .setMessage("Hier kannst du diese Challenge als \"erledigt\" markieren und dafür Erfahrungspunkte bekommen. Beachte aber, dass du diese Entscheidung nicht mehr rückgängig machen kannst für den Rest des Tages! Möchtest du diese Challenge als abgeschlossen markieren?")
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false).apply()
+                    sharedPrefs.edit()
+                        .putBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, false).apply()
                     showChallengeCompletedDialog(challenge)
                 }
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
         } else {
+            val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+            sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+
+            checkChallengeCompletedFirstTimeThisDay()
+
             overviewViewModel.setChallengeCompleted(challenge)
             //Timber.d(profileViewModel.currentUser.value.toString())
 
@@ -203,6 +251,10 @@ class OverviewFragment : Fragment() {
             .setTitle("Challenge abgeschlossen!")
             .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen dann erneut abschließen.")
             .setPositiveButton(android.R.string.ok) { _, _ ->
+                val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+                val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+                checkChallengeCompletedFirstTimeThisDay()
                 overviewViewModel.setChallengeCompleted(challenge)
                 updatePointsAndLevel(_currentUser, challenge)
             }
@@ -212,27 +264,61 @@ class OverviewFragment : Fragment() {
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
-            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
+            val challengeList: MutableList<BaseChallenge> =
+                (it ?: return@observe) as MutableList<BaseChallenge>
+            _challengeList = challengeList
 
             val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
 
             dailyChallenge?.let {
                 // remove the daily challenge from the challenge list so it won't be shown twice
                 challengeList.remove(dailyChallenge)
-
                 name_challenge.text = dailyChallenge.title
                 xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
-                description_challenge.text = dailyChallenge.description
+
+                if (!dailyChallenge.completed) {
+                    description_challenge.text = dailyChallenge.description
+                    icon_challenge.visibility = View.VISIBLE
+                    icon_challenge_completed.visibility = View.GONE
+                } else {
+                    description_challenge.visibility = View.GONE
+                    description_challenge_completed.visibility = View.VISIBLE
+                    icon_challenge.visibility = View.INVISIBLE
+                    icon_challenge_completed.visibility = View.VISIBLE
+                }
             }
 
             icon_daily_challenge.setImageResource(R.drawable.icons8_parchment_80)
 
             daily_challenge.setOnClickListener {
-                Toast.makeText(
-                    requireActivity(),
-                    "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
-                    Toast.LENGTH_LONG
-                ).show()
+                if (dailyChallenge != null) {
+                    if (!dailyChallenge.completed) {
+                        val toast = Toast.makeText(
+                            requireActivity(),
+                            "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                            Toast.LENGTH_LONG
+                        )
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
+                    } else {
+                        val toast = Toast.makeText(
+                            requireActivity(),
+                            "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue.",
+                            Toast.LENGTH_LONG
+                        )
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
+                    }
+                }
+            }
+            icon_challenge.setOnClickListener {
+                if (dailyChallenge != null) {
+                    setChallengeCompleted(dailyChallenge)
+                }
             }
 
             // update the list in the adapter with the new challenge list
@@ -310,7 +396,11 @@ class OverviewFragment : Fragment() {
                         } else {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
-                        Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT).show()
+                        val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
+                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        toast.view.setPadding(8, 4, 8, 4)
+                        toast.show()
+
                     }
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
@@ -337,18 +427,80 @@ class OverviewFragment : Fragment() {
         var currentPoints = user.points
         val currentLevel = user.level
 
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+        // save total amount of xp for achievements in profile fragment
+        val prevTotalXPValue = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0)
+        sharedPrefs.edit().putInt(
+            Constants.PREFS_COUNT_TOTAL_XP,
+            prevTotalXPValue + challenge.difficulty.points
+        ).apply()
+
+
+
         if (currentLevel >= levelsMap.size) {
-            Toast.makeText(requireActivity(), "Du hast das maximale Level bereits erreicht!", Toast.LENGTH_LONG).show()
+            if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, true)) {
+                // this is the first time this user has reached max level
+                val toast = Toast.makeText(
+                    requireActivity(),
+                    "Du hast das maximale Level erreicht!",
+                    Toast.LENGTH_LONG
+                )
+                toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                toast.view.setPadding(8, 4, 8, 4)
+                toast.show()
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
+            }
             return
         }
 
         val currentMaxPoints = levelsMap[currentLevel] ?: return
         currentPoints += challenge.difficulty.points
 
+
         if (maxPointsReached(currentPoints, currentMaxPoints)) {
             //Levelup (reset points)
             currentPoints -= currentMaxPoints
 
+            // Inform user that he unlocked new avatars/chars
+            when {
+                currentLevel + 1 == 5 -> {
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
+                        Toast.LENGTH_LONG
+                    )
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+
+                }
+                currentLevel + 1 == 10 -> {
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
+                        Toast.LENGTH_LONG
+                    )
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+                }
+                else -> {
+                    val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+                }
+            }
+
+
+
+            // send a firebase in-app-message to the user to congratulate him!
+//            Firebase.analytics.logEvent("level_up", null)
+//            Firebase.inAppMessaging.triggerEvent("level_up")
             // send a firebase in-app-message to the user to congratulate him! //TODO works only once a day unfortunately
             //Firebase.analytics.logEvent("level_up", null)
             //Firebase.inAppMessaging.triggerEvent("level_up")
@@ -376,7 +528,7 @@ class OverviewFragment : Fragment() {
 
     companion object {
         // map with necessary xp for levelup per level
-        private val levelsMap = hashMapOf(
+        val levelsMap = hashMapOf(
             1 to 15,
             2 to 20,
             3 to 25,

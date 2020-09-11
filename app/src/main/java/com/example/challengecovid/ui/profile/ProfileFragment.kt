@@ -3,14 +3,17 @@ package com.example.challengecovid.ui.profile
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import com.example.challengecovid.App
+import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
+import com.example.challengecovid.ui.OverviewFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -20,6 +23,8 @@ import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
+    private val levelsHashMap = OverviewFragment.levelsMap
+    private val MAX_LEVEL = 20
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -68,6 +73,14 @@ class ProfileFragment : Fragment() {
             //remove this fragment from the backstack to navigate back
             requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
+
+        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+
+        // Set achievement values in profile fragment
+        achievements_total_completed_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0).toString()
+        achievements_xp_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0).toString()
+        achievements_total_created_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0).toString()
+        achievements_dailystreak_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0).toString()
     }
 
     private fun observeViewModel() {
@@ -79,6 +92,19 @@ class ProfileFragment : Fragment() {
             profile_name.text = it.username
             profile_level.text = getString(R.string.level, it.level)
 
+//            level_progress.text = getString(R.string.levelProgress,it.points,levelsHashMap[it.level])
+            if (it.level == MAX_LEVEL) {
+                level_progressbar.max = 100
+                level_progressbar.progress = 100
+                level_progress.text = "Du hast das maximale Level erreicht!"
+            } else {
+                if (levelsHashMap[it.level] != null) {
+                    val remainingXPForLevelUp = levelsHashMap[it.level]?.minus(it.points)
+                    level_progressbar.max = levelsHashMap[it.level]!!
+                    level_progressbar.progress = it.points
+                    level_progress.text = "Noch $remainingXPForLevelUp XP bis Level ${it.level + 1}"
+                }
+            }
             val iconIdentifier =
                 requireActivity().resources.getIdentifier(it.userIcon, "drawable", requireActivity().packageName)
             profile_picture.setImageResource(iconIdentifier)
