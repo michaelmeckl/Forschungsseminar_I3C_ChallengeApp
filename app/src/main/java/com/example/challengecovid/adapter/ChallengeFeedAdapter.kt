@@ -3,6 +3,8 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -14,27 +16,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener) :
-    RecyclerView.Adapter<ChallengeFeedAdapter.FeedViewHolder>() {
+    ListAdapter<UserChallenge, ChallengeFeedAdapter.FeedViewHolder>(FeedDiffCallback()) {
 
+    /*
     var publicChallenges = listOf<UserChallenge>()
         set(value) {
             field = value
             notifyDataSetChanged()
-        }
-
-    fun getChallengeAt(position: Int): UserChallenge {
-        return publicChallenges[position]
-    }
+        }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         return FeedViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.bind(publicChallenges[position], clickListener = clickListener)
+        holder.bind(getItem(position), clickListener = clickListener)
     }
-
-    override fun getItemCount() = publicChallenges.size
 
     class FeedViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -93,6 +90,17 @@ class ChallengeFeedAdapter(private val clickListener: ChallengeFeedClickListener
                 return FeedViewHolder(view)
             }
         }
+    }
+}
+
+// This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
+class FeedDiffCallback : DiffUtil.ItemCallback<UserChallenge>() {
+    override fun areItemsTheSame(oldItem: UserChallenge, newItem: UserChallenge): Boolean {
+        return oldItem.challengeId == newItem.challengeId
+    }
+
+    override fun areContentsTheSame(oldItem: UserChallenge, newItem: UserChallenge): Boolean {
+        return oldItem == newItem
     }
 }
 

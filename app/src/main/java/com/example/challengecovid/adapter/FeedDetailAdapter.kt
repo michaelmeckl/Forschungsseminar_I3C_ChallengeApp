@@ -3,12 +3,14 @@ package com.example.challengecovid.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.R
 import com.example.challengecovid.model.User
 import kotlinx.android.synthetic.main.feed_detail_user_item.view.*
 
-class FeedDetailAdapter : RecyclerView.Adapter<FeedDetailAdapter.FeedDetailViewHolder>() {
+class FeedDetailAdapter : ListAdapter<User, FeedDetailAdapter.FeedDetailViewHolder>(FeedDetailDiffCallback()) {
 
     /*
     companion object {
@@ -16,13 +18,13 @@ class FeedDetailAdapter : RecyclerView.Adapter<FeedDetailAdapter.FeedDetailViewH
         private const val ITEM_VIEW_TYPE_ITEM = 1
     }*/
 
+    /*
     var participants = listOf<User>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-
-    override fun getItemCount() = participants.size
+    */
 
     /*
     override fun getItemViewType(position: Int) = when (position) {
@@ -35,7 +37,7 @@ class FeedDetailAdapter : RecyclerView.Adapter<FeedDetailAdapter.FeedDetailViewH
     }
 
     override fun onBindViewHolder(holder: FeedDetailViewHolder, position: Int) {
-        holder.bind(participants[position])
+        holder.bind(getItem(position))
     }
 
     /*
@@ -89,4 +91,15 @@ class FeedDetailAdapter : RecyclerView.Adapter<FeedDetailAdapter.FeedDetailViewH
             }
         }
     }*/
+}
+
+// This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
+class FeedDetailDiffCallback : DiffUtil.ItemCallback<User>() {
+    override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem.userId == newItem.userId
+    }
+
+    override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+        return oldItem == newItem
+    }
 }
