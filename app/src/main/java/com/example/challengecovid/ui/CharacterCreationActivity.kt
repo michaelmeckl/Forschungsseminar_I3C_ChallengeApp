@@ -79,8 +79,8 @@ class CharacterCreationActivity : AppCompatActivity() {
     }
 
     private fun updateName() {
-        if (username_edit_field.text.toString().isNotBlank()) {
-            val username = username_edit_field.text.toString()
+        val username = username_edit_field.text.toString()
+        if (username.isNotBlank()) {
             profileViewModel.updateUserName(username)
         }
     }

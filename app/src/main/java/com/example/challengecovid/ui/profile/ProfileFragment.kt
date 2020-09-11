@@ -64,7 +64,10 @@ class ProfileFragment : Fragment() {
 
         save_changes.setOnClickListener {
             val newName = change_name_field.text.toString()
-            profileViewModel.updateUserName(newName)
+            if(newName.isNotBlank()) {
+                // only update if he has entered at least one character that is not a whitespace
+                profileViewModel.updateUserName(newName)
+            }
 
             // clear the focus of the edit field so it won't be activated the next time the user enters the profile
             change_name_field.clearFocus()
