@@ -330,6 +330,16 @@ class UserRepository {
             .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }
     }
 
+    fun hideActiveChallengeWithID(challengeId: String, userId: String) {
+        val challengeRef = userCollection.document(userId)
+            .collection("activeChallenges")
+            .document(challengeId)
+
+        challengeRef.update("hidden", true)
+            .addOnSuccessListener { Timber.tag(USER_REPO_TAG).d("Challenge successfully hidden!") }
+            .addOnFailureListener { e -> Timber.tag(USER_REPO_TAG).d("Error hiding challenge: $e") }
+    }
+
     /*
     fun getUsersWithMinLevel(level: Int) {
         db.collection("cities")

@@ -146,6 +146,10 @@ class OverviewViewModel(
         userRepository.hideActiveChallenge(challenge, currentUserId)
     }
 
+    fun hideChallengeWithID(challengeId: String) {
+        userRepository.hideActiveChallengeWithID(challengeId, currentUserId)
+    }
+
     //TODO: use delete instead when completed?
     fun setChallengeCompleted(challenge: BaseChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
@@ -157,6 +161,10 @@ class OverviewViewModel(
             challenge.completed = true
             userRepository.addActiveChallenge(challenge, currentUserId)
         }
+    }
+
+    suspend fun getUserChallenge(challengeId: String): UserChallenge? = withContext(Dispatchers.IO) {
+        return@withContext challengeRepository.getUserChallenge(challengeId)
     }
 
     fun setAllChallengesToNotCompleted(challengeList: List<BaseChallenge>) = uiScope.launch {

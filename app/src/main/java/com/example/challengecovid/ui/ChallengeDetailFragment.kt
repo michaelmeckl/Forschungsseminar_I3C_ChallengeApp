@@ -14,12 +14,14 @@ import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.ChallengeType
-import com.example.challengecovid.model.Difficulty
-import com.example.challengecovid.model.UserChallenge
+import com.example.challengecovid.model.*
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 //wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
@@ -30,6 +32,9 @@ class ChallengeDetailFragment : Fragment() {
     private val arguments: ChallengeDetailFragmentArgs by navArgs()
 
     private lateinit var overviewViewModel: OverviewViewModel
+
+    private var challengeDetailJob = SupervisorJob()
+    private val challengeDetailScope = CoroutineScope(Dispatchers.Main + challengeDetailJob)
 
     private lateinit var sharedPrefs: SharedPreferences
 
@@ -42,6 +47,8 @@ class ChallengeDetailFragment : Fragment() {
     private var completed: Boolean = false
 
     private var isEditable: Boolean = false
+
+    private lateinit var userChallenge: UserChallenge
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val userRepository = RepositoryController.getUserRepository()
@@ -62,6 +69,12 @@ class ChallengeDetailFragment : Fragment() {
         difficulty = arguments.difficulty
         type = arguments.type
         completed = arguments.completed
+
+        challengeDetailScope.launch {
+            if (type == ChallengeType.USER_CHALLENGE){
+                userChallenge = overviewViewModel.getUserChallenge(id)!!
+            }
+        }
 
         setupInitialUI()
 
@@ -87,6 +100,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
                 switch_layout,
+                challenge_detail_delete,
                 visible = false
             )
             setVisibility(
@@ -121,6 +135,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_difficulty,
                 challenge_detail_start_editing,
                 switch_layout,
+                challenge_detail_delete,
                 visible = true
             )
 
@@ -134,14 +149,28 @@ class ChallengeDetailFragment : Fragment() {
                 visible = false
             )
 
-            if (description.isBlank()) {
-                setVisibility(challenge_detail_description, visible = false)
-            }
         }
 
         challenge_detail_button_submit_edit.setOnClickListener {
             saveUpdatedChallenge()
         }
+
+        challenge_detail_delete.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Willst du diese Challenge wirklich löschen?")
+                .setPositiveButton("Löschen") { _, _ ->
+                    if (type == ChallengeType.SYSTEM_CHALLENGE) {
+                        overviewViewModel.hideChallengeWithID(id)
+                        requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+                    } else {
+                        overviewViewModel.removeChallenge(id)
+                        requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+                    }
+                }.setNegativeButton("Abbrechen") {
+                    _, _ ->
+                    return@setNegativeButton
+                }.show()
+            }
 
     }
 
