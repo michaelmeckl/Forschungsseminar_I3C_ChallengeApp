@@ -138,8 +138,8 @@ object Utils {
         AlertDialog.Builder(context)
             .setTitle(R.string.no_internet)
             .setMessage(R.string.no_internet_warning)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setPositiveButton(android.R.string.ok) { _, _ -> checkInternet(context) }
+            .setIcon(R.drawable.ic_warning_red)
+            .setPositiveButton(android.R.string.ok) { _, _ -> }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .show()
     }

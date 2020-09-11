@@ -61,8 +61,8 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val linearLayoutManager =
-            LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
+        // return early if not attached to an activity
+        val linearLayoutManager = LinearLayoutManager(activity ?: return)
         //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
 
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
@@ -98,14 +98,6 @@ class OverviewFragment : Fragment() {
                 recyclerview_overview.smoothScrollToPosition(0)
             }*/
         }
-        /*
-        // Scroll to top on new challenges
-        challengeListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                recyclerview_overview.smoothScrollToPosition(0)
-            }
-        })
-        */
 
         setupObservers()
         setupSwipeListener()
@@ -264,8 +256,7 @@ class OverviewFragment : Fragment() {
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
-            val challengeList: MutableList<BaseChallenge> =
-                (it ?: return@observe) as MutableList<BaseChallenge>
+            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
             _challengeList = challengeList
 
             val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
@@ -273,6 +264,7 @@ class OverviewFragment : Fragment() {
             dailyChallenge?.let {
                 // remove the daily challenge from the challenge list so it won't be shown twice
                 challengeList.remove(dailyChallenge)
+
                 name_challenge.text = dailyChallenge.title
                 xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
 
@@ -492,6 +484,11 @@ class OverviewFragment : Fragment() {
                     val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
+                    //TODO breite und höhe des toasts noch anpassen?
+                    /*
+                    toast.view.minimumWidth = 850
+                    toast.view.minimumHeight = 150
+                    */
                     toast.show()
                 }
             }
@@ -505,9 +502,6 @@ class OverviewFragment : Fragment() {
             //Firebase.analytics.logEvent("level_up", null)
             //Firebase.inAppMessaging.triggerEvent("level_up")
 
-            //TODO: unlock icon methode
-            // TODO: show popup
-            //  or show snackbar attached to android.R.id.content, like:
             /*
             val snackbar = Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to

@@ -24,7 +24,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
     private val levelsHashMap = OverviewFragment.levelsMap
-    private val MAX_LEVEL = 20
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -52,7 +51,7 @@ class ProfileFragment : Fragment() {
             .setDismissTextColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark))
             .setDismissStyle(Typeface.DEFAULT_BOLD)
             .setTargetTouchable(true)
-            .singleUse("abcdefghijk")    // show this showcase only once
+            .singleUse("abcdefghijk")  // show this showcase only once by providing a unique id
             .setDelay(400)
             .show()
 
@@ -98,9 +97,10 @@ class ProfileFragment : Fragment() {
                 level_progressbar.progress = 100
                 level_progress.text = "Du hast das maximale Level erreicht!"
             } else {
-                if (levelsHashMap[it.level] != null) {
-                    val remainingXPForLevelUp = levelsHashMap[it.level]?.minus(it.points)
-                    level_progressbar.max = levelsHashMap[it.level]!!
+                val xpForLevel = levelsHashMap[it.level]
+                if (xpForLevel != null) {
+                    val remainingXPForLevelUp = xpForLevel.minus(it.points)
+                    level_progressbar.max = xpForLevel
                     level_progressbar.progress = it.points
                     level_progress.text = "Noch $remainingXPForLevelUp XP bis Level ${it.level + 1}"
                 }
@@ -113,5 +113,9 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()    // don't show the main menu in this fragment!
+    }
+
+    companion object {
+        private const val MAX_LEVEL = 20
     }
 }
