@@ -43,18 +43,18 @@ class MainActivity : AppCompatActivity() {
         // setup bottom navigation with the nav controller
         bottom_nav_view.setupWithNavController(navController)
 
-        /*
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            // on every navigation check if there is an internet connection otherwise show a connection alert
+            Utils.checkInternet(this)
+
+            /*
             if (destination.id in setOf(R.id.navigation_credits, R.id.navigation_category_detail)) {
                 // remove the toolbar logo in the detail view and in the credits
                 custom_toolbar.logo = null
             } else {
                 custom_toolbar.setLogo(R.drawable.ic_coronavirus)
-            }
-        }*/
-
-        // check if there is an internet connection otherwise show a connection alert
-        Utils.checkInternet(this)
+            }*/
+        }
     }
 
     private fun setupToolbar() {

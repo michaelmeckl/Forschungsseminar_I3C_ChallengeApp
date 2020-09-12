@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengecovid.Constants
+import com.example.challengecovid.DateUtil
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
 import com.example.challengecovid.adapter.ChallengeClickListener
@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.challenge_item.*
 import kotlinx.android.synthetic.main.fragment_overview.*
 import kotlinx.android.synthetic.main.overview_content.*
 import timber.log.Timber
-import java.util.*
 
 
 class OverviewFragment : Fragment() {
@@ -41,15 +40,19 @@ class OverviewFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
 
     private lateinit var _currentUser: User
-    private lateinit var _challengeList: List<BaseChallenge>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val root = inflater.inflate(R.layout.fragment_overview, container, false)
 
         val challengeRepository = RepositoryController.getChallengeRepository()
         val userRepository = RepositoryController.getUserRepository()
         val application = requireNotNull(this.activity).application
-        overviewViewModel = getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
+        overviewViewModel =
+            getViewModel { OverviewViewModel(challengeRepository, userRepository, application) }
         profileViewModel = getViewModel { ProfileViewModel(userRepository, application) }
 
 
@@ -61,8 +64,8 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val linearLayoutManager =
-            LinearLayoutManager(activity ?: return)   // return early if not attached to an activity
+        // return early if not attached to an activity
+        val linearLayoutManager = LinearLayoutManager(activity ?: return)
         //linearLayoutManager.stackFromEnd = true     // insert items at the bottom instead of top
 
         overviewAdapter = OverviewAdapter(object : ChallengeClickListener {
@@ -87,8 +90,10 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.VISIBLE
             } else {
                 empty_recyclerview_overview.visibility = View.GONE
-                // TODO OMG Find another place to call this
-                checkIfNewDayToSetCompletedToFalse()
+
+                // check if challenge completion status should be resetted
+                //TODO: sollte eigentlich nicht hier aufgerufen werden aus Performance-Gründen!
+                overviewViewModel.checkIfNewDayToSetCompletedToFalse()
             }
 
             /*
@@ -98,44 +103,25 @@ class OverviewFragment : Fragment() {
                 recyclerview_overview.smoothScrollToPosition(0)
             }*/
         }
-        /*
-        // Scroll to top on new challenges
-        challengeListAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                recyclerview_overview.smoothScrollToPosition(0)
-            }
-        })
-        */
 
         setupObservers()
         setupSwipeListener()
 
         fab_create_challenge.setOnClickListener {
+            /*
             val navOptions = NavOptions.Builder()
                 .setLaunchSingleTop(true)
                 .setEnterAnim(R.anim.fade_in)
                 .setExitAnim(R.anim.fade_out)
                 .build()
+            */
 
             requireActivity().findNavController(R.id.nav_host_fragment)
                 .navigate(OverviewFragmentDirections.actionOverviewToCreate())
         }
     }
 
-    private fun checkIfNewDayToSetCompletedToFalse() {
-        val sharedPrefs =
-            requireActivity().getSharedPreferences(
-                Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE
-            )
-        val currentDay = Calendar.DAY_OF_MONTH
-        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
-        if (currentDay > lastDay && ::_challengeList.isInitialized) {
-            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
-            overviewViewModel.setAllChallengesToNotCompleted(_challengeList)
-        }
-    }
-
+    /*
     private fun checkChallengeCompletedFirstTimeThisDay() {
 
         val sharedPrefs =
@@ -144,35 +130,40 @@ class OverviewFragment : Fragment() {
                 AppCompatActivity.MODE_PRIVATE
             )
 
-        val currentDay = Calendar.DAY_OF_MONTH
+        val currentDay = DateUtil.getDayOfMonth()
         val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, 0)
         var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
 
         if (lastDay == currentDay - 1) {
             // CONSECUTIVE DAYS
             counterOfConsecutiveDays += 1
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
             sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)?.apply()
         } else {
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
+            // reset daily streak
             sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)?.apply()
         }
+        sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
 
-
-    }
+    }*/
 
     private fun checkFirstTimeThisDay() {
-        //TODO: da die Studie im gleichen Monat durchgeführt wird, ist das ausreichend!
+        //TODO: da die Studie im gleichen Monat durchgeführt wird, ist Day of month ausreichend!
         // Sonst müsste man außerdem noch Monat und Jahr vergleichen!
-        val currentDay = Calendar.DAY_OF_MONTH
+        val currentDay = DateUtil.getDayOfMonth()
 
         val sharedPrefs =
-            requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+            requireActivity().getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
         // day of month starts with 1 so 0 is a good default to make sure it works the first time as well
         val lastDay = sharedPrefs?.getInt(Constants.PREFS_LAST_DAY, 0) ?: 0
 
         // get the id of the last daily challenge the day before (or null if the first time)
-        val lastDailyChallengeId = sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
+        val lastDailyChallengeId =
+            sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
+
+        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)
 
         if (currentDay > lastDay) {
             sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY, currentDay).apply()
@@ -180,6 +171,15 @@ class OverviewFragment : Fragment() {
 
             // remove the old daily challenge from the users active challenges
             overviewViewModel.removeChallenge(lastDailyChallengeId ?: return)
+
+            if (lastDay == currentDay - 1) {
+                // CONSECUTIVE DAYS
+                counterOfConsecutiveDays += 1
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays).apply()
+            } else {
+                // reset daily streak
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).apply()
+            }
         }
     }
 
@@ -218,7 +218,10 @@ class OverviewFragment : Fragment() {
             return
         }
 
-        val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
 
         if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_CHALLENGE_COMPLETED, true)) {
             // this is the first time this user has ticked the 'completed' button
@@ -233,10 +236,13 @@ class OverviewFragment : Fragment() {
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
         } else {
-            val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
-            sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+            val completedChallengesCount =
+                sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+            sharedPrefs.edit()
+                .putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1)
+                .apply()
 
-            checkChallengeCompletedFirstTimeThisDay()
+            //checkChallengeCompletedFirstTimeThisDay()
 
             overviewViewModel.setChallengeCompleted(challenge)
             //Timber.d(profileViewModel.currentUser.value.toString())
@@ -251,10 +257,14 @@ class OverviewFragment : Fragment() {
             .setTitle("Challenge abgeschlossen!")
             .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen dann erneut abschließen.")
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)
+                val sharedPrefs = requireActivity().getSharedPreferences(
+                    Constants.SHARED_PREFS_NAME,
+                    AppCompatActivity.MODE_PRIVATE
+                )
                 val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
                 sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
-                checkChallengeCompletedFirstTimeThisDay()
+
+                //checkChallengeCompletedFirstTimeThisDay()
                 overviewViewModel.setChallengeCompleted(challenge)
                 updatePointsAndLevel(_currentUser, challenge)
             }
@@ -264,15 +274,15 @@ class OverviewFragment : Fragment() {
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
-            val challengeList: MutableList<BaseChallenge> =
-                (it ?: return@observe) as MutableList<BaseChallenge>
-            _challengeList = challengeList
+            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
 
-            val dailyChallenge = challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
+            val dailyChallenge =
+                challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
 
             dailyChallenge?.let {
                 // remove the daily challenge from the challenge list so it won't be shown twice
                 challengeList.remove(dailyChallenge)
+
                 name_challenge.text = dailyChallenge.title
                 xp_challenge.text = String.format("%s XP", dailyChallenge.difficulty.points)
 
@@ -326,7 +336,7 @@ class OverviewFragment : Fragment() {
         })
 
 
-        profileViewModel.currentUser.observe(viewLifecycleOwner, {it ->
+        profileViewModel.currentUser.observe(viewLifecycleOwner, { it ->
             it?.let {
                 _currentUser = it
             }
@@ -365,7 +375,8 @@ class OverviewFragment : Fragment() {
 
     private fun setupSwipeListener() {
 
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -374,7 +385,7 @@ class OverviewFragment : Fragment() {
                 return false
             }
 
-//          FIXME: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
+            // FIXME: This can sometimes throw an indexoutofboundexception. Can't reproduce the error as of now.
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val challenge = overviewAdapter.getChallengeAt(viewHolder.adapterPosition)
 
@@ -396,7 +407,11 @@ class OverviewFragment : Fragment() {
                         } else {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
-                        val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
+                        val toast = Toast.makeText(
+                            requireContext(),
+                            "Challenge gelöscht",
+                            Toast.LENGTH_SHORT
+                        )
                         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                         toast.view.setPadding(8, 4, 8, 4)
                         toast.show()
@@ -446,13 +461,14 @@ class OverviewFragment : Fragment() {
                 // this is the first time this user has reached max level
                 val toast = Toast.makeText(
                     requireActivity(),
-                    "Du hast das maximale Level erreicht!",
+                    "Du hast das maximale Level erreicht! Du hast es echt drauf!",
                     Toast.LENGTH_LONG
                 )
                 toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 toast.view.setPadding(8, 4, 8, 4)
                 toast.show()
-                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
+                    .apply()
             }
             return
         }
@@ -489,13 +505,21 @@ class OverviewFragment : Fragment() {
                     toast.show()
                 }
                 else -> {
-                    val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
+                        Toast.LENGTH_SHORT
+                    )
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
+                    //TODO breite und höhe des toasts noch anpassen?
+                    /*
+                    toast.view.minimumWidth = 850
+                    toast.view.minimumHeight = 150
+                    */
                     toast.show()
                 }
             }
-
 
 
             // send a firebase in-app-message to the user to congratulate him!
@@ -505,9 +529,6 @@ class OverviewFragment : Fragment() {
             //Firebase.analytics.logEvent("level_up", null)
             //Firebase.inAppMessaging.triggerEvent("level_up")
 
-            //TODO: unlock icon methode
-            // TODO: show popup
-            //  or show snackbar attached to android.R.id.content, like:
             /*
             val snackbar = Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to

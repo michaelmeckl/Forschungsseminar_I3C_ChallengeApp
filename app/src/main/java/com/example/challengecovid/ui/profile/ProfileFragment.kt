@@ -24,7 +24,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var profileViewModel: ProfileViewModel
     private val levelsHashMap = OverviewFragment.levelsMap
-    private val MAX_LEVEL = 20
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_profile, container, false)
@@ -52,7 +51,7 @@ class ProfileFragment : Fragment() {
             .setDismissTextColor(ContextCompat.getColor(requireActivity(), R.color.colorPrimaryDark))
             .setDismissStyle(Typeface.DEFAULT_BOLD)
             .setTargetTouchable(true)
-            .singleUse("abcdefghijk")    // show this showcase only once
+            .singleUse("abcdefghijk")  // show this showcase only once by providing a unique id
             .setDelay(400)
             .show()
 
@@ -65,7 +64,10 @@ class ProfileFragment : Fragment() {
 
         save_changes.setOnClickListener {
             val newName = change_name_field.text.toString()
-            profileViewModel.updateUserName(newName)
+            if(newName.isNotBlank()) {
+                // only update if he has entered at least one character that is not a whitespace
+                profileViewModel.updateUserName(newName)
+            }
 
             // clear the focus of the edit field so it won't be activated the next time the user enters the profile
             change_name_field.clearFocus()
@@ -80,14 +82,14 @@ class ProfileFragment : Fragment() {
         achievements_total_completed_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0).toString()
         achievements_xp_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0).toString()
         achievements_total_created_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0).toString()
-        achievements_dailystreak_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0).toString()
+        achievements_dailystreak_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).toString()
     }
 
     private fun observeViewModel() {
         profileViewModel.currentUser.observe(viewLifecycleOwner, {
 
             // set only the hint instead of the text to prevent two way binding (which wouldn't allow to edit the field anymore)
-            change_name_field.hint = it.username
+            //change_name_field.hint = it.username
 
             profile_name.text = it.username
             profile_level.text = getString(R.string.level, it.level)
@@ -98,9 +100,10 @@ class ProfileFragment : Fragment() {
                 level_progressbar.progress = 100
                 level_progress.text = "Du hast das maximale Level erreicht!"
             } else {
-                if (levelsHashMap[it.level] != null) {
-                    val remainingXPForLevelUp = levelsHashMap[it.level]?.minus(it.points)
-                    level_progressbar.max = levelsHashMap[it.level]!!
+                val xpForLevel = levelsHashMap[it.level]
+                if (xpForLevel != null) {
+                    val remainingXPForLevelUp = xpForLevel.minus(it.points)
+                    level_progressbar.max = xpForLevel
                     level_progressbar.progress = it.points
                     level_progress.text = "Noch $remainingXPForLevelUp XP bis Level ${it.level + 1}"
                 }
@@ -113,5 +116,9 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         menu.clear()    // don't show the main menu in this fragment!
+    }
+
+    companion object {
+        private const val MAX_LEVEL = 20
     }
 }
