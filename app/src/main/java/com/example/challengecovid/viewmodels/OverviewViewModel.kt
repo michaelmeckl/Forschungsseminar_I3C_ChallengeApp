@@ -15,7 +15,6 @@ import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
-import java.util.*
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -67,25 +66,6 @@ class OverviewViewModel(
             ).show()
         } else {
             allChallenges = userRepository.getAllChallengesForUser(currentUserId)
-
-            //TODO
-            checkIfNewDayToSetCompletedToFalse()
-        }
-    }
-
-    private fun checkIfNewDayToSetCompletedToFalse() {
-        val sharedPrefs = App.instance.getSharedPreferences(
-            Constants.SHARED_PREFS_NAME,
-            AppCompatActivity.MODE_PRIVATE
-        )
-
-        val currentDay = DateUtil.getDayOfMonth()
-        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
-
-        if (currentDay > lastDay) {
-            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
-            //setAllChallengesToNotCompleted(_challengeList)
-            resetAllCompletedChallenges()
         }
     }
 
@@ -122,6 +102,22 @@ class OverviewViewModel(
     }
     }
      */
+
+    fun checkIfNewDayToSetCompletedToFalse() {
+        val sharedPrefs = App.instance.getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+        val currentDay = DateUtil.getDayOfMonth()
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
+
+        if (currentDay > lastDay) {
+            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
+            //setAllChallengesToNotCompleted(_challengeList)
+            resetAllCompletedChallenges()
+        }
+    }
 
     fun addNewChallenge(userChallenge: UserChallenge) {
         challengeRepository.saveNewUserChallenge(userChallenge)

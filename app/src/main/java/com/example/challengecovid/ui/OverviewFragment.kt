@@ -90,8 +90,10 @@ class OverviewFragment : Fragment() {
                 empty_recyclerview_overview.visibility = View.VISIBLE
             } else {
                 empty_recyclerview_overview.visibility = View.GONE
-                //TODO
-                //checkIfNewDayToSetCompletedToFalse()
+
+                // check if challenge completion status should be resetted
+                //TODO: sollte eigentlich nicht hier aufgerufen werden aus Performance-Gründen!
+                overviewViewModel.checkIfNewDayToSetCompletedToFalse()
             }
 
             /*
@@ -161,7 +163,7 @@ class OverviewFragment : Fragment() {
         val lastDailyChallengeId =
             sharedPrefs?.getString(Constants.PREFS_LAST_DAILY_CHALLENGE, null)
 
-        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
+        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)
 
         if (currentDay > lastDay) {
             sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY, currentDay).apply()
@@ -169,15 +171,15 @@ class OverviewFragment : Fragment() {
 
             // remove the old daily challenge from the users active challenges
             overviewViewModel.removeChallenge(lastDailyChallengeId ?: return)
-        }
 
-        if (lastDay == currentDay - 1) {
-            // CONSECUTIVE DAYS
-            counterOfConsecutiveDays += 1
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)?.apply()
-        } else {
-            // reset daily streak
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)?.apply()
+            if (lastDay == currentDay - 1) {
+                // CONSECUTIVE DAYS
+                counterOfConsecutiveDays += 1
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays).apply()
+            } else {
+                // reset daily streak
+                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).apply()
+            }
         }
     }
 
