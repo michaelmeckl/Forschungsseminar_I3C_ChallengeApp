@@ -4,9 +4,10 @@ import android.app.Application
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import com.example.challengecovid.App
 import com.example.challengecovid.Constants
+import com.example.challengecovid.DateUtil
 import com.example.challengecovid.R
-import com.example.challengecovid.adapter.OverviewAdapter
 import com.example.challengecovid.model.BaseChallenge
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.model.UserChallenge
@@ -14,6 +15,7 @@ import com.example.challengecovid.repository.ChallengeRepository
 import com.example.challengecovid.repository.UserRepository
 import kotlinx.coroutines.*
 import timber.log.Timber
+import java.util.*
 
 /**
  * A ViewModel is designed to store and manage UI-related data in a lifecycle conscious way. This
@@ -45,8 +47,6 @@ class OverviewViewModel(
      */
     private val uiScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var currentChallenge = MutableLiveData<UserChallenge>()
-
     private var currentUserId: String = ""
     lateinit var allChallenges: LiveData<List<BaseChallenge>>
 
@@ -57,7 +57,6 @@ class OverviewViewModel(
         )
         currentUserId = sharedPrefs?.getString(Constants.PREFS_USER_ID, "") ?: ""
 
-        //Toast.makeText(application, "UserID: $currentUserId", Toast.LENGTH_SHORT).show()
         Timber.d(currentUserId)
 
         if (currentUserId === "") {
@@ -68,6 +67,25 @@ class OverviewViewModel(
             ).show()
         } else {
             allChallenges = userRepository.getAllChallengesForUser(currentUserId)
+
+            //TODO
+            checkIfNewDayToSetCompletedToFalse()
+        }
+    }
+
+    private fun checkIfNewDayToSetCompletedToFalse() {
+        val sharedPrefs = App.instance.getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+        val currentDay = DateUtil.getDayOfMonth()
+        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, 0)
+
+        if (currentDay > lastDay) {
+            sharedPrefs.edit().putInt(Constants.PREFS_LAST_DAY_CHALLENGES_RESET, currentDay).apply()
+            //setAllChallengesToNotCompleted(_challengeList)
+            resetAllCompletedChallenges()
         }
     }
 
@@ -110,12 +128,6 @@ class OverviewViewModel(
         userRepository.addActiveChallenge(userChallenge, currentUserId)
     }
 
-    private fun initializeChallenge(challengeID: String) {
-        uiScope.launch {
-            currentChallenge.value = challengeRepository.getUserChallenge(challengeID)
-        }
-    }
-
     fun updateChallenge(userChallenge: UserChallenge) {
         challengeRepository.updateUserChallenge(userChallenge)
         userRepository.updateActiveChallenge(userChallenge, currentUserId)
@@ -153,20 +165,47 @@ class OverviewViewModel(
     //TODO: use delete instead when completed?
     fun setChallengeCompleted(challenge: BaseChallenge) = uiScope.launch {
         withContext(Dispatchers.IO) {
-            challengeRepository.updateCompletionStatus(
-                challenge.challengeId,
-                challenge.type,
-                completed = true
-            )
+            changeChallengeCompletionStatus(challenge, true)
+
+            // set the challenge to completed and updated the active challenge copy too
             challenge.completed = true
             userRepository.addActiveChallenge(challenge, currentUserId)
         }
     }
 
-    suspend fun getUserChallenge(challengeId: String): UserChallenge? = withContext(Dispatchers.IO) {
-        return@withContext challengeRepository.getUserChallenge(challengeId)
+    private fun changeChallengeCompletionStatus(
+        challenge: BaseChallenge,
+        completionStatus: Boolean
+    ) {
+        challengeRepository.updateCompletionStatus(
+            challenge.challengeId,
+            challenge.type,
+            completed = completionStatus
+        )
     }
 
+    fun resetAllCompletedChallenges() = uiScope.launch {
+        withContext(Dispatchers.IO) {
+            val allCurrentChallenges = allChallenges.value ?: return@withContext
+
+            for (challenge in allCurrentChallenges) {
+                if (challenge.completed) {
+                    changeChallengeCompletionStatus(challenge, false)
+
+                    // set the challenge to not completed and updated the active challenge copy too
+                    challenge.completed = false
+                    userRepository.addActiveChallenge(challenge, currentUserId)
+                }
+            }
+        }
+    }
+
+    suspend fun getUserChallenge(challengeId: String): UserChallenge? =
+        withContext(Dispatchers.IO) {
+            return@withContext challengeRepository.getUserChallenge(challengeId)
+        }
+
+    /*
     fun setAllChallengesToNotCompleted(challengeList: List<BaseChallenge>) = uiScope.launch {
         withContext(Dispatchers.IO) {
             for (challenge in challengeList) {
@@ -177,14 +216,21 @@ class OverviewViewModel(
                 }
             }
         }
-
-
     }
+    */
 
     fun getRandomDailyChallenge(oldDailyChallenge: String?) = uiScope.launch {
         withContext(Dispatchers.IO) {
             val randomChallenge =
                 challengeRepository.getRandomChallenge(oldDailyChallenge) ?: return@withContext
+
+            //save it in the shared prefs so it wont come twice in a row
+            val sharedPrefs = App.instance.getSharedPreferences(
+                Constants.SHARED_PREFS_NAME,
+                AppCompatActivity.MODE_PRIVATE
+            )
+            sharedPrefs.edit().putString(Constants.PREFS_LAST_DAILY_CHALLENGE, randomChallenge.challengeId)?.apply()
+
             userRepository.updateActiveChallenge(randomChallenge, currentUserId)
         }
         _showDailyChallengeEvent.value = true
