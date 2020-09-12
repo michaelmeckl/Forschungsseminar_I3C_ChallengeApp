@@ -127,10 +127,42 @@ class SplashActivity : AppCompatActivity() {
     companion object {
         const val PREFS_VERSION_CODE_KEY = "version_code"
 
-        //TODO: bessere Splash Screen Nachrichten hinzufügen als die unten!!!
         val splashMessages = arrayOf(
-                "Laden ...",
-                "Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde"
-        )
+
+            "Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde",
+            "Manche Leute wollen, dass es passiert, manche wünschen, es würde passieren, andere sorgen dafür, dass es passiert. ~ Michael Jordan",
+            "Wer einen Misserfolg nur als kleinen Umweg betrachtet, verliert nie sein Ziel aus den Augen. ~ Martin Luther",
+            "Entweder werden wir einen Weg finden oder wir machen einen! ~ Hannibal",
+            "Das Geheimnis zum Erfolg ist anzufangen ~ Mark Twain",
+            "Erfolg hat drei Buchstaben: TUN ~ Johann Wolfang von Goethe",
+            "Unser Schicksal hängt nicht von den Sternen ab, sondern von unserem Handeln. ~ William Shakespeare",
+            "„Alle Träume können wahr werden, wenn wir den Mut haben, ihnen zu folgen. ~ Walt Disney",
+            "„Wege entstehen dadurch, dass man sie geht. ~ Franz Kafka",
+            "„Wir sind das, was wir wiederholt tun. Vorzüglichkeit ist daher keine Handlung, sondern eine Gewohnheit. ~ Aristoteles",
+            "„Hindernisse können mich nicht aufhalten; Entschlossenheit bringt jedes Hindernis zu Fall. ~ Leonardo da Vinci",
+            "„Das gute Gelingen ist zwar nichts Kleines, fängt aber mit Kleinigkeiten an. ~ Sokrates",
+            "„Ist unsere Motivation stark und heilsam, können wir alles vollbringen. ~ Dalai Lama",
+            "Ein Mensch, der keine Fehler gemacht hat, hat nie etwas Neues ausprobiert. ~ Albert Einstein",
+            "Es macht nichts, wenn es langsam vorangeht. Hauptsache du bleibst nicht stehen. ~ Konfuzius",
+            "Erfolg ist die Fähigkeit, von einem Misserfolg zum anderen zu gehen, ohne seine Begeisterung zu verlieren. ~ Winston Churchill",
+            "Was vorstellbar ist, ist auch machbar. ~ Albert Einstein",
+            "Es gibt mehr Menschen, die zu früh aufgeben als solche, die scheitern. ~ Henry Ford",
+            "Wer sich um das Morgen am wenigsten kümmert, geht ihm mit der größten Lust entgegen. ~ Epikur",
+            "Der höchste Genuss besteht in der Zufriedenheit mit sich selbst. ~ Jean-Jacques Rousseau",
+            "Ein Misserfolg ist lediglich die Möglichkeit, schlauer von Neuem zu beginnen. ~ Henry Ford",
+            "Ich kenne keinen sicheren Weg zum Erfolg, aber einen sicheren Weg zum Misserfolg: Es allen Recht machen zu wollen. ~ Platon",
+            "Es ist nicht genug zu wissen – man muss auch anwenden. Es ist nicht genug zu wollen – man muss auch tun. ~ Johann Wolfang von Goethe",
+            "Die Kunst ist, einmal mehr aufzustehen, als man umgeworfen wird. ~ Winston Churchill",
+            "Wer einen Fehler gemacht hat und ihn nicht korrigiert, begeht einen zweiten. ~ Konfuzius", 
+            "Hindernisse und Schwierigkeiten sind Stufen, auf denen wir in die Höhe steigen. ~ Friedrich Nietzsche",
+            "Ob Du denkst, Du kannst es, oder Du kannst es nicht – in beiden Fällen hast Du Recht. ~ Henry Ford",
+            "Erfolg ist die Belohnung für schwere Arbeit. ~ Sophokles",
+            "Glaube daran, DASS du es schaffst und du hast schon den halben Weg gemeistert. ~ Theodore Roosevelt",
+            "Fange nie an, aufzuhören. Höre nie auf, anzufangen. ~ Cicero"
+
+
+
+
+            )
     }
 }
