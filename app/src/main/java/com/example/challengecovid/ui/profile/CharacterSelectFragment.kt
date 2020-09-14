@@ -164,6 +164,7 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
 
     private fun showNotYetUnlockedMessage(lvl: Int) {
+        //FIXME: Wird als Snackbar angezeigt, auch wenn hier ein Toast sein sollte ??
         val toast = Toast.makeText(
             requireActivity(),
             "Dieser Avatar wird erst auf Level $lvl freigeschaltet!",

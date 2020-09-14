@@ -292,6 +292,7 @@ class OverviewFragment : Fragment() {
 
             daily_challenge.setOnClickListener {
                 if (dailyChallenge != null) {
+                    //FIXME: Wird als Snackbar angezeigt, auch wenn hier ein Toast sein sollte ??
                     if (!dailyChallenge.completed) {
                         val toast = Toast.makeText(
                             requireActivity(),
@@ -396,10 +397,20 @@ class OverviewFragment : Fragment() {
                         } else {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
+                        /*
                         val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
                         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                         toast.view.setPadding(8, 4, 8, 4)
                         toast.show()
+
+                         */
+                        val snackbar = Snackbar.make(
+                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                            "Challenge gelöscht",
+                            Snackbar.LENGTH_LONG
+                        )
+                        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        snackbar.show()
 
                     }
                     setNegativeButton("Abbrechen") { _, _ ->
@@ -443,6 +454,7 @@ class OverviewFragment : Fragment() {
 
         if (currentLevel >= levelsMap.size) {
             if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, true)) {
+                /*
                 // this is the first time this user has reached max level
                 val toast = Toast.makeText(
                     requireActivity(),
@@ -452,6 +464,16 @@ class OverviewFragment : Fragment() {
                 toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 toast.view.setPadding(8, 4, 8, 4)
                 toast.show()
+
+                 */
+                val snackbar = Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                    "Du hast das maximale Level erreicht!",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
+
                 sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
             }
             return
@@ -468,6 +490,7 @@ class OverviewFragment : Fragment() {
             // Inform user that he unlocked new avatars/chars
             when {
                 currentLevel + 1 == 5 -> {
+                    /*
                     val toast = Toast.makeText(
                         requireActivity(),
                         "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
@@ -477,8 +500,18 @@ class OverviewFragment : Fragment() {
                     toast.view.setPadding(8, 4, 8, 4)
                     toast.show()
 
+                     */
+                    val snackbar = Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
+                        Snackbar.LENGTH_LONG
+                    )
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.show()
+
                 }
                 currentLevel + 1 == 10 -> {
+                    /*
                     val toast = Toast.makeText(
                         requireActivity(),
                         "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
@@ -487,12 +520,31 @@ class OverviewFragment : Fragment() {
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
                     toast.show()
+
+                     */
+                    val snackbar = Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
+                        Snackbar.LENGTH_LONG
+                    )
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.show()
+
                 }
                 else -> {
+                    /*
                     val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
                     toast.show()
+                     */
+                    val snackbar = Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!",
+                        Snackbar.LENGTH_LONG
+                    )
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.show()
                 }
             }
 

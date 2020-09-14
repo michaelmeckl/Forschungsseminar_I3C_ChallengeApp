@@ -153,16 +153,12 @@ class SplashActivity : AppCompatActivity() {
             "Ich kenne keinen sicheren Weg zum Erfolg, aber einen sicheren Weg zum Misserfolg: Es allen Recht machen zu wollen. ~ Platon",
             "Es ist nicht genug zu wissen – man muss auch anwenden. Es ist nicht genug zu wollen – man muss auch tun. ~ Johann Wolfang von Goethe",
             "Die Kunst ist, einmal mehr aufzustehen, als man umgeworfen wird. ~ Winston Churchill",
-            "Wer einen Fehler gemacht hat und ihn nicht korrigiert, begeht einen zweiten. ~ Konfuzius", 
+            "Wer einen Fehler gemacht hat und ihn nicht korrigiert, begeht einen zweiten. ~ Konfuzius",
             "Hindernisse und Schwierigkeiten sind Stufen, auf denen wir in die Höhe steigen. ~ Friedrich Nietzsche",
             "Ob Du denkst, Du kannst es, oder Du kannst es nicht – in beiden Fällen hast Du Recht. ~ Henry Ford",
             "Erfolg ist die Belohnung für schwere Arbeit. ~ Sophokles",
             "Glaube daran, DASS du es schaffst und du hast schon den halben Weg gemeistert. ~ Theodore Roosevelt",
             "Fange nie an, aufzuhören. Höre nie auf, anzufangen. ~ Cicero"
-
-
-
-
             )
     }
 }
