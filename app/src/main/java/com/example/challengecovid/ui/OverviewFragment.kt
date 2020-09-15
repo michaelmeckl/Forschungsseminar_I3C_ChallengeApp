@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -279,11 +280,10 @@ class OverviewFragment : Fragment() {
 
             daily_challenge.setOnClickListener {
                 if (dailyChallenge != null) {
-                    //FIXME: Wird als Snackbar angezeigt, auch wenn hier ein Toast sein sollte ??
                     if (!dailyChallenge.completed) {
                         val snackbar = Snackbar.make(
                             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                            "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
+                            "Deine Tagesaufgabe ist nur heute verfügbar, versuch sie möglichst schnell abzuschließen!",
                             Snackbar.LENGTH_SHORT
                         )
                         snackbar.view.setBackgroundColor(
@@ -297,7 +297,7 @@ class OverviewFragment : Fragment() {
                     } else {
                         val snackbar = Snackbar.make(
                             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                            "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue!",
+                            "Du hast deine Tagesaufgabe schon abgeschlossen! Morgen bekommst du wieder eine neue!",
                             Snackbar.LENGTH_SHORT
                         )
                         snackbar.view.setBackgroundColor(
@@ -306,6 +306,8 @@ class OverviewFragment : Fragment() {
                                 null
                             )
                         )
+                        //set the snackbars's textview size up to 3 lines (per default only 2)
+                        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 3
                         snackbar.show()
 
                     }

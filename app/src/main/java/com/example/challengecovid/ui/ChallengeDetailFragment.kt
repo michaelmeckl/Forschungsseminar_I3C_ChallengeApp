@@ -171,13 +171,6 @@ class ChallengeDetailFragment : Fragment() {
                         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
                     }
 
-                    /*
-                    val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
-                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                    toast.view.setPadding(8, 4, 8, 4)
-                    toast.show()
-                    */
-
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                         "Challenge gelöscht",

@@ -110,12 +110,6 @@ class CategoryDetailFragment : Fragment() {
         }
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
-        /*
-        val toast = Toast.makeText(requireActivity(), "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT)
-        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-        toast.view.setPadding(8, 4, 8, 4)
-        toast.show()
-        */
         val snackbar = Snackbar.make(
             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
             "Challenge erfolgreich angenommen!",
