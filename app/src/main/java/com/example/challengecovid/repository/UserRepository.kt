@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
@@ -22,7 +21,7 @@ class UserRepository {
     // reference to the root user collection in firestore
     private val userCollection = firestore.collection("users")
 
-    private lateinit var snapshotListener: ListenerRegistration
+    //private lateinit var snapshotListener: ListenerRegistration
 
 
     companion object {
@@ -241,7 +240,7 @@ class UserRepository {
             }
     }
 
-// TODO: Für bessere performance das da implementieren mit batch
+// Für bessere performance das da implementieren mit batch
 //    fun addActiveChallengeBulk(challengeList: List<BaseChallenge>, userId: String) {
 //        userCollection.document(userId)
 //            .collection("activeChallenges")
@@ -377,6 +376,7 @@ class UserRepository {
      */
 
     //listen for realtime updates
+    /*
     fun listenOnUpdates() {
         val listener = userCollection.whereEqualTo("state", "CA")
             .addSnapshotListener { snapshots, e ->
@@ -416,7 +416,7 @@ class UserRepository {
     fun detachListener() {
         // Stop listening to changes
         snapshotListener.remove()
-    }
+    }*/
 
 
     /**

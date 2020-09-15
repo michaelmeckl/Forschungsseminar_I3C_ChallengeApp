@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,6 +19,7 @@ import com.example.challengecovid.model.Difficulty
 import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -171,10 +171,20 @@ class ChallengeDetailFragment : Fragment() {
                         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
                     }
 
+                    /*
                     val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
                     toast.show()
+                    */
+
+                    val snackbar = Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        "Challenge gelöscht",
+                        Snackbar.LENGTH_SHORT
+                    )
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.show()
 
                 }.setNegativeButton("Abbrechen") {
                     _, _ ->

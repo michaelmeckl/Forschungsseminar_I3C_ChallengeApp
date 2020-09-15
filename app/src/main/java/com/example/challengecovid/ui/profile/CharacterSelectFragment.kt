@@ -164,7 +164,6 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
 
 
     private fun showNotYetUnlockedMessage(lvl: Int) {
-        //FIXME: Wird als Snackbar angezeigt, auch wenn hier ein Toast sein sollte ??
         val toast = Toast.makeText(
             requireActivity(),
             "Dieser Avatar wird erst auf Level $lvl freigeschaltet!",
@@ -173,16 +172,6 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
         toast.view.setPadding(8, 4, 8, 4)
         toast.show()
-
-        /*
-        val snackbar = Snackbar.make(
-            requireActivity().findViewById(android.R.id.content),
-            "Dieser Avatar wird erst ab Level $lvl freigeschaltet",
-            Snackbar.LENGTH_SHORT
-        )
-        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-        snackbar.show()
-        */
     }
 
     companion object {

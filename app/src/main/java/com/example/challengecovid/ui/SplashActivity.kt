@@ -2,10 +2,7 @@ package com.example.challengecovid.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View.ALPHA
 import android.view.View.TRANSLATION_Y
@@ -41,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
         // if this is the first start prepopulate the firestore db
         if (firstRun) initDatabase()
 
-        handleIncomingCloudMessages()
+        //handleIncomingCloudMessages()
 
         showSplashScreen()
     }
@@ -66,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
         challengeRepo.saveMultipleChallenges(Data.getDailyChallenges())
     }
 
-    //TODO:
+    /*
     private fun handleIncomingCloudMessages() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create channel to show notifications.
@@ -89,6 +86,7 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
+    */
 
     private fun showSplashScreen() {
         job = CoroutineScope(Dispatchers.Default).launch {
@@ -127,9 +125,8 @@ class SplashActivity : AppCompatActivity() {
     companion object {
         const val PREFS_VERSION_CODE_KEY = "version_code"
 
+        // motivating messages that are randomly shown in the splash screen
         val splashMessages = arrayOf(
-
-            "Ein Zyniker ist ein Mensch, der von allen Dingen den Preis kennt und keinem den Wert weiß. ~ Oscar Wilde",
             "Manche Leute wollen, dass es passiert, manche wünschen, es würde passieren, andere sorgen dafür, dass es passiert. ~ Michael Jordan",
             "Wer einen Misserfolg nur als kleinen Umweg betrachtet, verliert nie sein Ziel aus den Augen. ~ Martin Luther",
             "Entweder werden wir einen Weg finden oder wir machen einen! ~ Hannibal",

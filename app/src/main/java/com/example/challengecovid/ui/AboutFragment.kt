@@ -2,11 +2,8 @@ package com.example.challengecovid.ui
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
 import android.view.*
 import androidx.fragment.app.Fragment
-import com.example.challengecovid.App
-import com.example.challengecovid.BuildConfig
 import com.example.challengecovid.R
 import com.example.challengecovid.adapter.AboutAdapter
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -43,17 +40,18 @@ class AboutFragment : Fragment() {
     }
 
     companion object {
-        // TODO alle verwendeten Icons und andere Quellen hier auflisten!
+        // alle verwendeten Icons und andere Quellen hier auflisten!
         val allAttributions = listOf(
             //AttributionItem(R.drawable.ic_coronavirus, "Icon made by Freepik from https://flaticon.com"),
             AttributionItem(
                 R.drawable.icon_protective_suit_corona,
                 "Illustration by Olha Khomich from https://icons8.com"
             ),
+            /*
             AttributionItem(
                 R.drawable.ic_flame,
                 "Taken from Streaky (https://github.com/alexakasanjeev/streak-counter)"
-            ),
+            ),*/
             AttributionItem(R.drawable.ic_user_man_1, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_user_man_2, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_user_man_3, "Icon made by Freepik from www.flaticon.com/"),
@@ -69,7 +67,7 @@ class AboutFragment : Fragment() {
             AttributionItem(R.drawable.ic_social_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.ic_safety_category, "Icon made by Freepik from www.flaticon.com/"),
             AttributionItem(R.drawable.icons8_parchment_80, "Icon made by Icons8 (https://icons8.com)"),
-
+            //TODO: profile icons hier noch auflisten!!
         )
     }
 }

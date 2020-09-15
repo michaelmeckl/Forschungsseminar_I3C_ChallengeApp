@@ -72,8 +72,9 @@ class ProfileFragment : Fragment() {
             // clear the focus of the edit field so it won't be activated the next time the user enters the profile
             change_name_field.clearFocus()
 
+            //TODO: sollte hier wirklich zurück navigiert werden?
             //remove this fragment from the backstack to navigate back
-            requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
+            //requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
         }
 
         val sharedPrefs = requireActivity().getSharedPreferences(Constants.SHARED_PREFS_NAME, AppCompatActivity.MODE_PRIVATE)

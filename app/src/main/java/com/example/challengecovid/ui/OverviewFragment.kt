@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -175,42 +174,15 @@ class OverviewFragment : Fragment() {
             if (lastDay == currentDay - 1) {
                 // CONSECUTIVE DAYS
                 counterOfConsecutiveDays += 1
-                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays).apply()
+                sharedPrefs.edit()
+                    .putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)
+                    .apply()
             } else {
                 // reset daily streak
                 sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).apply()
             }
         }
     }
-
-    //TODO: für firestore ui und firestoreadapter
-    /*
-    private open fun newAdapter(): RecyclerView.Adapter<*>? {
-        val options: FirestoreRecyclerOptions<Chat> = Builder<Chat>()
-            .setQuery(sChatQuery, Chat::class.java)
-            .setLifecycleOwner(this)
-            .build()
-        return object : FirestoreRecyclerAdapter<Chat?, ChatHolder?>(options) {
-            @NonNull
-            fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ChatHolder? {
-                return ChatHolder(
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.message, parent, false)
-                )
-            }
-
-            protected fun onBindViewHolder(@NonNull holder: ChatHolder, position: Int, @NonNull model: Chat?) {
-                holder.bind(model)
-            }
-
-            fun onDataChanged() {
-                // If there are no chat messages, show a view that invites the user to add a message.
-                mEmptyListMessage.setVisibility(if (getItemCount() === 0) View.VISIBLE else View.GONE)
-            }
-        }
-    }
-
-     */
 
     private fun setChallengeCompleted(challenge: BaseChallenge) {
         if (challenge.completed) {
@@ -261,8 +233,12 @@ class OverviewFragment : Fragment() {
                     Constants.SHARED_PREFS_NAME,
                     AppCompatActivity.MODE_PRIVATE
                 )
-                val completedChallengesCount = sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
-                sharedPrefs.edit().putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1).apply()
+                val completedChallengesCount =
+                    sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+                sharedPrefs.edit().putInt(
+                    Constants.PREFS_COUNT_COMPLETED_CHALLENGES,
+                    completedChallengesCount + 1
+                ).apply()
 
                 //checkChallengeCompletedFirstTimeThisDay()
                 overviewViewModel.setChallengeCompleted(challenge)
@@ -274,7 +250,8 @@ class OverviewFragment : Fragment() {
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
-            val challengeList: MutableList<BaseChallenge> = (it ?: return@observe) as MutableList<BaseChallenge>
+            val challengeList: MutableList<BaseChallenge> =
+                (it ?: return@observe) as MutableList<BaseChallenge>
 
             val dailyChallenge =
                 challengeList.find { challenge -> challenge.type == ChallengeType.DAILY_CHALLENGE }
@@ -304,24 +281,32 @@ class OverviewFragment : Fragment() {
                 if (dailyChallenge != null) {
                     //FIXME: Wird als Snackbar angezeigt, auch wenn hier ein Toast sein sollte ??
                     if (!dailyChallenge.completed) {
-                        val toast = Toast.makeText(
-                            requireActivity(),
+                        val snackbar = Snackbar.make(
+                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                             "Das ist deine Tagesaufgabe! Sie ist nur heute verfügbar, versuch also sie möglichst schnell abzuschließen!",
-                            Toast.LENGTH_LONG
+                            Snackbar.LENGTH_SHORT
                         )
-                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                        toast.view.setPadding(8, 4, 8, 4)
-                        toast.show()
+                        snackbar.view.setBackgroundColor(
+                            resources.getColor(
+                                R.color.colorAccent,
+                                null
+                            )
+                        )
+                        snackbar.show()
 
                     } else {
-                        val toast = Toast.makeText(
-                            requireActivity(),
-                            "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue.",
-                            Toast.LENGTH_LONG
+                        val snackbar = Snackbar.make(
+                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                            "Glückwunsch, du hast deine Tagesaufgabe abgeschlossen! Morgen bekommst du wieder eine neue!",
+                            Snackbar.LENGTH_SHORT
                         )
-                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                        toast.view.setPadding(8, 4, 8, 4)
-                        toast.show()
+                        snackbar.view.setBackgroundColor(
+                            resources.getColor(
+                                R.color.colorAccent,
+                                null
+                            )
+                        )
+                        snackbar.show()
 
                     }
                 }
@@ -349,7 +334,7 @@ class OverviewFragment : Fragment() {
                     //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                     overview_layout,
                     "Du hast eine neue Challenge erhalten!",
-                    Snackbar.LENGTH_LONG
+                    Snackbar.LENGTH_SHORT
                 )
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 snackbar.show()
@@ -409,38 +394,23 @@ class OverviewFragment : Fragment() {
                             overviewViewModel.removeChallenge(challenge.challengeId)
                         }
 
-                        /*
-                        val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
-
-                        val toast = Toast.makeText(
-                            requireContext(),
-                            "Challenge gelöscht",
-                            Toast.LENGTH_SHORT
-                        )
-
-                        val toast = Toast.makeText(
-                            requireContext(),
-                            "Challenge gelöscht",
-                            Toast.LENGTH_SHORT
-                        )
-                        toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                        toast.view.setPadding(8, 4, 8, 4)
-                        toast.show()
-
-                         */
                         val snackbar = Snackbar.make(
                             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                             "Challenge gelöscht",
-                            Snackbar.LENGTH_LONG
+                            Snackbar.LENGTH_SHORT
                         )
-                        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                        snackbar.view.setBackgroundColor(
+                            resources.getColor(
+                                R.color.colorAccent,
+                                null
+                            )
+                        )
                         snackbar.show()
 
                     }
                     setNegativeButton("Abbrechen") { _, _ ->
                         // User cancelled the dialog, so we will refresh the adapter to prevent hiding the item from UI
                         overviewAdapter.notifyItemChanged(viewHolder.adapterPosition)
-                        //Toast.makeText(requireContext(), "Challenge nicht gelöscht", Toast.LENGTH_SHORT).show()
                     }
                     show()
                 }
@@ -451,6 +421,7 @@ class OverviewFragment : Fragment() {
 
 
     // LEVEL STUFF STARTING HERE
+
 
     //helper function
     private fun maxPointsReached(currentPoints: Int, maxPoints: Int): Boolean {
@@ -478,30 +449,16 @@ class OverviewFragment : Fragment() {
 
         if (currentLevel >= levelsMap.size) {
             if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, true)) {
-                /*
-                // this is the first time this user has reached max level
-                val toast = Toast.makeText(
-                    requireActivity(),
-                    "Du hast das maximale Level erreicht! Du hast es echt drauf!",
-                    Toast.LENGTH_LONG
-                )
-                toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                toast.view.setPadding(8, 4, 8, 4)
-                toast.show()
-
-
-                 */
                 val snackbar = Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                    "Du hast das maximale Level erreicht!",
+                    "Du hast das maximale Level erreicht! Du hast es echt drauf!",
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                 snackbar.show()
 
-                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
-
-
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
+                    .apply()
             }
             return
         }
@@ -517,54 +474,26 @@ class OverviewFragment : Fragment() {
             // Inform user that he unlocked new avatars/chars
             when {
                 currentLevel + 1 == 5 -> {
-                    /*
-                    val toast = Toast.makeText(
-                        requireActivity(),
-                        "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
-                        Toast.LENGTH_LONG
-                    )
-                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                    toast.view.setPadding(8, 4, 8, 4)
-                    toast.show()
-
-                     */
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                         "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     )
                     snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     snackbar.show()
 
                 }
                 currentLevel + 1 == 10 -> {
-                    /*
-                    val toast = Toast.makeText(
-                        requireActivity(),
-                        "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
-                        Toast.LENGTH_LONG
-                    )
-                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                    toast.view.setPadding(8, 4, 8, 4)
-                    toast.show()
-
-                     */
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                         "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
-                        Snackbar.LENGTH_LONG
+                        Snackbar.LENGTH_SHORT
                     )
                     snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     snackbar.show()
 
                 }
                 else -> {
-                    val toast = Toast.makeText(
-                        requireActivity(),
-                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
-                        Toast.LENGTH_SHORT
-                    )
-
                     /*
                     val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
 
@@ -576,7 +505,7 @@ class OverviewFragment : Fragment() {
 
                     toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     toast.view.setPadding(8, 4, 8, 4)
-                    //TODO breite und höhe des toasts noch anpassen?
+                    //breite und höhe des toasts noch anpassen?
                     /*
                     toast.view.minimumWidth = 850
                     toast.view.minimumHeight = 150
@@ -585,30 +514,17 @@ class OverviewFragment : Fragment() {
                      */
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                        "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!",
-                        Snackbar.LENGTH_LONG
+                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
+                        Snackbar.LENGTH_SHORT
                     )
                     snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                     snackbar.show()
                 }
             }
 
-            // send a firebase in-app-message to the user to congratulate him!
-//            Firebase.analytics.logEvent("level_up", null)
-//            Firebase.inAppMessaging.triggerEvent("level_up")
-            // send a firebase in-app-message to the user to congratulate him! //TODO works only once a day unfortunately
+            // send a firebase in-app-message to the user to congratulate him!  //works only once a day unfortunately
             //Firebase.analytics.logEvent("level_up", null)
             //Firebase.inAppMessaging.triggerEvent("level_up")
-
-            /*
-            val snackbar = Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                    "Du bist ein Level aufgestiegen! Mach weiter so!",
-                    Snackbar.LENGTH_LONG
-                )
-                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                snackbar.show()
-             */
 
             profileViewModel.updateUserPoints(currentPoints)
             profileViewModel.updateUserLevel(currentLevel + 1)
@@ -644,4 +560,33 @@ class OverviewFragment : Fragment() {
         )
     }
 
+
+    //für firestore ui und firestoreadapter
+    /*
+    private open fun newAdapter(): RecyclerView.Adapter<*>? {
+        val options: FirestoreRecyclerOptions<Chat> = Builder<Chat>()
+            .setQuery(sChatQuery, Chat::class.java)
+            .setLifecycleOwner(this)
+            .build()
+        return object : FirestoreRecyclerAdapter<Chat?, ChatHolder?>(options) {
+            @NonNull
+            fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): ChatHolder? {
+                return ChatHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.message, parent, false)
+                )
+            }
+
+            protected fun onBindViewHolder(@NonNull holder: ChatHolder, position: Int, @NonNull model: Chat?) {
+                holder.bind(model)
+            }
+
+            fun onDataChanged() {
+                // If there are no chat messages, show a view that invites the user to add a message.
+                mEmptyListMessage.setVisibility(if (getItemCount() === 0) View.VISIBLE else View.GONE)
+            }
+        }
+    }
+
+     */
 }

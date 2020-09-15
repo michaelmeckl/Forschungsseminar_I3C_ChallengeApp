@@ -180,7 +180,7 @@ class OverviewViewModel(
         )
     }
 
-    fun resetAllCompletedChallenges() = uiScope.launch {
+    private fun resetAllCompletedChallenges() = uiScope.launch {
         withContext(Dispatchers.IO) {
             val allCurrentChallenges = allChallenges.value ?: return@withContext
 

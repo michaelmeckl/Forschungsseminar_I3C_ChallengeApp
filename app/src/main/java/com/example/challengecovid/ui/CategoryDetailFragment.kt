@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
-import com.example.challengecovid.App
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
@@ -16,6 +15,7 @@ import com.example.challengecovid.adapter.CategoryDetailAdapter
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.viewmodels.CategoryDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +51,7 @@ class CategoryDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val (id, title, description, imageName) = arguments
+        val (id, _, description, imageName) = arguments
 
         // set the same transition name on the new image view to enable the shared element transition!
         detail_image.transitionName = imageName
@@ -110,10 +110,19 @@ class CategoryDetailFragment : Fragment() {
         }
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
+        /*
         val toast = Toast.makeText(requireActivity(), "Challenge erfolgreich angenommen!", Toast.LENGTH_SHORT)
         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
         toast.view.setPadding(8, 4, 8, 4)
         toast.show()
+        */
+        val snackbar = Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+            "Challenge erfolgreich angenommen!",
+            Snackbar.LENGTH_SHORT
+        )
+        snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+        snackbar.show()
 
     }
 
