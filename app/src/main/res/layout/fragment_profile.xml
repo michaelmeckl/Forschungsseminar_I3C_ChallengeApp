@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/profile_header_section_top"
                 android:layout_centerHorizontal="true"
-                />
+                android:layout_marginTop="8dp" />
 
             <TextView
                 android:id="@+id/level_progress"
@@ -86,20 +86,20 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/profile_change_username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/level_progress"
-                android:layout_marginHorizontal="32dp"
+                android:layout_alignParentStart="true"
                 android:layout_marginVertical="16dp"
-                android:layout_marginTop="25dp">
+                android:layout_marginStart="26dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/change_name_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Neuer Name:"
+                    android:hint="Namen ändern: "
                     android:inputType="textPersonName"
-                    android:maxLength="30"
+                    android:maxLength="25"
                     android:textAlignment="center" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,10 +107,13 @@
                 android:id="@+id/save_changes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/profile_change_username"
-                android:layout_centerHorizontal="true"
-                android:layout_marginVertical="@dimen/margin_small"
-                android:text="Änderungen speichern" />
+                android:layout_below="@+id/level_progress"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginVertical="25dp"
+                android:layout_toEndOf="@id/profile_change_username"
+                android:text="Speichern"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="14sp" />
 
         </RelativeLayout>
 
@@ -125,6 +128,7 @@
         <!--        tools:layout_editor_absoluteX="-26dp">-->
 
         <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_achievements"
             android:layout_width="match_parent"
@@ -139,6 +143,7 @@
                 style="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/margin_normal"
                 android:text="Meine Erfolge"
@@ -163,13 +168,24 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="@dimen/margin_normal">
+                    android:padding="24dp">
+
+                    <!--XP-->
+                    <ImageView
+                        android:id="@+id/achievements_xp_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@android:color/holo_orange_light" />
+
 
                     <TextView
                         android:id="@+id/achievements_xp_prefix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="4dp"
+                        android:layout_margin="4dp"
+                        android:layout_toRightOf="@id/achievements_xp_img"
                         android:text="Gesamt XP: "
                         android:textStyle="bold" />
 
@@ -177,16 +193,27 @@
                         android:id="@+id/achievements_xp_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_xp_prefix"
-                        android:padding="4dp"
                         android:text="13" />
+
+                    <!--Dailystreak-->
+                    <ImageView
+                        android:id="@+id/achievements_dailystreak_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_xp_img"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_graph"
+                        app:tint="@android:color/holo_purple" />
 
                     <TextView
                         android:id="@+id/achievements_dailystreak_prefix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_xp_prefix"
-                        android:padding="4dp"
+                        android:layout_below="@id/achievements_xp_img"
+                        android:layout_margin="4dp"
+                        android:layout_toRightOf="@id/achievements_dailystreak_img"
                         android:text="Tagesserie: "
                         android:textStyle="bold" />
 
@@ -194,45 +221,67 @@
                         android:id="@+id/achievements_dailystreak_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_xp_prefix"
+                        android:layout_below="@id/achievements_xp_img"
+                        android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_dailystreak_prefix"
-                        android:padding="4dp"
                         android:text="4" />
+
+                    <!--Total completed-->
+                    <ImageView
+                        android:id="@+id/achievements_total_completed_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_dailystreak_img"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_checkmark_checked" />
 
                     <TextView
                         android:id="@+id/achievements_total_completed_prefix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_dailystreak_prefix"
-                        android:padding="4dp"
+                        android:layout_below="@id/achievements_dailystreak_img"
+                        android:layout_margin="4dp"
+                        android:layout_toRightOf="@id/achievements_total_completed_img"
                         android:text="Abgeschlossene Challenges: "
                         android:textStyle="bold" />
+
 
                     <TextView
                         android:id="@+id/achievements_total_completed_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_dailystreak_prefix"
+                        android:layout_below="@id/achievements_dailystreak_img"
+                        android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_total_completed_prefix"
-                        android:padding="4dp"
                         android:text="14" />
+                    <!--Total created-->
+                    <ImageView
+                        android:id="@+id/achievements_total_created_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_completed_img"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_edit"
+                        app:tint="@android:color/holo_blue_light" />
 
                     <TextView
                         android:id="@+id/achievements_total_created_prefix"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_total_completed_prefix"
-                        android:padding="4dp"
+                        android:layout_below="@+id/achievements_total_completed_img"
+                        android:layout_margin="4dp"
+                        android:layout_toRightOf="@id/achievements_total_created_img"
                         android:text="Erstellte Challenges: "
                         android:textStyle="bold" />
+
 
                     <TextView
                         android:id="@+id/achievements_total_created_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/achievements_total_completed_prefix"
+                        android:layout_below="@+id/achievements_total_completed_img"
+                        android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_total_created_prefix"
-                        android:padding="4dp"
                         android:text="7" />
 
 

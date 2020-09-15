@@ -418,6 +418,11 @@ class OverviewFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         )
 
+                        val toast = Toast.makeText(
+                            requireContext(),
+                            "Challenge gelöscht",
+                            Toast.LENGTH_SHORT
+                        )
                         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
                         toast.view.setPadding(8, 4, 8, 4)
                         toast.show()
@@ -499,6 +504,8 @@ class OverviewFragment : Fragment() {
                 sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
                     .apply()
 
+                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
+                    .apply()
             }
             return
         }
@@ -556,6 +563,11 @@ class OverviewFragment : Fragment() {
 
                 }
                 else -> {
+                    val toast = Toast.makeText(
+                        requireActivity(),
+                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
+                        Toast.LENGTH_SHORT
+                    )
 
                     /*
                     val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
@@ -584,7 +596,6 @@ class OverviewFragment : Fragment() {
                     snackbar.show()
                 }
             }
-
 
             // send a firebase in-app-message to the user to congratulate him!
 //            Firebase.analytics.logEvent("level_up", null)

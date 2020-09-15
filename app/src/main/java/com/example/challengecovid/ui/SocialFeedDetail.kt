@@ -109,15 +109,9 @@ class SocialFeedDetail : DialogFragment() {
         val linearLayoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false)
 
         recycler_feed_detail_view.apply {
-            setHasFixedSize(true)
+            //setHasFixedSize(true)     // this prevents the listadapter and diffutil from working correctly!
             adapter = feedDetailAdapter
             layoutManager = linearLayoutManager
-        }
-
-        if (feedDetailAdapter.participants.isEmpty()) {
-            // hide title if no participants
-            feed_detail_recycler_title.visibility = View.GONE
-            feed_detail_no_participants_message.visibility = View.VISIBLE
         }
     }
 
@@ -145,12 +139,16 @@ class SocialFeedDetail : DialogFragment() {
                 feedDetailViewModel.getParticipantsForChallenge(challengeId) ?: return@launch
             }
 
-            feedDetailAdapter.participants = participants
+            feedDetailAdapter.submitList(participants)
 
             if (participants.isNotEmpty()) {
                 // show title if not empty
                 feed_detail_recycler_title.visibility = View.VISIBLE
                 feed_detail_no_participants_message.visibility = View.GONE
+            } else {
+                // hide title if no participants
+                feed_detail_recycler_title.visibility = View.GONE
+                feed_detail_no_participants_message.visibility = View.VISIBLE
             }
 
             // finished loading stuff; hide the loading circle and show the content

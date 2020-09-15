@@ -53,7 +53,7 @@ class SocialFeedFragment : Fragment() {
         feedViewModel.publicChallenges.observe(viewLifecycleOwner, { it ->
             it?.let {
                 // update the list in the adapter with the new challenge list
-                feedAdapter.publicChallenges = it
+                feedAdapter.submitList(it)
             }
         })
     }

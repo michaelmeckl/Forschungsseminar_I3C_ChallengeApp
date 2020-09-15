@@ -86,6 +86,18 @@ class OverviewAdapter(private val clickListener: ChallengeClickListener, private
     }
 }
 
+/*
+// This class efficiently checks which items need to be updated so only these are redrawn and not the entire list!
+class OverviewDiffCallback : DiffUtil.ItemCallback<BaseChallenge>() {
+    override fun areItemsTheSame(oldItem: BaseChallenge, newItem: BaseChallenge): Boolean {
+        return oldItem.challengeId == newItem.challengeId
+    }
+
+    override fun areContentsTheSame(oldItem: BaseChallenge, newItem: BaseChallenge): Boolean {
+        return oldItem == newItem
+    }
+}*/
+
 // ClickListener - Interface for the recycler view items
 interface ChallengeClickListener {
     fun onChallengeClick(challenge: BaseChallenge)

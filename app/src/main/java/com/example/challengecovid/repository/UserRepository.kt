@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.example.challengecovid.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
@@ -103,6 +104,7 @@ class UserRepository {
             val challengeList = mutableListOf<BaseChallenge>()
             val docSnapshots = userCollection.document(userId)
                 .collection("activeChallenges")
+                .orderBy("completed", Query.Direction.ASCENDING)  // order them by creation date with the newest first
                 .get().await().documents
 
             if (docSnapshots.isNotEmpty()) {

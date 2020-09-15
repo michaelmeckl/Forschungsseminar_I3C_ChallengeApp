@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,7 +15,9 @@ import androidx.navigation.fragment.navArgs
 import com.example.challengecovid.Constants
 import com.example.challengecovid.R
 import com.example.challengecovid.RepositoryController
-import com.example.challengecovid.model.*
+import com.example.challengecovid.model.ChallengeType
+import com.example.challengecovid.model.Difficulty
+import com.example.challengecovid.model.UserChallenge
 import com.example.challengecovid.viewmodels.OverviewViewModel
 import com.example.challengecovid.viewmodels.getViewModel
 import kotlinx.android.synthetic.main.fragment_challenge_detail.*
@@ -22,10 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
-//wenn eine challenge von anderen aus dem feed angenommen wird, kann man sie zwar nicht bearbeiten oder erneut veröffentlichen, das liegt aber daran dass sie automatisch als completed markiert ist sobald angenommen ????
-// -> das sollte jetzt gefixet sein TODO: überprüfen, dass es wirklich immer klappt!
 class ChallengeDetailFragment : Fragment() {
 
     // get the given navigation arguments lazily
@@ -72,7 +72,7 @@ class ChallengeDetailFragment : Fragment() {
 
         challengeDetailScope.launch {
             if (type == ChallengeType.USER_CHALLENGE){
-                userChallenge = overviewViewModel.getUserChallenge(id)!!
+                userChallenge = overviewViewModel.getUserChallenge(id) ?: return@launch
             }
         }
 
@@ -153,8 +153,15 @@ class ChallengeDetailFragment : Fragment() {
         }
 
         challenge_detail_delete.setOnClickListener {
-            AlertDialog.Builder(requireContext())
+            val message = when (type) {
+                ChallengeType.SYSTEM_CHALLENGE -> "Wenn du diese Challenge löschst, kann sie für diese Woche nicht mehr erneut angenommen werden!"
+                ChallengeType.USER_CHALLENGE -> "ACHTUNG:\nWenn diese Challenge öffentlich ist, wird nur die eigene Version gelöscht! Wenn du der Ersteller der Challenge bist und sie auch aus den veröffentlichten Challenges löschen willst, musst du sie vor dem Löschen erst auf privat setzen!"
+                ChallengeType.DAILY_CHALLENGE -> "Eine Daily Challenge kann nicht gelöscht werden!"
+            }
+
+            AlertDialog.Builder(requireActivity())
                 .setTitle("Willst du diese Challenge wirklich löschen?")
+                .setMessage(message)
                 .setPositiveButton("Löschen") { _, _ ->
                     if (type == ChallengeType.SYSTEM_CHALLENGE) {
                         overviewViewModel.hideChallengeWithID(id)
@@ -163,6 +170,12 @@ class ChallengeDetailFragment : Fragment() {
                         overviewViewModel.removeChallenge(id)
                         requireActivity().findNavController(R.id.nav_host_fragment).popBackStack()
                     }
+
+                    val toast = Toast.makeText(requireContext(), "Challenge gelöscht", Toast.LENGTH_SHORT)
+                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    toast.view.setPadding(8, 4, 8, 4)
+                    toast.show()
+
                 }.setNegativeButton("Abbrechen") {
                     _, _ ->
                     return@setNegativeButton
@@ -228,17 +241,11 @@ class ChallengeDetailFragment : Fragment() {
         sharedPrefs.edit().putBoolean(Constants.PREFS_SWITCH_STATE + id, isChecked).apply()
 
 //          TODO: Hier wird noch primitiv eine Progressbar für 2s eingeblendet und dann der jeweils andere state angezeigt, obwohl nicht geschaut wird ob success oder failure
-
         setVisibility(challenge_detail_progressbar, visible = true)
         requireActivity().window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
-        /*
-        runBlocking {
-            switchStatus()
-            delay(2000)
-        }*/
         Handler().postDelayed(this::switchStatus, 2000)
     }
 
@@ -300,9 +307,6 @@ class ChallengeDetailFragment : Fragment() {
     }
 
     private fun switchStatus() {
-        //TODO: app crasht hier, da challenge_detail_relativelayout_offline gleich null wenn geedited und dann neu geöffnet
-        // -> sollte jetzt aber nicht mehr passieren können
-
         // bessere if bedingung hier nötig (ohne layout zu referenzieren, das vielleicht nicht sichtbar ist)!
 
         if (challenge_detail_relativelayout_offline.visibility == View.GONE) {
@@ -318,7 +322,7 @@ class ChallengeDetailFragment : Fragment() {
 
     // Create the Share Intent
     private fun getShareIntent(): Intent {
-        val message = "Challenge:\n${arguments.title}\n${arguments.description}"
+        val message = "Hast du Lust an der Challenge \"${arguments.title}\" teilzunehmen?\n\nDarum geht es:\n${arguments.description}"
 
         // Create intent to show the chooser dialog
         return Intent.createChooser(Intent().apply {
@@ -347,6 +351,12 @@ class ChallengeDetailFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // cancel all coroutines that might still be running to prevent memory leaks and crashes
+        challengeDetailJob.cancel()
     }
 
     /*
