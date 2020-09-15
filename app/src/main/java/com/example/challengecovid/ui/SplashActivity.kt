@@ -130,7 +130,7 @@ class SplashActivity : AppCompatActivity() {
             "Manche Leute wollen, dass es passiert, manche wünschen, es würde passieren, andere sorgen dafür, dass es passiert. ~ Michael Jordan",
             "Wer einen Misserfolg nur als kleinen Umweg betrachtet, verliert nie sein Ziel aus den Augen. ~ Martin Luther",
             "Entweder werden wir einen Weg finden oder wir machen einen! ~ Hannibal",
-            "Das Geheimnis zum Erfolg ist anzufangen ~ Mark Twain",
+            "Das Geheimnis zum Erfolg ist anzufangen. ~ Mark Twain",
             "Erfolg hat drei Buchstaben: TUN ~ Johann Wolfang von Goethe",
             "Unser Schicksal hängt nicht von den Sternen ab, sondern von unserem Handeln. ~ William Shakespeare",
             "Alle Träume können wahr werden, wenn wir den Mut haben, ihnen zu folgen. ~ Walt Disney",
@@ -154,7 +154,7 @@ class SplashActivity : AppCompatActivity() {
             "Hindernisse und Schwierigkeiten sind Stufen, auf denen wir in die Höhe steigen. ~ Friedrich Nietzsche",
             "Ob Du denkst, Du kannst es, oder Du kannst es nicht – in beiden Fällen hast Du Recht. ~ Henry Ford",
             "Erfolg ist die Belohnung für schwere Arbeit. ~ Sophokles",
-            "Glaube daran, DASS du es schaffst und du hast schon den halben Weg gemeistert. ~ Theodore Roosevelt",
+            "Glaube daran, dass du es schaffst und du hast schon den halben Weg gemeistert. ~ Theodore Roosevelt",
             "Fange nie an, aufzuhören. Höre nie auf, anzufangen. ~ Cicero"
             )
     }
