@@ -501,11 +501,7 @@ class OverviewFragment : Fragment() {
 
                 sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false).apply()
 
-                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
-                    .apply()
 
-                sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
-                    .apply()
             }
             return
         }
