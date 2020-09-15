@@ -56,12 +56,14 @@ class App: Application(), ViewModelStoreOwner {
             // if in Debug Mode enable logging with Timber
             if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
-            setupFirebase()
+            //setupFirebase()
         }
     }
 
+    /*
     private fun setupFirebase() {
         Timber.d("In setup firebase in application class now")
         //firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
+    */
 }

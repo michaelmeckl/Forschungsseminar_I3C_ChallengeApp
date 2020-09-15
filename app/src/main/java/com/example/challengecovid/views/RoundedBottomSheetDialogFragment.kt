@@ -1,17 +1,10 @@
 package com.example.challengecovid.views
 
-import android.app.Dialog
-import android.os.Build
-import android.os.Bundle
-import android.view.View
-import com.example.challengecovid.R
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-
 /**
  * BottomSheetDialog fragment that uses a custom theme which sets a rounded background to the dialog
  * and doesn't dim the navigation bar
  */
+/*
 open class RoundedBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
@@ -35,3 +28,5 @@ open class RoundedBottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
     }
 }
+
+ */

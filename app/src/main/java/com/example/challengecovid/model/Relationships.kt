@@ -1,10 +1,5 @@
 package com.example.challengecovid.model
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.Junction
-import androidx.room.Relation
-
 // Room Relationships Model
 //See https://developer.android.com/training/data-storage/room/relationships#kotlin
 
@@ -14,6 +9,7 @@ import androidx.room.Relation
  * ################################################
  */
 
+/*
 // Associative Entity for the M - N - relationship between users and system challenges
 @Entity(
     tableName = "challenge_user_crossref",
@@ -73,3 +69,4 @@ data class UsersForChallenge(
     )
     val participatingUsers: List<User>?
 )
+*/

@@ -1,9 +1,6 @@
 package com.example.challengecovid.database
 
-import androidx.room.TypeConverter
-import com.example.challengecovid.model.Difficulty
-import java.util.*
-
+/*
 class Converters {
     @TypeConverter
     fun fromDifficulty(value: String): Difficulty {
@@ -36,3 +33,5 @@ class Converters {
         return date.time
     }
 }
+
+ */

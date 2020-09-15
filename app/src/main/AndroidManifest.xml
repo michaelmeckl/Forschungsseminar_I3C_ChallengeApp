@@ -37,6 +37,7 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
 
+        <!--
         <service
             android:name=".firebase.MessagingService"
             android:exported="false">
@@ -44,19 +45,22 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        -->
 
-        <!-- default notification channel for firebase cloud messages -->
+        <!-- default notification channel for firebase cloud messages
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+        -->
 
-        <!-- color and icon for notifications without custom icon or color specified -->
+        <!-- color and icon for notifications without custom icon or color specified
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_flame" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorSecondary" />
+         -->
 
         <!-- Specifying stopWithTask="false" will cause the onTaskRemoved() method to be triggered in
         our own service when the task is removed from the Process, e.g. when the application is closed.-->

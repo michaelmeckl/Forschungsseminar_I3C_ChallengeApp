@@ -1,11 +1,6 @@
 package com.example.challengecovid.firebase
 
-import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
-import kotlinx.coroutines.coroutineScope
-import timber.log.Timber
-
+/*
 class FirebaseWorkManager(appContext: Context, workerParams: WorkerParameters) :
     CoroutineWorker(appContext, workerParams) {
 
@@ -15,3 +10,5 @@ class FirebaseWorkManager(appContext: Context, workerParams: WorkerParameters) :
         Result.success()
     }
 }
+
+ */

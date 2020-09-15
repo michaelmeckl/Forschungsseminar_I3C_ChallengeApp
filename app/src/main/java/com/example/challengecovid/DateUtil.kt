@@ -1,6 +1,6 @@
 package com.example.challengecovid
 
-import java.util.*
+import java.util.Calendar
 
 object DateUtil {
 

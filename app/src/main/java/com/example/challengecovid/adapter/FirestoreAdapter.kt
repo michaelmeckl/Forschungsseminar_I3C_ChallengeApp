@@ -1,16 +1,5 @@
 package com.example.challengecovid.adapter
 
-import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import java.util.ArrayList
-
 /**
  * RecyclerView adapter for displaying the results of a Firestore [Query].
  *
@@ -19,6 +8,8 @@ import java.util.ArrayList
  * many times as the user scrolls.
  */
 // Taken from https://github.com/firebase/quickstart-android/blob/master/firestore/app/src/main/java/com/google/firebase/example/fireeats/kotlin/adapter/FirestoreAdapter.kt
+
+/*
 abstract class FirestoreAdapter<VH : RecyclerView.ViewHolder>(private var query: Query?) :
     RecyclerView.Adapter<VH>(),
     EventListener<QuerySnapshot> {
@@ -120,3 +111,4 @@ abstract class FirestoreAdapter<VH : RecyclerView.ViewHolder>(private var query:
         private const val TAG = "FirestoreAdapter"
     }
 }
+*/
