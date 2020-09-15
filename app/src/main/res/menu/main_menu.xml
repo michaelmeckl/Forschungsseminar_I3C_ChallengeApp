@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_action_search_black_24dp"
+        android:title="@string/action_search"
+        app:showAsAction="collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
+    -->
+
+    <item
+        android:id="@+id/profile_graph"
+        android:menuCategory="secondary"
+        android:icon="@drawable/icons8_user_male"
+        android:title="@string/action_profile"
+        app:showAsAction="never" />
+
+    <!-- This id has to be the same as the one in the navigation graph!-->
+    <item
+        android:id="@+id/navigation_about"
+        android:menuCategory="secondary"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
+
+</menu>

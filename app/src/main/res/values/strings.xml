@@ -1,6 +1,118 @@
 <resources>
-    <string name="app_name" translatable="false">CoronaSimulation</string>
-    <string name="title_home" translatable="false">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="app_name" translatable="false">ChallengeCovid</string>
+
+    <!-- navigation titles -->
+    <string name="label_overview">Overview</string>
+    <string name="label_categories">Categories</string>
+    <string name="label_social_feed">Feed</string>
+    <string name="label_about">About this app</string>
+    <string name="label_add_friend">Add a friend</string>
+    <string name="label_profile">Profile</string>
+    <string name="label_edit_profile">Edit Profile</string>
+    <string name="label_create_challenge">Create new challenge</string>
+
+    <!-- toolbar actions -->
+    <string name="action_profile">Profile</string>
+    <string name="action_about">About</string>
+    <string name="action_share">Share</string>
+
+    <!-- Firebase -->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="true">Challenges</string>
+
+    <!-- Others -->
+    <string name="credits_used_icons">Used Icons:</string>
+    <string name="splash_screen_load">Loading …</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="no_internet_warning">Unfortunately, the app doesn\'t work properly without an internet connection because no new data can be loaded or saved! Please check your internet connection and try again.</string>
+    <string name="share_title">Share this challenge via</string>
+
+    <string name="username_placeholder">Anonymous</string>
+    <string name="creator_in_feed">created by %s</string>
+
+    <string name="level" translatable="false">Level %d</string>
+    <string name="difficulty">Difficulty: %s</string>
+
+    <string name="edit_profile">Edit profile</string>
+    <string name="save_changes">Save changes</string>
+    <string name="add_friend">Send friend request</string>
+    <string name="change_profile_pic">Change profile picture</string>
+    <string name="desc">Description</string>
+
+    <string name="wrong_user_id_error">Your userID wasn\'t recognized! Please contact the testers!</string>
+
+    <string name="about_intro">This app was developed as part of the project seminar "Interaktionsdesign, Informationsverhalten und Informationsvisualisierung in Zeiten der Corona-Krise (I3C)" of the University of Regensburg in the summer semester 2020.</string>
+
+    <string name="about_challenge_infos">Some of the challenges and categories in this app refer to official guidelines and recommendations for dealing with Covid-19 and social isolation.\n\nMore information:\n
+        * <a href="https://www.stmgp.bayern.de/coronavirus/psychische-gesundheit-in-zeiten-der-corona-krise/">Tips for improving mental health</a>\n
+        * <a href="https://www.uni-regensburg.de/psychologie-paedagogik-sport/psychologie-muehlberger-ambulanz/psychische-gesundheit-waehrend-corona/index.html">Examples for improving mental health</a>\n
+        * <a href="https://www.who.int/health-topics/coronavirus#tab=tab_1">Official Information about Covid-19 from the World Health Organization</a>\n
+        * <a href="https://www.infektionsschutz.de/coronavirus/verhaltensregeln.html">Official Rules of conduct and hygiene</a>
+    </string>
+
+    <string name="heading_create_new_challenge">Create new challenge</string>
+    <string name="hint_name_create_new_challenge">Name of challenge</string>
+    <string name="hint_description_create_new_challenge">Description (optional)</string>
+    <string name="hint_points_create_new_challenge">Amount XP</string>
+    <string name="button_text_create_challenge">Create Challenge</string>
+    <string name="textview_text_create_challenge">Difficulty:</string>
+    <string name="spinner_text_icon_create_new_challenge">Category (optional):</string>
+    <string name="hint_duration_create_challenge">Duration in days (optional)</string>
+    <string name="empty_recyclerview_overview_message">You don\'t have any challenges yet. To create one, click the button in the bottom right corner.</string>
+    <string name="challenge_completed_text">Completed today!</string>
+    <string name="edit_challenge">Challenge bearbeiten</string>
+    <string name="levelProgress">%1$d von %2$d</string>
+
+    <string-array name="difficulties_challenges">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="icons_challenges">
+        <item>No icon</item>
+    </string-array>
+
+    <!--
+    //Information About Corona
+    <string name="corona_info_one">Coronavirus disease (COVID-19) is an infectious disease caused by a newly discovered coronavirus.
+        \n\nMost people infected with the COVID-19 virus will experience mild to moderate respiratory illness and
+        recover without requiring special treatment.  Older people, and those with underlying medical
+        problems like cardiovascular disease, diabetes, chronic respiratory disease, and cancer are
+        more likely to develop serious illness.
+        \n\nThe best way to prevent and slow down transmission is be well
+        informed about the COVID-19 virus, the
+        disease it causes and how it spreads. Protect yourself and others from infection by washing
+        your hands or using an alcohol based rub frequently and not touching your face.
+        </string>
+
+    <string name="corona_info_two">
+        The COVID-19 virus spreads primarily through droplets of saliva or discharge from the nose
+        when an infected person coughs or sneezes, so it’s important that you also practice respiratory
+        etiquette (for example, by coughing into a flexed elbow).
+        \n\nAt this time, there are no specific vaccines or treatments for
+        COVID-19. However, there are many ongoing clinical trials evaluating potential treatments.
+        WHO will continue to provide updated
+        information as soon as clinical findings become available.</string>
+
+    <string name="corona_info_three">
+        The COVID-19 virus spreads primarily through droplets of saliva or discharge from the nose
+        when an infected person coughs or sneezes, so it’s important that you also practice respiratory
+        etiquette (for example, by coughing into a flexed elbow).
+        \n\nAt this time, there are no specific vaccines or treatments for
+        COVID-19. However, there are many ongoing clinical trials evaluating potential treatments.
+        WHO will continue to provide updated
+        information as soon as clinical findings become available.</string>
+
+    <string name="corona_symptoms_title">Symptoms</string>
+    <string name="corona_symptoms_info">The most common symptoms of COVID-19 are fever, tiredness,
+        and dry cough. Some patients may have aches and pains, nasal congestion, runny nose, sore
+        throat or diarrhea. These symptoms are usually mild and begin gradually. Some people become
+        infected but don’t develop any symptoms and don\'t feel unwell.People with fever, cough and difficulty breathing
+        should seek medical attention.</string>
+
+    <string name="corona_info_credit">NOTE : All information shown here has been taken from WHO\'s official website.
+    Refer to the links below for more information on Corona virus.</string>
+    -->
+
 </resources>

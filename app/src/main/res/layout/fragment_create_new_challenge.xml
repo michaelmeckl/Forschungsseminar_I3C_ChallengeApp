@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp"
+        tools:context="com.example.challengecovid.ui.CreateChallengeFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/heading_create_new_challenge"
+            android:textColor="@android:color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_name_create_new_challenge"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_create_new_challenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_name_create_new_challenge"
+                android:inputType="text"
+                android:text="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_create_new_challenge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_description_create_new_challenge"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+<!--        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_duration_create_new_challenge"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:padding="4dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/duration_create_new_challenge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/hint_duration_create_challenge"
+                    android:inputType="number"
+                    android:text="" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/info_duration_create_challenge"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="7"
+                android:src="@drawable/ic_info"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/spinner_difficulties"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/textview_text_create_challenge" />
+
+        <Spinner
+            android:id="@+id/spinner_difficulties"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <!--
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/spinner_icon_create_new_challenge"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/spinner_text_icon_create_new_challenge" />
+
+        <Spinner
+            android:id="@+id/spinner_icon_create_new_challenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp" />
+         -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_submit_create_new_challenge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:text="@string/button_text_create_challenge"
+            android:textColor="@color/design_default_color_surface" />
+
+    </LinearLayout>
+</ScrollView>

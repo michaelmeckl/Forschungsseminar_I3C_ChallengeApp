@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="@dimen/card_view_corner_radius"
+    card_view:cardElevation="4dp"
+    card_view:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
+
+        <ImageButton
+            android:id="@+id/icon_challenge"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="-10dp"
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_checkmark_unchecked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
+
+        <ImageButton
+            android:id="@+id/icon_challenge_completed"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:layout_margin="-10dp"
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_checkmark_checked"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
+
+        <TextView
+            android:id="@+id/name_challenge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/is_online_challenge"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/icon_challenge"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Titel dieser Challenge ist wirklich lang, um zu testen" />
+
+        <ImageView
+            android:id="@+id/is_online_challenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/ic_challenge_detail_online"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/xp_challenge"
+            app:layout_constraintStart_toEndOf="@+id/name_challenge"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+
+        <TextView
+            android:id="@+id/xp_challenge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_red_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/is_online_challenge"
+            tools:text="15 XP" />
+
+
+        <TextView
+            android:id="@+id/description_challenge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon_challenge"
+            app:layout_constraintTop_toBottomOf="@+id/name_challenge"
+            tools:text="Beschreibung Hier steht ein langer Beispieltext um zu prüfen ob das Layout auch wirklich so funktioniert wie es soll" />
+        <TextView
+            android:id="@+id/description_challenge_completed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:textColor="@android:color/holo_green_light"
+            android:visibility="gone"
+            android:text="@string/challenge_completed_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/icon_challenge"
+            app:layout_constraintTop_toBottomOf="@+id/name_challenge"
+            tools:text="Beschreibung Hier steht ein langer Beispieltext um zu prüfen ob das Layout auch wirklich so funktioniert wie es soll" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

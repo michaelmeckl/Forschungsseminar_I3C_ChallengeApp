@@ -2,24 +2,140 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/navigation_overview">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.example.coronasimulation.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_overview"
+        android:name="com.example.challengecovid.ui.OverviewFragment"
+        android:label="@string/label_overview"
+        tools:layout="@layout/fragment_overview">
+        <action
+            android:id="@+id/action_overview_to_create"
+            app:destination="@id/navigation_create_challenge"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_overview_to_detail"
+            app:destination="@id/navigation_challenge_detail"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.coronasimulation.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_categories"
+        android:name="com.example.challengecovid.ui.CategoriesFragment"
+        android:label="@string/label_categories"
+        tools:layout="@layout/fragment_categories">
+        <action
+            android:id="@+id/action_category_to_detail"
+            app:destination="@id/navigation_category_detail"/>
+    </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.coronasimulation.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_category_detail"
+        android:name="com.example.challengecovid.ui.CategoryDetailFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_category_detail">
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="imageName"
+            app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_challenge_detail"
+        android:name="com.example.challengecovid.ui.ChallengeDetailFragment"
+        android:label="Detail Ansicht"
+        tools:layout="@layout/fragment_challenge_detail">
+        <argument
+            android:name="id"
+            app:argType="string" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="description"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="com.example.challengecovid.model.ChallengeType" />
+        <argument
+            android:name="difficulty"
+            app:argType="string" />
+        <argument
+            android:name="completed"
+            app:argType="boolean" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_about"
+        android:name="com.example.challengecovid.ui.AboutFragment"
+        android:label="@string/label_about"
+        tools:layout="@layout/fragment_about" />
+
+    <dialog
+        android:id="@+id/navigation_create_challenge"
+        android:name="com.example.challengecovid.ui.CreateChallengeFragment"
+        android:label="@string/label_create_challenge"
+        tools:layout="@layout/fragment_create_new_challenge">
+    </dialog>
+
+    <fragment
+        android:id="@+id/navigation_feed"
+        android:name="com.example.challengecovid.ui.SocialFeedFragment"
+        android:label="@string/label_social_feed"
+        tools:layout="@layout/fragment_social_feed">
+        <action
+            android:id="@+id/action_feed_to_detail"
+            app:destination="@id/navigation_feed_detail" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/navigation_feed_detail"
+        android:name="com.example.challengecovid.ui.SocialFeedDetail"
+        android:label="{challengeTitle}"
+        tools:layout="@layout/fragment_social_feed_detail">
+        <argument
+            android:name="challengeId"
+            app:argType="string" />
+        <argument
+            android:name="challengeTitle"
+            app:argType="string" />
+        <argument
+            android:name="challengeDescription"
+            app:argType="string" />
+    </dialog>
+
+    <!-- nested graph for profile to enable shared viewmodel store -->
+    <navigation android:id="@+id/profile_graph"
+        app:startDestination="@id/navigation_profile">
+
+        <fragment
+            android:id="@+id/navigation_profile"
+            android:name="com.example.challengecovid.ui.profile.ProfileFragment"
+            android:label="@string/label_profile"
+            tools:layout="@layout/fragment_profile">
+            <action
+                android:id="@+id/action_profile_to_character_select"
+                app:destination="@id/navigation_character_select" />
+        </fragment>
+
+        <dialog
+            android:id="@+id/navigation_character_select"
+            android:name="com.example.challengecovid.ui.profile.CharacterSelectFragment"
+            android:label="CharacterSelectFragment"
+            tools:layout="@layout/fragment_character_selection"/>
+
+    </navigation>
+
 </navigation>

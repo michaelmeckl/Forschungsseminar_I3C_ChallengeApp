@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/content_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/loading_circle"
+        layout="@layout/loading_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <!--
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.MultiplePulseRing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:SpinKit_Color="@color/colorAccent" />
+       -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/social_feed_detail_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/feed_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:paddingHorizontal="8dp"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User Challenge Title" />
+
+        <TextView
+            android:id="@+id/feed_detail_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:paddingHorizontal="8dp"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feed_detail_title"
+            tools:text="User Challenge Description Text User Challenge Description Text User Challenge Description Text User Challenge Description Text" />
+
+        <TextView
+            android:id="@+id/feed_detail_recycler_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Teilnehmer:"
+            android:textAppearance="@android:style/TextAppearance.Material.SearchResult.Title"
+            app:layout_constraintBottom_toTopOf="@+id/recycler_feed_detail_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/feed_detail_description" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_feed_detail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="2dp"
+            android:paddingVertical="4dp"
+            android:scrollbarSize="1dp"
+            android:scrollbars="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/feed_accept_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feed_detail_recycler_title"
+            tools:listitem="@layout/feed_detail_user_item"
+            tools:orientation="horizontal" />
+        <!-- android:background="@drawable/bg_corner_dialog" -->
+
+        <TextView
+            android:id="@+id/feed_detail_no_participants_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Keine Teilnehmer im Moment"
+            android:textAppearance="@android:style/TextAppearance.Material.Small"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/feed_accept_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/feed_detail_recycler_title"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/feed_accept_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="32dp"
+            android:padding="4dp"
+            android:text="Teilnehmen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_feed_detail_view" />
+
+        <TextView
+            android:id="@+id/feed_detail_already_accepted_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:padding="12dp"
+            android:text="Du hast diese Challenge bereits!"
+            android:textAppearance="@android:style/TextAppearance.Material.Small"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/feed_accept_button"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

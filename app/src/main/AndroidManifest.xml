@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.coronasimulation">
+    package="com.example.challengecovid">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -13,14 +17,56 @@
         tools:ignore="AllowBackup">
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:name=".ui.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.CharacterCreationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
+        <!--
+        <service
+            android:name=".firebase.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        -->
+
+        <!-- default notification channel for firebase cloud messages
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+        -->
+
+        <!-- color and icon for notifications without custom icon or color specified
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_flame" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorSecondary" />
+         -->
+
+        <!-- Specifying stopWithTask="false" will cause the onTaskRemoved() method to be triggered in
+        our own service when the task is removed from the Process, e.g. when the application is closed.-->
+        <service android:name=".CloseService"
+            android:stopWithTask="false"/>
+
     </application>
 
 </manifest>

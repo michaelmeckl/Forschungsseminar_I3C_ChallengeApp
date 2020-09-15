@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_dashboard">Übersicht</string>
-    <string name="title_notifications">Benachrichtigungen</string>
+    <!-- navigation titles -->
+    <string name="label_overview">Übersicht</string>
+    <string name="label_categories">Kategorien</string>
+    <string name="label_social_feed">Feed</string>
+    <string name="label_about">Über diese App</string>
+    <string name="label_add_friend">Freund hinzufügen</string>
+    <string name="label_profile">Profil</string>
+    <string name="label_edit_profile">Profil bearbeiten</string>
+    <string name="label_create_challenge">Neue Challenge erstellen</string>
+
+    <!-- toolbar actions -->
+    <string name="action_profile">Profil</string>
+    <string name="action_about">Über</string>
+    <string name="action_share">Teilen</string>
+
+    <!-- Firebase -->
+    <string name="default_notification_channel_name">Challenges</string>
+
+    <!-- Others -->
+    <string name="credits_used_icons">Verwendete Icons:</string>
+    <string name="splash_screen_load">Laden …</string>
+    <string name="no_internet">Keine Internetverbindung!</string>
+    <string name="no_internet_warning">Die App funktioniert leider nicht richtig ohne Internet, da neue Daten nicht geladen oder gespeichert werden können! Überprüfe bitte deine Verbindung und versuch es dann nochmal.</string>
+    <string name="share_title">Teile diese Challenge</string>
+
+    <string name="username_placeholder">Anonym</string>
+    <string name="creator_in_feed">erstellt von %s</string>
+
+    <string name="edit_profile">Profil bearbeiten</string>
+    <string name="save_changes">Änderungen speichern</string>
+    <string name="add_friend">Anfrage abschicken</string>
+    <string name="change_profile_pic">Profilbild ändern</string>
+    <string name="desc">Beschreibung</string>
+
+    <string name="difficulty">Schwierigkeit: %s</string>
+
+    <string name="wrong_user_id_error">Deine NutzerID wurde nicht erkannt! Bitte kontaktiere die Testleiter!</string>
+
+    <string name="about_intro">Diese App wurde im Rahmen des Forschungsseminars "Interaktionsdesign, Informationsverhalten und Informationsvisualisierung in Zeiten der Corona-Krise (I3C)" der Universität Regensburg im Sommersemester 2020 entwickelt.</string>
+
+    <string name="about_challenge_infos">Einige der Challenges und Kategorien in dieser App orientieren sich an offiziellen Richtlinien und Empfehlungen im Umgang mit Corona und sozialer Isolation.\n\nWeiterführende Informationen:\n
+        * <a href="https://www.stmgp.bayern.de/coronavirus/psychische-gesundheit-in-zeiten-der-corona-krise/">Hilfreiche Tipps für psychische Gesundheit des bayerischen Gesundheitsministeriums</a>\n
+        * <a href="https://www.uni-regensburg.de/psychologie-paedagogik-sport/psychologie-muehlberger-ambulanz/psychische-gesundheit-waehrend-corona/index.html">Beispiele zur Verbesserung der psychischen Gesundheit</a>\n
+        * <a href="https://www.who.int/health-topics/coronavirus#tab=tab_1">Offizielle Informationen über Covid-19 der Weltgesundheitsorganisation (WHO)</a>\n
+        * <a href="https://www.infektionsschutz.de/coronavirus/verhaltensregeln.html">Offizielle Verhaltens- und Hygieneregeln</a>
+    </string>
+
+    <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
+    <string name="hint_name_create_new_challenge">Name der Challenge</string>
+    <string name="hint_description_create_new_challenge">Beschreibung (optional)</string>
+    <string name="hint_points_create_new_challenge">Anzahl XP</string>
+    <string name="button_text_create_challenge">Challenge erstellen</string>
+    <string name="textview_text_create_challenge">Schwierigkeit:</string>
+    <string name="spinner_text_icon_create_new_challenge">Kategorie (optional):</string>
+    <string name="hint_duration_create_challenge">Dauer in Tagen (optional)</string>
+    <string name="empty_recyclerview_overview_message">Du hast noch keine Challenge erstellt. Klicke den Button unten rechts, um eine zu erstellen.</string>
+    <string name="challenge_completed_text">Heute abgeschlossen!</string>
+    <string name="edit_challenge">Challenge bearbeiten</string>
+    <string name="levelProgress">%1$d von %2$d</string>
+
+    <string-array name="difficulties_challenges">
+        <item>Einfach</item>
+        <item>Mittel</item>
+        <item>Schwer</item>
+    </string-array>
+
+    <string-array name="icons_challenges">
+        <item>Kein icon</item>
+    </string-array>
+
 </resources>
