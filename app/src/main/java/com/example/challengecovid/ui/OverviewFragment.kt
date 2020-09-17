@@ -178,9 +178,27 @@ class OverviewFragment : Fragment() {
                 sharedPrefs.edit()
                     .putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)
                     .apply()
+
+                // inform user that he played one more consecutive day
+                val snackbar = Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),
+                    "Prima! Deine Tagesserie liegt jetzt bei $counterOfConsecutiveDays Tagen!",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
             } else {
                 // reset daily streak
                 sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).apply()
+
+                // inform user that daily streak is reset
+                    val snackbar = Snackbar.make(
+                        requireActivity().findViewById(android.R.id.content),
+                        "Deine Tagesserie von $counterOfConsecutiveDays Tagen ist gerissen, da du die App gestern nicht benutzt hast!",
+                        Snackbar.LENGTH_LONG
+                    )
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.show()
             }
         }
     }
