@@ -17,6 +17,7 @@ import com.example.challengecovid.ui.OverviewFragment
 import com.example.challengecovid.viewmodels.ProfileViewModel
 import com.example.challengecovid.viewmodels.ProfileViewModelFactory
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.overview_content.*
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView
 
 
@@ -83,6 +84,7 @@ class ProfileFragment : Fragment() {
         achievements_xp_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0).toString()
         achievements_total_created_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0).toString()
         achievements_dailystreak_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).toString()
+        achievements_icon_title.setImageResource(R.drawable.ic_medaille)
     }
 
     private fun observeViewModel() {

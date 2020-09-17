@@ -44,6 +44,7 @@
                     android:layout_marginStart="@dimen/margin_normal"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_toEndOf="@id/profile_picture"
+                    android:textStyle="bold"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
@@ -79,6 +80,7 @@
                 android:layout_below="@id/level_progressbar"
                 android:layout_centerHorizontal="true"
                 android:text="%1$d von %2$d"
+                android:textStyle="italic"
                 android:textSize="15sp"
                 tools:text="Du hast das maximale Level erreicht!" />
 
@@ -138,20 +140,35 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_header">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/achievements_title"
-                style="@style/TextAppearance.AppCompat.Large"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/margin_normal"
                 android:text="Meine Erfolge"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/achievements_cardview_summary"
+                app:layout_constraintHorizontal_bias="0.45"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/achievements_icon_title"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                app:layout_constraintTop_toTopOf="@id/achievements_title"
+                app:layout_constraintLeft_toRightOf="@id/achievements_title"
+                app:layout_constraintBottom_toBottomOf="@id/achievements_title"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_trophy" />
+
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/achievements_cardview_summary"
