@@ -44,10 +44,10 @@
                     android:layout_marginStart="@dimen/margin_normal"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_toEndOf="@id/profile_picture"
-                    android:textStyle="bold"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="30sp"
+                    android:textStyle="bold"
                     tools:text="Name" />
 
                 <TextView
@@ -80,42 +80,46 @@
                 android:layout_below="@id/level_progressbar"
                 android:layout_centerHorizontal="true"
                 android:text="%1$d von %2$d"
-                android:textStyle="italic"
                 android:textSize="15sp"
+                android:textStyle="italic"
                 tools:text="Du hast das maximale Level erreicht!" />
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/profile_change_username"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/layout_name_change"
+                android:orientation="horizontal"
                 android:layout_below="@id/level_progress"
-                android:layout_alignParentStart="true"
-                android:layout_marginVertical="16dp"
-                android:layout_marginStart="26dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/change_name_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Namen ändern: "
-                    android:inputType="textPersonName"
-                    android:maxLength="25"
-                    android:textAlignment="center" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/save_changes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/level_progress"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginVertical="25dp"
-                android:layout_toEndOf="@id/profile_change_username"
-                android:text="Speichern"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textSize="14sp" />
+                android:layout_centerHorizontal="true">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/profile_change_username"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="16dp"
+                    android:layout_marginStart="26dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/change_name_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Namen ändern: "
+                        android:inputType="textPersonName"
+                        android:maxLength="25"
+                        android:textAlignment="center" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/save_changes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginVertical="25dp"
+                    android:text="Speichern"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -144,10 +148,9 @@
                 android:id="@+id/achievements_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:gravity="center_horizontal"
                 android:padding="@dimen/margin_normal"
-                android:text="Meine Erfolge"
+                android:text="Deine Erfolge"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/achievements_cardview_summary"
@@ -162,12 +165,11 @@
                 android:layout_height="35dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
-                app:layout_constraintTop_toTopOf="@id/achievements_title"
-                app:layout_constraintLeft_toRightOf="@id/achievements_title"
                 app:layout_constraintBottom_toBottomOf="@id/achievements_title"
+                app:layout_constraintLeft_toRightOf="@id/achievements_title"
+                app:layout_constraintTop_toTopOf="@id/achievements_title"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/ic_trophy" />
-
 
 
             <androidx.cardview.widget.CardView
@@ -202,7 +204,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
-                        android:layout_toRightOf="@id/achievements_xp_img"
+                        android:layout_toEndOf="@id/achievements_xp_img"
                         android:text="Gesamt XP: "
                         android:textStyle="bold" />
 
@@ -230,7 +232,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_xp_img"
                         android:layout_margin="4dp"
-                        android:layout_toRightOf="@id/achievements_dailystreak_img"
+                        android:layout_toEndOf="@id/achievements_dailystreak_img"
                         android:text="Tagesserie: "
                         android:textStyle="bold" />
 
@@ -258,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_dailystreak_img"
                         android:layout_margin="4dp"
-                        android:layout_toRightOf="@id/achievements_total_completed_img"
+                        android:layout_toEndOf="@id/achievements_total_completed_img"
                         android:text="Abgeschlossene Challenges: "
                         android:textStyle="bold" />
 
@@ -287,7 +289,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/achievements_total_completed_img"
                         android:layout_margin="4dp"
-                        android:layout_toRightOf="@id/achievements_total_created_img"
+                        android:layout_toEndOf="@id/achievements_total_created_img"
                         android:text="Erstellte Challenges: "
                         android:textStyle="bold" />
 
@@ -300,6 +302,67 @@
                         android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_total_created_prefix"
                         android:text="7" />
+
+
+                    <!--Challenges shared-->
+                    <ImageView
+                        android:id="@+id/achievements_total_shared_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_created_img"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_share"
+                        app:tint="@android:color/holo_green_dark" />
+
+                    <TextView
+                        android:id="@+id/achievements_total_shared_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_created_img"
+                        android:layout_margin="4dp"
+                        android:layout_toEndOf="@id/achievements_total_shared_img"
+                        android:text="Geteilte Challenges: "
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/achievements_total_shared_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_created_img"
+                        android:layout_margin="4dp"
+                        android:layout_toEndOf="@id/achievements_total_shared_prefix"
+                        tools:text="7" />
+
+                    <!--Avatars unlocked-->
+                    <ImageView
+                        android:id="@+id/achievements_avatars_unlocked_img"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_shared_img"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/ic_person"
+                        app:tint="@color/colorSecondaryDark" />
+
+                    <TextView
+                        android:id="@+id/achievements_avatars_unlocked_prefix"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_shared_img"
+                        android:layout_margin="4dp"
+                        android:layout_toEndOf="@id/achievements_avatars_unlocked_img"
+                        android:text="Freigeschaltete Avatare: "
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/achievements_avatars_unlocked_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/achievements_total_shared_img"
+                        android:layout_margin="4dp"
+                        android:layout_toEndOf="@id/achievements_avatars_unlocked_prefix"
+                        tools:text="7" />
 
 
                 </RelativeLayout>

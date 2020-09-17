@@ -84,6 +84,10 @@ class ProfileFragment : Fragment() {
         achievements_xp_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_TOTAL_XP, 0).toString()
         achievements_total_created_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CREATED_CHALLENGES, 0).toString()
         achievements_dailystreak_value.text = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).toString()
+
+        val amountSharedChallenges = sharedPrefs.getStringSet(Constants.PREFS_ALL_SHARED_CHALLENGES, null)?.size ?: 0
+        achievements_total_shared_value.text = amountSharedChallenges.toString()
+
         achievements_icon_title.setImageResource(R.drawable.ic_medaille)
     }
 
@@ -95,6 +99,12 @@ class ProfileFragment : Fragment() {
 
             profile_name.text = it.username
             profile_level.text = getString(R.string.level, it.level)
+
+            when(it.level) {
+                in 0..4 -> achievements_avatars_unlocked_value.text = ("2 von 6")
+                in 5..9 -> achievements_avatars_unlocked_value.text = ("4 von 6")
+                in 10..21 -> achievements_avatars_unlocked_value.text = ("6 von 6")
+            }
 
 //            level_progress.text = getString(R.string.levelProgress,it.points,levelsHashMap[it.level])
             if (it.level == MAX_LEVEL) {

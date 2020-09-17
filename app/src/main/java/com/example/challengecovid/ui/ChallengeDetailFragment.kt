@@ -233,6 +233,16 @@ class ChallengeDetailFragment : Fragment() {
 
         //update the public status of the challenge
         if (isChecked) {
+            // Put id of this challenge in sharedprefs, so that it can be counted how many challenges the user shared (for achievements)
+            var prevSharedChallenges = HashSet<String>()
+            if (sharedPrefs.getStringSet(Constants.PREFS_ALL_SHARED_CHALLENGES, null) != null) {
+                prevSharedChallenges =
+                    sharedPrefs.getStringSet(Constants.PREFS_ALL_SHARED_CHALLENGES, null) as HashSet<String>
+            }
+            prevSharedChallenges.add(id)
+            sharedPrefs.edit().putStringSet(Constants.PREFS_ALL_SHARED_CHALLENGES, prevSharedChallenges).apply()
+
+
             setVisibility(challenge_detail_start_editing, visible = false)
         } else {
             if (type == ChallengeType.USER_CHALLENGE && isEditable) {

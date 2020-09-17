@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
         android:layout_marginBottom="@dimen/margin_normal"
-        android:text="Meine Challenges"
+        android:text="Deine Challenges"
         android:textStyle="bold"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         app:layout_constraintBottom_toTopOf="@+id/recyclerview_overview"
