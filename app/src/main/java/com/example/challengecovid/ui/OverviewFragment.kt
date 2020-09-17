@@ -182,7 +182,7 @@ class OverviewFragment : Fragment() {
                 // inform user that he played one more consecutive day
                 val snackbar = Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
-                    "Prima! Deine Tagesserie liegt jetzt bei $counterOfConsecutiveDays Tagen!",
+                    "Prima! Deine Tagesserie liegt jetzt bei $counterOfConsecutiveDays Tagen!\nDu hast auch eine neue Tageschallenge erhalten!",
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
@@ -348,21 +348,22 @@ class OverviewFragment : Fragment() {
             }
         })
 
-        overviewViewModel.showDailyChallengeEvent.observe(viewLifecycleOwner, {
-            if (it == true) {
-                val snackbar = Snackbar.make(
-                    //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                    overview_layout,
-                    "Du hast eine neue Challenge erhalten!",
-                    Snackbar.LENGTH_SHORT
-                )
-                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                snackbar.show()
-
-                // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
-                overviewViewModel.doneShowingSnackbar()
-            }
-        })
+//        Displaying this snackbar made the other one disappear
+//        overviewViewModel.showDailyChallengeEvent.observe(viewLifecycleOwner, {
+//            if (it == true) {
+//                val snackbar = Snackbar.make(
+//                    //requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+//                    overview_layout,
+//                    "Du hast eine neue Challenge erhalten!",
+//                    Snackbar.LENGTH_SHORT
+//                )
+//                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+//                snackbar.show()
+//
+//                // Reset state to make sure the snackbar is only shown once, even if the device has a configuration change.
+//                overviewViewModel.doneShowingSnackbar()
+//            }
+//        })
     }
 
     private fun showChallengeDetails(challenge: BaseChallenge) {
