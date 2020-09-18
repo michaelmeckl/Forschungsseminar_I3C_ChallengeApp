@@ -114,11 +114,12 @@
                     android:id="@+id/save_changes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginHorizontal="14dp"
-                    android:layout_marginVertical="25dp"
                     android:text="Speichern"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -142,6 +143,7 @@
             android:paddingTop="@dimen/margin_normal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_header">
 
             <com.google.android.material.textview.MaterialTextView
@@ -149,8 +151,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:padding="@dimen/margin_normal"
-                android:text="Deine Erfolge"
+                android:paddingStart="0dp"
+                android:paddingEnd="@dimen/margin_normal"
+                android:paddingVertical="@dimen/margin_normal"
+                android:text="Erfolge"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/achievements_cardview_summary"
@@ -169,7 +173,7 @@
                 app:layout_constraintLeft_toRightOf="@id/achievements_title"
                 app:layout_constraintTop_toTopOf="@id/achievements_title"
                 tools:ignore="ContentDescription"
-                tools:src="@drawable/ic_trophy" />
+                tools:src="@drawable/ic_medaille" />
 
 
             <androidx.cardview.widget.CardView
@@ -180,6 +184,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/achievements_title"
+                app:layout_constraintBottom_toBottomOf="parent"
                 card_view:cardCornerRadius="@dimen/card_view_corner_radius"
                 card_view:cardElevation="2dp"
                 card_view:cardUseCompatPadding="true">
@@ -195,9 +200,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="4dp"
+                        android:paddingBottom="8dp"
                         android:src="@drawable/ic_trophy"
                         app:tint="@android:color/holo_orange_light" />
-
 
                     <TextView
                         android:id="@+id/achievements_xp_prefix"
@@ -216,6 +221,7 @@
                         android:layout_toEndOf="@id/achievements_xp_prefix"
                         android:text="13" />
 
+
                     <!--Dailystreak-->
                     <ImageView
                         android:id="@+id/achievements_dailystreak_img"
@@ -223,6 +229,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_xp_img"
                         android:layout_margin="4dp"
+                        android:paddingBottom="8dp"
                         android:src="@drawable/ic_graph"
                         app:tint="@android:color/holo_purple" />
 
@@ -245,6 +252,7 @@
                         android:layout_toEndOf="@id/achievements_dailystreak_prefix"
                         android:text="4" />
 
+
                     <!--Total completed-->
                     <ImageView
                         android:id="@+id/achievements_total_completed_img"
@@ -252,6 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_dailystreak_img"
                         android:layout_margin="4dp"
+                        android:paddingBottom="8dp"
                         android:src="@drawable/ic_checkmark_checked" />
 
                     <TextView
@@ -273,6 +282,8 @@
                         android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_total_completed_prefix"
                         android:text="14" />
+
+
                     <!--Total created-->
                     <ImageView
                         android:id="@+id/achievements_total_created_img"
@@ -280,6 +291,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_total_completed_img"
                         android:layout_margin="4dp"
+                        android:paddingBottom="8dp"
                         android:src="@drawable/ic_edit"
                         app:tint="@android:color/holo_blue_light" />
 
@@ -311,6 +323,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/achievements_total_created_img"
                         android:layout_margin="4dp"
+                        android:paddingBottom="8dp"
                         android:src="@drawable/ic_share"
                         app:tint="@android:color/holo_green_dark" />
 
@@ -333,6 +346,7 @@
                         android:layout_margin="4dp"
                         android:layout_toEndOf="@id/achievements_total_shared_prefix"
                         tools:text="7" />
+
 
                     <!--Avatars unlocked-->
                     <ImageView
@@ -366,178 +380,8 @@
 
 
                 </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
-
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:id="@+id/achievements_cardview_level"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:padding="16dp"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/achievements_cardview_xp"-->
-            <!--                app:layout_constraintHorizontal_bias="0.5"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/achievements_title"-->
-            <!--                card_view:cardCornerRadius="@dimen/card_view_corner_radius"-->
-            <!--                card_view:cardElevation="2dp"-->
-            <!--                card_view:cardUseCompatPadding="true">-->
-
-            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:padding="16dp">-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_level_label"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:layout_marginTop="4dp"-->
-            <!--                        android:text="Dein Level"-->
-            <!--                        android:textSize="20sp"-->
-            <!--                        android:textStyle="bold"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_level_value"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="13"-->
-            <!--                        android:textSize="16sp"-->
-            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toBottomOf="@+id/achievements_level_label" />-->
-            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-            <!--            </androidx.cardview.widget.CardView>-->
-
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:id="@+id/achievements_cardview_xp"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:padding="16dp"-->
-            <!--                app:layout_constraintEnd_toStartOf="@+id/achievements_cardview_dailystreak"-->
-            <!--                app:layout_constraintHorizontal_bias="0.5"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/achievements_cardview_level"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/achievements_title"-->
-            <!--                card_view:cardCornerRadius="@dimen/card_view_corner_radius"-->
-            <!--                card_view:cardElevation="2dp"-->
-            <!--                card_view:cardUseCompatPadding="true">-->
-
-            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:padding="16dp">-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_xp_label"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:layout_marginTop="4dp"-->
-            <!--                        android:text="Gesamt XP"-->
-            <!--                        android:textSize="20sp"-->
-            <!--                        android:textStyle="bold"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_xp_value"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="75 XP"-->
-            <!--                        android:textSize="16sp"-->
-            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toBottomOf="@+id/achievements_xp_label" />-->
-            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-            <!--            </androidx.cardview.widget.CardView>-->
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:id="@+id/achievements_cardview_dailystreak"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:padding="16dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintHorizontal_bias="0.5"-->
-            <!--                app:layout_constraintStart_toEndOf="@+id/achievements_cardview_xp"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/achievements_title"-->
-            <!--                card_view:cardCornerRadius="@dimen/card_view_corner_radius"-->
-            <!--                card_view:cardElevation="2dp"-->
-            <!--                card_view:cardUseCompatPadding="true">-->
-
-            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:padding="16dp">-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_dailystreak_label"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:layout_marginTop="4dp"-->
-            <!--                        android:text="Tagesserie"-->
-            <!--                        android:textSize="20sp"-->
-            <!--                        android:textStyle="bold"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_dailystreak_value"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="3"-->
-            <!--                        android:textSize="16sp"-->
-            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toBottomOf="@+id/achievements_dailystreak_label" />-->
-            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-            <!--            </androidx.cardview.widget.CardView>-->
-
-
-            <!--            <androidx.cardview.widget.CardView-->
-            <!--                android:id="@+id/achievements_cardview_completed_challenges"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:padding="16dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintHorizontal_bias="0.5"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@+id/achievements_cardview_level"-->
-            <!--                card_view:cardCornerRadius="@dimen/card_view_corner_radius"-->
-            <!--                card_view:cardElevation="2dp"-->
-            <!--                card_view:cardUseCompatPadding="true">-->
-
-            <!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="match_parent"-->
-            <!--                    android:padding="16dp">-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_completed_challenges_label"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="wrap_content"-->
-            <!--                        android:layout_marginTop="4dp"-->
-            <!--                        android:text="Insgesamt abgeschlossene Challenges"-->
-            <!--                        android:textSize="20sp"-->
-            <!--                        android:textStyle="bold"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toTopOf="parent" />-->
-
-            <!--                    <TextView-->
-            <!--                        android:id="@+id/achievements_completed_challenges_value"-->
-            <!--                        android:layout_width="wrap_content"-->
-            <!--                        android:layout_height="match_parent"-->
-            <!--                        android:text="8"-->
-            <!--                        android:textSize="16sp"-->
-            <!--                        app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                        app:layout_constraintStart_toStartOf="parent"-->
-            <!--                        app:layout_constraintTop_toBottomOf="@+id/achievements_completed_challenges_label" />-->
-            <!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-            <!--            </androidx.cardview.widget.CardView>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
