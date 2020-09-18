@@ -182,7 +182,7 @@ class OverviewFragment : Fragment() {
                 // inform user that he played one more consecutive day
                 val snackbar = Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
-                    "Prima! Deine Tagesserie liegt jetzt bei $counterOfConsecutiveDays Tagen!\nDu hast auch eine neue Tageschallenge erhalten!",
+                    "Willkommen zurück! Deine Tagesserie liegt jetzt schon bei $counterOfConsecutiveDays Tagen!",
                     Snackbar.LENGTH_LONG
                 )
                 snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
@@ -192,13 +192,13 @@ class OverviewFragment : Fragment() {
                 sharedPrefs.edit().putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1).apply()
 
                 // inform user that daily streak is reset
-                    val snackbar = Snackbar.make(
-                        requireActivity().findViewById(android.R.id.content),
-                        "Deine Tagesserie von $counterOfConsecutiveDays Tagen ist gerissen, da du die App gestern nicht benutzt hast!",
-                        Snackbar.LENGTH_LONG
-                    )
-                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                    snackbar.show()
+                val snackbar = Snackbar.make(
+                    requireActivity().findViewById(android.R.id.content),
+                    "Oh nein! Deine Serie von $counterOfConsecutiveDays Tagen ist gerissen!",
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.show()
             }
         }
     }
@@ -227,18 +227,7 @@ class OverviewFragment : Fragment() {
                 .setNegativeButton(android.R.string.cancel) { _, _ -> }
                 .show()
         } else {
-            val completedChallengesCount =
-                sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
-            sharedPrefs.edit()
-                .putInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, completedChallengesCount + 1)
-                .apply()
-
-            //checkChallengeCompletedFirstTimeThisDay()
-
-            overviewViewModel.setChallengeCompleted(challenge)
-            //Timber.d(profileViewModel.currentUser.value.toString())
-
-            updatePointsAndLevel(_currentUser, challenge)
+            onChallengeCompleted(challenge)
         }
     }
 
@@ -248,24 +237,35 @@ class OverviewFragment : Fragment() {
             .setTitle("Challenge abgeschlossen!")
             .setMessage("Du kannst sie jetzt aus der Übersicht löschen, indem du sie zur Seite wischst. Alternativ kannst du die Challenge auch behalten und sie morgen dann erneut abschließen.")
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                val sharedPrefs = requireActivity().getSharedPreferences(
-                    Constants.SHARED_PREFS_NAME,
-                    AppCompatActivity.MODE_PRIVATE
-                )
-                val completedChallengesCount =
-                    sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
-                sharedPrefs.edit().putInt(
-                    Constants.PREFS_COUNT_COMPLETED_CHALLENGES,
-                    completedChallengesCount + 1
-                ).apply()
-
-                //checkChallengeCompletedFirstTimeThisDay()
-                overviewViewModel.setChallengeCompleted(challenge)
-                updatePointsAndLevel(_currentUser, challenge)
+                onChallengeCompleted(challenge)
             }
             .show()
     }
 
+    private fun onChallengeCompleted(challenge: BaseChallenge) {
+        val sharedPrefs = requireActivity().getSharedPreferences(
+            Constants.SHARED_PREFS_NAME,
+            AppCompatActivity.MODE_PRIVATE
+        )
+
+        val completedChallengesCount =
+            sharedPrefs.getInt(Constants.PREFS_COUNT_COMPLETED_CHALLENGES, 0)
+
+        sharedPrefs.edit().putInt(
+            Constants.PREFS_COUNT_COMPLETED_CHALLENGES,
+            completedChallengesCount + 1
+        ).apply()
+
+        //checkChallengeCompletedFirstTimeThisDay()
+        overviewViewModel.setChallengeCompleted(challenge)
+        updatePointsAndLevel(_currentUser, challenge)
+
+        // update the layout so the user gets immediate feedback
+        challenge.completed = true
+
+        val position = overviewAdapter.activeChallenges.indexOf(challenge)
+        overviewAdapter.notifyItemChanged(position)
+    }
 
     private fun setupObservers() {
         overviewViewModel.allChallenges.observe(viewLifecycleOwner, {
@@ -475,7 +475,7 @@ class OverviewFragment : Fragment() {
                     "Du hast das maximale Level erreicht! Du hast es echt drauf!",
                     Snackbar.LENGTH_LONG
                 )
-                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorSecondary, null))
                 snackbar.show()
 
                 sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
@@ -498,9 +498,10 @@ class OverviewFragment : Fragment() {
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                         "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
-                        Snackbar.LENGTH_SHORT
+                        Snackbar.LENGTH_LONG
                     )
-                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.view.setPadding(8, 12, 8, 12)
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
                     snackbar.show()
 
                 }
@@ -508,38 +509,33 @@ class OverviewFragment : Fragment() {
                     val snackbar = Snackbar.make(
                         requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
                         "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
-                        Snackbar.LENGTH_SHORT
+                        Snackbar.LENGTH_LONG
                     )
-                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.view.setPadding(8, 12, 8, 12)
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
                     snackbar.show()
 
                 }
                 else -> {
-                    /*
-                    val toast = Toast.makeText(requireActivity(), "Glückwunsch! du bist jetzt Level ${currentLevel + 1}!", Toast.LENGTH_SHORT)
-
-                    val toast = Toast.makeText(
-                        requireActivity(),
-                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
-                        Toast.LENGTH_SHORT
-                    )
-
-                    toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-                    toast.view.setPadding(8, 4, 8, 4)
-                    //breite und höhe des toasts noch anpassen?
-                    /*
-                    toast.view.minimumWidth = 850
-                    toast.view.minimumHeight = 150
-                    */
-                    toast.show()
-                     */
                     val snackbar = Snackbar.make(
-                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        requireActivity().findViewById(R.id.overview_scroll_view),
                         "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
                         Snackbar.LENGTH_SHORT
                     )
-                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
+                    snackbar.view.setPadding(8, 12, 8, 12)
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
                     snackbar.show()
+
+                    /*
+                    val snackbar = TSnackbar.make(
+                        requireActivity().findViewById(R.id.overview_scroll_view),
+                        "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
+                        TSnackbar.LENGTH_SHORT
+                    )
+                    snackbar.view.setPadding(8, 12, 8, 12)
+                    snackbar.view.setBackgroundColor(resources.getColor(R.color.colorSecondary, null))
+                    snackbar.show()
+                    */
                 }
             }
 
