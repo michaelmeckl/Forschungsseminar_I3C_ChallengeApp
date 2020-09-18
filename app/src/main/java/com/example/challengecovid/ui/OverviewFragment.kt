@@ -121,31 +121,6 @@ class OverviewFragment : Fragment() {
         }
     }
 
-    /*
-    private fun checkChallengeCompletedFirstTimeThisDay() {
-
-        val sharedPrefs =
-            requireActivity().getSharedPreferences(
-                Constants.SHARED_PREFS_NAME,
-                AppCompatActivity.MODE_PRIVATE
-            )
-
-        val currentDay = DateUtil.getDayOfMonth()
-        val lastDay = sharedPrefs.getInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, 0)
-        var counterOfConsecutiveDays = sharedPrefs.getInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 0)
-
-        if (lastDay == currentDay - 1) {
-            // CONSECUTIVE DAYS
-            counterOfConsecutiveDays += 1
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, counterOfConsecutiveDays)?.apply()
-        } else {
-            // reset daily streak
-            sharedPrefs?.edit()?.putInt(Constants.PREFS_COUNT_CONSECUTIVE_DAYS, 1)?.apply()
-        }
-        sharedPrefs?.edit()?.putInt(Constants.PREFS_LAST_DAY_CHALLENGE_COMPLETED, currentDay)?.apply()
-
-    }*/
-
     private fun checkFirstTimeThisDay() {
         //TODO: da die Studie im gleichen Monat durchgeführt wird, ist Day of month ausreichend!
         // Sonst müsste man außerdem noch Monat und Jahr vergleichen!
@@ -181,7 +156,7 @@ class OverviewFragment : Fragment() {
 
                 // inform user that he played one more consecutive day
                 val snackbar = Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),
+                    requireActivity().findViewById(R.id.overview_scroll_view),
                     "Willkommen zurück! Deine Tagesserie liegt jetzt schon bei $counterOfConsecutiveDays Tagen!",
                     Snackbar.LENGTH_LONG
                 )
@@ -193,7 +168,7 @@ class OverviewFragment : Fragment() {
 
                 // inform user that daily streak is reset
                 val snackbar = Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),
+                    requireActivity().findViewById(R.id.overview_scroll_view),
                     "Oh nein! Deine Serie von $counterOfConsecutiveDays Tagen ist gerissen!",
                     Snackbar.LENGTH_LONG
                 )
@@ -300,7 +275,7 @@ class OverviewFragment : Fragment() {
                 if (dailyChallenge != null) {
                     if (!dailyChallenge.completed) {
                         val snackbar = Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                            requireActivity().findViewById(R.id.overview_scroll_view),
                             "Deine Tagesaufgabe ist nur heute verfügbar, versuch sie möglichst schnell abzuschließen!",
                             Snackbar.LENGTH_SHORT
                         )
@@ -314,8 +289,8 @@ class OverviewFragment : Fragment() {
 
                     } else {
                         val snackbar = Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
-                            "Du hast deine Tagesaufgabe schon abgeschlossen! Morgen bekommst du wieder eine neue!",
+                            requireActivity().findViewById(R.id.overview_scroll_view),
+                            "Du hast deine Tagesaufgabe heute schon abgeschlossen! Morgen bekommst du wieder eine neue!",
                             Snackbar.LENGTH_SHORT
                         )
                         snackbar.view.setBackgroundColor(
@@ -416,7 +391,7 @@ class OverviewFragment : Fragment() {
                         }
 
                         val snackbar = Snackbar.make(
-                            requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                            requireActivity().findViewById(R.id.overview_scroll_view),
                             "Challenge gelöscht",
                             Snackbar.LENGTH_SHORT
                         )
@@ -471,11 +446,12 @@ class OverviewFragment : Fragment() {
         if (currentLevel >= levelsMap.size) {
             if (sharedPrefs.getBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, true)) {
                 val snackbar = Snackbar.make(
-                    requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                    requireActivity().findViewById(R.id.overview_scroll_view),
                     "Du hast das maximale Level erreicht! Du hast es echt drauf!",
                     Snackbar.LENGTH_LONG
                 )
-                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorSecondary, null))
+                snackbar.view.setPadding(8, 12, 8, 12)
+                snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
                 snackbar.show()
 
                 sharedPrefs.edit().putBoolean(Constants.PREFS_FIRST_TIME_MAX_LEVEL_REACHED, false)
@@ -496,7 +472,7 @@ class OverviewFragment : Fragment() {
             when {
                 currentLevel + 1 == 5 -> {
                     val snackbar = Snackbar.make(
-                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        requireActivity().findViewById(R.id.overview_scroll_view),
                         "Glückwunsch! Du bist jetzt Level 5! Du hast 2 neue Avatare freigeschaltet!",
                         Snackbar.LENGTH_LONG
                     )
@@ -507,7 +483,7 @@ class OverviewFragment : Fragment() {
                 }
                 currentLevel + 1 == 10 -> {
                     val snackbar = Snackbar.make(
-                        requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
+                        requireActivity().findViewById(R.id.overview_scroll_view),
                         "Glückwunsch! Du bist jetzt Level 10! Du hast die letzten 2 Avatare freigeschaltet!",
                         Snackbar.LENGTH_LONG
                     )
@@ -522,6 +498,7 @@ class OverviewFragment : Fragment() {
                         "Du hast Level ${currentLevel + 1} erreicht! Mach weiter so!",
                         Snackbar.LENGTH_SHORT
                     )
+                    //make it a little bit bigger
                     snackbar.view.setPadding(8, 12, 8, 12)
                     snackbar.view.setBackgroundColor(resources.getColor(R.color.colorPrimary, null))
                     snackbar.show()
