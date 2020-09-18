@@ -90,8 +90,8 @@ class SplashActivity : AppCompatActivity() {
 
     private fun showSplashScreen() {
         job = CoroutineScope(Dispatchers.Default).launch {
-            // show the splash screen for 1 1/2 seconds
-            delay(1500)
+            // show the splash screen for 2 seconds
+            delay(2000)
 
             if (firstRun) {
                 startCharacterCreation()
