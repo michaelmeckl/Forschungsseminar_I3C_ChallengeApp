@@ -88,6 +88,7 @@ class ChallengeDetailFragment : Fragment() {
                 challenge_detail_start_editing,
                 challenge_detail_relativelayout_online,
                 challenge_detail_relativelayout_offline,
+                view_divider,
                 visible = false
             )
         }
