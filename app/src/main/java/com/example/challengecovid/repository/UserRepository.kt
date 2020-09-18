@@ -82,7 +82,7 @@ class UserRepository {
         while (true) {
             val challengesForUser = fetchChallengesForUser(userId)
             challengesForUser?.let { emit(it) }
-            delay(1000)     // refresh for new data every second
+            delay(1500)     // refresh for new data every 1.5 seconds
         }
     }
 

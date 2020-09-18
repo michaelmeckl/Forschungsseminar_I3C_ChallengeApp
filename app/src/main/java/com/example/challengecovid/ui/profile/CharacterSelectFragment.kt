@@ -170,7 +170,9 @@ class CharacterSelectFragment : DialogFragment(), View.OnClickListener {
             Toast.LENGTH_SHORT
         )
         toast.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
-        toast.view.setPadding(8, 4, 8, 4)
+        toast.view.setPadding(12, 4, 12, 4)
+        toast.view.minimumWidth = 850
+        toast.view.minimumHeight = 150
         toast.show()
     }
 

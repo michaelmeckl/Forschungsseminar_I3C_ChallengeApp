@@ -54,7 +54,7 @@
     <fragment
         android:id="@+id/navigation_challenge_detail"
         android:name="com.example.challengecovid.ui.ChallengeDetailFragment"
-        android:label="Detail Ansicht"
+        android:label="Challenge Detail Ansicht"
         tools:layout="@layout/fragment_challenge_detail">
         <argument
             android:name="id"

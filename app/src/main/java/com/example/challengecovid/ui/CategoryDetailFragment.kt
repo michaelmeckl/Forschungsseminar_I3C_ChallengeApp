@@ -15,7 +15,6 @@ import com.example.challengecovid.adapter.CategoryDetailAdapter
 import com.example.challengecovid.model.Challenge
 import com.example.challengecovid.viewmodels.CategoryDetailViewModel
 import com.example.challengecovid.viewmodels.getViewModel
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_category_detail.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -110,6 +109,8 @@ class CategoryDetailFragment : Fragment() {
         }
 
         categoryDetailViewModel.addToActiveChallenges(categoryId, challenge, userId)
+        /*
+        //TODO: this is really annoying when taking on multiple challenges
         val snackbar = Snackbar.make(
             requireActivity().findViewById(android.R.id.content),   // uses the android content to attach to
             "Challenge erfolgreich angenommen!",
@@ -117,7 +118,7 @@ class CategoryDetailFragment : Fragment() {
         )
         snackbar.view.setBackgroundColor(resources.getColor(R.color.colorAccent, null))
         snackbar.show()
-
+        */
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
