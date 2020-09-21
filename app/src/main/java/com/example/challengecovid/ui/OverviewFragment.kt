@@ -156,7 +156,7 @@ class OverviewFragment : Fragment() {
 
                 // inform user that he played one more consecutive day
                 val snackbar = Snackbar.make(
-                    requireActivity().findViewById(R.id.overview_scroll_view),
+                    requireActivity().findViewById(android.R.id.content),
                     "Willkommen zurück! Deine Tagesserie liegt jetzt schon bei $counterOfConsecutiveDays Tagen!",
                     Snackbar.LENGTH_LONG
                 )
@@ -168,7 +168,7 @@ class OverviewFragment : Fragment() {
 
                 // inform user that daily streak is reset
                 val snackbar = Snackbar.make(
-                    requireActivity().findViewById(R.id.overview_scroll_view),
+                    requireActivity().findViewById(android.R.id.content),
                     "Oh nein! Deine Serie von $counterOfConsecutiveDays Tagen ist gerissen!",
                     Snackbar.LENGTH_LONG
                 )

@@ -2,76 +2,77 @@
     <string name="app_name" translatable="false">ChallengeCovid</string>
 
     <!-- navigation titles -->
-    <string name="label_overview">Overview</string>
-    <string name="label_categories">Categories</string>
+    <string name="label_overview">Übersicht</string>
+    <string name="label_categories">Kategorien</string>
     <string name="label_social_feed">Feed</string>
-    <string name="label_about">About this app</string>
-    <string name="label_add_friend">Add a friend</string>
-    <string name="label_profile">Profile</string>
-    <string name="label_edit_profile">Edit Profile</string>
-    <string name="label_create_challenge">Create new challenge</string>
+    <string name="label_about">Über diese App</string>
+    <string name="label_add_friend">Freund hinzufügen</string>
+    <string name="label_profile">Profil</string>
+    <string name="label_edit_profile">Profil bearbeiten</string>
+    <string name="label_create_challenge">Neue Challenge erstellen</string>
 
     <!-- toolbar actions -->
-    <string name="action_profile">Profile</string>
-    <string name="action_about">About</string>
-    <string name="action_share">Share</string>
+    <string name="action_profile">Profil</string>
+    <string name="action_about">Über</string>
+    <string name="action_share">Teilen</string>
 
     <!-- Firebase -->
+    <string name="default_notification_channel_name">Challenges</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <string name="default_notification_channel_name" translatable="true">Challenges</string>
 
     <!-- Others -->
-    <string name="credits_used_icons">Used Icons:</string>
-    <string name="splash_screen_load">Loading …</string>
-    <string name="no_internet">No Internet Connection</string>
-    <string name="no_internet_warning">Unfortunately, the app doesn\'t work properly without an internet connection because no new data can be loaded or saved! Please check your internet connection and try again.</string>
-    <string name="share_title">Share this challenge via</string>
+    <string name="credits_used_icons">Verwendete Icons:</string>
+    <string name="splash_screen_load">Laden …</string>
+    <string name="no_internet">Keine Internetverbindung!</string>
+    <string name="no_internet_warning">Die App funktioniert leider nicht richtig ohne Internet, da neue Daten nicht geladen oder gespeichert werden können! Überprüfe bitte deine Verbindung und versuch es dann nochmal.</string>
+    <string name="share_title">Teile diese Challenge</string>
 
-    <string name="username_placeholder">Anonymous</string>
-    <string name="creator_in_feed">created by %s</string>
+    <string name="username_placeholder">Anonym</string>
+    <string name="creator_in_feed">erstellt von %s</string>
 
+    <string name="edit_profile">Profil bearbeiten</string>
+    <string name="save_changes">Änderungen speichern</string>
+    <string name="add_friend">Anfrage abschicken</string>
+    <string name="change_profile_pic">Profilbild ändern</string>
+    <string name="desc">Beschreibung</string>
     <string name="level" translatable="false">Level %d</string>
-    <string name="difficulty">Difficulty: %s</string>
 
-    <string name="edit_profile">Edit profile</string>
-    <string name="save_changes">Save changes</string>
-    <string name="add_friend">Send friend request</string>
-    <string name="change_profile_pic">Change profile picture</string>
-    <string name="desc">Description</string>
+    <string name="difficulty">Schwierigkeit: %s</string>
 
-    <string name="wrong_user_id_error">Your userID wasn\'t recognized! Please contact the testers!</string>
+    <string name="wrong_user_id_error">Deine NutzerID wurde nicht erkannt! Bitte kontaktiere die Testleiter!</string>
 
-    <string name="about_intro">This app was developed as part of the project seminar "Interaktionsdesign, Informationsverhalten und Informationsvisualisierung in Zeiten der Corona-Krise (I3C)" of the University of Regensburg in the summer semester 2020.</string>
+    <string name="about_intro">Diese App wurde im Rahmen des Forschungsseminars "Interaktionsdesign, Informationsverhalten und Informationsvisualisierung in Zeiten der Corona-Krise (I3C)" der Universität Regensburg im Sommersemester 2020 entwickelt.</string>
 
-    <string name="about_challenge_infos">Some of the challenges and categories in this app refer to official guidelines and recommendations for dealing with Covid-19 and social isolation.\n\nMore information:\n
-        * <a href="https://www.stmgp.bayern.de/coronavirus/psychische-gesundheit-in-zeiten-der-corona-krise/">Tips for improving mental health</a>\n
-        * <a href="https://www.uni-regensburg.de/psychologie-paedagogik-sport/psychologie-muehlberger-ambulanz/psychische-gesundheit-waehrend-corona/index.html">Examples for improving mental health</a>\n
-        * <a href="https://www.who.int/health-topics/coronavirus#tab=tab_1">Official Information about Covid-19 from the World Health Organization</a>\n
-        * <a href="https://www.infektionsschutz.de/coronavirus/verhaltensregeln.html">Official Rules of conduct and hygiene</a>
+    <string name="about_challenge_infos">Einige der Challenges und Kategorien in dieser App orientieren sich an offiziellen Richtlinien und Empfehlungen im Umgang mit Corona und sozialer Isolation.\n\nWeiterführende Informationen:\n
+        * <a href="https://www.stmgp.bayern.de/coronavirus/psychische-gesundheit-in-zeiten-der-corona-krise/">Hilfreiche Tipps für psychische Gesundheit des bayerischen Gesundheitsministeriums</a>\n
+        * <a href="https://www.uni-regensburg.de/psychologie-paedagogik-sport/psychologie-muehlberger-ambulanz/psychische-gesundheit-waehrend-corona/index.html">Beispiele zur Verbesserung der psychischen Gesundheit</a>\n
+        * <a href="https://www.who.int/health-topics/coronavirus#tab=tab_1">Offizielle Informationen über Covid-19 der Weltgesundheitsorganisation (WHO)</a>\n
+        * <a href="https://www.infektionsschutz.de/coronavirus/verhaltensregeln.html">Offizielle Verhaltens- und Hygieneregeln</a>
     </string>
 
-    <string name="heading_create_new_challenge">Create new challenge</string>
-    <string name="hint_name_create_new_challenge">Name of challenge</string>
-    <string name="hint_description_create_new_challenge">Description (optional)</string>
-    <string name="hint_points_create_new_challenge">Amount XP</string>
-    <string name="button_text_create_challenge">Create Challenge</string>
-    <string name="textview_text_create_challenge">Difficulty:</string>
-    <string name="spinner_text_icon_create_new_challenge">Category (optional):</string>
-    <string name="hint_duration_create_challenge">Duration in days (optional)</string>
-    <string name="empty_recyclerview_overview_message">You don\'t have any challenges yet. To create one, click the button in the bottom right corner.</string>
-    <string name="challenge_completed_text">Completed today!</string>
+    <string name="heading_create_new_challenge">Neue Challenge erstellen</string>
+    <string name="hint_name_create_new_challenge">Name der Challenge</string>
+    <string name="hint_description_create_new_challenge">Beschreibung (optional)</string>
+    <string name="hint_points_create_new_challenge">Anzahl XP</string>
+    <string name="button_text_create_challenge">Challenge erstellen</string>
+    <string name="textview_text_create_challenge">Schwierigkeit:</string>
+    <string name="spinner_text_icon_create_new_challenge">Kategorie (optional):</string>
+    <string name="hint_duration_create_challenge">Dauer in Tagen (optional)</string>
+    <string name="empty_recyclerview_overview_message">Du hast noch keine Challenge. Klicke den Button unten rechts, um eine zu erstellen.</string>
+    <string name="challenge_completed_text">Heute abgeschlossen!</string>
     <string name="edit_challenge">Challenge bearbeiten</string>
     <string name="levelProgress">%1$d von %2$d</string>
 
     <string-array name="difficulties_challenges">
-        <item>Easy</item>
-        <item>Medium</item>
-        <item>Hard</item>
+        <item>Einfach</item>
+        <item>Mittel</item>
+        <item>Schwer</item>
     </string-array>
 
     <string-array name="icons_challenges">
-        <item>No icon</item>
+        <item>Kein icon</item>
     </string-array>
+
 
     <!--
     //Information About Corona
